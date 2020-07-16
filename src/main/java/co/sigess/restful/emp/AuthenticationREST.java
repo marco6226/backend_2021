@@ -25,6 +25,7 @@ import io.jsonwebtoken.UnsupportedJwtException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Level;
@@ -97,6 +98,7 @@ public class AuthenticationREST {
             Usuario user = usuarioFacade.authenticate(email, passw, mfacod);
             if (user != null && user.codigo == 0) {
                 Map<String, Object> resp = new HashMap<>();
+                tokenFacade.eliminarTokensUsuario(user);
                 switch (user.getEstado()) {
                     case ACTIVO:
                     case CAMBIO_PASSWD:
@@ -160,7 +162,7 @@ public class AuthenticationREST {
                 if (null == ume.getCodigo()) {
                     return Response.status(Response.Status.FORBIDDEN).entity(new Mensaje()).build();
                 } else {
-                    System.out.print(ume.getClass());
+                  //  System.out.print(ume.getClass());
                     switch (ume.getCodigo()) {
                         case Mensaje.COD_USUARIO_LOGIN_PREVIO:
                         case Mensaje.COD_IP_NO_PERMITIDA:
@@ -286,6 +288,26 @@ public class AuthenticationREST {
         }
     }
 
+    @POST
+    @Path("activetokens")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getIfExistToken(String loginRequest) throws Exception{
+        String[] array = loginRequest.split(":");
+            String email = array[0].trim().toLowerCase();
+             Map<String, String> da = new HashMap<>();
+            String passw = array[1];
+            Usuario user = usuarioFacade.authenticate(email, passw, null);
+            List tokens = tokenFacade.getTokensByUser(user);
+            if (tokens.size() > 0) {
+               
+            da.put("exit", "true");
+                return Response.ok(da).build();
+            }
+             da.put("exit", "false");
+               return Response.ok(da).build();
+    }
+    
+    
     @GET
     @Path("version")
     @Produces(MediaType.APPLICATION_JSON)

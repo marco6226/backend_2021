@@ -8,6 +8,7 @@ package co.sigess.facade.emp;
 import co.sigess.entities.emp.TokenActivo;
 import co.sigess.entities.emp.Usuario;
 import co.sigess.facade.com.AbstractFacade;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -38,4 +39,9 @@ public class TokenFacade extends AbstractFacade<TokenActivo> {
         q.executeUpdate();
     }
 
+     public List getTokensByUser(Usuario user) {
+        Query q = this.em.createQuery("Select ta FROM TokenActivo ta WHERE ta.usuario.id = ?1");
+        q.setParameter(1, user.getId());
+        return q.getResultList();
+    }
 }

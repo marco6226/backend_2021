@@ -92,7 +92,7 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
         q.setParameter(4, mfaCod);
         Object[] resp = (Object[]) q.getSingleResult();
         int codigo = (Integer) resp[3];
-        System.out.print(codigo);
+       // System.out.print(codigo);
         switch (codigo) {
             case Mensaje.COD_IP_NO_PERMITIDA:
                 throw new UserMessageException(new Mensaje("ACCESO NO PERMITIDOo", "Su dirección IP no se encuentra autorizada para realizar peticiones. Por favor pongase en contacto con el administrador.", TipoMensaje.warn, Mensaje.COD_IP_NO_PERMITIDA));     
