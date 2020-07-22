@@ -36,6 +36,9 @@ public class FilterQuery {
     @QueryParam("fieldList")
     private String strFields;
     
+    @QueryParam("groupBy")
+    private String groupBy;
+    
     @QueryParam("count")
     private boolean count;
 
@@ -117,6 +120,20 @@ public class FilterQuery {
 
     public void setStrFields(String strFields) {
         this.strFields = strFields;
+    }
+
+    /**
+     * @return the groupBy
+     */
+    public String getGroupBy() {
+        return groupBy;
+    }
+
+    /**
+     * @param groupBy the groupBy to set
+     */
+    public void setGroupBy(String groupBy) {
+        this.groupBy = groupBy;
     }
 
 }

@@ -122,12 +122,10 @@ public class ListaInspeccionREST extends ServiceREST {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response edit(ListaInspeccion listaInspeccion, @QueryParam("actualizarVersion") Boolean actualizarVersion ,@QueryParam("putProfile") Boolean putProfile) {
         try {
-            listaInspeccion.setEmpresa(new Empresa(super.getEmpresaIdRequestContext()));
-              
+            listaInspeccion.setEmpresa(new Empresa(super.getEmpresaIdRequestContext()));  
             int res;
-
             //Evitamos que PutProfile sea null
-            if(putProfile == null) putProfile = false;
+            if(putProfile == null) putProfile = false;       
             if (putProfile == true){
 
                 res = listaInspeccionFacade.editProfile(listaInspeccion);

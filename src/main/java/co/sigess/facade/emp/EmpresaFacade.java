@@ -51,7 +51,7 @@ public class EmpresaFacade extends AbstractFacade<Empresa> {
 
     public List<Empresa> findByUsuario(Integer usuarioId) {
         Query query = this.em.createQuery("SELECT DISTINCT emp  FROM Empresa emp  JOIN emp.usuarioEmpresaList ue WHERE ue.usuario.id = :usuarioId ORDER BY emp.razonSocial");
-
+        
         query.setParameter("usuarioId", usuarioId);
         List<Empresa> emp = (List<Empresa>) query.getResultList();
 

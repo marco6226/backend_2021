@@ -14,6 +14,7 @@ import co.sigess.util.Util;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
+import java.security.acl.Group;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -77,10 +78,11 @@ public abstract class AbstractFacade<T> {
         CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
         CriteriaQuery cq = cb.createQuery();
         Root<T> root = cq.from(entityClass);
-
+       
         cq.select(cb.count(root));
         cq.where(this.generarPredicados(filterQuery, cb, root));
         Query query = getEntityManager().createQuery(cq);
+        
         return (Long) query.getSingleResult();
     }
 
@@ -92,11 +94,12 @@ public abstract class AbstractFacade<T> {
         boolean queryByField = filterQuery.getFieldList() != null;
         if (queryByField) {
             Selection[] selections = this.generarSelecciones(filterQuery, root);
-            cq.multiselect(selections);
+            cq.multiselect(selections).distinct(true);
         } else {
             cq.select(root);
         }
-
+        
+       
         cq.where(this.generarPredicados(filterQuery, cb, root));
         if (filterQuery.getSortField() != null && !filterQuery.getSortField().isEmpty()) {
             Order order = (filterQuery.getSortOrder() != null && filterQuery.getSortOrder() < 0) ? cb.asc(this.recursiveSearchField(filterQuery.getSortField(), root)) : cb.desc(this.recursiveSearchField(filterQuery.getSortField(), root));
