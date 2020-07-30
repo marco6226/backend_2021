@@ -118,11 +118,10 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
                 usr.codigo = codigo;
                 if (usr.codigo == Mensaje.COD_LOGIN_OK_SIN_MFA) {
                     String pin = resp[9].toString();
-                    System.out.print(pin);
-                  //  Mensaje msgError = this.smsFacade.enviarSms(resp[10].toString(), "SIGESS - PIN de ingreso: " + pin);
-                 //   if (msgError != null) {
-                     //   throw new UserMessageException(msgError);
-                  //  }
+                    Mensaje msgError = this.smsFacade.enviarSms(resp[10].toString(), "SIGESS - PIN de ingreso: " + pin);
+                    if (msgError != null) {
+                        throw new UserMessageException(msgError);
+                    }
                 }
                 return usr;
         }
