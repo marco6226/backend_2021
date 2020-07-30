@@ -99,6 +99,7 @@ public class AuthenticationREST {
             if (user != null && user.codigo == 0) {
                 Map<String, Object> resp = new HashMap<>();
                 tokenFacade.eliminarTokensUsuario(user);
+                System.err.println(user.getEstado());
                 switch (user.getEstado()) {
                     case ACTIVO:
                     case CAMBIO_PASSWD:
@@ -296,7 +297,7 @@ public class AuthenticationREST {
             String email = array[0].trim().toLowerCase();
              Map<String, String> da = new HashMap<>();
             String passw = array[1];
-            Usuario user = usuarioFacade.authenticate(email, passw, null);
+            Usuario user = usuarioFacade.findByEmail(email);
             List tokens = tokenFacade.getTokensByUser(user);
             if (tokens.size() > 0) {
                

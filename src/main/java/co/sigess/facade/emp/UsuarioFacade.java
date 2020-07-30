@@ -92,9 +92,9 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
         q.setParameter(4, mfaCod);
         Object[] resp = (Object[]) q.getSingleResult();
         int codigo = (Integer) resp[3];
-       // System.out.print(codigo);
+        System.out.print(codigo);
         switch (codigo) {
-            case Mensaje.COD_IP_NO_PERMITIDA:
+            case Mensaje.COD_IP_NO_PERMITIDA: 
                 throw new UserMessageException(new Mensaje("ACCESO NO PERMITIDOo", "Su dirección IP no se encuentra autorizada para realizar peticiones. Por favor pongase en contacto con el administrador.", TipoMensaje.warn, Mensaje.COD_IP_NO_PERMITIDA));     
             case Mensaje.COD_USUARIO_NO_VALIDO:
                 throw new UserMessageException(new Mensaje("CREDENCIALES INCORRECTAS", "El usuario o contraseña especificada no son correctas", TipoMensaje.warn, Mensaje.COD_USUARIO_NO_VALIDO));
@@ -118,10 +118,11 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
                 usr.codigo = codigo;
                 if (usr.codigo == Mensaje.COD_LOGIN_OK_SIN_MFA) {
                     String pin = resp[9].toString();
-                    Mensaje msgError = this.smsFacade.enviarSms(resp[10].toString(), "SIGESS - PIN de ingreso: " + pin);
-                    if (msgError != null) {
-                        throw new UserMessageException(msgError);
-                    }
+                    System.out.print(pin);
+                  //  Mensaje msgError = this.smsFacade.enviarSms(resp[10].toString(), "SIGESS - PIN de ingreso: " + pin);
+                 //   if (msgError != null) {
+                     //   throw new UserMessageException(msgError);
+                  //  }
                 }
                 return usr;
         }
