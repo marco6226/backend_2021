@@ -11,6 +11,7 @@ import co.sigess.entities.ind.FichaTecnicaIndicador;
 import co.sigess.entities.ind.ModeloGrafica;
 import co.sigess.facade.emp.AreaFacade;
 import co.sigess.facade.inp.ProgramacionFacade;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -18,7 +19,9 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -130,5 +133,27 @@ public class IndicadorInpFacade {
         }
 
         return acumulador;
+    }
+    
+     public List calcularCumplimiento(String[] areasId, Date desde, Date hasta) {
+   
+        Query q = this.em.createNamedQuery("SELECT b.n_realiz, b.total , p.nombre\n "
+                + "from inp.tesdeleonardo(?1) b\n "
+                + "INNER JOIN emp.area p on p.id = b.areas"
+               );
+        
+        q.setParameter(1, areasId);
+       
+        try {
+          List list;
+            list = q.getResultList();
+            
+          return list;  
+        } catch (NoResultException nre) {
+            return null;
+        } catch (Exception ed) {
+            System.out.println(ed.toString());
+            return null;
+        }
     }
 }
