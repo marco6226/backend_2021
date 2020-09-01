@@ -136,17 +136,17 @@ public class IndicadorInpFacade {
     }
     
      public List calcularCumplimiento(String[] areasId, Date desde, Date hasta) {
-   
-        Query q = this.em.createNamedQuery("SELECT b.n_realiz, b.total , p.nombre\n "
-                + "from inp.tesdeleonardo(?1) b\n "
-                + "INNER JOIN emp.area p on p.id = b.areas"
-               );
+   String q = "SELECT b.n_realiz, b.total , p.nombre from inp.tesdeleonardo(?1::int[]) b "
+           +  "INNER JOIN emp.area p on p.id = b.areas";
+    try {             
+   Query sql = this.em.createNativeQuery(q);
+                             
         
-        q.setParameter(1, areasId);
+        sql.setParameter(1, areasId);
+       System.out.println(sql);
        
-        try {
           List list;
-            list = q.getResultList();
+            list = sql.getResultList();
             
           return list;  
         } catch (NoResultException nre) {

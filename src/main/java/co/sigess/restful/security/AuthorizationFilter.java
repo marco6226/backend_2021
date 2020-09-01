@@ -54,7 +54,7 @@ public class AuthorizationFilter implements ContainerRequestFilter {
             Logger.getLogger(AuthorizationFilter.class.getName()).log(Level.SEVERE, msg.toString(), e);
             requestContext.abortWith(Response.status(Response.Status.BAD_REQUEST).entity(msg).build());
         }
-    }
+        }
 
     private void setupSecurityContext(ContainerRequestContext requestContext, final String jsonUser) {
         requestContext.setSecurityContext(new SecurityContext() {
