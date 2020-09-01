@@ -11,12 +11,16 @@ import co.sigess.entities.emp.Empresa;
 import co.sigess.entities.rai.Reporte;
 import co.sigess.facade.rai.ReporteFacade;
 import co.sigess.restful.ServiceREST;
+import co.sigess.restful.security.Auditable;
+import co.sigess.restful.security.AuthorizationFacade;
 import co.sigess.restful.security.Secured;
 import co.sigess.util.Util;
 import java.io.File;
 import java.io.InputStream;
 import java.io.FileInputStream;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -76,6 +80,7 @@ public class ReporteREST extends ServiceREST {
     }
 
     @POST
+    @Auditable
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response create(Reporte reporte) {
         try {
@@ -89,8 +94,11 @@ public class ReporteREST extends ServiceREST {
     }
 
     @PUT
+    @Auditable
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response edit(Reporte reporte) {
+        Mensaje msg = new Mensaje("USUARIO BLOQUEADO", "El usuario "  + " ha sido bloqueado", TipoMensaje.error, Mensaje.COD_USUARIO_BLOQUEADO);
+        Logger.getLogger(AuthorizationFacade.class.getName()).log(Level.INFO, msg.toString());
         try {
             reporte.setUsuarioReporta(super.getUsuarioRequestContext());
             reporte.setEmpresa(new Empresa(super.getEmpresaIdRequestContext()));

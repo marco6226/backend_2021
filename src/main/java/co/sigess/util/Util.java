@@ -83,6 +83,7 @@ public class Util {
             UserMessageException ume = (UserMessageException) exception;
             if (ume.getTipoMensaje().equals(TipoMensaje.error)) {
                 Logger.getLogger(restClass.getName()).log(Level.SEVERE, msg.toString(), ume);
+                 System.out.print("Aqui paso");
             }
             return Response.status(Response.Status.BAD_REQUEST).entity(ume.getObjetoMensaje()).build();
         } else if (exception instanceof ConstraintViolationException) {

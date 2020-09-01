@@ -47,6 +47,7 @@ public class ResponseAuditableFilter implements ContainerResponseFilter {
             }
             Auditable annot = resourceInfo.getResourceMethod().getAnnotation(Auditable.class);
             Object body = httpRequest.getAttribute("body");
+           
             evt = new EventoLog(
                     null,
                     resourceInfo.getResourceClass().getSimpleName() + "." + resourceInfo.getResourceMethod().getName(),

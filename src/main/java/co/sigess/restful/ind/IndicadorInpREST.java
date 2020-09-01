@@ -42,5 +42,17 @@ public class IndicadorInpREST extends ServiceREST {
             return Util.manageException(ex, TareaDesviacionREST.class);
         }
     }
+      
+     @GET
+    @Path("test/{aresaId}/{rango}/{empresaId}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response getInspInd(@PathParam("areasId") String areasId, @PathParam("rango") String rango, @PathParam("empresaId") Integer empresaId) {
+        try {
+              
+           return Response.ok().build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, TareaDesviacionREST.class);
+        }
+    }
 
 }
