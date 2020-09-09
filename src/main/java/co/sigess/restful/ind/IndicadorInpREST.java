@@ -44,9 +44,9 @@ public class IndicadorInpREST extends ServiceREST {
     }
       
     @GET
-    @Path("test/{types}")
+    @Path("test/{types}/{desde}/{hasta}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response getInspInd(@PathParam("types")String type) {
+    public Response getInspInd(@PathParam("types")String type,@PathParam("desde") String desde,@PathParam("hasta") String hasta) {
         try {
               String[] arrString = type.split(",");
               int[] areasId = new int[arrString.length];
@@ -55,7 +55,7 @@ public class IndicadorInpREST extends ServiceREST {
                 
             }
               
-              List list = this.indicadorInpFacade.calcularCumplimiento(arrString, null, null);
+              List list = this.indicadorInpFacade.calcularCumplimiento(arrString, desde, hasta);
            return Response.ok(list).build();
         } catch (Exception ex) {
             return Util.manageException(ex, TareaDesviacionREST.class);

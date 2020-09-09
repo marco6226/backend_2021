@@ -90,7 +90,7 @@ public class ProgramacionFacade extends AbstractFacade<Programacion> {
         return list;
     }
 
-    public double calcularCumplimiento(Long areaId, Date desde, Date hasta) {
+        public double calcularCumplimiento(Long areaId, Date desde, Date hasta) {
         Query q = this.em.createNativeQuery("SELECT avg(p.numero_realizadas * 1.0 / p.numero_inspecciones)::numeric\n"
                 + "from inp.programacion p \n"
                 + "inner join emp.area a on a.id = p.fk_area_id\n"
