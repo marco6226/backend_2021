@@ -142,13 +142,44 @@ public class IndicadorInpFacade {
    Query sql = this.em.createNativeQuery(q);
                              
         
-       // sql.setParameter(1, areasId);
-       sql.setParameter(1, desde);
-       sql.setParameter(2, hasta);
+       sql.setParameter(1, areasId);
+       sql.setParameter(2, desde);
+       sql.setParameter(3, hasta);
        System.out.println(sql);
        
           List list;
             list = sql.getResultList();
+            
+          return list;  
+        } catch (NoResultException nre) {
+            return null;
+        } catch (Exception ed) {
+            System.out.println(ed.toString());
+            return null;
+        }
+    }
+     public List calcularCobertura(String[] areasId, String desde, String hasta) {
+   String q = "SELECT count (*) as programadas  from inp.ind_cumplimiento(?1::int[],?2::date,?3::date) b "
+           +  "INNER JOIN emp.area p on p.id = b.areas " 
+           + " union all SELECT count (b.n_realiz) as realizadas  from inp.ind_cumplimiento(?1::int[],?2::date,?3::date) b "
+           + "INNER JOIN emp.area p on p.id = b.areas where b.n_realiz > 0";
+    try {             
+   Query sql = this.em.createNativeQuery(q);
+   
+                             
+        
+       sql.setParameter(1, areasId);
+       sql.setParameter(2, desde);
+       sql.setParameter(3, hasta);
+       
+       System.out.println(sql);
+       
+          List list;
+          
+            list = sql.getResultList();
+            
+            
+            
             
           return list;  
         } catch (NoResultException nre) {
