@@ -44,7 +44,7 @@ public class IndicadorInpREST extends ServiceREST {
     }
       
     @GET
-    @Path("test/{types}/{desde}/{hasta}")
+    @Path("cumplimientoinp/{types}/{desde}/{hasta}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response getInspInd(@PathParam("types")String type,@PathParam("desde") String desde,@PathParam("hasta") String hasta) {
         try {
@@ -76,6 +76,82 @@ public class IndicadorInpREST extends ServiceREST {
               
               
               List list = this.indicadorInpFacade.calcularCobertura(arrString, desde, hasta);
+           return Response.ok(list).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, TareaDesviacionREST.class);
+        }
+    }
+    @GET
+    @Path("efectividad/{types}/{desde}/{hasta}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response getInspIndEfectividadInspecciones(@PathParam("types")String type,@PathParam("desde") String desde,@PathParam("hasta") String hasta) {
+        try {
+              String[] arrString = type.split(",");
+              int[] areasId = new int[arrString.length];
+              for (int i = 0; i < arrString.length; i++) {
+                  areasId[i] = Integer.parseInt(arrString[i]);
+                
+            }
+              
+              
+              List list = this.indicadorInpFacade.calcularEfectividadInspecciones(arrString, desde, hasta);
+           return Response.ok(list).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, TareaDesviacionREST.class);
+        }
+    }
+    @GET
+    @Path("efectividadat/{types}/{desde}/{hasta}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response getInspIndEfectividadAt(@PathParam("types")String type,@PathParam("desde") String desde,@PathParam("hasta") String hasta) {
+        try {
+              String[] arrString = type.split(",");
+              int[] areasId = new int[arrString.length];
+              for (int i = 0; i < arrString.length; i++) {
+                  areasId[i] = Integer.parseInt(arrString[i]);
+                
+            }
+              
+              
+              List list = this.indicadorInpFacade.calcularEfectividadAt(arrString, desde, hasta);
+           return Response.ok(list).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, TareaDesviacionREST.class);
+        }
+    }
+    @GET
+    @Path("coberturaat/{types}/{desde}/{hasta}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response getIndCoberturaAt(@PathParam("types")String type,@PathParam("desde") String desde,@PathParam("hasta") String hasta) {
+        try {
+              String[] arrString = type.split(",");
+              int[] areasId = new int[arrString.length];
+              for (int i = 0; i < arrString.length; i++) {
+                  areasId[i] = Integer.parseInt(arrString[i]);
+                
+            }
+              
+              
+              List list = this.indicadorInpFacade.calcularCoberturaAt(arrString, desde, hasta);
+           return Response.ok(list).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, TareaDesviacionREST.class);
+        }
+    }
+    @GET
+    @Path("eficaciaauc/{types}/{desde}/{hasta}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response getInspIndEficaciaAuc(@PathParam("types")String type,@PathParam("desde") String desde,@PathParam("hasta") String hasta) {
+        try {
+              String[] arrString = type.split(",");
+              int[] areasId = new int[arrString.length];
+              for (int i = 0; i < arrString.length; i++) {
+                  areasId[i] = Integer.parseInt(arrString[i]);
+                
+            }
+              
+              
+              List list = this.indicadorInpFacade.calcularEficaciaReporte(arrString, desde, hasta);
            return Response.ok(list).build();
         } catch (Exception ex) {
             return Util.manageException(ex, TareaDesviacionREST.class);
