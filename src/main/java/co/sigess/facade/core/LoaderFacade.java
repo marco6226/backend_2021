@@ -60,6 +60,7 @@ public class LoaderFacade {
                 String ruta = getClass().getResource(Recursos.PLANTILLA_MAIL.getRuta()).getPath();
                 int y = ruta.length(); 
                String x  = isWindows(ruta,y);
+                System.out.println(x + "añsdkasñldsadasd");
                 this.plantillaMail = new String(Files.readAllBytes(Paths.get(x)));               
             } catch (IOException ex) {
                 Logger.getLogger(LoaderFacade.class.getName()).log(Level.SEVERE, null, ex);
@@ -148,7 +149,7 @@ public class LoaderFacade {
     }
     
     private String isWindows (String route,int y){
-       //System.out.println(System.getProperty("os.name").toLowerCase().contains("windows"));
+        System.out.println(System.getProperty("os.name").toLowerCase().contains("windows"));
         route  =   System.getProperty("os.name").toLowerCase().contains("windows") ?  route.substring(1,y) : route;
         return route; 
     }

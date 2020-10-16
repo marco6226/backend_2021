@@ -51,6 +51,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Empleado.findAll", query = "SELECT e FROM Empleado e")})
 public class Empleado implements Serializable {
 
+
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -101,6 +102,22 @@ public class Empleado implements Serializable {
     @Column(name = "primer_nombre")
     private String primerNombre;
 
+    @Size(max = 45)
+    @Column(name = "emergency_contact")
+    private String phoneEmergencyContact;
+    
+    @Size(max = 45)
+    @Column(name = "corporative_phone")
+    private String corporativePhone;
+    
+    @Size(max = 45)
+    @Column(name = "email_emergency_contact")
+    private String emailEmergencyContact;
+
+    @Size(max = 45)
+    @Column(name = "phone_emergency_contact")
+    private String emergencyContact;
+    
     @Size(max = 45)
     @Column(name = "segundo_apellido")
     private String segundoApellido;
@@ -386,6 +403,47 @@ public class Empleado implements Serializable {
         return estado;
     }
 
+    /**
+     * @return the phoneEmergencyContact
+     */
+    public String getPhoneEmergencyContact() {
+        return phoneEmergencyContact;
+    }
+
+    /**
+     * @param phoneEmergencyContact the phoneEmergencyContact to set
+     */
+    public void setPhoneEmergencyContact(String phoneEmergencyContact) {
+        this.phoneEmergencyContact = phoneEmergencyContact;
+    }
+
+    /**
+     * @return the emailEmergencyContact
+     */
+    public String getEmailEmergencyContact() {
+        return emailEmergencyContact;
+    }
+
+    /**
+     * @param emailEmergencyContact the emailEmergencyContact to set
+     */
+    public void setEmailEmergencyContact(String emailEmergencyContact) {
+        this.emailEmergencyContact = emailEmergencyContact;
+    }
+
+    /**
+     * @return the emergencyContact
+     */
+    public String getEmergencyContact() {
+        return emergencyContact;
+    }
+
+    /**
+     * @param emergencyContact the emergencyContact to set
+     */
+    public void setEmergencyContact(String emergencyContact) {
+        this.emergencyContact = emergencyContact;
+    }
     public void setEstado(EstadoUsuario estado) {
         this.estado = estado;
     }
@@ -413,6 +471,20 @@ public class Empleado implements Serializable {
     @Override
     public String toString() {
         return "co.sigess.entities.empEmpleado[ id=" + id + " ]";
+    }
+
+    /**
+     * @return the corporativePhone
+     */
+    public String getCorporativePhone() {
+        return corporativePhone;
+    }
+
+    /**
+     * @param corporativePhone the corporativePhone to set
+     */
+    public void setCorporativePhone(String corporativePhone) {
+        this.corporativePhone = corporativePhone;
     }
 
 }
