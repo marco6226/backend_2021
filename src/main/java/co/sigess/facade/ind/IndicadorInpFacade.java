@@ -158,6 +158,72 @@ public class IndicadorInpFacade {
             return null;
         }
     }
+     public List calcularCumplimientototal(String[] areasId, String desde, String hasta) {
+   String q = "SELECT sum(b.n_realiz),sum(b.total)  from inp.ind_cumplimiento(?1::int[],?2::date,?3::date) b ";
+    try {             
+   Query sql = this.em.createNativeQuery(q);
+                             
+        
+       sql.setParameter(1, areasId);
+       sql.setParameter(2, desde);
+       sql.setParameter(3, hasta);
+       System.out.println(sql);
+       
+          List list;
+            list = sql.getResultList();
+            
+          return list;  
+        } catch (NoResultException nre) {
+            return null;
+        } catch (Exception ed) {
+            System.out.println(ed.toString());
+            return null;
+        }
+    }
+     public List calcularCumplimientoattotal(String[] areasId, String desde, String hasta) {
+   String q = "SELECT sum(b.gestionados),sum(b.total)  from rai.efectividad(?1::int[],?2::date,?3::date) b ";
+    try {             
+   Query sql = this.em.createNativeQuery(q);
+                             
+        
+       sql.setParameter(1, areasId);
+       sql.setParameter(2, desde);
+       sql.setParameter(3, hasta);
+       System.out.println(sql);
+       
+          List list;
+            list = sql.getResultList();
+            
+          return list;  
+        } catch (NoResultException nre) {
+            return null;
+        } catch (Exception ed) {
+            System.out.println(ed.toString());
+            return null;
+        }
+    }
+     public List calcularCumplimientoauctotal(String[] areasId, String desde, String hasta) {
+   String q = "SELECT sum(b.gestionados),sum(b.total)  from auc.eficacia(?1::int[],?2::date,?3::date) b ";
+    try {             
+   Query sql = this.em.createNativeQuery(q);
+                             
+        
+       sql.setParameter(1, areasId);
+       sql.setParameter(2, desde);
+       sql.setParameter(3, hasta);
+       System.out.println(sql);
+       
+          List list;
+            list = sql.getResultList();
+            
+          return list;  
+        } catch (NoResultException nre) {
+            return null;
+        } catch (Exception ed) {
+            System.out.println(ed.toString());
+            return null;
+        }
+    }
      public List calcularCobertura(String[] areasId, String desde, String hasta) {
    String q = "SELECT count (*) as programadas  from inp.ind_cumplimiento(?1::int[],?2::date,?3::date) b "
            +  "INNER JOIN emp.area p on p.id = b.areas " 
