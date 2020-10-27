@@ -33,6 +33,63 @@ import javax.xml.bind.annotation.XmlRootElement;
    
 public class CasosMedicos implements Serializable {
 
+    /**
+     * @return the saludStatus
+     */
+    public String getSaludStatus() {
+        return saludStatus;
+    }
+
+    /**
+     * @param saludStatus the saludStatus to set
+     */
+    public void setSaludStatus(String saludStatus) {
+        this.saludStatus = saludStatus;
+    }
+
+    /**
+     * @return the names
+     */
+    public String getNames() {
+        return names;
+    }
+
+    /**
+     * @param names the names to set
+     */
+    public void setNames(String names) {
+        this.names = names;
+    }
+
+    
+    /**
+     * @return the region
+     */
+    public String getRegion() {
+        return region;
+    }
+
+    /**
+     * @param region the region to set
+     */
+    public void setRegion(String region) {
+        this.region = region;
+    }
+
+    /**
+     * @return the ciudad
+     */
+    public String getCiudad() {
+        return ciudad;
+    }
+
+    /**
+     * @param ciudad the ciudad to set
+     */
+    public void setCiudad(String ciudad) {
+        this.ciudad = ciudad;
+    }
+
     private static final long serialVersionUID = 1L;
     @Id
     @SequenceGenerator(name = "casos_medicos_id_seq", schema = "scm", sequenceName = "casos_medicos_id_seq", allocationSize = 1)
@@ -55,6 +112,21 @@ public class CasosMedicos implements Serializable {
     @Size(max = 128)
     @Column(name = "codigo_cie10")
     private String codigoCie10;
+    @Size(max = 128)
+    @Column(name = "region")
+    private String region;
+    @Size(max = 128)
+    @Column(name = "ciudad")
+    private String ciudad;
+    @Size(max = 128)
+    @Column(name = "names")
+    private String names;
+    @Size(max = 128)
+    @Column(name = "cargo")
+    private String cargo;
+    @Size(max = 128)
+    @Column(name = "salud_status")
+    private String saludStatus;
     @Size(max = 128)
     @Column(name = "sistema_afectado")
     private String sistemaAfectado;
@@ -361,6 +433,20 @@ public class CasosMedicos implements Serializable {
      */
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    /**
+     * @return the cargo
+     */
+    public String getCargo() {
+        return cargo;
+    }
+
+    /**
+     * @param cargo the cargo to set
+     */
+    public void setCargo(String cargo) {
+        this.cargo = cargo;
     }
 
     
