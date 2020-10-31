@@ -37,4 +37,11 @@ public class CasosMedicosFacade  extends AbstractFacade<CasosMedicos>{
         super.create(casosMedicos);
         return casosMedicos;
     }
+     
+      public CasosMedicos update(CasosMedicos casosMedicos) throws Exception {
+       
+        casosMedicos = super.edit(casosMedicos);
+        return casosMedicos;
+    }
+
 }

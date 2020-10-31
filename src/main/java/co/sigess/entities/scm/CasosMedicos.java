@@ -6,6 +6,7 @@
 package co.sigess.entities.scm;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
@@ -17,6 +18,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -32,6 +35,20 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "CasosMedicos.findAll", query = "SELECT c FROM CasosMedicos c")})
    
 public class CasosMedicos implements Serializable {
+
+    /**
+     * @return the fechaCreacion
+     */
+    public Date getFechaCreacion() {
+        return fechaCreacion;
+    }
+
+    /**
+     * @param fechaCreacion the fechaCreacion to set
+     */
+    public void setFechaCreacion(Date fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
+    }
 
     /**
      * @return the saludStatus
@@ -106,7 +123,7 @@ public class CasosMedicos implements Serializable {
     @Size(max = 128)
     @Column(name = "observaciones")
     private String observaciones;
-    @Size(max = 128)
+    @Size(max = 128) 
     @Column(name = "origen")
     private String origen;
     @Size(max = 128)
@@ -115,6 +132,9 @@ public class CasosMedicos implements Serializable {
     @Size(max = 128)
     @Column(name = "region")
     private String region;
+    @Column(name = "fecha_creacion")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaCreacion;
     @Size(max = 128)
     @Column(name = "ciudad")
     private String ciudad;

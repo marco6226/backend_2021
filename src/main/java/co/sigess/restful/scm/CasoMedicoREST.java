@@ -18,6 +18,7 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -56,6 +57,17 @@ public class CasoMedicoREST  extends ServiceREST {
     public Response create(CasosMedicos casosmedicos) {
         try {
             casosmedicos = this.casosmedicosFacade.create(casosmedicos);
+            return Response.ok(casosmedicos.getId()).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, ReporteREST.class);
+        }
+    }
+    
+    @PUT
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response edit(CasosMedicos casosmedicos) {
+        try {
+            casosmedicos = this.casosmedicosFacade.update(casosmedicos);
             return Response.ok(casosmedicos.getId()).build();
         } catch (Exception ex) {
             return Util.manageException(ex, ReporteREST.class);
