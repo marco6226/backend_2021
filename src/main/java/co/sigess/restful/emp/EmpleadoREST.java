@@ -127,7 +127,7 @@ public class EmpleadoREST extends ServiceREST {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response loadAll(List<Empleado> list) {
         try {
-            List<Mensaje> listErrors = empleadoFacade.loadAll(list, super.getEmpresaIdRequestContext());
+            List<Mensaje> listErrors = empleadoFacade.createList(list, super.getEmpresaIdRequestContext());
             return Response.ok(listErrors).build();
         } catch (Exception ex) {
             return Util.manageException(ex, EmpleadoREST.class);

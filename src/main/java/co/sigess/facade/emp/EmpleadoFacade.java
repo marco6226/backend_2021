@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.ejb.EJB;
+import javax.ejb.EJBTransactionRolledbackException;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
@@ -89,7 +90,7 @@ public class EmpleadoFacade extends AbstractFacade<Empleado> {
         }
         empleadoDB.setEstado(EstadoUsuario.ELIMINADO);
         super.edit(empleadoDB);
-        
+
         Usuario usuario = empleadoDB.getUsuario();
         if (usuario != null) {
             usuario.setEstado(EstadoUsuario.ELIMINADO);
@@ -128,6 +129,31 @@ public class EmpleadoFacade extends AbstractFacade<Empleado> {
         Empleado emp = (Empleado) q.getSingleResult();
         emp.getDocumentosList().remove(documento);
         super.edit(emp);
+    }
+
+    public List<Mensaje> createList(List<Empleado> list, Integer empresaId) throws Exception,UserMessageException {
+
+        List<Mensaje> listErrors = new ArrayList<>();
+        for (Empleado empleado : list) {
+            try {
+                if (empleado.getUsuario() == null) {
+                    throw new IllegalArgumentException("El empleado a crear no contiene un usuario");
+                }
+                if (empleado.getUsuario().getEmail() == null || empleado.getUsuario().getEmail().isEmpty()) {
+                    throw new IllegalArgumentException("El campo email es necesario");
+                }
+              
+               
+                usuarioFacade.create(empleado.getUsuario(), empresaId);
+                super.create(empleado);
+               
+            } catch (Exception e) {
+                System.out.println(e.getMessage()+"Aqui la prueba");
+                Mensaje mu = new Mensaje("Error al procesar el empleado: " + empleado.getNumeroIdentificacion(), e.getMessage(), TipoMensaje.error);
+                listErrors.add(mu);
+            }
+        }
+        return listErrors;
     }
 
     public List<Mensaje> loadAll(List<Empleado> list, Integer empresaId) throws Exception {
