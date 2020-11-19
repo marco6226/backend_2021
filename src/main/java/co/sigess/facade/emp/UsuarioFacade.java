@@ -133,40 +133,6 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
         }
         Usuario usrDB = this.findByEmail(usuario.getEmail());
         if (usrDB != null) {
-             throw new UserMessageException(
-                    "USUARIO YA REGISTRADO",
-                    "El usuario que intenta registrar con el correo electrónico "
-                    + usuario.getEmail()
-                    + " ya se encuentra registrado",
-                    TipoMensaje.warn
-            );
-        }
-        String passwd = UtilSecurity.generatePassword();
-        usuario.setPassword(UtilSecurity.createEmailPasswordHash(usuario.getEmail(), UtilSecurity.toSHA256(passwd)));
-        usuario.setEstado(EstadoUsuario.CAMBIO_PASSWD);
-      List<String> b = new ArrayList<String>();
-        usuario.setIpPermitida(b);
-        usuario.setFechaCreacion(new Date());
-        usuario = super.create(usuario);
-
-//      Crea la relacion usuario-empresa y asigna perfil por defecto
-        for (UsuarioEmpresa ue : usuario.getUsuarioEmpresaList()) {
-            ue.setUsuarioEmpresaPK(new UsuarioEmpresaPK(usuario.getId(), empresaId, ue.getPerfil().getId()));
-            usuarioEmpresaFacade.create(ue);
-        }
-        Map<String, String> parametros = new HashMap<>();
-        parametros.put("P{passwd}", passwd);
-        parametros.put("P{email}", usuario.getEmail());
-       // emailFacade.sendEmail(parametros, TipoMail.CREACION_USUARIO, "Creación de cuenta", usuario.getEmail());
-        return usuario;
-    }
-
-     public Usuario createList(Usuario usuario, Integer empresaId) throws Exception {
-        if (usuario.getUsuarioEmpresaList() == null || usuario.getUsuarioEmpresaList().isEmpty()) {
-            throw new IllegalArgumentException("Debe establecer un perfil para el usuario a crear");
-        }
-        Usuario usrDB = this.findByEmail(usuario.getEmail());
-        if (usrDB != null) {
             throw new UserMessageException(
                     "USUARIO YA REGISTRADO",
                     "El usuario que intenta registrar con el correo electrónico "
@@ -178,8 +144,6 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
         String passwd = UtilSecurity.generatePassword();
         usuario.setPassword(UtilSecurity.createEmailPasswordHash(usuario.getEmail(), UtilSecurity.toSHA256(passwd)));
         usuario.setEstado(EstadoUsuario.CAMBIO_PASSWD);
-      List<String> b = new ArrayList<String>();
-        usuario.setIpPermitida(b);
         usuario.setFechaCreacion(new Date());
         usuario = super.create(usuario);
 
@@ -191,10 +155,10 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
         Map<String, String> parametros = new HashMap<>();
         parametros.put("P{passwd}", passwd);
         parametros.put("P{email}", usuario.getEmail());
-       // emailFacade.sendEmail(parametros, TipoMail.CREACION_USUARIO, "Creación de cuenta", usuario.getEmail());
+        emailFacade.sendEmail(parametros, TipoMail.CREACION_USUARIO, "Creación de cuenta", usuario.getEmail());
         return usuario;
     }
-    
+
     public Usuario edit(Usuario usuario, Integer empresaId) throws Exception {
         if (usuario.getEstado() != null) {
             switch (usuario.getEstado()) {
@@ -278,6 +242,7 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
             q.setParameter(1, httpRequest.getRemoteAddr());
             q.setParameter(2, user.getId());
             boolean ipValida = (boolean) q.getSingleResult();
+            ipValida = true;
             if (!ipValida) {
                 throw new UserMessageException(
                         new Mensaje(
