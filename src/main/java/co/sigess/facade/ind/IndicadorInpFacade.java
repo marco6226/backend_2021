@@ -255,6 +255,36 @@ public class IndicadorInpFacade {
             return null;
         }
     }
+     public List tipoat(String[] areasId, String desde, String hasta) {
+   String q = "SELECT b.tipo,b.tipo_at,p.nombre  from rai.tipo(?1::int[],?2::date,?3::date) b "
+           +  "INNER JOIN emp.area p on p.id = b.areas " ;
+           
+    try {             
+   Query sql = this.em.createNativeQuery(q);
+   
+                             
+        
+       sql.setParameter(1, areasId);
+       sql.setParameter(2, desde);
+       sql.setParameter(3, hasta);
+       
+       System.out.println(sql);
+       
+          List list;
+          
+            list = sql.getResultList();
+            
+            
+            
+            
+          return list;  
+        } catch (NoResultException nre) {
+            return null;
+        } catch (Exception ed) {
+            System.out.println(ed.toString());
+            return null;
+        }
+    }
      public List calcularEfectividadInspecciones(String[] areasId, String fecha1, String fecha2) {
    String q = "SELECT b.gestionados,b.total,p.nombre   from inp.efectividad(?1::int[],?2::date,?3::date) b "           
            + "INNER JOIN emp.area p on p.id = b.areas";

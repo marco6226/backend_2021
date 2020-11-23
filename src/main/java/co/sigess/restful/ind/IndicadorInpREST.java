@@ -56,8 +56,10 @@ public class IndicadorInpREST extends ServiceREST {
             }
               
               List list = this.indicadorInpFacade.calcularCumplimiento(arrString, desde, hasta);
+             
               
            return Response.ok(list).build();
+           
         } catch (Exception ex) {
             return Util.manageException(ex, TareaDesviacionREST.class);
         }
@@ -114,6 +116,7 @@ public class IndicadorInpREST extends ServiceREST {
               
               List list = this.indicadorInpFacade.calcularCumplimientoauctotal(arrString, desde, hasta);
               
+              
            return Response.ok(list).build();
         } catch (Exception ex) {
             return Util.manageException(ex, TareaDesviacionREST.class);
@@ -133,6 +136,25 @@ public class IndicadorInpREST extends ServiceREST {
               
               
               List list = this.indicadorInpFacade.calcularCobertura(arrString, desde, hasta);
+           return Response.ok(list).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, TareaDesviacionREST.class);
+        }
+    }
+    @GET
+    @Path("tipo/{types}/{desde}/{hasta}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response getTipoAt(@PathParam("types")String type,@PathParam("desde") String desde,@PathParam("hasta") String hasta) {
+        try {
+              String[] arrString = type.split(",");
+              int[] areasId = new int[arrString.length];
+              for (int i = 0; i < arrString.length; i++) {
+                  areasId[i] = Integer.parseInt(arrString[i]);
+                
+            }
+              
+              
+              List list = this.indicadorInpFacade.tipoat(arrString, desde, hasta);
            return Response.ok(list).build();
         } catch (Exception ex) {
             return Util.manageException(ex, TareaDesviacionREST.class);
