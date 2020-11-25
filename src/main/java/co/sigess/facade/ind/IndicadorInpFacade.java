@@ -14,6 +14,7 @@ import co.sigess.facade.inp.ProgramacionFacade;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
@@ -136,7 +137,12 @@ public class IndicadorInpFacade {
     }
     
      public List calcularCumplimiento(String[] areasId, String desde, String hasta) {
-   String q = "SELECT b.n_realiz, b.total , p.nombre from inp.ind_cumplimiento(?1::int[],?2::date,?3::date) b "
+         int size = areasId.length;
+      int [] arr = new int [size];
+      for(int i=0; i<size; i++) {
+         arr[i] = Integer.parseInt(areasId[i]); 
+      }
+   String q = "SELECT b.n_realiz, b.total , p.nombre from inp.ind_cumplimiento(ARRAY" + (Arrays.toString(arr)) + "::int[],'" + desde +"'::date,'" +  hasta + "'::date) b  "
            +  "INNER JOIN emp.area p on p.id = b.areas";
     try {             
    Query sql = this.em.createNativeQuery(q);
@@ -159,7 +165,12 @@ public class IndicadorInpFacade {
         }
     }
      public List calcularCumplimientototal(String[] areasId, String desde, String hasta) {
-   String q = "SELECT sum(b.n_realiz),sum(b.total)  from inp.ind_cumplimiento(?1::int[],?2::date,?3::date) b ";
+         int size = areasId.length;
+      int [] arr = new int [size];
+      for(int i=0; i<size; i++) {
+         arr[i] = Integer.parseInt(areasId[i]); 
+      }
+   String q = "SELECT sum(b.n_realiz),sum(b.total)  from inp.ind_cumplimiento(ARRAY" + (Arrays.toString(arr)) + "::int[],'" + desde +"'::date,'" +  hasta + "'::date) b  ";
     try {             
    Query sql = this.em.createNativeQuery(q);
                              
@@ -181,7 +192,12 @@ public class IndicadorInpFacade {
         }
     }
      public List calcularCumplimientoattotal(String[] areasId, String desde, String hasta) {
-   String q = "SELECT sum(b.gestionados),sum(b.total)  from rai.efectividad(?1::int[],?2::date,?3::date) b ";
+         int size = areasId.length;
+      int [] arr = new int [size];
+      for(int i=0; i<size; i++) {
+         arr[i] = Integer.parseInt(areasId[i]); 
+      }
+   String q = "SELECT sum(b.gestionados),sum(b.total)  from rai.efectividad(ARRAY" + (Arrays.toString(arr)) + "::int[],'" + desde +"'::date,'" +  hasta + "'::date) b  ";
     try {             
    Query sql = this.em.createNativeQuery(q);
                              
@@ -203,7 +219,12 @@ public class IndicadorInpFacade {
         }
     }
      public List calcularCumplimientoauctotal(String[] areasId, String desde, String hasta) {
-   String q = "SELECT sum(b.gestionados),sum(b.total)  from auc.eficacia(?1::int[],?2::date,?3::date) b ";
+         int size = areasId.length;
+      int [] arr = new int [size];
+      for(int i=0; i<size; i++) {
+         arr[i] = Integer.parseInt(areasId[i]); 
+      }
+   String q = "SELECT sum(b.gestionados),sum(b.total)  from auc.eficacia(ARRAY" + (Arrays.toString(arr)) + "::int[],'" + desde +"'::date,'" +  hasta + "'::date) b  ";
     try {             
    Query sql = this.em.createNativeQuery(q);
                              
@@ -225,9 +246,14 @@ public class IndicadorInpFacade {
         }
     }
      public List calcularCobertura(String[] areasId, String desde, String hasta) {
-   String q = "SELECT count (*) as programadas  from inp.ind_cumplimiento(?1::int[],?2::date,?3::date) b "
+         int size = areasId.length;
+      int [] arr = new int [size];
+      for(int i=0; i<size; i++) {
+         arr[i] = Integer.parseInt(areasId[i]); 
+      }
+   String q = "SELECT count (*) as programadas  from inp.ind_cumplimiento(ARRAY" + (Arrays.toString(arr)) + "::int[],'" + desde +"'::date,'" +  hasta + "'::date) b  "
            +  "INNER JOIN emp.area p on p.id = b.areas " 
-           + " union all SELECT count (b.n_realiz) as realizadas  from inp.ind_cumplimiento(?1::int[],?2::date,?3::date) b "
+           + " union all SELECT count (b.n_realiz) as realizadas  from inp.ind_cumplimiento(ARRAY" + (Arrays.toString(arr)) + "::int[],'" + desde +"'::date,'" +  hasta + "'::date) b  "
            + "INNER JOIN emp.area p on p.id = b.areas where b.n_realiz > 0";
     try {             
    Query sql = this.em.createNativeQuery(q);
@@ -256,7 +282,12 @@ public class IndicadorInpFacade {
         }
     }
      public List tipoat(String[] areasId, String desde, String hasta) {
-   String q = "SELECT b.tipo,b.tipo_at,p.nombre  from rai.tipo(?1::int[],?2::date,?3::date) b "
+         int size = areasId.length;
+      int [] arr = new int [size];
+      for(int i=0; i<size; i++) {
+         arr[i] = Integer.parseInt(areasId[i]); 
+      }
+   String q = "SELECT b.tipo,b.tipo_at,p.nombre  from rai.tipo(ARRAY" + (Arrays.toString(arr)) + "::int[],'" + desde +"'::date,'" +  hasta + "'::date) b  "
            +  "INNER JOIN emp.area p on p.id = b.areas " ;
            
     try {             
@@ -285,8 +316,13 @@ public class IndicadorInpFacade {
             return null;
         }
     }
-     public List calcularEfectividadInspecciones(String[] areasId, String fecha1, String fecha2) {
-   String q = "SELECT b.gestionados,b.total,p.nombre   from inp.efectividad(?1::int[],?2::date,?3::date) b "           
+     public List calcularEfectividadInspecciones(String[] areasId, String desde, String hasta) {
+         int size = areasId.length;
+      int [] arr = new int [size];
+      for(int i=0; i<size; i++) {
+         arr[i] = Integer.parseInt(areasId[i]); 
+      }
+   String q = "SELECT b.gestionados,b.total,p.nombre   from inp.efectividad(ARRAY" + (Arrays.toString(arr)) + "::int[],'" + desde +"'::date,'" +  hasta + "'::date) b  "           
            + "INNER JOIN emp.area p on p.id = b.areas";
     try {             
    Query sql = this.em.createNativeQuery(q);
@@ -294,8 +330,8 @@ public class IndicadorInpFacade {
                              
         
        sql.setParameter(1, areasId);
-       sql.setParameter(2, fecha1);
-       sql.setParameter(3, fecha2);
+       sql.setParameter(2, desde);
+       sql.setParameter(3, hasta);
        
        System.out.println(sql);
        
@@ -314,8 +350,13 @@ public class IndicadorInpFacade {
             return null;
         }
     }
-     public List calcularCoberturaAt(String[] areasId, String fecha1, String fecha2) {
-   String q = "SELECT b.gestionados,b.total,p.nombre   from rai.efectividad(?1::int[],?2::date,?3::date) b "           
+     public List calcularCoberturaAt(String[] areasId, String desde, String hasta) {
+         int size = areasId.length;
+      int [] arr = new int [size];
+      for(int i=0; i<size; i++) {
+         arr[i] = Integer.parseInt(areasId[i]); 
+      }
+   String q = "SELECT b.gestionados,b.total,p.nombre   from rai.efectividad(ARRAY" + (Arrays.toString(arr)) + "::int[],'" + desde +"'::date,'" +  hasta + "'::date) b  "           
            + "INNER JOIN emp.area p on p.id = b.areas";
     try {             
    Query sql = this.em.createNativeQuery(q);
@@ -323,8 +364,8 @@ public class IndicadorInpFacade {
                              
         
        sql.setParameter(1, areasId);
-       sql.setParameter(2, fecha1);
-       sql.setParameter(3, fecha2);
+       sql.setParameter(2, desde);
+       sql.setParameter(3, hasta);
        
        System.out.println(sql);
        
@@ -343,8 +384,13 @@ public class IndicadorInpFacade {
             return null;
         }
     }
-     public List calcularEficaciaReporte(String[] areasId, String fecha1, String fecha2) {
-   String q = "SELECT b.gestionados,b.total,p.nombre   from auc.eficacia(?1::int[],?2::date,?3::date) b "           
+     public List calcularEficaciaReporte(String[] areasId, String desde, String hasta) {
+         int size = areasId.length;
+      int [] arr = new int [size];
+      for(int i=0; i<size; i++) {
+         arr[i] = Integer.parseInt(areasId[i]); 
+      }
+   String q = "SELECT b.gestionados,b.total,p.nombre   from auc.eficacia(ARRAY" + (Arrays.toString(arr)) + "::int[],'" + desde +"'::date,'" +  hasta + "'::date) b  "           
            + "INNER JOIN emp.area p on p.id = b.areas";
     try {             
    Query sql = this.em.createNativeQuery(q);
@@ -352,8 +398,8 @@ public class IndicadorInpFacade {
                              
         
        sql.setParameter(1, areasId);
-       sql.setParameter(2, fecha1);
-       sql.setParameter(3, fecha2);
+       sql.setParameter(2, desde);
+       sql.setParameter(3, hasta);
        
        System.out.println(sql);
        
@@ -373,7 +419,12 @@ public class IndicadorInpFacade {
         }
     }
      public List calcularEfectividadAt(String[] areasId, String desde, String hasta) {
-   String q = "SELECT b.gestionados,b.total,p.nombre   from sec.efectividadat(?1::int[],?2::date,?3::date) b "           
+         int size = areasId.length;
+      int [] arr = new int [size];
+      for(int i=0; i<size; i++) {
+         arr[i] = Integer.parseInt(areasId[i]); 
+      }
+   String q = "SELECT b.gestionados,b.total,p.nombre   from sec.efectividadat(ARRAY" + (Arrays.toString(arr)) + "::int[],'" + desde +"'::date,'" +  hasta + "'::date) b  "           
            + "INNER JOIN emp.area p on p.id = b.areas";
     try {             
    Query sql = this.em.createNativeQuery(q);
