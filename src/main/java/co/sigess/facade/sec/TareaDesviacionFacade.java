@@ -78,6 +78,7 @@ public class TareaDesviacionFacade extends AbstractFacade<TareaDesviacion> {
         tareaDB.setTipoAccion(entity.getTipoAccion());
         tareaDB.setFechaProyectada(entity.getFechaProyectada());
         tareaDB.setAreaResponsable(entity.getAreaResponsable());
+        tareaDB.setjerarquia(entity.getjerarquia());
         return super.edit(tareaDB); //To change body of generated methods, choose Tools | Templates.
     }
 
