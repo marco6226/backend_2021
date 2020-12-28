@@ -47,9 +47,9 @@ public class CasosMedicos implements Serializable {
      * @param fechaCreacion the fechaCreacion to set
      */
     public void setFechaCreacion(Date fechaCreacion) {
-        this.fechaCreacion = fechaCreacion;
+         this.fechaCreacion = fechaCreacion; 
     }
-
+ 
     /**
      * @return the saludStatus
      */
@@ -198,6 +198,9 @@ public class CasosMedicos implements Serializable {
     @Size(max = 128)
     @Column(name = "sve")
     private String sve;
+    @Size(max = 128)
+    @Column(name = "documento")
+    private String documento;
     @Size(max = 128)
     @Column(name = "professional_area")
     private String professionalArea;
@@ -467,6 +470,20 @@ public class CasosMedicos implements Serializable {
      */
     public void setCargo(String cargo) {
         this.cargo = cargo;
+    }
+
+    /**
+     * @return the documento
+     */
+    public String getDocumento() {
+        return documento;
+    }
+
+    /**
+     * @param documento the documento to set
+     */
+    public void setDocumento(String documento) {
+        this.documento = documento;
     }
 
     

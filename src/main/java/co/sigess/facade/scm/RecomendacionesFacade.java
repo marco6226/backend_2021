@@ -4,10 +4,10 @@
  * and open the template in the editor.
  */
 package co.sigess.facade.scm;
-import co.sigess.facade.com.AbstractFacade;
+
 import co.sigess.entities.scm.CasosMedicos;
+import co.sigess.entities.scm.Recomendaciones;
 import co.sigess.facade.com.AbstractFacade;
-import java.io.Serializable;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -19,42 +19,44 @@ import javax.persistence.Query;
  * @author leonardo
  */
 @Stateless
-public class CasosMedicosFacade  extends AbstractFacade<CasosMedicos>{
-    
-     @PersistenceContext(unitName = "SIGESS_PU")
+public class RecomendacionesFacade extends AbstractFacade<Recomendaciones> {
+
+    @PersistenceContext(unitName = "SIGESS_PU")
     private EntityManager em;
 
-  @Override
+    @Override
     protected EntityManager getEntityManager() {
         return em;
     }
-       public CasosMedicosFacade() {
-        super(CasosMedicos.class);
-    }
-
     
-     public CasosMedicos create(CasosMedicos casosMedicos, Integer empresaId) throws Exception {
+    public RecomendacionesFacade(){
+        super(Recomendaciones.class);
+    }
+    
+    
+     public Recomendaciones create(Recomendaciones recomendaciones, Integer empresaId) throws Exception {
         
 
-        super.create(casosMedicos);
-        return casosMedicos;
+        super.create(recomendaciones);
+        return recomendaciones;
     }
      
-      public CasosMedicos update(CasosMedicos casosMedicos) throws Exception {
+      public Recomendaciones update(Recomendaciones recomendaciones) throws Exception {
        
-        casosMedicos = super.edit(casosMedicos);
-        return casosMedicos;
+        recomendaciones = super.edit(recomendaciones);
+        return recomendaciones;
     }
 
-      public List<CasosMedicos> buscar(String parametro) {
+      public List<Recomendaciones> buscar(String parametro) {
         System.out.println(parametro);
 
         Query q = this.em.createNativeQuery("SELECT * FROM scm.casos_medicos  WHERE documento = ?1");
         
         q.setParameter(1,parametro);
-         System.out.println(q);
-        List<CasosMedicos> list = (List<CasosMedicos>) q.getResultList();
+        List<Recomendaciones> list = (List<Recomendaciones>) q.getResultList();
         return list;
-    }
+
+      }
       
+    
 }
