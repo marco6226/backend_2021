@@ -10,9 +10,12 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -24,12 +27,20 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author leonardo
  */
 @Entity
-@Table(name = "recomendaciones")
+@Table(name = "recomendaciones",schema="scm")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Recomendaciones.findAll", query = "SELECT r FROM Recomendaciones r")})
 public class Recomendaciones implements Serializable {
 
+    
+    @Id
+    @SequenceGenerator(name = "recomendaciones_id_seq", schema = "scm", sequenceName = "recomendaciones_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "recomendaciones_id_seq")
+    @Basic(optional = false)
+    @Column(name = "id")
+    private Integer id;
+    
     private static final long serialVersionUID = 1L;
     @Column(name = "generate_recomendaciones")
     private Character generateRecomendaciones;
@@ -147,6 +158,20 @@ public class Recomendaciones implements Serializable {
     @Override
     public String toString() {
         return "co.sigess.entities.scm.Recomendaciones[ pkUser=" + pkUser + " ]";
+    }
+
+    /**
+     * @return the id
+     */
+    public Integer getId() {
+        return id;
+    }
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(Integer id) {
+        this.id = id;
     }
     
 }
