@@ -15,11 +15,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -27,27 +29,29 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author leonardo
  */
 @Entity
-@Table(name = "recomendaciones",schema="scm")
+@Table(name = "recomendaciones", schema = "scm")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Recomendaciones.findAll", query = "SELECT r FROM Recomendaciones r")})
 public class Recomendaciones implements Serializable {
 
-    
     @Id
     @SequenceGenerator(name = "recomendaciones_id_seq", schema = "scm", sequenceName = "recomendaciones_id_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "recomendaciones_id_seq")
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    
+
     private static final long serialVersionUID = 1L;
     @Column(name = "generate_recomendaciones")
-    private Character generateRecomendaciones;
+    @Size(max = 128)
+    private String generateRecomendaciones;
     @Column(name = "entidad_emit_recomendaciones")
-    private Character entidadEmitRecomendaciones;
+    @Size(max = 128)
+    private String entidadEmitRecomendaciones;
     @Column(name = "tipo")
-    private Character tipo;
+    @Size(max = 128)
+    private String tipo;
     @Column(name = "fecha_inicio")
     @Temporal(TemporalType.DATE)
     private Date fechaInicio;
@@ -55,9 +59,11 @@ public class Recomendaciones implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date fechaExpiracion;
     @Column(name = "status")
-    private Character status;
+    @Size(max = 128)
+    private String status;
     @Column(name = "recomendaciones")
-    private Character recomendaciones;
+    @Size(max = 128)
+    private String recomendaciones;
     @Id
     @Basic(optional = false)
     @NotNull
@@ -71,62 +77,13 @@ public class Recomendaciones implements Serializable {
         this.pkUser = pkUser;
     }
 
-    public Character getGenerateRecomendaciones() {
-        return generateRecomendaciones;
-    }
-
-    public void setGenerateRecomendaciones(Character generateRecomendaciones) {
-        this.generateRecomendaciones = generateRecomendaciones;
-    }
-
-    public Character getEntidadEmitRecomendaciones() {
-        return entidadEmitRecomendaciones;
-    }
-
-    public void setEntidadEmitRecomendaciones(Character entidadEmitRecomendaciones) {
-        this.entidadEmitRecomendaciones = entidadEmitRecomendaciones;
-    }
-
-    public Character getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(Character tipo) {
-        this.tipo = tipo;
-    }
-
-    public Date getFechaInicio() {
-        return fechaInicio;
-    }
 
     public void setFechaInicio(Date fechaInicio) {
         this.fechaInicio = fechaInicio;
     }
 
-    public Date getFechaExpiracion() {
-        return fechaExpiracion;
-    }
 
-    public void setFechaExpiracion(Date fechaExpiracion) {
-        this.fechaExpiracion = fechaExpiracion;
-    }
-
-    public Character getStatus() {
-        return status;
-    }
-
-    public void setStatus(Character status) {
-        this.status = status;
-    }
-
-    public Character getRecomendaciones() {
-        return recomendaciones;
-    }
-
-    public void setRecomendaciones(Character recomendaciones) {
-        this.recomendaciones = recomendaciones;
-    }
-
+    
     public Long getPkUser() {
         return pkUser;
     }
@@ -172,6 +129,108 @@ public class Recomendaciones implements Serializable {
      */
     public void setId(Integer id) {
         this.id = id;
+    }
+
+     @PrePersist
+    public void onPrePersist() {
+        audit("INSERT");
+    }
+    
+    
+    private void audit(String operation) {
+        System.out.print(operation);
+        
+    }
+
+    /**
+     * @return the generateRecomendaciones
+     */
+    public String getGenerateRecomendaciones() {
+        return generateRecomendaciones;
+    }
+
+    /**
+     * @param generateRecomendaciones the generateRecomendaciones to set
+     */
+    public void setGenerateRecomendaciones(String generateRecomendaciones) {
+        this.generateRecomendaciones = generateRecomendaciones;
+    }
+
+    /**
+     * @return the entidadEmitRecomendaciones
+     */
+    public String getEntidadEmitRecomendaciones() {
+        return entidadEmitRecomendaciones;
+    }
+
+    /**
+     * @param entidadEmitRecomendaciones the entidadEmitRecomendaciones to set
+     */
+    public void setEntidadEmitRecomendaciones(String entidadEmitRecomendaciones) {
+        this.entidadEmitRecomendaciones = entidadEmitRecomendaciones;
+    }
+
+    /**
+     * @return the tipo
+     */
+    public String getTipo() {
+        return tipo;
+    }
+
+    /**
+     * @param tipo the tipo to set
+     */
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    /**
+     * @return the fechaInicio
+     */
+    public Date getFechaInicio() {
+        return fechaInicio;
+    }
+
+    /**
+     * @return the fechaExpiracion
+     */
+    public Date getFechaExpiracion() {
+        return fechaExpiracion;
+    }
+
+    /**
+     * @param fechaExpiracion the fechaExpiracion to set
+     */
+    public void setFechaExpiracion(Date fechaExpiracion) {
+        this.fechaExpiracion = fechaExpiracion;
+    }
+
+    /**
+     * @return the status
+     */
+    public String getStatus() {
+        return status;
+    }
+
+    /**
+     * @param status the status to set
+     */
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    /**
+     * @return the recomendaciones
+     */
+    public String getRecomendaciones() {
+        return recomendaciones;
+    }
+
+    /**
+     * @param recomendaciones the recomendaciones to set
+     */
+    public void setRecomendaciones(String recomendaciones) {
+        this.recomendaciones = recomendaciones;
     }
     
 }
