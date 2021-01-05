@@ -10,12 +10,15 @@ import co.sigess.entities.scm.Recomendaciones;
 
 import co.sigess.facade.scm.CasosMedicosFacade;
 import co.sigess.facade.scm.RecomendacionesFacade;
+import co.sigess.restful.Filter;
+import co.sigess.restful.FilterQuery;
 import co.sigess.restful.ServiceREST;
 import co.sigess.restful.emp.EmpleadoREST;
 import co.sigess.restful.rai.ReporteREST;
 import co.sigess.util.Util;
 import java.util.List;
 import javax.ejb.EJB;
+import javax.ws.rs.BeanParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -79,11 +82,22 @@ public class CasoMedicoREST extends ServiceREST {
     }
 
     @GET
-    @Path("recomendation")
+    @Path("recomendation/{parametro}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response listReco() {
+    public Response listReco(@PathParam("parametro") String parametro) {
         try {
-            List list = this.recomendacionesFacade.findAll();
+            FilterQuery filterQuery = new FilterQuery();
+            System.out.print("Aqui paso" + parametro);
+            Filter empFilt = new Filter();
+            empFilt.setCriteria("eq");
+            empFilt.setField("pk_user");
+            empFilt.setValue1(parametro);
+            //filterQuery.getFilterList().add(empFilt);
+
+            for (Filter filter : filterQuery.getFilterList()) {
+                System.out.print(filter.getField());
+            }
+            List list = this.recomendacionesFacade.findWithFilter(filterQuery);
             return Response.ok(list).build();
         } catch (Exception ex) {
             return Util.manageException(ex, ReporteREST.class);
