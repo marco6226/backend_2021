@@ -16,6 +16,7 @@ import co.sigess.restful.ServiceREST;
 import co.sigess.restful.emp.EmpleadoREST;
 import co.sigess.restful.rai.ReporteREST;
 import co.sigess.util.Util;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ws.rs.BeanParam;
@@ -86,18 +87,8 @@ public class CasoMedicoREST extends ServiceREST {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response listReco(@PathParam("parametro") String parametro) {
         try {
-            FilterQuery filterQuery = new FilterQuery();
-            System.out.print("Aqui paso" + parametro);
-            Filter empFilt = new Filter();
-            empFilt.setCriteria("eq");
-            empFilt.setField("pk_user");
-            empFilt.setValue1(parametro);
-            //filterQuery.getFilterList().add(empFilt);
-
-            for (Filter filter : filterQuery.getFilterList()) {
-                System.out.print(filter.getField());
-            }
-            List list = this.recomendacionesFacade.findWithFilter(filterQuery);
+            
+            List<Recomendaciones> list = this.recomendacionesFacade.buscar(parametro);
             return Response.ok(list).build();
         } catch (Exception ex) {
             return Util.manageException(ex, ReporteREST.class);
