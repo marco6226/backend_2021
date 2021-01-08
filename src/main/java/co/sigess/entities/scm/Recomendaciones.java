@@ -44,13 +44,13 @@ public class Recomendaciones implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Column(name = "generate_recomendaciones")
-    @Size(max = 128)
+    @Size(max = 2147483647)
     private String generateRecomendaciones;
     @Column(name = "entidad_emit_recomendaciones")
-    @Size(max = 128)
+    @Size(max = 2147483647)
     private String entidadEmitRecomendaciones;
     @Column(name = "tipo")
-    @Size(max = 128)
+    @Size(max = 2147483647)
     private String tipo;
     @Column(name = "fecha_inicio")
     @Temporal(TemporalType.DATE)
@@ -59,10 +59,10 @@ public class Recomendaciones implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date fechaExpiracion;
     @Column(name = "status")
-    @Size(max = 128)
+    @Size(max = 2147483647)
     private String status;
     @Column(name = "recomendaciones")
-    @Size(max = 128)
+    @Size(max = 2147483647)
     private String recomendaciones;
     @Id
     @Basic(optional = false)

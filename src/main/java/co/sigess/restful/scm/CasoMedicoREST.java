@@ -7,18 +7,24 @@ package co.sigess.restful.scm;
 
 import co.sigess.entities.scm.CasosMedicos;
 import co.sigess.entities.scm.Recomendaciones;
+import co.sigess.entities.scm.ScmLogs;
 
 import co.sigess.facade.scm.CasosMedicosFacade;
 import co.sigess.facade.scm.RecomendacionesFacade;
+import co.sigess.facade.scm.ScmLogsFacade;
 import co.sigess.restful.Filter;
 import co.sigess.restful.FilterQuery;
 import co.sigess.restful.ServiceREST;
 import co.sigess.restful.emp.EmpleadoREST;
 import co.sigess.restful.rai.ReporteREST;
 import co.sigess.util.Util;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
+import javax.persistence.Entity;
 import javax.ws.rs.BeanParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -28,6 +34,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import org.jsoup.nodes.Entities;
 
 /**
  *
@@ -38,6 +45,9 @@ public class CasoMedicoREST extends ServiceREST {
 
     @EJB
     private CasosMedicosFacade casosmedicosFacade;
+
+    @EJB
+    private ScmLogsFacade scmLogsFacade;
 
     @EJB
     private RecomendacionesFacade recomendacionesFacade;
@@ -63,6 +73,7 @@ public class CasoMedicoREST extends ServiceREST {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response create(CasosMedicos casosmedicos) {
         try {
+            
             casosmedicos = this.casosmedicosFacade.create(casosmedicos);
             return Response.ok(casosmedicos.getId()).build();
         } catch (Exception ex) {
@@ -87,7 +98,7 @@ public class CasoMedicoREST extends ServiceREST {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response listReco(@PathParam("parametro") String parametro) {
         try {
-            
+
             List<Recomendaciones> list = this.recomendacionesFacade.buscar(parametro);
             return Response.ok(list).build();
         } catch (Exception ex) {
@@ -100,7 +111,11 @@ public class CasoMedicoREST extends ServiceREST {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response createReco(Recomendaciones recomendaciones) {
         try {
+             ObjectMapper mapper = new ObjectMapper();
+            String json = mapper.writeValueAsString(recomendaciones);
+            this.logScm("Creacion de recomendacion", json);
             recomendaciones = this.recomendacionesFacade.create(recomendaciones);
+         
             return Response.ok(recomendaciones.getId()).build();
         } catch (Exception ex) {
             return Util.manageException(ex, ReporteREST.class);
@@ -130,4 +145,18 @@ public class CasoMedicoREST extends ServiceREST {
         }
     }
 
+    private void logScm(String action , String json ){
+        try {
+            ScmLogs log = new ScmLogs();
+            log.setAction(action);
+          //  log.setFecha_creacion(Date.from(Instant.MIN));
+            log.setJson(json);
+            scmLogsFacade.create(log);
+           
+        } catch (Exception e) {
+        }
+          
+    }
+
+   
 }
