@@ -46,6 +46,16 @@ public class Recomendaciones implements Serializable {
     @Column(name = "generate_recomendaciones")
     @Size(max = 2147483647)
     private String generateRecomendaciones;
+    
+    
+    @Column(name = "actionplan")
+    @Size(max = 2147483647)
+    private String actionPlan;
+    
+    @Column(name = "action_plan_responsable")
+    @Size(max = 2147483647)
+    private String actionPlanResponsable;
+     
     @Column(name = "entidad_emit_recomendaciones")
     @Size(max = 2147483647)
     private String entidadEmitRecomendaciones;
@@ -231,6 +241,34 @@ public class Recomendaciones implements Serializable {
      */
     public void setRecomendaciones(String recomendaciones) {
         this.recomendaciones = recomendaciones;
+    }
+
+    /**
+     * @return the actionPlan
+     */
+    public String getActionPlan() {
+        return actionPlan;
+    }
+
+    /**
+     * @param actionPlan the actionPlan to set
+     */
+    public void setActionPlan(String actionPlan) {
+        this.actionPlan = actionPlan;
+    }
+
+    /**
+     * @return the actionPlanResponsable
+     */
+    public String getActionPlanResponsable() {
+        return actionPlanResponsable;
+    }
+
+    /**
+     * @param actionPlanResponsable the actionPlanResponsable to set
+     */
+    public void setActionPlanResponsable(String actionPlanResponsable) {
+        this.actionPlanResponsable = actionPlanResponsable;
     }
     
 }

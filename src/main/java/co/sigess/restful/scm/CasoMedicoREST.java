@@ -85,7 +85,7 @@ public class CasoMedicoREST extends ServiceREST {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response edit(CasosMedicos casosmedicos) {
         try {
-
+            
             casosmedicos = this.casosmedicosFacade.update(casosmedicos);
             return Response.ok(casosmedicos.getId()).build();
         } catch (Exception ex) {
@@ -111,7 +111,7 @@ public class CasoMedicoREST extends ServiceREST {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response createReco(Recomendaciones recomendaciones) {
         try {
-             ObjectMapper mapper = new ObjectMapper();
+            ObjectMapper mapper = new ObjectMapper();
             String json = mapper.writeValueAsString(recomendaciones);
             this.logScm("Creacion de recomendacion", json);
             recomendaciones = this.recomendacionesFacade.create(recomendaciones);
@@ -119,7 +119,7 @@ public class CasoMedicoREST extends ServiceREST {
             return Response.ok(recomendaciones.getId()).build();
         } catch (Exception ex) {
             return Util.manageException(ex, ReporteREST.class);
-        }
+            }
     }
 
     @GET
@@ -145,15 +145,17 @@ public class CasoMedicoREST extends ServiceREST {
         }
     }
 
+    
     private void logScm(String action , String json ){
         try {
             ScmLogs log = new ScmLogs();
             log.setAction(action);
-          //  log.setFecha_creacion(Date.from(Instant.MIN));
+            //log.setFecha_creacion(Date.from(Instant.MIN));
             log.setJson(json);
             scmLogsFacade.create(log);
            
         } catch (Exception e) {
+
         }
           
     }
