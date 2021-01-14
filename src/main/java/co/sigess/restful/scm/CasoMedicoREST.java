@@ -5,9 +5,11 @@
  */
 package co.sigess.restful.scm;
 
+import co.sigess.entities.aus.ReporteAusentismo;
 import co.sigess.entities.scm.CasosMedicos;
 import co.sigess.entities.scm.Recomendaciones;
 import co.sigess.entities.scm.ScmLogs;
+import co.sigess.facade.aus.ReporteAusentismoFacade;
 
 import co.sigess.facade.scm.CasosMedicosFacade;
 import co.sigess.facade.scm.RecomendacionesFacade;
@@ -45,6 +47,9 @@ public class CasoMedicoREST extends ServiceREST {
 
     @EJB
     private CasosMedicosFacade casosmedicosFacade;
+    
+    @EJB
+    private ReporteAusentismoFacade reporteAusentismoFacade;
 
     @EJB
     private ScmLogsFacade scmLogsFacade;
@@ -122,6 +127,21 @@ public class CasoMedicoREST extends ServiceREST {
             }
     }
 
+    
+    @GET
+    @Path("scmausentismo/{parametro}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response listAus(@PathParam("parametro") String documento) {
+        try {
+            System.out.println("Prueba");
+            List<ReporteAusentismo> list = this.reporteAusentismoFacade.buscar(documento);
+            return Response.ok(list).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, ReporteREST.class);
+        }
+    }
+    
+    
     @GET
     @Path("validate/{parametro}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})

@@ -7,11 +7,13 @@ package co.sigess.restful.aus;
 
 import co.sigess.entities.aus.CausaAusentismo;
 import co.sigess.entities.aus.ReporteAusentismo;
+import co.sigess.entities.scm.Recomendaciones;
 import co.sigess.facade.aus.ReporteAusentismoFacade;
 import co.sigess.restful.Filter;
 import co.sigess.restful.FilterQuery;
 import co.sigess.restful.FilterResponse;
 import co.sigess.restful.ServiceREST;
+import co.sigess.restful.rai.ReporteREST;
 import co.sigess.restful.security.Secured;
 import co.sigess.util.Util;
 import java.io.IOException;
@@ -23,6 +25,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -37,7 +40,7 @@ public class ReporteAusentismoREST extends ServiceREST {
 
     @EJB
     private ReporteAusentismoFacade reporteAusentismoFacade;
-
+ 
     @Override
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -80,6 +83,20 @@ public class ReporteAusentismoREST extends ServiceREST {
         }
     }
 
+    @GET
+    @Path("scmausentismo/{parametro}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response listReco(@PathParam("parametro") String documento) {
+        try {
+            System.out.println("Prueba");
+            List<ReporteAusentismo> list = this.reporteAusentismoFacade.buscar(documento);
+            return Response.ok(list).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, ReporteREST.class);
+        }
+    }
+     
+    
     @PUT
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response edit(ReporteAusentismo reporteAusentismo) {

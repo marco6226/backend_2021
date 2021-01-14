@@ -6,6 +6,7 @@
 package co.sigess.facade.aus;
 
 import co.sigess.entities.aus.ReporteAusentismo;
+import co.sigess.entities.scm.Recomendaciones;
 import co.sigess.facade.com.AbstractFacade;
 import java.util.Date;
 import java.util.List;
@@ -60,6 +61,16 @@ public class ReporteAusentismoFacade extends AbstractFacade<ReporteAusentismo> {
         return super.edit(repDB); //To change body of generated methods, choose Tools | Templates.
     }
     
+      public List<ReporteAusentismo> buscar(String parametro) {
+        System.out.println(parametro);
+
+        Query q = this.em.createNativeQuery("SELECT * FROM aus.reporte_ausentismo  WHERE fk_empleado_id = ?1",ReporteAusentismo.class);
+        
+        q.setParameter(1,Integer.parseInt(parametro));
+        List<ReporteAusentismo> list = (List<ReporteAusentismo>) q.getResultList();
+        return list;
+
+      }
     
     
 }
