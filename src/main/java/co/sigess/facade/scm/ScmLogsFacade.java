@@ -8,9 +8,11 @@ package co.sigess.facade.scm;
 import co.sigess.entities.scm.Recomendaciones;
 import co.sigess.entities.scm.ScmLogs;
 import co.sigess.facade.com.AbstractFacade;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -37,4 +39,12 @@ public class ScmLogsFacade extends AbstractFacade<ScmLogs>{
         super.create(logs);
         return logs;
     }
+       
+         public List<ScmLogs> findAllById(String userDocument) {
+        Query query = this.em.createNativeQuery("SELECT * FROM scm.scm_logs WHERE pk_user = ?1",ScmLogs.class);
+        query.setParameter(1, userDocument);
+        List<ScmLogs> list = (List<ScmLogs>) query.getResultList();
+        return list;
+    }
+     
 }

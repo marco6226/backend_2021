@@ -39,6 +39,7 @@ public class CausaAusentismoREST extends ServiceREST{
             boolean filtradoEmpresa = false;
             for (Filter filter : filterQuery.getFilterList()) {
                 if (filter.getField().equals("empresa.id")) {
+                    System.out.println(filter.getField());
                     filtradoEmpresa = true;
                     break;
                 }
@@ -48,6 +49,7 @@ public class CausaAusentismoREST extends ServiceREST{
                 empFilt.setCriteria("eq");
                 empFilt.setField("empresa.id");
                 empFilt.setValue1(super.getEmpresaIdRequestContext().toString());
+                System.out.println(super.getEmpresaIdRequestContext().toString());
                 filterQuery.getFilterList().add(empFilt);
             }
             List<CausaAusentismo> list = causaAusentismoFacade.findWithFilter(filterQuery);
