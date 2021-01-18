@@ -38,6 +38,9 @@ public class ScmLogs implements Serializable {
     @Size(max = 2147483647)
     @Column(name = "action")
     private String action;
+    @Size(max = 2147483647)
+    @Column(name = "pk_user")
+    private String pkUser;
     @Column(name = "fecha_creacion")
     @Temporal(TemporalType.DATE)
     private Date fecha_creacion;
@@ -105,6 +108,20 @@ public class ScmLogs implements Serializable {
     @Override
     public String toString() {
         return "co.sigess.entities.scm.ScmLogs[ id=" + id + " ]";
+    }
+
+    /**
+     * @return the pkUser
+     */
+    public String getPkUser() {
+        return pkUser;
+    }
+
+    /**
+     * @param pkUser the pkUser to set
+     */
+    public void setPkUser(String pkUser) {
+        this.pkUser = pkUser;
     }
     
 }

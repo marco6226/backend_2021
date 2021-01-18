@@ -90,7 +90,10 @@ public class CasoMedicoREST extends ServiceREST {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response edit(CasosMedicos casosmedicos) {
         try {
+            ObjectMapper mapper = new ObjectMapper();
+            String json = mapper.writeValueAsString(casosmedicos);
             
+            this.logScm("Edicion de caso medico", json , casosmedicos.getDocumento(), casosmedicos.getClass().toString());
             casosmedicos = this.casosmedicosFacade.update(casosmedicos);
             return Response.ok(casosmedicos.getId()).build();
         } catch (Exception ex) {
@@ -118,7 +121,8 @@ public class CasoMedicoREST extends ServiceREST {
         try {
             ObjectMapper mapper = new ObjectMapper();
             String json = mapper.writeValueAsString(recomendaciones);
-            this.logScm("Creacion de recomendacion", json);
+            
+            this.logScm("Creacion de recomendacion", json , recomendaciones.getPkUser().toString(),recomendaciones.getClass().toString());
             recomendaciones = this.recomendacionesFacade.create(recomendaciones);
          
             return Response.ok(recomendaciones.getId()).build();
@@ -165,12 +169,27 @@ public class CasoMedicoREST extends ServiceREST {
         }
     }
 
+    @GET
+    @Path("logs/{parametro}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response getLogs(@PathParam("parametro") String parametro) {
+          try {
+
+            List<ScmLogs> list = this.scmLogsFacade.findAllById(parametro);
+            return Response.ok(list).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, ReporteREST.class);
+        }
+    }
     
-    private void logScm(String action , String json ){
+    
+    private void logScm(String action , String json ,String documento,String entity){
         try {
             ScmLogs log = new ScmLogs();
             log.setAction(action);
-            //log.setFecha_creacion(Date.from(Instant.MIN));
+            log.setPkUser(documento);
+            log.setFecha_creacion(new Date());
+            log.setEntity(entity);
             log.setJson(json);
             scmLogsFacade.create(log);
            
