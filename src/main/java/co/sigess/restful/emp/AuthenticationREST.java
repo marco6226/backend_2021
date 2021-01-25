@@ -82,9 +82,10 @@ public class AuthenticationREST {
 
             String appVersion = httpRequest.getHeader(UtilSecurity.APP_VERSION_HEADER_NAME);
             Map<String, Object> map = (Map<String, Object>) loaderFacade.getApiVersion().getSoportado().get(appVersion);
+                          
             if (map == null || (Boolean) map.get("req_update")) {
                 Mensaje msg = new Mensaje(
-                        "La versión de la app no es compatible",
+                        "La versión de la app no es compatible", 
                         "Por favor asegurese de actualizar a la versión mas reciente",
                         TipoMensaje.warn, Mensaje.COD_VERSION_APP_NO_COMPATIBLE
                 );
