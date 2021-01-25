@@ -23,6 +23,7 @@ import co.sigess.util.Util;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
@@ -79,6 +80,7 @@ public class CasoMedicoREST extends ServiceREST {
     public Response create(CasosMedicos casosmedicos) {
         try {
             
+            this.logScm("Creacion de caso", "" , casosmedicos.getPkUser(),casosmedicos.getClass().toString());
             casosmedicos = this.casosmedicosFacade.create(casosmedicos);
             return Response.ok(casosmedicos.getId()).build();
         } catch (Exception ex) {
@@ -93,7 +95,7 @@ public class CasoMedicoREST extends ServiceREST {
             ObjectMapper mapper = new ObjectMapper();
             String json = mapper.writeValueAsString(casosmedicos);
             
-            this.logScm("Edicion de caso medico", json , casosmedicos.getDocumento(), casosmedicos.getClass().toString());
+            this.logScm("Edicion de caso medico", json , casosmedicos.getPkUser(), casosmedicos.getClass().toString());
             casosmedicos = this.casosmedicosFacade.update(casosmedicos);
             return Response.ok(casosmedicos.getId()).build();
         } catch (Exception ex) {
@@ -185,10 +187,12 @@ public class CasoMedicoREST extends ServiceREST {
     
     private void logScm(String action , String json ,String documento,String entity){
         try {
+            Calendar fechaActual = Calendar.getInstance();
+            System.out.println(fechaActual.getTime());
             ScmLogs log = new ScmLogs();
             log.setAction(action);
             log.setPkUser(documento);
-            log.setFecha_creacion(new Date());
+            log.setFecha_creacion(fechaActual.getTime());
             log.setEntity(entity);
             log.setJson(json);
             scmLogsFacade.create(log);

@@ -8,7 +8,9 @@ package co.sigess.restful.aus;
 import co.sigess.entities.aus.CausaAusentismo;
 import co.sigess.entities.aus.ReporteAusentismo;
 import co.sigess.entities.scm.Recomendaciones;
+import co.sigess.entities.scm.ScmLogs;
 import co.sigess.facade.aus.ReporteAusentismoFacade;
+import co.sigess.facade.scm.ScmLogsFacade;
 import co.sigess.restful.Filter;
 import co.sigess.restful.FilterQuery;
 import co.sigess.restful.FilterResponse;
@@ -18,6 +20,7 @@ import co.sigess.restful.security.Secured;
 import co.sigess.util.Util;
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ws.rs.BeanParam;
@@ -40,7 +43,10 @@ public class ReporteAusentismoREST extends ServiceREST {
 
     @EJB
     private ReporteAusentismoFacade reporteAusentismoFacade;
- 
+    
+    @EJB
+    private ScmLogsFacade scmLogsFacade;
+   
     @Override
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -76,6 +82,8 @@ public class ReporteAusentismoREST extends ServiceREST {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response create(ReporteAusentismo reporteAusentismo) {
         try {
+           
+            this.logScm("Se agrego un ausentismo", "" , reporteAusentismo.getEmpleado().getId().toString(),reporteAusentismo.getClass().toString());
             reporteAusentismo = reporteAusentismoFacade.create(reporteAusentismo);
             return Response.ok(reporteAusentismo).build();
         } catch (Exception e) {
@@ -107,4 +115,23 @@ public class ReporteAusentismoREST extends ServiceREST {
             return Util.manageException(e, ReporteAusentismoREST.class);
         }
     }
+    
+    
+      private void logScm(String action , String json ,String documento,String entity){
+        try {
+            
+            ScmLogs log = new ScmLogs();
+            log.setAction(action);
+            log.setPkUser(documento);
+            log.setFecha_creacion(new Date());
+            log.setEntity(entity);
+            log.setJson(json);
+            scmLogsFacade.create(log);
+           
+        } catch (Exception e) {
+
+        }
+      }
+    
+    
 }
