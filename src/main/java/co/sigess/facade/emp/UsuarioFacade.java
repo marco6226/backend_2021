@@ -155,7 +155,7 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
         Map<String, String> parametros = new HashMap<>();
         parametros.put("P{passwd}", passwd);
         parametros.put("P{email}", usuario.getEmail());
-        emailFacade.sendEmail(parametros, TipoMail.CREACION_USUARIO, "Creación de cuenta", usuario.getEmail());
+       // emailFacade.sendEmail(parametros, TipoMail.CREACION_USUARIO, "Creación de cuenta", usuario.getEmail());
         return usuario;
     }
 

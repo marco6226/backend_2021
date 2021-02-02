@@ -121,6 +121,9 @@ public class CasosMedicos implements Serializable {
     @Column(name = "fecha_final")
     private String fechaFinal;
     @Size(max = 128)
+    @Column(name = "descripcion_cargo")
+    private String descripcionCargo;
+    @Size(max = 128)
     @Column(name = "observaciones")
     private String observaciones;
     @Size(max = 128) 
@@ -281,6 +284,20 @@ public class CasosMedicos implements Serializable {
 
     public String getDiagnostico() {
         return diagnostico;
+    }
+
+    /**
+     * @return the descripcionCargo
+     */
+    public String getDescripcionCargo() {
+        return descripcionCargo;
+    }
+
+    /**
+     * @param descripcionCargo the descripcionCargo to set
+     */
+    public void setDescripcionCargo(String descripcionCargo) {
+        this.descripcionCargo = descripcionCargo;
     }
 
     public void setDiagnostico(String diagnostico) {
