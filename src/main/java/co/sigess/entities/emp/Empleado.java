@@ -134,6 +134,23 @@ public class Empleado implements Serializable {
     @Column(name = "telefono2")
     private String telefono2;
 
+    @Size(max = 45)
+    @Column(name = "direccion_gerencia")
+    private String direccionGerencia;
+
+    
+    @Size(max = 45)
+    @Column(name = "regional")
+    private String regional;
+    
+    @Size(max = 20)
+    @Column(name = "correo_personal")
+    private String correoPersonal;
+
+    @Size(max = 20)
+    @Column(name = "ciudad_gerencia")
+    private String ciudadGerencia;
+
     @Size(max = 20)
     @Column(name = "tipo_vinculacion")
     private String tipoVinculacion;
@@ -150,6 +167,16 @@ public class Empleado implements Serializable {
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Area area;
 
+    @JoinColumn(name = "fk_jefe_inmediato", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private Empleado jefeInmediato;
+
+    
+    @JoinColumn(name = "fk_bussiness_partner", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private Empleado businessPartner;
+
+    
     @JoinColumn(name = "fk_cargo_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Cargo cargo;
@@ -239,6 +266,34 @@ public class Empleado implements Serializable {
         this.fechaNacimiento = fechaNacimiento;
     }
 
+    /**
+     * @return the regional
+     */
+    public String getRegional() {
+        return regional;
+    }
+
+    /**
+     * @param regional the regional to set
+     */
+    public void setRegional(String regional) {
+        this.regional = regional;
+    }
+
+    /**
+     * @return the ciudadGerencia
+     */
+    public String getCiudadGerencia() {
+        return ciudadGerencia;
+    }
+
+    /**
+     * @param ciudadGerencia the ciudadGerencia to set
+     */
+    public void setCiudadGerencia(String ciudadGerencia) {
+        this.ciudadGerencia = ciudadGerencia;
+    }
+
     public String getGenero() {
         return genero;
     }
@@ -250,6 +305,51 @@ public class Empleado implements Serializable {
     public TipoIdentificacion getTipoIdentificacion() {
         return tipoIdentificacion;
     }
+
+    /**
+     * @return the businessPartner
+     */
+    public Empleado getBusinessPartner() {
+        return businessPartner;
+    }
+
+    /**
+     * @param businessPartner the businessPartner to set
+     */
+    public void setBusinessPartner(Empleado businessPartner) {
+        this.businessPartner = businessPartner;
+    }
+
+    /**
+     * @return the direccionGerencia
+     */
+    public String getDireccionGerencia() {
+        return direccionGerencia;
+    }
+
+    /**
+     * @param direccionGerencia the direccionGerencia to set
+     */
+    public void setDireccionGerencia(String direccionGerencia) {
+        this.direccionGerencia = direccionGerencia;
+    }
+
+    /**
+     * @return the correoPersonal
+     */
+    public String getCorreoPersonal() {
+        return correoPersonal;
+    }
+
+    /**
+     * @param correoPersonal the correoPersonal to set
+     */
+    public void setCorreoPersonal(String correoPersonal) {
+        this.correoPersonal = correoPersonal;
+    }
+
+    
+   
 
     public void setTipoIdentificacion(TipoIdentificacion tipoIdentificacion) {
         this.tipoIdentificacion = tipoIdentificacion;
@@ -265,6 +365,20 @@ public class Empleado implements Serializable {
 
     public String getPrimerApellido() {
         return primerApellido;
+    }
+
+    /**
+     * @return the jefeInmediato
+     */
+    public Empleado getJefeInmediato() {
+        return jefeInmediato;
+    }
+
+    /**
+     * @param jefeInmediato the jefeInmediato to set
+     */
+    public void setJefeInmediato(Empleado jefeInmediato) {
+        this.jefeInmediato = jefeInmediato;
     }
 
     public void setPrimerApellido(String primerApellido) {
