@@ -154,18 +154,9 @@ public class CasoMedicoREST extends ServiceREST {
     public Response buscar(@PathParam("parametro") String parametro) {
         try {
             List<CasosMedicos> list = casosmedicosFacade.buscar(parametro);
-            System.out.println(list.size());
 
-            if (list.size() > 0) {
+            return Response.ok(list).build();
 
-                System.out.println(list.size());
-
-                return Response.status(400, MediaType.APPLICATION_JSON).build();
-            } else {
-                //   StringTokenizerst = new StringTokenizer(fields, ",");
-                return Response.ok(list).build();
-
-            }
         } catch (Exception ex) {
             return Util.manageException(ex, EmpleadoREST.class);
         }
