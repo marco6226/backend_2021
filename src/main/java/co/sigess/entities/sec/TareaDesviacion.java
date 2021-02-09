@@ -78,6 +78,10 @@ public class TareaDesviacion implements Serializable {
     @Column(name = "tipo_accion")
     private String tipoAccion;
 
+     @Size(max = 255)
+    @Column(name = "jerarquia")
+    private String jerarquia;
+     
     @Column(name = "realizada")
     private Boolean realizada;
 
@@ -156,6 +160,13 @@ public class TareaDesviacion implements Serializable {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+     public String getjerarquia() {
+        return jerarquia;
+    }
+
+    public void setjerarquia(String jerarquia) {
+        this.jerarquia = jerarquia;
     }
 
     public String getModulo() {
