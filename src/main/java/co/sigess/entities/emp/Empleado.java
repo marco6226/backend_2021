@@ -12,6 +12,7 @@ import co.sigess.entities.com.Ccf;
 import co.sigess.entities.com.Ciudad;
 import co.sigess.entities.com.TipoIdentificacion;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -45,6 +46,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author fmoreno
  */
 @Entity
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Table(name = "empleado", schema = "emp")
 @XmlRootElement
 @NamedQueries({
@@ -167,11 +169,13 @@ public class Empleado implements Serializable {
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Area area;
 
+    @JsonIgnoreProperties({"jefeInmediato","businessPartner"})
     @JoinColumn(name = "fk_jefe_inmediato", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Empleado jefeInmediato;
 
     
+    @JsonIgnoreProperties({"jefeInmediato","businessPartner"})
     @JoinColumn(name = "fk_bussiness_partner", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Empleado businessPartner;
