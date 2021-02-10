@@ -217,17 +217,7 @@ public class CasosMedicos implements Serializable {
     @Column(name = "pk_user")
     private String pkUser;
    
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 128)
-    @Column(name = "pk_jefe")
-    private String pkJefe;
-   
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 128)
-    @Column(name = "pk_business_partner")
-    private String pkBusinessPartner;
+
     public CasosMedicos() {
     }
 
@@ -450,17 +440,7 @@ public class CasosMedicos implements Serializable {
     /**
      * @return the pkJefe
      */
-    public String getPkJefe() {
-        return pkJefe;
-    }
-
-    /**
-     * @return the pkBusinessPartner
-     */
-    public String getPkBusinessPartner() {
-        return pkBusinessPartner;
-    }
-
+  
     /**
      * @return the id
      */
