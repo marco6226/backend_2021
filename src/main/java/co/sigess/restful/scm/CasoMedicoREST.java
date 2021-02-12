@@ -9,11 +9,14 @@ import co.sigess.entities.aus.ReporteAusentismo;
 import co.sigess.entities.scm.CasosMedicos;
 import co.sigess.entities.scm.Recomendaciones;
 import co.sigess.entities.scm.ScmLogs;
+import co.sigess.entities.scm.Diagnosticos;
+
 import co.sigess.facade.aus.ReporteAusentismoFacade;
 
 import co.sigess.facade.scm.CasosMedicosFacade;
 import co.sigess.facade.scm.RecomendacionesFacade;
 import co.sigess.facade.scm.ScmLogsFacade;
+import co.sigess.facade.scm.diagnosticoFacade;
 import co.sigess.restful.Filter;
 import co.sigess.restful.FilterQuery;
 import co.sigess.restful.ServiceREST;
@@ -48,6 +51,10 @@ public class CasoMedicoREST extends ServiceREST {
 
     @EJB
     private CasosMedicosFacade casosmedicosFacade;
+    
+    @EJB
+    private diagnosticoFacade diagnosticoFacade;
+    
     
     @EJB
     private ReporteAusentismoFacade reporteAusentismoFacade;
@@ -193,6 +200,37 @@ public class CasoMedicoREST extends ServiceREST {
         }
           
     }
+    
+    @GET
+    @Path("diagnosticos/{parametro}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response getDiagnosticos(@PathParam("parametro") String parametro) {
+          try {
+
+            List<Diagnosticos> list = this.diagnosticoFacade.findAllById(parametro);
+            return Response.ok(list).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, ReporteREST.class);
+        }
+    }
+    
+    @POST
+    @Path("diagnosticos")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response createDiag(Diagnosticos diagnosticos) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            String json = mapper.writeValueAsString(diagnosticos);
+            
+            this.logScm("Creacion de recomendacion", json , " ",diagnosticos.getClass().toString());
+            diagnosticos = this.diagnosticoFacade.create(diagnosticos);
+         
+            return Response.ok(diagnosticos.getId()).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, ReporteREST.class);
+            }
+    }
+    
 
    
 }
