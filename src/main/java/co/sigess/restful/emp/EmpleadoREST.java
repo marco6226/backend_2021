@@ -4,7 +4,6 @@
  * and open the template in the editor.
  */
 package co.sigess.restful.emp;
-
 import co.sigess.entities.com.Mensaje;
 import co.sigess.entities.emp.Empleado;
 import co.sigess.facade.emp.EmpleadoFacade;

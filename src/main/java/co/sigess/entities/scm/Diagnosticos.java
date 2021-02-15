@@ -49,6 +49,9 @@ public class Diagnosticos implements Serializable {
     @Size(max = 2147483647)
     @Column(name = "pk_case")
     private String pkCase;
+     @Size(max = 2147483647)
+    @Column(name = "pk_user")
+    private String pkUser;
     @Size(max = 2147483647)
     @Column(name = "codigo_cie10")
     private String codigoCie10;
@@ -69,6 +72,20 @@ public class Diagnosticos implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    /**
+     * @return the pkUser
+     */
+    public String getPkUser() {
+        return pkUser;
+    }
+
+    /**
+     * @param pkUser the pkUser to set
+     */
+    public void setPkUser(String pkUser) {
+        this.pkUser = pkUser;
     }
 
     public String getDiagnostico() {
