@@ -10,12 +10,14 @@ import co.sigess.entities.scm.CasosMedicos;
 import co.sigess.entities.scm.Recomendaciones;
 import co.sigess.entities.scm.ScmLogs;
 import co.sigess.entities.scm.Diagnosticos;
+import co.sigess.entities.scm.SistemaAfectado;
 
 import co.sigess.facade.aus.ReporteAusentismoFacade;
 
 import co.sigess.facade.scm.CasosMedicosFacade;
 import co.sigess.facade.scm.RecomendacionesFacade;
 import co.sigess.facade.scm.ScmLogsFacade;
+import co.sigess.facade.scm.SistemaAfectadoFacade;
 import co.sigess.facade.scm.diagnosticoFacade;
 import co.sigess.restful.Filter;
 import co.sigess.restful.FilterQuery;
@@ -49,6 +51,9 @@ import org.jsoup.nodes.Entities;
 @Path("casomedico")
 public class CasoMedicoREST extends ServiceREST {
 
+    @EJB
+    private SistemaAfectadoFacade sistemaAfectadoFacade;
+    
     @EJB
     private CasosMedicosFacade casosmedicosFacade;
     
@@ -229,6 +234,19 @@ public class CasoMedicoREST extends ServiceREST {
         } catch (Exception ex) {
             return Util.manageException(ex, ReporteREST.class);
             }
+    }
+    
+    @GET
+    @Path("sistemaafectado")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response getSistemasAfectados() {
+          try {
+
+            List<SistemaAfectado> list = this.sistemaAfectadoFacade.findAll();
+            return Response.ok(list).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, ReporteREST.class);
+        }
     }
     
 
