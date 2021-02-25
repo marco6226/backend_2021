@@ -10,6 +10,7 @@ import co.sigess.entities.scm.CasosMedicos;
 import co.sigess.entities.scm.Recomendaciones;
 import co.sigess.entities.scm.ScmLogs;
 import co.sigess.entities.scm.Diagnosticos;
+import co.sigess.entities.scm.SeguimientoCaso;
 import co.sigess.entities.scm.SistemaAfectado;
 
 import co.sigess.facade.aus.ReporteAusentismoFacade;
@@ -17,6 +18,7 @@ import co.sigess.facade.aus.ReporteAusentismoFacade;
 import co.sigess.facade.scm.CasosMedicosFacade;
 import co.sigess.facade.scm.RecomendacionesFacade;
 import co.sigess.facade.scm.ScmLogsFacade;
+import co.sigess.facade.scm.SeguimientoCasoFacade;
 import co.sigess.facade.scm.SistemaAfectadoFacade;
 import co.sigess.facade.scm.diagnosticoFacade;
 import co.sigess.restful.Filter;
@@ -60,6 +62,8 @@ public class CasoMedicoREST extends ServiceREST {
     @EJB
     private diagnosticoFacade diagnosticoFacade;
     
+    @EJB
+    private SeguimientoCasoFacade seguimientoFacade;
     
     @EJB
     private ReporteAusentismoFacade reporteAusentismoFacade;
@@ -249,6 +253,50 @@ public class CasoMedicoREST extends ServiceREST {
         }
     }
     
+    @POST
+    @Path("seguimiento")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response createSeg(SeguimientoCaso seguimientoCaso) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            String json = mapper.writeValueAsString(seguimientoCaso);
+            
+           // this.logScm("Creacion de recomendacion", json , " ",seguimientoCaso.getClass().toString());
+            seguimientoCaso = this.seguimientoFacade.create(seguimientoCaso);
+         
+            return Response.ok(seguimientoCaso).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, ReporteREST.class);
+            }
+    }
+    
+    @GET
+    @Path("seguimiento/{parametro}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response getSeguimiento(@PathParam("parametro") String parametro) {
+          try {
 
+            List<SeguimientoCaso> list = this.seguimientoFacade.buscar(parametro);
+            return Response.ok(list).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, ReporteREST.class);
+        }
+    }
+    
+    @PUT
+    @Path("seguimiento")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response editSeg(SeguimientoCaso seguimientoCaso) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            String json = mapper.writeValueAsString(seguimientoCaso);
+            
+           // this.logScm("Edicion de caso medico", json , casosmedicos.getPkUser(), casosmedicos.getClass().toString());
+            seguimientoCaso = this.seguimientoFacade.update(seguimientoCaso);
+            return Response.ok(seguimientoCaso).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, ReporteREST.class);
+        }
+    }
    
 }
