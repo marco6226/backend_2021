@@ -5,6 +5,7 @@
  */
 package co.sigess.entities.scm;
 
+import co.sigess.entities.emp.Empleado;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
@@ -13,6 +14,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
@@ -62,9 +65,11 @@ public class SeguimientoCaso implements Serializable {
     @Size(max = 2147483647)
     @Column(name = "tarea")
     private String tarea;
-    @Size(max = 2147483647)
-    @Column(name = "responsable")
-    private String responsable;
+    
+    @JoinColumn(name = "responsable", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private Empleado responsable;
+  
     @Size(max = 2147483647)
     @Column(name = "resultado")
     private String resultado;
@@ -114,6 +119,20 @@ public class SeguimientoCaso implements Serializable {
         this.id = id;
     }
 
+    /**
+     * @return the responsable
+     */
+    public Empleado getResponsable() {
+        return responsable;
+    }
+
+    /**
+     * @param responsable the responsable to set
+     */
+    public void setResponsable(Empleado responsable) {
+        this.responsable = responsable;
+    }
+
     public String getTarea() {
         return tarea;
     }
@@ -122,13 +141,7 @@ public class SeguimientoCaso implements Serializable {
         this.tarea = tarea;
     }
 
-    public String getResponsable() {
-        return responsable;
-    }
-
-    public void setResponsable(String responsable) {
-        this.responsable = responsable;
-    }
+  
 
     public String getResultado() {
         return resultado;
