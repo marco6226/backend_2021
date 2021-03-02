@@ -52,7 +52,7 @@ public class CasosMedicosFacade  extends AbstractFacade<CasosMedicos>{
         Query q = this.em.createNativeQuery("SELECT * FROM scm.casos_medicos  WHERE pk_user = ?1",CasosMedicos.class);
 
         
-        q.setParameter(1,parametro);
+        q.setParameter(1,Integer.parseInt(parametro));
          System.out.println(q);
         List<CasosMedicos> list = (List<CasosMedicos>) q.getResultList();
         return list;

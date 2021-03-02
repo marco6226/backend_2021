@@ -50,7 +50,7 @@ public class RecomendacionesFacade extends AbstractFacade<Recomendaciones> {
       public List<Recomendaciones> buscar(String parametro) {
         System.out.println(parametro);
 
-        Query q = this.em.createNativeQuery("SELECT * FROM scm.recomendaciones  WHERE pk_user = ?1",Recomendaciones.class);
+        Query q = this.em.createNativeQuery("SELECT * FROM scm.recomendaciones  WHERE pk_case = ?1",Recomendaciones.class);
         
         q.setParameter(1,Integer.parseInt(parametro));
         List<Recomendaciones> list = (List<Recomendaciones>) q.getResultList();

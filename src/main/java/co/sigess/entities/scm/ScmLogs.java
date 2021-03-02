@@ -41,6 +41,9 @@ public class ScmLogs implements Serializable {
     @Size(max = 2147483647)
     @Column(name = "pk_user")
     private String pkUser;
+     @Size(max = 2147483647)
+    @Column(name = "pk_case")
+    private String pkCase;
     @Column(name = "fecha_creacion")
     @Temporal(TemporalType.DATE)
     private Date fecha_creacion;
@@ -97,6 +100,20 @@ public class ScmLogs implements Serializable {
 
     public Long getId() {
         return id;
+    }
+
+    /**
+     * @return the pkCase
+     */
+    public String getPkCase() {
+        return pkCase;
+    }
+
+    /**
+     * @param pkCase the pkCase to set
+     */
+    public void setPkCase(String pkCase) {
+        this.pkCase = pkCase;
     }
 
     public void setId(Long id) {

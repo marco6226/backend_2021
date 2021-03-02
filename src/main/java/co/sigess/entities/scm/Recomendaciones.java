@@ -80,6 +80,12 @@ public class Recomendaciones implements Serializable {
     @Column(name = "pk_user")
     private Long pkUser;
 
+    @Id
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "pk_case")
+    private Long pkCase;
+    
     public Recomendaciones() {
     }
 
@@ -164,6 +170,20 @@ public class Recomendaciones implements Serializable {
      */
     public void setGenerateRecomendaciones(String generateRecomendaciones) {
         this.generateRecomendaciones = generateRecomendaciones;
+    }
+
+    /**
+     * @return the pkCase
+     */
+    public Long getPkCase() {
+        return pkCase;
+    }
+
+    /**
+     * @param pkCase the pkCase to set
+     */
+    public void setPkCase(Long pkCase) {
+        this.pkCase = pkCase;
     }
 
     /**

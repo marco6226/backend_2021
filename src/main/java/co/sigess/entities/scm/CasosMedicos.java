@@ -5,6 +5,7 @@
  */
 package co.sigess.entities.scm;
 
+import co.sigess.entities.emp.Empleado;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
@@ -13,7 +14,9 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import javax.persistence.ManyToOne;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
@@ -84,6 +87,20 @@ public class CasosMedicos implements Serializable {
      */
     public String getRegion() {
         return region;
+    }
+
+    /**
+     * @return the pkUser
+     */
+    public Empleado getPkUser() {
+        return pkUser;
+    }
+
+    /**
+     * @param pkUser the pkUser to set
+     */
+    public void setPkUser(Empleado pkUser) {
+        this.pkUser = pkUser;
     }
 
     /**
@@ -211,12 +228,10 @@ public class CasosMedicos implements Serializable {
     @Column(name = "justification")
     private String justification;
     
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 128)
-    @Column(name = "pk_user")
-    private String pkUser;
-   
+
+    @JoinColumn(name = "pk_user", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private Empleado pkUser;
 
     public CasosMedicos() {
     }
@@ -433,9 +448,7 @@ public class CasosMedicos implements Serializable {
     /**
      * @return the pkUser
      */
-    public String getPkUser() {
-        return pkUser;
-    }
+  
 
     /**
      * @return the pkJefe
