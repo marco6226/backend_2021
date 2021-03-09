@@ -8,6 +8,7 @@ package co.sigess.facade.scm;
 import co.sigess.entities.scm.Sve;
 import co.sigess.facade.com.AbstractFacade;
 import java.util.List;
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -16,6 +17,7 @@ import javax.persistence.Query;
  *
  * @author leonardo
  */
+@Stateless
 public class SveFacade extends AbstractFacade<Sve> {
    @PersistenceContext(unitName = "SIGESS_PU")
     private EntityManager em;

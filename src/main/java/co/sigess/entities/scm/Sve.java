@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author leonardo
  */
 @Entity
-@Table(name = "sve")
+@Table(name = "sve",schema="scm")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Sve.findAll", query = "SELECT s FROM Sve s"),
@@ -51,7 +51,6 @@ public class Sve implements Serializable {
     @Column(name = "descripcion")
     private String descripcion;
     @Basic(optional = false)
-    @NotNull
     @Column(name = "fk_empresa_id")
     private int fkEmpresaId;
     @Size(max = 2147483647)
