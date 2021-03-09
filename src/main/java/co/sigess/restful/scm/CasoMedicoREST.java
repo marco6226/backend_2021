@@ -12,6 +12,7 @@ import co.sigess.entities.scm.ScmLogs;
 import co.sigess.entities.scm.Diagnosticos;
 import co.sigess.entities.scm.SeguimientoCaso;
 import co.sigess.entities.scm.SistemaAfectado;
+import co.sigess.entities.scm.Sve;
 
 import co.sigess.facade.aus.ReporteAusentismoFacade;
 
@@ -20,6 +21,7 @@ import co.sigess.facade.scm.RecomendacionesFacade;
 import co.sigess.facade.scm.ScmLogsFacade;
 import co.sigess.facade.scm.SeguimientoCasoFacade;
 import co.sigess.facade.scm.SistemaAfectadoFacade;
+import co.sigess.facade.scm.SveFacade;
 import co.sigess.facade.scm.diagnosticoFacade;
 import co.sigess.restful.Filter;
 import co.sigess.restful.FilterQuery;
@@ -51,6 +53,9 @@ public class CasoMedicoREST extends ServiceREST {
 
     @EJB
     private SistemaAfectadoFacade sistemaAfectadoFacade;
+    
+    @EJB
+    private SveFacade sve;
 
     @EJB
     private CasosMedicosFacade casosmedicosFacade;
@@ -246,7 +251,20 @@ public class CasoMedicoREST extends ServiceREST {
             return Util.manageException(ex, ReporteREST.class);
         }
     }
+    
+    @GET
+    @Path("svelist")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response getSve() {
+        try {
 
+            List<Sve> list = this.sve.findAll();
+            return Response.ok(list).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, ReporteREST.class);
+        }
+    }
+    
     @POST
     @Path("seguimiento")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -285,7 +303,7 @@ public class CasoMedicoREST extends ServiceREST {
             ObjectMapper mapper = new ObjectMapper();
             String json = mapper.writeValueAsString(seguimientoCaso);
 
-            this.logScm("Se creo un seguimiento", json, seguimientoCaso.getPkCase(), seguimientoCaso.getClass().toString());
+            this.logScm("Se edito un seguimiento", json, seguimientoCaso.getPkCase(), seguimientoCaso.getClass().toString());
             seguimientoCaso = this.seguimientoFacade.update(seguimientoCaso);
             return Response.ok(seguimientoCaso).build();
         } catch (Exception ex) {
