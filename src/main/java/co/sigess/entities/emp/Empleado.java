@@ -149,7 +149,7 @@ public class Empleado implements Serializable {
     @Column(name = "correo_personal")
     private String correoPersonal;
 
-    @Size(max = 20)
+    @Size(max = 45)
     @Column(name = "ciudad_gerencia")
     private String ciudadGerencia;
 
