@@ -5,13 +5,16 @@
  */
 package co.sigess.entities.scm;
 
+import co.sigess.entities.emp.Empleado;
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
-import javax.persistence.Entity;
+import javax.persistence.Entity; 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
@@ -49,15 +52,19 @@ public class Diagnosticos implements Serializable {
     @Size(max = 2147483647)
     @Column(name = "pk_case")
     private String pkCase;
+    
+    
+    @JoinColumn(name = "sistema_afectado", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private SistemaAfectado sistemaAfectado;
+        
      @Size(max = 2147483647)
     @Column(name = "pk_user")
     private String pkUser;
     @Size(max = 2147483647)
     @Column(name = "codigo_cie10")
     private String codigoCie10;
-    @Size(max = 2147483647)
-    @Column(name = "sistema_afectado")
-    private String sistemaAfectado;
+   
 
     public Diagnosticos() {
     }
@@ -112,19 +119,27 @@ public class Diagnosticos implements Serializable {
     }
 
     /**
+     * @return the sistemaAfectado
+     */
+    public SistemaAfectado getSistemaAfectado() {
+        return sistemaAfectado;
+    }
+
+    /**
+     * @param sistemaAfectado the sistemaAfectado to set
+     */
+    public void setSistemaAfectado(SistemaAfectado sistemaAfectado) {
+        this.sistemaAfectado = sistemaAfectado;
+    }
+
+    /**
      * @param pkCase the pkCase to set
      */
     public void setPkCase(String pkCase) {
         this.pkCase = pkCase;
     }
 
-    public String getSistemaAfectado() {
-        return sistemaAfectado;
-    }
-
-    public void setSistemaAfectado(String sistemaAfectado) {
-        this.sistemaAfectado = sistemaAfectado;
-    }
+  
 
     @Override
     public int hashCode() {
