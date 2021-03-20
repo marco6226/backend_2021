@@ -64,7 +64,7 @@ public class ReporteAusentismoFacade extends AbstractFacade<ReporteAusentismo> {
       public List<ReporteAusentismo> buscar(String parametro) {
         System.out.println(parametro);
 
-        Query q = this.em.createNativeQuery("SELECT * FROM aus.reporte_ausentismo  WHERE fk_empleado_id = ?1",ReporteAusentismo.class);
+        Query q = this.em.createNativeQuery("SELECT * FROM aus.reporte_ausentismo  WHERE fk_empleado_id = ?1 order by fecha_elaboracion desc ",ReporteAusentismo.class);
         
         q.setParameter(1,Integer.parseInt(parametro));
         List<ReporteAusentismo> list = (List<ReporteAusentismo>) q.getResultList();

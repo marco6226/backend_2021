@@ -43,6 +43,20 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "SeguimientoCaso.findByResultado", query = "SELECT s FROM SeguimientoCaso s WHERE s.resultado = :resultado")})
 public class SeguimientoCaso implements Serializable {
 
+    /**
+     * @return the responsableExterno
+     */
+    public String getResponsableExterno() {
+        return responsableExterno;
+    }
+
+    /**
+     * @param responsableExterno the responsableExterno to set
+     */
+    public void setResponsableExterno(String responsableExterno) {
+        this.responsableExterno = responsableExterno;
+    }
+
     private static final long serialVersionUID = 1L;
     
     @Id
@@ -65,7 +79,9 @@ public class SeguimientoCaso implements Serializable {
     @Size(max = 2147483647)
     @Column(name = "tarea")
     private String tarea;
-    
+      @Size(max = 2147483647)
+    @Column(name = "responsable_externo")
+    private String responsableExterno;
     @JoinColumn(name = "responsable", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Empleado responsable;

@@ -5,6 +5,7 @@
  */
 package co.sigess.entities.scm;
 
+import co.sigess.entities.emp.Empleado;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
@@ -13,6 +14,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.PrePersist;
@@ -80,6 +83,11 @@ public class Recomendaciones implements Serializable {
     @Column(name = "pk_user")
     private Long pkUser;
 
+    @JoinColumn(name = "responsable_empresa", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private Empleado responsableEmpresa;
+
+    
     @Id
     @Basic(optional = false)
     @NotNull
@@ -177,6 +185,20 @@ public class Recomendaciones implements Serializable {
      */
     public Long getPkCase() {
         return pkCase;
+    }
+
+    /**
+     * @return the responsableEmpresa
+     */
+    public Empleado getResponsableEmpresa() {
+        return responsableEmpresa;
+    }
+
+    /**
+     * @param responsableEmpresa the responsableEmpresa to set
+     */
+    public void setResponsableEmpresa(Empleado responsableEmpresa) {
+        this.responsableEmpresa = responsableEmpresa;
     }
 
     /**

@@ -7,6 +7,7 @@ package co.sigess.entities.scm;
 
 import co.sigess.entities.emp.Empleado;
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity; 
@@ -19,6 +20,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -52,8 +55,13 @@ public class Diagnosticos implements Serializable {
     @Size(max = 2147483647)
     @Column(name = "pk_case")
     private String pkCase;
+      @Column(name = "fecha_diagnostico")
+    @Temporal(TemporalType.DATE)
+    private Date fechaDiagnostico;
     
-    
+    @Size(max = 2147483647)
+    @Column(name = "creado_por")
+    private String creadoPor;
     @JoinColumn(name = "sistema_afectado", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private SistemaAfectado sistemaAfectado;
@@ -123,6 +131,34 @@ public class Diagnosticos implements Serializable {
      */
     public SistemaAfectado getSistemaAfectado() {
         return sistemaAfectado;
+    }
+
+    /**
+     * @return the fechaDiagnostico
+     */
+    public Date getFechaDiagnostico() {
+        return fechaDiagnostico;
+    }
+
+    /**
+     * @return the creadoPor
+     */
+    public String getCreadoPor() {
+        return creadoPor;
+    }
+
+    /**
+     * @param creadoPor the creadoPor to set
+     */
+    public void setCreadoPor(String creadoPor) {
+        this.creadoPor = creadoPor;
+    }
+
+    /**
+     * @param fechaDiagnostico the fechaDiagnostico to set
+     */
+    public void setFechaDiagnostico(Date fechaDiagnostico) {
+        this.fechaDiagnostico = fechaDiagnostico;
     }
 
     /**

@@ -39,7 +39,7 @@ public class diagnosticoFacade extends AbstractFacade<Diagnosticos> {
     }
        
          public List<Diagnosticos> findAllById(String caseId) {
-            Query query = this.em.createNativeQuery("SELECT * FROM scm.diagnosticos WHERE pk_case = ?1",Diagnosticos.class);
+            Query query = this.em.createNativeQuery("SELECT * FROM scm.diagnosticos WHERE pk_case = ?1 order by fecha_diagnostico desc",Diagnosticos.class);
         query.setParameter(1, caseId);
         List<Diagnosticos> list = (List<Diagnosticos>) query.getResultList();
         return list;
