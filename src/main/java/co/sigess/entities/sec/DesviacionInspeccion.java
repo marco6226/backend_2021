@@ -62,6 +62,9 @@ public class DesviacionInspeccion implements Serializable {
     @Column(name = "area_inspeccion")
     private String areaInspeccion;
     
+    @Column(name = "area_inspeccion_id")
+    private BigInteger areaInspeccionId;
+    
     @Size(max = 255)
     @Column(name = "nombre_lista_inspeccion")
     private String nombreListaInspeccion;
@@ -181,6 +184,13 @@ public class DesviacionInspeccion implements Serializable {
 
     public void setAreaInspeccion(String areaInspeccion) {
         this.areaInspeccion = areaInspeccion;
+    }
+    public BigInteger getAreaInspeccionId() {
+        return areaInspeccionId;
+    }
+
+    public void setAreaInspeccionId(BigInteger areaInspeccionId) {
+        this.areaInspeccionId = areaInspeccionId;
     }
 
     public String getNombreListaInspeccion() {
