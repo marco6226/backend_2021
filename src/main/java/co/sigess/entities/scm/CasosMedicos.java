@@ -206,9 +206,10 @@ public class CasosMedicos implements Serializable {
     @Size(max = 128)
     @Column(name = "concept_rehabilitacion")
     private String conceptRehabilitacion;
-    @Size(max = 128)
     @Column(name = "fecha_concept_rehabilitacion")
-    private String fechaConceptRehabilitacion;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaConceptRehabilitacion;
+    
     @Size(max = 128)
     @Column(name = "entidad_emite_concepto")
     private String entidadEmiteConcepto;
@@ -253,6 +254,20 @@ public class CasosMedicos implements Serializable {
 
     public void setFechaFinal(String fechaFinal) {
         this.fechaFinal = fechaFinal;
+    }
+
+    /**
+     * @return the fechaConceptRehabilitacion
+     */
+    public Date getFechaConceptRehabilitacion() {
+        return fechaConceptRehabilitacion;
+    }
+
+    /**
+     * @param fechaConceptRehabilitacion the fechaConceptRehabilitacion to set
+     */
+    public void setFechaConceptRehabilitacion(Date fechaConceptRehabilitacion) {
+        this.fechaConceptRehabilitacion = fechaConceptRehabilitacion;
     }
 
     public String getObservaciones() {
@@ -397,14 +412,7 @@ public class CasosMedicos implements Serializable {
         this.conceptRehabilitacion = conceptRehabilitacion;
     }
 
-    public String getFechaConceptRehabilitacion() {
-        return fechaConceptRehabilitacion;
-    }
-
-    public void setFechaConceptRehabilitacion(String fechaConceptRehabilitacion) {
-        this.fechaConceptRehabilitacion = fechaConceptRehabilitacion;
-    }
-
+   
     public String getEntidadEmiteConcepto() {
         return entidadEmiteConcepto;
     }

@@ -76,7 +76,10 @@ public class Directorio implements Serializable {
     @JoinColumn(name = "fk_empresa_id", referencedColumnName = "id")
     @ManyToOne
     private Empresa empresa;
-
+    
+    @Column(name = "fk_case_medic_id")
+    private Long caseId;
+    
     @JsonIgnore
     @OneToMany(mappedBy = "directorioPadre")
     private List<Directorio> directorioList;
@@ -108,6 +111,20 @@ public class Directorio implements Serializable {
         } else {
             return this.directorioList == null ? 0L : this.directorioList.size();
         }
+    }
+
+    /**
+     * @return the caseId
+     */
+    public Long getCaseId() {
+        return caseId;
+    }
+
+    /**
+     * @param caseId the caseId to set
+     */
+    public void setCaseId(Long caseId) {
+        this.caseId = caseId;
     }
     
     public String getEmailPropietario(){

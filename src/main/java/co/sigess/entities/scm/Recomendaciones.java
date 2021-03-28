@@ -74,6 +74,10 @@ public class Recomendaciones implements Serializable {
     @Column(name = "status")
     @Size(max = 2147483647)
     private String status;
+    @Column(name = "responsable_externo")
+    @Size(max = 2147483647)
+    private String responsableExterno;
+    
     @Column(name = "recomendaciones")
     @Size(max = 2147483647)
     private String recomendaciones;
@@ -153,6 +157,20 @@ public class Recomendaciones implements Serializable {
      */
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    /**
+     * @return the responsableExterno
+     */
+    public String getResponsableExterno() {
+        return responsableExterno;
+    }
+
+    /**
+     * @param responsableExterno the responsableExterno to set
+     */
+    public void setResponsableExterno(String responsableExterno) {
+        this.responsableExterno = responsableExterno;
     }
 
      @PrePersist

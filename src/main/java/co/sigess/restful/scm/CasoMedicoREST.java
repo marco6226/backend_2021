@@ -169,6 +169,24 @@ public class CasoMedicoREST extends ServiceREST {
         }
     }
 
+    @PUT
+    @Path("recomendation")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response editSeg(Recomendaciones recomendaciones) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            String json = mapper.writeValueAsString(recomendaciones);
+
+            this.logScm("Se edito una recomendacion", json, recomendaciones.getPkCase().toString(), recomendaciones.getClass().toString());
+            recomendaciones = this.recomendacionesFacade.update(recomendaciones);
+            return Response.ok(recomendaciones).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, ReporteREST.class);
+        }
+    }
+
+    
+    
     @GET
     @Path("scmausentismo/{parametro}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})

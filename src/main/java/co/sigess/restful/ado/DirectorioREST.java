@@ -96,7 +96,9 @@ public class DirectorioREST extends ServiceREST {
             @FormDataParam("dpId") Long directorioPadreId,
             @FormDataParam("mod") String modulo,
             @FormDataParam("modParam") String modParam,
-            @FormDataParam("docMetaData") String docMetaData
+            @FormDataParam("docMetaData") String docMetaData,
+            @FormDataParam("caseId") Long caseId
+
     ) throws Exception {
         try {
             directorioFacade.validarParametrosUpload(modulo, modParam);
@@ -111,6 +113,7 @@ public class DirectorioREST extends ServiceREST {
                 dir = new Directorio();
                 dir.setEsDocumento(true);
                 dir.setNombre(fileName);
+                dir.setCaseId(caseId);
                 dir.setEmpresa(new Empresa(super.getEmpresaIdRequestContext()));
                 dir.setUsuario(super.getUsuarioRequestContext());
                 dir.setDocumento(new Documento());
@@ -167,6 +170,7 @@ public class DirectorioREST extends ServiceREST {
             boolean filtradoEmpresa = false;
             boolean filtradoUsuario = false;
             for (Filter filter : filterQuery.getFilterList()) {
+               System.out.print(filter.getField());
                 if (filter.getField().equals("empresa.id")) {
                     filtradoEmpresa = true;
                 }
@@ -271,8 +275,9 @@ public class DirectorioREST extends ServiceREST {
             @FormDataParam("file") FormDataContentDisposition fileMetaData,
             @FormDataParam("modParam") String modParam,
             @FormDataParam("docMetaData") String docMetaData
+
     ) throws Exception {
-        return this.uploadFile(fileInputStream, fileMetaData, null, Modulo.SEC.name(), modParam, docMetaData);
+        return this.uploadFile(fileInputStream, fileMetaData, null, Modulo.SEC.name(), modParam, docMetaData,null);
     }
 
     @GET
@@ -338,7 +343,7 @@ public class DirectorioREST extends ServiceREST {
             @FormDataParam("file") FormDataContentDisposition fileMetaData,
             @FormDataParam("modParam") String modParam
     ) throws Exception {
-        return this.uploadFile(fileInputStream, fileMetaData, null, Modulo.COP.name(), modParam, null);
+        return this.uploadFile(fileInputStream, fileMetaData, null, Modulo.COP.name(), modParam, null,null);
     }
 
     @GET

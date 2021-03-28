@@ -49,7 +49,7 @@ public class CasosMedicosFacade  extends AbstractFacade<CasosMedicos>{
       public List<CasosMedicos> buscar(String parametro) {
         System.out.println(parametro);
 
-        Query q = this.em.createNativeQuery("SELECT * FROM scm.casos_medicos  WHERE pk_user = ?1",CasosMedicos.class);
+        Query q = this.em.createNativeQuery("SELECT * FROM scm.casos_medicos  WHERE pk_user = ?1 order by fecha_creacion desc ",CasosMedicos.class);
 
         
         q.setParameter(1,Integer.parseInt(parametro));
