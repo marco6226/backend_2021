@@ -185,13 +185,7 @@ public class DirectorioREST extends ServiceREST {
                 empFilt.setValue1(super.getEmpresaIdRequestContext().toString());
                 filterQuery.getFilterList().add(empFilt);
             }
-            if (!filtradoUsuario) {
-                Filter usrFilt = new Filter();
-                usrFilt.setCriteria("eq");
-                usrFilt.setField("usuario.id");
-                usrFilt.setValue1(super.getUsuarioRequestContext().getId().toString());
-                filterQuery.getFilterList().add(usrFilt);
-            }
+            
             List<Directorio> list = directorioFacade.findWithFilter(filterQuery);
             return Response.ok(list).build();
         } catch (Exception ex) {
