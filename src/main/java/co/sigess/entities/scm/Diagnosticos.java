@@ -72,6 +72,9 @@ public class Diagnosticos implements Serializable {
     @Size(max = 2147483647)
     @Column(name = "codigo_cie10")
     private String codigoCie10;
+    @Size(max = 2147483647)
+    @Column(name = "origen")
+    private String origen;
    
 
     public Diagnosticos() {
@@ -117,6 +120,14 @@ public class Diagnosticos implements Serializable {
 
     public void setCodigoCie10(String codigoCie10) {
         this.codigoCie10 = codigoCie10;
+    }
+    
+    public String getOrigen() {
+        return origen;
+    }
+
+    public void setOrigen(String origen) {
+        this.origen = origen;
     }
 
     /**
