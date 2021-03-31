@@ -6,12 +6,14 @@
 package co.sigess.entities.scm;
 
 import co.sigess.entities.emp.Empleado;
+import co.sigess.entities.emp.Empresa;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.ManyToOne;
@@ -210,6 +212,10 @@ public class CasosMedicos implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaConceptRehabilitacion;
     
+    
+    @JoinColumn(name = "fk_empresa_id", referencedColumnName = "id")
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private Empresa empresa;
     @Size(max = 128)
     @Column(name = "entidad_emite_concepto")
     private String entidadEmiteConcepto;
@@ -300,6 +306,20 @@ public class CasosMedicos implements Serializable {
 
     public void setSistemaAfectado(String sistemaAfectado) {
         this.sistemaAfectado = sistemaAfectado;
+    }
+
+    /**
+     * @return the empresa
+     */
+    public Empresa getEmpresa() {
+        return empresa;
+    }
+
+    /**
+     * @param empresa the empresa to set
+     */
+    public void setEmpresa(Empresa empresa) {
+        this.empresa = empresa;
     }
 
     public String getDiagnostico() {

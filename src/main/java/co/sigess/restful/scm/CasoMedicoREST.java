@@ -6,6 +6,7 @@
 package co.sigess.restful.scm;
 
 import co.sigess.entities.aus.ReporteAusentismo;
+import co.sigess.entities.emp.Empresa;
 import co.sigess.entities.scm.CasosMedicos;
 import co.sigess.entities.scm.Recomendaciones;
 import co.sigess.entities.scm.ScmLogs;
@@ -29,11 +30,14 @@ import co.sigess.restful.FilterResponse;
 import co.sigess.restful.ServiceREST;
 import co.sigess.restful.emp.EmpleadoREST;
 import co.sigess.restful.rai.ReporteREST;
+import co.sigess.restful.security.Secured;
 import co.sigess.util.Util;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Calendar;
 import java.util.List;
 import javax.ejb.EJB;
+import javax.enterprise.util.Nonbinding;
+import javax.persistence.Access;
 import javax.ws.rs.BeanParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -48,6 +52,7 @@ import javax.ws.rs.core.Response;
  *
  * @author leonardo
  */
+@Secured
 @Path("casomedico")
 public class CasoMedicoREST extends ServiceREST {
 
@@ -96,8 +101,9 @@ public class CasoMedicoREST extends ServiceREST {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response create(CasosMedicos casosmedicos) {
         try {
-
-            casosmedicos = this.casosmedicosFacade.create(casosmedicos);
+            
+           casosmedicos.setEmpresa(new Empresa(super.getEmpresaIdRequestContext()));
+           casosmedicos = this.casosmedicosFacade.create(casosmedicos);
             this.logScm("Creacion de caso", "", casosmedicos.getId().toString(), casosmedicos.getClass().toString());
 
             return Response.ok(casosmedicos.getId()).build();
@@ -126,7 +132,24 @@ public class CasoMedicoREST extends ServiceREST {
     @Override
     public Response findWithFilter(@BeanParam FilterQuery filterQuery) {
         try {
-
+            boolean filtradoEmpresa = false;
+            
+            for (Filter filter : filterQuery.getFilterList()) {
+               System.out.print(filter.getField());
+                if (filter.getField().equals("empresa.id")) {
+                    filtradoEmpresa = true;
+                }
+                
+            }
+            
+            if (!filtradoEmpresa) {
+                Filter empFilt = new Filter();
+                empFilt.setCriteria("eq");
+                empFilt.setField("empresa.id");
+                empFilt.setValue1(super.getEmpresaIdRequestContext().toString());
+                filterQuery.getFilterList().add(empFilt);
+            }
+            
             long numRows = filterQuery.isCount() ? casosmedicosFacade.countWithFilter(filterQuery) : -1;
 
             List list = casosmedicosFacade.findWithFilter(filterQuery);
@@ -205,6 +228,7 @@ public class CasoMedicoREST extends ServiceREST {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response buscar(@PathParam("parametro") String parametro) {
         try {
+            
             List<CasosMedicos> list = casosmedicosFacade.buscar(parametro);
 
             return Response.ok(list).build();
@@ -245,6 +269,8 @@ public class CasoMedicoREST extends ServiceREST {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response createDiag(Diagnosticos diagnosticos) {
         try {
+            diagnosticos.setCreadoPor(super.getUsuarioRequestContext().getEmail());
+            
             ObjectMapper mapper = new ObjectMapper();
             String json = mapper.writeValueAsString(diagnosticos);
 
@@ -257,6 +283,7 @@ public class CasoMedicoREST extends ServiceREST {
         }
     }
 
+    @Secured(validarPermiso = false)
     @GET
     @Path("sistemaafectado")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -270,6 +297,7 @@ public class CasoMedicoREST extends ServiceREST {
         }
     }
     
+    @Secured(validarPermiso = false)
     @GET
     @Path("svelist")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -332,10 +360,10 @@ public class CasoMedicoREST extends ServiceREST {
     private void logScm(String action, String json, String documento, String entity) {
         try {
             Calendar fechaActual = Calendar.getInstance();
-            System.out.println(fechaActual.getTime());
             ScmLogs log = new ScmLogs();
             log.setAction(action);
             log.setPkCase(documento);
+            log.setPkUser(super.getUsuarioRequestContext().getEmail());
             log.setFecha_creacion(fechaActual.getTime());
             log.setEntity(entity);
             log.setJson(json);
