@@ -41,7 +41,7 @@ public class ScmLogsFacade extends AbstractFacade<ScmLogs>{
     }
        
          public List<ScmLogs> findAllById(String userDocument) {
-        Query query = this.em.createNativeQuery("SELECT * FROM scm.scm_logs WHERE pk_case = ?1",ScmLogs.class);
+        Query query = this.em.createNativeQuery("SELECT * FROM scm.scm_logs WHERE pk_case = ?1 order by fecha_creacion desc",ScmLogs.class);
         query.setParameter(1, userDocument);
         List<ScmLogs> list = (List<ScmLogs>) query.getResultList();
         return list;

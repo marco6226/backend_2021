@@ -45,7 +45,7 @@ public class ScmLogs implements Serializable {
     @Column(name = "pk_case")
     private String pkCase;
     @Column(name = "fecha_creacion")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date fecha_creacion;
     @Size(max = 2147483647)
     @Column(name = "json")
