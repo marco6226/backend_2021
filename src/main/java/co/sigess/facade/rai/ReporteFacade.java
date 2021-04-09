@@ -218,7 +218,7 @@ public class ReporteFacade extends AbstractFacade<Reporte> {
 
                 switch (cell.getCellTypeEnum()) {
                     case STRING:
-                        valor = cell.getStringCellValue();
+                        valor = cell.getStringCellValue().trim();
                         break;
                     case BOOLEAN:
                         valor = cell.getBooleanCellValue();
