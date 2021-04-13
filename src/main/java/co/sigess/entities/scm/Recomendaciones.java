@@ -54,6 +54,15 @@ public class Recomendaciones implements Serializable {
     @Column(name = "actionplan")
     @Size(max = 2147483647)
     private String actionPlan;
+     @Column(name = "actividad")
+    @Size(max = 2147483647)
+    private String actividad;
+      @Column(name = "descripcion_act")
+    @Size(max = 2147483647)
+    private String descripcion_act;
+       @Column(name = "fecha_proyectada")
+    @Temporal(TemporalType.DATE)
+    private Date fecha_proyectada;
     
     @Column(name = "action_plan_responsable")
     @Size(max = 2147483647)
@@ -171,6 +180,48 @@ public class Recomendaciones implements Serializable {
      */
     public void setResponsableExterno(String responsableExterno) {
         this.responsableExterno = responsableExterno;
+    }
+
+    /**
+     * @return the actividad
+     */
+    public String getActividad() {
+        return actividad;
+    }
+
+    /**
+     * @param actividad the actividad to set
+     */
+    public void setActividad(String actividad) {
+        this.actividad = actividad;
+    }
+
+    /**
+     * @return the descripcion_act
+     */
+    public String getDescripcion_act() {
+        return descripcion_act;
+    }
+
+    /**
+     * @param descripcion_act the descripcion_act to set
+     */
+    public void setDescripcion_act(String descripcion_act) {
+        this.descripcion_act = descripcion_act;
+    }
+
+    /**
+     * @return the fecha_proyectada
+     */
+    public Date getFecha_proyectada() {
+        return fecha_proyectada;
+    }
+
+    /**
+     * @param fecha_proyectada the fecha_proyectada to set
+     */
+    public void setFecha_proyectada(Date fecha_proyectada) {
+        this.fecha_proyectada = fecha_proyectada;
     }
 
      @PrePersist

@@ -53,6 +53,9 @@ public class Diagnosticos implements Serializable {
     @Column(name = "diagnostico")
     private String diagnostico;
     @Size(max = 2147483647)
+    @Column(name = "detalle")
+    private String detalle;
+    @Size(max = 2147483647)
     @Column(name = "pk_case")
     private String pkCase;
       @Column(name = "fecha_diagnostico")
@@ -211,6 +214,20 @@ public class Diagnosticos implements Serializable {
     @Override
     public String toString() {
         return "co.sigess.entities.scm.Diagnosticos[ id=" + id + " ]";
+    }
+
+    /**
+     * @return the detalle
+     */
+    public String getDetalle() {
+        return detalle;
+    }
+
+    /**
+     * @param detalle the detalle to set
+     */
+    public void setDetalle(String detalle) {
+        this.detalle = detalle;
     }
     
 }
