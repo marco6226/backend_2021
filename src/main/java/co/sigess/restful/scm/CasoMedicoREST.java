@@ -374,8 +374,15 @@ public class CasoMedicoREST extends ServiceREST {
     @Path("test")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response test() throws MalformedURLException, IOException {
-        Mensaje test = this.smsFacade.test();
-        return Response.ok("test").build();
+        String test = "";
+        try {
+        test = this.smsFacade.test("https://www.qa.segurosaon.com.co/API/login");
+            System.out.println(test);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+        return Response.ok(test).build();
 
     }
 
