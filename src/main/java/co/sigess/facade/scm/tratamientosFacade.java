@@ -5,8 +5,8 @@
  */
 package co.sigess.facade.scm;
 
-import javax.ejb.Stateless;
 import co.sigess.entities.scm.Diagnosticos;
+import co.sigess.entities.scm.Tratamientos;
 import co.sigess.facade.com.AbstractFacade;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -17,8 +17,7 @@ import javax.persistence.Query;
  *
  * @author leonardo
  */
-@Stateless
-public class diagnosticoFacade extends AbstractFacade<Diagnosticos> {
+public class tratamientosFacade extends AbstractFacade<Tratamientos> {
 
     @PersistenceContext(unitName = "SIGESS_PU")
     private EntityManager em;
@@ -28,20 +27,21 @@ public class diagnosticoFacade extends AbstractFacade<Diagnosticos> {
         return em;
     }
 
-    public diagnosticoFacade() {
-        super(Diagnosticos.class);
+    public tratamientosFacade() {
+        super(Tratamientos.class);
     }
 
-    public Diagnosticos create(Diagnosticos diag, Integer empresaId) throws Exception {
+    public Tratamientos create(Tratamientos trat, Integer empresaId) throws Exception {
 
-        super.create(diag);
-        return diag;
+        super.create(trat);
+        return trat;
+
     }
 
-    public List<Diagnosticos> findAllById(String caseId) {
-        Query query = this.em.createNativeQuery("SELECT * FROM scm.diagnosticos WHERE pk_case = ?1 order by fecha_diagnostico desc", Diagnosticos.class);
+    public List<Tratamientos> findAllById(String caseId) {
+        Query query = this.em.createNativeQuery("SELECT * FROM scm.tratamientos WHERE pk_case = ?1 order by fecha desc", Tratamientos.class);
         query.setParameter(1, caseId);
-        List<Diagnosticos> list = (List<Diagnosticos>) query.getResultList();
+        List<Tratamientos> list = (List<Tratamientos>) query.getResultList();
         return list;
     }
 

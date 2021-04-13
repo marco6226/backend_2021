@@ -14,9 +14,8 @@ import co.sigess.entities.scm.Diagnosticos;
 import co.sigess.entities.scm.SeguimientoCaso;
 import co.sigess.entities.scm.SistemaAfectado;
 import co.sigess.entities.scm.Sve;
-
 import co.sigess.facade.aus.ReporteAusentismoFacade;
-
+import co.sigess.facade.core.LoaderFacade;
 import co.sigess.facade.scm.CasosMedicosFacade;
 import co.sigess.facade.scm.RecomendacionesFacade;
 import co.sigess.facade.scm.ScmLogsFacade;
@@ -33,11 +32,17 @@ import co.sigess.restful.rai.ReporteREST;
 import co.sigess.restful.security.Secured;
 import co.sigess.util.Util;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Properties;
 import javax.ejb.EJB;
-import javax.enterprise.util.Nonbinding;
-import javax.persistence.Access;
+import javax.ejb.Stateless;
 import javax.ws.rs.BeanParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -52,13 +57,18 @@ import javax.ws.rs.core.Response;
  *
  * @author leonardo
  */
+@Stateless
 @Secured
 @Path("casomedico")
 public class CasoMedicoREST extends ServiceREST {
 
+    public final static String EMAIL_AON = "email_aon";
+    public final static String PASS_AON = "pass_aon";
     @EJB
     private SistemaAfectadoFacade sistemaAfectadoFacade;
-    
+
+    @EJB
+    private LoaderFacade loaderFacade;
     @EJB
     private SveFacade sve;
 
@@ -101,9 +111,9 @@ public class CasoMedicoREST extends ServiceREST {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response create(CasosMedicos casosmedicos) {
         try {
-            
-           casosmedicos.setEmpresa(new Empresa(super.getEmpresaIdRequestContext()));
-           casosmedicos = this.casosmedicosFacade.create(casosmedicos);
+
+            casosmedicos.setEmpresa(new Empresa(super.getEmpresaIdRequestContext()));
+            casosmedicos = this.casosmedicosFacade.create(casosmedicos);
             this.logScm("Creacion de caso", "", casosmedicos.getId().toString(), casosmedicos.getClass().toString());
 
             return Response.ok(casosmedicos.getId()).build();
@@ -133,15 +143,15 @@ public class CasoMedicoREST extends ServiceREST {
     public Response findWithFilter(@BeanParam FilterQuery filterQuery) {
         try {
             boolean filtradoEmpresa = false;
-            
+
             for (Filter filter : filterQuery.getFilterList()) {
-               System.out.print(filter.getField());
+                System.out.print(filter.getField());
                 if (filter.getField().equals("empresa.id")) {
                     filtradoEmpresa = true;
                 }
-                
+
             }
-            
+
             if (!filtradoEmpresa) {
                 Filter empFilt = new Filter();
                 empFilt.setCriteria("eq");
@@ -149,7 +159,7 @@ public class CasoMedicoREST extends ServiceREST {
                 empFilt.setValue1(super.getEmpresaIdRequestContext().toString());
                 filterQuery.getFilterList().add(empFilt);
             }
-            
+
             long numRows = filterQuery.isCount() ? casosmedicosFacade.countWithFilter(filterQuery) : -1;
 
             List list = casosmedicosFacade.findWithFilter(filterQuery);
@@ -208,8 +218,6 @@ public class CasoMedicoREST extends ServiceREST {
         }
     }
 
-    
-    
     @GET
     @Path("scmausentismo/{parametro}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -228,7 +236,7 @@ public class CasoMedicoREST extends ServiceREST {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response buscar(@PathParam("parametro") String parametro) {
         try {
-            
+
             List<CasosMedicos> list = casosmedicosFacade.buscar(parametro);
 
             return Response.ok(list).build();
@@ -270,7 +278,7 @@ public class CasoMedicoREST extends ServiceREST {
     public Response createDiag(Diagnosticos diagnosticos) {
         try {
             diagnosticos.setCreadoPor(super.getUsuarioRequestContext().getEmail());
-            
+
             ObjectMapper mapper = new ObjectMapper();
             String json = mapper.writeValueAsString(diagnosticos);
 
@@ -296,7 +304,7 @@ public class CasoMedicoREST extends ServiceREST {
             return Util.manageException(ex, ReporteREST.class);
         }
     }
-    
+
     @Secured(validarPermiso = false)
     @GET
     @Path("svelist")
@@ -310,17 +318,17 @@ public class CasoMedicoREST extends ServiceREST {
             return Util.manageException(ex, ReporteREST.class);
         }
     }
-    
+
     @POST
     @Path("seguimiento")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response createSeg(SeguimientoCaso seguimientoCaso) {
         try {
-            ObjectMapper mapper = new ObjectMapper();
-            String json = mapper.writeValueAsString(seguimientoCaso);
 
-            this.logScm("Creacion de Seguimiento", json, seguimientoCaso.getPkCase(), seguimientoCaso.getClass().toString());
+            ObjectMapper mapper = new ObjectMapper();
             seguimientoCaso = this.seguimientoFacade.create(seguimientoCaso);
+            String json = mapper.writeValueAsString(seguimientoCaso);
+            this.logScm("Creacion de Seguimiento", json, seguimientoCaso.getPkCase(), seguimientoCaso.getClass().toString());
 
             return Response.ok(seguimientoCaso).build();
         } catch (Exception ex) {
@@ -346,6 +354,7 @@ public class CasoMedicoREST extends ServiceREST {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response editSeg(SeguimientoCaso seguimientoCaso) {
         try {
+
             ObjectMapper mapper = new ObjectMapper();
             String json = mapper.writeValueAsString(seguimientoCaso);
 
@@ -355,6 +364,42 @@ public class CasoMedicoREST extends ServiceREST {
         } catch (Exception ex) {
             return Util.manageException(ex, ReporteREST.class);
         }
+    }
+
+    @Secured(validarPermiso = false)
+    @GET
+    @Path("test")
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    public Response test() throws MalformedURLException, IOException {
+        System.out.print("QUIEN ERES");
+        Properties prop = this.loaderFacade.getSmsProperties();
+
+        URL url = new URL("https://www.qa.segurosaon.com.co/API/login");
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setRequestMethod("POST");
+        con.setRequestProperty("Content-Type", "application/json");
+        con.setRequestProperty("Accept", "application/json");
+        con.setConnectTimeout(10000);
+        con.setDoOutput(true);
+        
+            StringBuilder sb = new StringBuilder();
+            sb.append("{")
+                    .append("\"email\":\"")
+                    .append(prop.getProperty(EMAIL_AON))
+                    .append("\",\"password\":\"")
+                    .append(prop.getProperty(PASS_AON))
+                    .append("\"}");
+            
+       //.\keytool.exe -import -keystore "C:\Program Files\Java\jdk1.8.0_141\jre\lib\security\cacerts" -file "C:\Users\leonardo\Documents\aon.cer"
+         
+        
+        con.setDoOutput(true);
+        OutputStream os = con.getOutputStream();
+        os.write(sb.toString().getBytes());
+        os.flush();
+        os.close();
+        return Response.ok(con.getResponseCode()).build();
+
     }
 
     private void logScm(String action, String json, String documento, String entity) {
