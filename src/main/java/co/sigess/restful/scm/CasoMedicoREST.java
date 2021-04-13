@@ -6,6 +6,7 @@
 package co.sigess.restful.scm;
 
 import co.sigess.entities.aus.ReporteAusentismo;
+import co.sigess.entities.com.Mensaje;
 import co.sigess.entities.emp.Empresa;
 import co.sigess.entities.scm.CasosMedicos;
 import co.sigess.entities.scm.Recomendaciones;
@@ -16,6 +17,7 @@ import co.sigess.entities.scm.SistemaAfectado;
 import co.sigess.entities.scm.Sve;
 import co.sigess.facade.aus.ReporteAusentismoFacade;
 import co.sigess.facade.core.LoaderFacade;
+import co.sigess.facade.core.SMSFacade;
 import co.sigess.facade.scm.CasosMedicosFacade;
 import co.sigess.facade.scm.RecomendacionesFacade;
 import co.sigess.facade.scm.ScmLogsFacade;
@@ -68,7 +70,8 @@ public class CasoMedicoREST extends ServiceREST {
     private SistemaAfectadoFacade sistemaAfectadoFacade;
 
     @EJB
-    private LoaderFacade loaderFacade;
+    private SMSFacade smsFacade;
+    
     @EJB
     private SveFacade sve;
 
@@ -371,34 +374,8 @@ public class CasoMedicoREST extends ServiceREST {
     @Path("test")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response test() throws MalformedURLException, IOException {
-        System.out.print("QUIEN ERES");
-        Properties prop = this.loaderFacade.getSmsProperties();
-
-        URL url = new URL("https://www.qa.segurosaon.com.co/API/login");
-        HttpURLConnection con = (HttpURLConnection) url.openConnection();
-        con.setRequestMethod("POST");
-        con.setRequestProperty("Content-Type", "application/json");
-        con.setRequestProperty("Accept", "application/json");
-        con.setConnectTimeout(10000);
-        con.setDoOutput(true);
-        
-            StringBuilder sb = new StringBuilder();
-            sb.append("{")
-                    .append("\"email\":\"")
-                    .append(prop.getProperty(EMAIL_AON))
-                    .append("\",\"password\":\"")
-                    .append(prop.getProperty(PASS_AON))
-                    .append("\"}");
-            
-       //.\keytool.exe -import -keystore "C:\Program Files\Java\jdk1.8.0_141\jre\lib\security\cacerts" -file "C:\Users\leonardo\Documents\aon.cer"
-         
-        
-        con.setDoOutput(true);
-        OutputStream os = con.getOutputStream();
-        os.write(sb.toString().getBytes());
-        os.flush();
-        os.close();
-        return Response.ok(con.getResponseCode()).build();
+        Mensaje test = this.smsFacade.test();
+        return Response.ok("test").build();
 
     }
 

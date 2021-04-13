@@ -3,7 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package co.sigess.facade.core;
+
 
 import co.sigess.entities.com.Mensaje;
 import co.sigess.entities.com.TipoMensaje;
@@ -31,7 +33,8 @@ public class SMSFacade {
 
     public final static String PROPKEY_URL = "url";
     public final static String PROPKEY_PUBLIC_API_KEY = "publicApiKey";
-
+   public final static String EMAIL_AON = "email_aon";
+    public final static String PASS_AON = "pass_aon";
     @EJB
     private LoaderFacade loaderFacade;
 
@@ -83,6 +86,60 @@ public class SMSFacade {
         }
     }
 
+    public Mensaje test() throws MalformedURLException, IOException{
+     Properties prop = this.loaderFacade.getSmsProperties();
+        URL url = new URL("https://www.qa.segurosaon.com.co/API/login");
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setRequestMethod("POST");
+        con.setRequestProperty("Content-Type", "application/json");
+        con.setRequestProperty("Accept", "application/json");
+        con.setConnectTimeout(10000);
+        con.setDoOutput(true);
+        OutputStream os = con.getOutputStream();
+          StringBuilder sb = new StringBuilder();
+            sb.append("{")
+                    .append("\"email\":\"")
+                    .append(prop.getProperty(EMAIL_AON))
+                    .append("\",\"password\":\"")
+                    .append(prop.getProperty(PASS_AON))
+                    .append("\"}");
+        os.write(sb.toString().getBytes());
+        os.flush();
+        os.close();
+
+        int responseCode = con.getResponseCode();
+        Logger.getLogger(SMSFacade.class.getName()).log(Level.SEVERE, "POST Response Code :  {0}", responseCode);
+        Logger.getLogger(SMSFacade.class.getName()).log(Level.SEVERE, "POST Response msg :  {0}", con.getResponseMessage());
+
+        if (responseCode == 200) {
+            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            String inputLine;
+            StringBuilder response = new StringBuilder();
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
+            Logger.getLogger(SMSFacade.class.getName()).log(Level.INFO, "POST Response:  {0}", response.toString());
+            InfobipSMSResponse resp = Util.fromJson(response.toString(), InfobipSMSResponse.class);
+            if ("REJECTED_DESTINATION".equals(resp.messages.get(0).status.name)) {
+                return new Mensaje(
+                        "NÚMERO MÓVIL NO VÁLIDO",
+                        "El número móvil registrado presenta inconsistencias, por favor consulte con el administrador",
+                        TipoMensaje.warn,
+                        Mensaje.COD_MOVIL_NO_VALIDO
+                );
+            } else {
+                return null;
+            }
+        } else {
+            return new Mensaje(
+                    "ERROR AL ENVIAR PIN", "Se ha producido un error al enviar el pin, por favor consulte con el administrador",
+                    TipoMensaje.error,
+                    Mensaje.COD_ERROR_ENVIO_SMS
+            );
+        }
+        
+    }    
     private String construirMensaje(String para, String msg) {
         StringBuilder sb = new StringBuilder();
         sb.append("{")
