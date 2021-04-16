@@ -9,6 +9,7 @@ import co.sigess.entities.scm.Diagnosticos;
 import co.sigess.entities.scm.Tratamientos;
 import co.sigess.facade.com.AbstractFacade;
 import java.util.List;
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -17,6 +18,7 @@ import javax.persistence.Query;
  *
  * @author leonardo
  */
+@Stateless
 public class tratamientosFacade extends AbstractFacade<Tratamientos> {
 
     @PersistenceContext(unitName = "SIGESS_PU")
@@ -40,9 +42,17 @@ public class tratamientosFacade extends AbstractFacade<Tratamientos> {
 
     public List<Tratamientos> findAllById(String caseId) {
         Query query = this.em.createNativeQuery("SELECT * FROM scm.tratamientos WHERE pk_case = ?1 order by fecha desc", Tratamientos.class);
-        query.setParameter(1, caseId);
+        query.setParameter(1, Integer.parseInt(caseId));
         List<Tratamientos> list = (List<Tratamientos>) query.getResultList();
         return list;
     }
 
+    
+      public Tratamientos update(Tratamientos trat) throws Exception {
+        
+          trat = super.edit(trat);
+        return trat;
+        
+    }
+    
 }
