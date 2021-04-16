@@ -15,6 +15,7 @@ import co.sigess.entities.scm.Diagnosticos;
 import co.sigess.entities.scm.SeguimientoCaso;
 import co.sigess.entities.scm.SistemaAfectado;
 import co.sigess.entities.scm.Sve;
+import co.sigess.entities.scm.Tratamientos;
 import co.sigess.facade.aus.ReporteAusentismoFacade;
 import co.sigess.facade.core.LoaderFacade;
 import co.sigess.facade.core.SMSFacade;
@@ -25,6 +26,7 @@ import co.sigess.facade.scm.SeguimientoCasoFacade;
 import co.sigess.facade.scm.SistemaAfectadoFacade;
 import co.sigess.facade.scm.SveFacade;
 import co.sigess.facade.scm.diagnosticoFacade;
+import co.sigess.facade.scm.tratamientosFacade;
 import co.sigess.restful.Filter;
 import co.sigess.restful.FilterQuery;
 import co.sigess.restful.FilterResponse;
@@ -71,12 +73,15 @@ public class CasoMedicoREST extends ServiceREST {
 
     @EJB
     private SMSFacade smsFacade;
-    
+
     @EJB
     private SveFacade sve;
 
     @EJB
     private CasosMedicosFacade casosmedicosFacade;
+
+    @EJB
+    private tratamientosFacade tratamientoFacade;
 
     @EJB
     private diagnosticoFacade diagnosticoFacade;
@@ -131,6 +136,7 @@ public class CasoMedicoREST extends ServiceREST {
         try {
             ObjectMapper mapper = new ObjectMapper();
             String json = mapper.writeValueAsString(casosmedicos);
+            casosmedicos.setEmpresa(new Empresa(super.getEmpresaIdRequestContext()));
 
             this.logScm("Edicion de caso medico", json, casosmedicos.getId().toString(), casosmedicos.getClass().toString());
             casosmedicos = this.casosmedicosFacade.update(casosmedicos);
@@ -369,6 +375,52 @@ public class CasoMedicoREST extends ServiceREST {
         }
     }
 
+    @POST
+    @Path("tratamiento")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response createTrat(Tratamientos tratamiento) {
+        try {
+
+            ObjectMapper mapper = new ObjectMapper();
+            tratamiento = this.tratamientoFacade.create(tratamiento);
+            String json = mapper.writeValueAsString(tratamiento);
+            this.logScm("Creacion de tratamiento", json, tratamiento.getPkCase().toString(), tratamiento.getClass().toString());
+
+            return Response.ok(tratamiento).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, ReporteREST.class);
+        }
+    }
+
+    @PUT
+    @Path("tratamiento")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response editTrat(Tratamientos tratamiento) {
+        try {
+
+            ObjectMapper mapper = new ObjectMapper();
+            String json = mapper.writeValueAsString(tratamiento);
+
+            this.logScm("Se edito un tratamiento", json, tratamiento.getPkCase().toString(), tratamiento.getClass().toString());
+            tratamiento = this.tratamientoFacade.update(tratamiento);
+            return Response.ok(tratamiento).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, ReporteREST.class);
+        }
+    }
+
+    @GET
+    @Path("tratamiento/{parametro}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response getTratamiento(@PathParam("parametro") String parametro) {
+        try {
+            List<Tratamientos> list = this.tratamientoFacade.findAllById(parametro);
+            return Response.ok(list).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, ReporteREST.class);
+        }
+    }
+
     @Secured(validarPermiso = false)
     @GET
     @Path("test")
@@ -376,12 +428,12 @@ public class CasoMedicoREST extends ServiceREST {
     public Response test() throws MalformedURLException, IOException {
         String test = "";
         try {
-        test = this.smsFacade.test("https://www.qa.segurosaon.com.co/API/login");
+            test = this.smsFacade.test("https://www.qa.segurosaon.com.co/API/login");
             System.out.println(test);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        
+
         return Response.ok(test).build();
 
     }
