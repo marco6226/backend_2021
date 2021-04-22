@@ -32,15 +32,10 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(name = "seguimiento_caso",schema="scm")
+
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "SeguimientoCaso.findAll", query = "SELECT s FROM SeguimientoCaso s"),
-    @NamedQuery(name = "SeguimientoCaso.findByFechaSeg", query = "SELECT s FROM SeguimientoCaso s WHERE s.fechaSeg = :fechaSeg"),
-    @NamedQuery(name = "SeguimientoCaso.findBySeguimiento", query = "SELECT s FROM SeguimientoCaso s WHERE s.seguimiento = :seguimiento"),
-    @NamedQuery(name = "SeguimientoCaso.findById", query = "SELECT s FROM SeguimientoCaso s WHERE s.id = :id"),
-    @NamedQuery(name = "SeguimientoCaso.findByTarea", query = "SELECT s FROM SeguimientoCaso s WHERE s.tarea = :tarea"),
-    @NamedQuery(name = "SeguimientoCaso.findByResponsable", query = "SELECT s FROM SeguimientoCaso s WHERE s.responsable = :responsable"),
-    @NamedQuery(name = "SeguimientoCaso.findByResultado", query = "SELECT s FROM SeguimientoCaso s WHERE s.resultado = :resultado")})
+    @NamedQuery(name = "SeguimientoCaso.findAll", query = "SELECT s FROM SeguimientoCaso s WHERE s.eliminado = true" ),})
 public class SeguimientoCaso implements Serializable {
 
     /**
@@ -90,6 +85,9 @@ public class SeguimientoCaso implements Serializable {
     @Column(name = "resultado")
     private String resultado;
 
+    @Column(name = "eliminado")
+    private Boolean eliminado;
+    
     public SeguimientoCaso() {
     }
 
@@ -151,6 +149,20 @@ public class SeguimientoCaso implements Serializable {
 
     public String getTarea() {
         return tarea;
+    }
+
+    /**
+     * @return the eliminado
+     */
+    public Boolean getEliminado() {
+        return eliminado;
+    }
+
+    /**
+     * @param eliminado the eliminado to set
+     */
+    public void setEliminado(Boolean eliminado) {
+        this.eliminado = eliminado;
     }
 
     public void setTarea(String tarea) {
