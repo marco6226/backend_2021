@@ -48,6 +48,7 @@ import java.util.Properties;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ws.rs.BeanParam;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -121,6 +122,7 @@ public class CasoMedicoREST extends ServiceREST {
         try {
 
             casosmedicos.setEmpresa(new Empresa(super.getEmpresaIdRequestContext()));
+            casosmedicos.setStatusCaso("1");
             casosmedicos = this.casosmedicosFacade.create(casosmedicos);
             this.logScm("Creacion de caso", "", casosmedicos.getId().toString(), casosmedicos.getClass().toString());
 
@@ -351,7 +353,7 @@ public class CasoMedicoREST extends ServiceREST {
     public Response getSeguimiento(@PathParam("parametro") String parametro) {
         try {
 
-            List<SeguimientoCaso> list = this.seguimientoFacade.buscar(parametro);
+            List<SeguimientoCaso> list = this.seguimientoFacade.findAll();
             return Response.ok(list).build();
         } catch (Exception ex) {
             return Util.manageException(ex, ReporteREST.class);
@@ -362,6 +364,23 @@ public class CasoMedicoREST extends ServiceREST {
     @Path("seguimiento")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response editSeg(SeguimientoCaso seguimientoCaso) {
+        try {
+
+            ObjectMapper mapper = new ObjectMapper();
+            String json = mapper.writeValueAsString(seguimientoCaso);
+
+            this.logScm("Se edito un seguimiento", json, seguimientoCaso.getPkCase(), seguimientoCaso.getClass().toString());
+            seguimientoCaso = this.seguimientoFacade.update(seguimientoCaso);
+            return Response.ok(seguimientoCaso).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, ReporteREST.class);
+        }
+    }
+    
+    @DELETE
+    @Path("seguimiento")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response deleteSeg(SeguimientoCaso seguimientoCaso) {
         try {
 
             ObjectMapper mapper = new ObjectMapper();
