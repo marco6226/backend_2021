@@ -65,7 +65,7 @@ public class EmpleadoFacade extends AbstractFacade<Empleado> {
             throw new IllegalArgumentException("El campo email es necesario");
         }
 
-        usuarioFacade.create(empleado.getUsuario(), empresaId);
+        usuarioFacade.create(empleado.getUsuario(), empresaId,true);
         super.create(empleado);
         return empleado;
     }
@@ -144,7 +144,7 @@ public class EmpleadoFacade extends AbstractFacade<Empleado> {
                 }
               
                
-                usuarioFacade.create(empleado.getUsuario(), empresaId);
+                usuarioFacade.create(empleado.getUsuario(), empresaId,false);
                 super.create(empleado);
                
             } catch (Exception e) {
