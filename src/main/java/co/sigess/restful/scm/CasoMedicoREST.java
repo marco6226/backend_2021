@@ -50,6 +50,7 @@ import javax.ejb.Stateless;
 import javax.ws.rs.BeanParam;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.PATCH;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -243,6 +244,23 @@ public class CasoMedicoREST extends ServiceREST {
     }
 
     @GET
+    @Path("case/{id}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response buscarCaso(@PathParam("id") String id) {
+        try {
+
+            
+            CasosMedicos list = casosmedicosFacade.find(Integer.parseInt(id));
+            return Response.ok(list).build();
+           
+            
+        } catch (Exception ex) {
+            return Util.manageException(ex, EmpleadoREST.class);
+        }
+        
+    }
+    
+    @GET
     @Path("validate/{parametro}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response buscar(@PathParam("parametro") String parametro) {
@@ -377,18 +395,33 @@ public class CasoMedicoREST extends ServiceREST {
         }
     }
     
-    @DELETE
-    @Path("seguimiento")
+    @PUT
+    @Path("seguimiento/{id}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response deleteSeg(SeguimientoCaso seguimientoCaso) {
+    public Response deleteSeg(@PathParam("id") String id) {
         try {
+            System.out.print(id);
+            
+            this.logScm("Se Elimino un seguimiento", null , id , "Seguimiento");
 
-            ObjectMapper mapper = new ObjectMapper();
-            String json = mapper.writeValueAsString(seguimientoCaso);
+            int seg = this.seguimientoFacade.eliminar(Long.parseLong(id));
+            return Response.ok(seg).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, ReporteREST.class);
+        }
+    }
+    
+    @PUT
+    @Path("recomendation/{id}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response deleteReco(@PathParam("id") String id) {
+        try {
+            System.out.print(id);
+            
+            this.logScm("Se Elimino una recomendacion", null , id , "Reomendacion");
 
-            this.logScm("Se edito un seguimiento", json, seguimientoCaso.getPkCase(), seguimientoCaso.getClass().toString());
-            seguimientoCaso = this.seguimientoFacade.update(seguimientoCaso);
-            return Response.ok(seguimientoCaso).build();
+            int seg = this.recomendacionesFacade.eliminar(Long.parseLong(id));
+            return Response.ok(seg).build();
         } catch (Exception ex) {
             return Util.manageException(ex, ReporteREST.class);
         }

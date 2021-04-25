@@ -41,91 +41,7 @@ import javax.xml.bind.annotation.XmlRootElement;
    
 public class CasosMedicos implements Serializable {
 
-    /**
-     * @return the fechaCreacion
-     */
-    public Date getFechaCreacion() {
-        return fechaCreacion;
-    }
-
-    /**
-     * @param fechaCreacion the fechaCreacion to set
-     */
-    public void setFechaCreacion(Date fechaCreacion) {
-         this.fechaCreacion = fechaCreacion; 
-    }
- 
-    /**
-     * @return the saludStatus
-     */
-    public String getSaludStatus() {
-        return saludStatus;
-    }
-
-    /**
-     * @param saludStatus the saludStatus to set
-     */
-    public void setSaludStatus(String saludStatus) {
-        this.saludStatus = saludStatus;
-    }
-
-    /**
-     * @return the names
-     */
-    public String getNames() {
-        return names;
-    }
-
-    /**
-     * @param names the names to set
-     */
-    public void setNames(String names) {
-        this.names = names;
-    }
-
-    
-    /**
-     * @return the region
-     */
-    public String getRegion() {
-        return region;
-    }
-
-    /**
-     * @return the pkUser
-     */
-    public Empleado getPkUser() {
-        return pkUser;
-    }
-
-    /**
-     * @param pkUser the pkUser to set
-     */
-    public void setPkUser(Empleado pkUser) {
-        this.pkUser = pkUser;
-    }
-
-    /**
-     * @param region the region to set
-     */
-    public void setRegion(String region) {
-        this.region = region;
-    }
-
-    /**
-     * @return the ciudad
-     */
-    public String getCiudad() {
-        return ciudad;
-    }
-
-    /**
-     * @param ciudad the ciudad to set
-     */
-    public void setCiudad(String ciudad) {
-        this.ciudad = ciudad;
-    }
-
+  
     private static final long serialVersionUID = 1L;
     @Id
     @SequenceGenerator(name = "casos_medicos_id_seq", schema = "scm", sequenceName = "casos_medicos_id_seq", allocationSize = 1)
@@ -364,6 +280,91 @@ public class CasosMedicos implements Serializable {
         return razon;
     }
 
+      /**
+     * @return the fechaCreacion
+     */
+    public Date getFechaCreacion() {
+        return fechaCreacion;
+    }
+
+    /**
+     * @param fechaCreacion the fechaCreacion to set
+     */
+    public void setFechaCreacion(Date fechaCreacion) {
+         this.fechaCreacion = fechaCreacion; 
+    }
+ 
+    /**
+     * @return the saludStatus
+     */
+    public String getSaludStatus() {
+        return saludStatus;
+    }
+
+    /**
+     * @param saludStatus the saludStatus to set
+     */
+    public void setSaludStatus(String saludStatus) {
+        this.saludStatus = saludStatus;
+    }
+
+    /**
+     * @return the names
+     */
+    public String getNames() {
+        return names;
+    }
+
+    /**
+     * @param names the names to set
+     */
+    public void setNames(String names) {
+        this.names = names;
+    }
+
+    
+    /**
+     * @return the region
+     */
+    public String getRegion() {
+        return region;
+    }
+
+    /**
+     * @return the pkUser
+     */
+    public Empleado getPkUser() {
+        return pkUser;
+    }
+
+    /**
+     * @param pkUser the pkUser to set
+     */
+    public void setPkUser(Empleado pkUser) {
+        this.pkUser = pkUser;
+    }
+
+    /**
+     * @param region the region to set
+     */
+    public void setRegion(String region) {
+        this.region = region;
+    }
+
+    /**
+     * @return the ciudad
+     */
+    public String getCiudad() {
+        return ciudad;
+    }
+
+    /**
+     * @param ciudad the ciudad to set
+     */
+    public void setCiudad(String ciudad) {
+        this.ciudad = ciudad;
+    }
+    
     public void setRazon(String razon) {
         this.razon = razon;
     }

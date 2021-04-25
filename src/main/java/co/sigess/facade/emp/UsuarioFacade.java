@@ -127,7 +127,7 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
         }
     }
 
-    public Usuario create(Usuario usuario, Integer empresaId) throws Exception {
+    public Usuario create(Usuario usuario, Integer empresaId,boolean sendEmail) throws Exception {
         if (usuario.getUsuarioEmpresaList() == null || usuario.getUsuarioEmpresaList().isEmpty()) {
             throw new IllegalArgumentException("Debe establecer un perfil para el usuario a crear");
         }
@@ -155,7 +155,9 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
         Map<String, String> parametros = new HashMap<>();
         parametros.put("P{passwd}", passwd);
         parametros.put("P{email}", usuario.getEmail());
-       // emailFacade.sendEmail(parametros, TipoMail.CREACION_USUARIO, "Creación de cuenta", usuario.getEmail());
+        if (sendEmail) {
+              emailFacade.sendEmail(parametros, TipoMail.CREACION_USUARIO, "Creación de cuenta", usuario.getEmail());
+        }
         return usuario;
     }
 

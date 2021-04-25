@@ -157,7 +157,7 @@ public class UsuarioREST extends ServiceREST {
     @Auditable
     public Response create(Usuario usuario) {
         try {
-            usuarioFacade.create(usuario, super.getEmpresaIdRequestContext());
+            usuarioFacade.create(usuario, super.getEmpresaIdRequestContext(),true);
             return Response.ok(usuario).build();
         } catch (Exception ex) {
             return Util.manageException(ex, UsuarioREST.class);

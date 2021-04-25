@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package co.sigess.facade.scm;
+
 import co.sigess.entities.scm.SeguimientoCaso;
 import co.sigess.facade.com.AbstractFacade;
 import java.util.List;
@@ -17,7 +18,7 @@ import javax.persistence.Query;
  * @author leonardo
  */
 @Stateless
-public class SeguimientoCasoFacade  extends AbstractFacade<SeguimientoCaso> {
+public class SeguimientoCasoFacade extends AbstractFacade<SeguimientoCaso> {
 
     @PersistenceContext(unitName = "SIGESS_PU")
     private EntityManager em;
@@ -26,35 +27,39 @@ public class SeguimientoCasoFacade  extends AbstractFacade<SeguimientoCaso> {
     protected EntityManager getEntityManager() {
         return em;
     }
-    
-    public SeguimientoCasoFacade(){
+
+    public SeguimientoCasoFacade() {
         super(SeguimientoCaso.class);
     }
-    
-    
-     public SeguimientoCaso create(SeguimientoCaso seguimientocaso, Integer empresaId) throws Exception {
-        
+
+    public SeguimientoCaso create(SeguimientoCaso seguimientocaso, Integer empresaId) throws Exception {
 
         super.create(seguimientocaso);
         return seguimientocaso;
     }
-     
-      public SeguimientoCaso update(SeguimientoCaso seguimientocaso) throws Exception {
-       
+
+    public SeguimientoCaso update(SeguimientoCaso seguimientocaso) throws Exception {
+
         seguimientocaso = super.edit(seguimientocaso);
         return seguimientocaso;
     }
 
-      public List<SeguimientoCaso> buscar(String parametro) {
-        System.out.println(parametro);
+    public List<SeguimientoCaso> buscar(String parametro) {
 
-        Query q = this.em.createNativeQuery("SELECT * FROM scm.seguimiento_caso  WHERE pk_case = ?1 order by fecha_seg desc",SeguimientoCaso.class);
-        
-        q.setParameter(1,parametro);
+        Query q = this.em.createNativeQuery("SELECT * FROM scm.seguimiento_caso  WHERE pk_case = ?1 and eliminado != true order by fecha_seg desc", SeguimientoCaso.class);
+        q.setParameter(1, parametro);
         List<SeguimientoCaso> list = (List<SeguimientoCaso>) q.getResultList();
         return list;
 
-      }
-      
-    
+    }
+
+    public int eliminar(Long id) {
+
+        //3117537464
+        Query q = this.em.createNativeQuery("UPDATE scm.seguimiento_caso  SET eliminado = true WHERE id = ?1");
+        q.setParameter(1, id);
+        int deleted = q.executeUpdate();
+        return deleted;
+    }
+
 }

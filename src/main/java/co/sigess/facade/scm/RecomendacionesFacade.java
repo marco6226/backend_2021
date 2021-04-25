@@ -7,6 +7,7 @@ package co.sigess.facade.scm;
 
 import co.sigess.entities.scm.CasosMedicos;
 import co.sigess.entities.scm.Recomendaciones;
+import co.sigess.entities.scm.SeguimientoCaso;
 import co.sigess.facade.com.AbstractFacade;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -50,13 +51,19 @@ public class RecomendacionesFacade extends AbstractFacade<Recomendaciones> {
       public List<Recomendaciones> buscar(String parametro) {
         System.out.println(parametro);
 
-        Query q = this.em.createNativeQuery("SELECT * FROM scm.recomendaciones  WHERE pk_case = ?1 order by fecha_inicio desc",Recomendaciones.class);
+        Query q = this.em.createNativeQuery("SELECT * FROM scm.recomendaciones  WHERE pk_case = ?1 and eliminado != true order by fecha_inicio desc",Recomendaciones.class);
         
         q.setParameter(1,Integer.parseInt(parametro));
         List<Recomendaciones> list = (List<Recomendaciones>) q.getResultList();
         return list;
 
       }
-      
+       public int eliminar(Long parametro) {
+        //3117537464
+        Query q = this.em.createNativeQuery("UPDATE scm.recomendaciones  SET eliminado = true WHERE id = ?1");
+        q.setParameter(1, parametro);
+        int deleted  =  q.executeUpdate();
+        return deleted;
+    }
     
 }

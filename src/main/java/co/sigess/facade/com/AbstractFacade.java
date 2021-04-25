@@ -354,6 +354,8 @@ public abstract class AbstractFacade<T> {
         }
     }
 
+    
+    
     public Class<T> getEntityClass() {
         return entityClass;
     }
