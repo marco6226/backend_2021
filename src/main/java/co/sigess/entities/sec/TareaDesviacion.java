@@ -49,6 +49,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "TareaDesviacion.findAll", query = "SELECT t FROM TareaDesviacion t")})
 public class TareaDesviacion implements Serializable {
 
+    
+
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -81,6 +83,10 @@ public class TareaDesviacion implements Serializable {
      @Size(max = 255)
     @Column(name = "jerarquia")
     private String jerarquia;
+     
+     @Size(max = 255)
+    @Column(name = "codigo")
+    private String codigo;
      
     @Column(name = "realizada")
     private Boolean realizada;
@@ -263,6 +269,20 @@ public class TareaDesviacion implements Serializable {
 
     public void setUsuarioVerifica(Usuario usuarioVerifica) {
         this.usuarioVerifica = usuarioVerifica;
+    }
+    
+    /**
+     * @return the codigo
+     */
+    public String getCodigo() {
+        return codigo;
+    }
+
+    /**
+     * @param codigo the codigo to set
+     */
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
     }
 
     public Area getAreaResponsable() {
