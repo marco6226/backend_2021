@@ -9,8 +9,10 @@ import co.sigess.entities.ado.Directorio;
 import co.sigess.entities.ado.Documento;
 import co.sigess.entities.ado.Modulo;
 import co.sigess.entities.emp.Empresa;
+import co.sigess.entities.scm.ScmLogs;
 import co.sigess.facade.ado.DirectorioFacade;
 import co.sigess.facade.ado.DocumentoFacade;
+import co.sigess.facade.scm.ScmLogsFacade;
 import co.sigess.restful.CriteriaFilter;
 import co.sigess.restful.Filter;
 import co.sigess.restful.FilterQuery;
@@ -18,8 +20,10 @@ import co.sigess.restful.ServiceREST;
 import co.sigess.restful.security.Secured;
 import co.sigess.util.FileUtil;
 import co.sigess.util.Util;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import javax.ejb.EJB;
@@ -45,6 +49,8 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 @Path("directorio")
 public class DirectorioREST extends ServiceREST {
 
+    @EJB
+    private ScmLogsFacade scmLogsFacade;
     @EJB
     private DirectorioFacade directorioFacade;
 
@@ -98,7 +104,6 @@ public class DirectorioREST extends ServiceREST {
             @FormDataParam("modParam") String modParam,
             @FormDataParam("docMetaData") String docMetaData,
             @FormDataParam("caseId") Long caseId
-
     ) throws Exception {
         try {
             directorioFacade.validarParametrosUpload(modulo, modParam);
@@ -114,6 +119,7 @@ public class DirectorioREST extends ServiceREST {
                 dir.setEsDocumento(true);
                 dir.setNombre(fileName);
                 dir.setCaseId(caseId);
+
                 dir.setEmpresa(new Empresa(super.getEmpresaIdRequestContext()));
                 dir.setUsuario(super.getUsuarioRequestContext());
                 dir.setDocumento(new Documento());
@@ -132,7 +138,11 @@ public class DirectorioREST extends ServiceREST {
             } else {
                 directorioFacade.eliminarDocumentos(modulo, modParam);
             }
-
+           ObjectMapper mapper = new ObjectMapper();
+            String json = mapper.writeValueAsString(dir);
+            if (caseId != null) {
+            this.logScm("Guardado de ausentismo", json, dir.getId().toString(), directorioFacade.getClass().toString());
+            }
             return Response.ok(dir).build();
         } catch (Exception ex) {
             return Util.manageException(ex, DirectorioREST.class);
@@ -170,7 +180,7 @@ public class DirectorioREST extends ServiceREST {
             boolean filtradoEmpresa = false;
             boolean filtradoUsuario = false;
             for (Filter filter : filterQuery.getFilterList()) {
-               System.out.print(filter.getField());
+                System.out.print(filter.getField());
                 if (filter.getField().equals("empresa.id")) {
                     filtradoEmpresa = true;
                 }
@@ -185,7 +195,7 @@ public class DirectorioREST extends ServiceREST {
                 empFilt.setValue1(super.getEmpresaIdRequestContext().toString());
                 filterQuery.getFilterList().add(empFilt);
             }
-            
+
             List<Directorio> list = directorioFacade.findWithFilter(filterQuery);
             return Response.ok(list).build();
         } catch (Exception ex) {
@@ -257,9 +267,8 @@ public class DirectorioREST extends ServiceREST {
             return Util.manageException(ex, DirectorioREST.class);
         }
     }
-    
+
     /* ###################################################     ANALISIS DESVIACIONES     ################################################### */
-    
     @POST
     @Path("analisisDesviacion/upload")
     @Consumes({MediaType.MULTIPART_FORM_DATA})
@@ -269,9 +278,8 @@ public class DirectorioREST extends ServiceREST {
             @FormDataParam("file") FormDataContentDisposition fileMetaData,
             @FormDataParam("modParam") String modParam,
             @FormDataParam("docMetaData") String docMetaData
-
     ) throws Exception {
-        return this.uploadFile(fileInputStream, fileMetaData, null, Modulo.SEC.name(), modParam, docMetaData,null);
+        return this.uploadFile(fileInputStream, fileMetaData, null, Modulo.SEC.name(), modParam, docMetaData, null);
     }
 
     @GET
@@ -285,7 +293,7 @@ public class DirectorioREST extends ServiceREST {
             return Util.manageException(ex, DirectorioREST.class);
         }
     }
-    
+
     @PUT
     @Path("analisisDesviacion")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -313,7 +321,7 @@ public class DirectorioREST extends ServiceREST {
             return Util.manageException(ex, DirectorioREST.class);
         }
     }
-    
+
 
     /* ###################################################     COPASST     ################################################### */
     @GET
@@ -337,7 +345,7 @@ public class DirectorioREST extends ServiceREST {
             @FormDataParam("file") FormDataContentDisposition fileMetaData,
             @FormDataParam("modParam") String modParam
     ) throws Exception {
-        return this.uploadFile(fileInputStream, fileMetaData, null, Modulo.COP.name(), modParam, null,null);
+        return this.uploadFile(fileInputStream, fileMetaData, null, Modulo.COP.name(), modParam, null, null);
     }
 
     @GET
@@ -367,5 +375,19 @@ public class DirectorioREST extends ServiceREST {
             return Util.manageException(ex, DirectorioREST.class);
         }
     }
+    
+  private void logScm(String action , String json ,String documento,String entity){
+        try {
+            
+            ScmLogs log = new ScmLogs();
+            log.setAction(action);
+            log.setPkUser(documento);
+            log.setFecha_creacion(new Date());
+            log.setEntity(entity);
+            log.setJson(json);
+            scmLogsFacade.create(log);
+        } catch (Exception e) {
 
+        }
+      }
 }

@@ -8,6 +8,7 @@ package co.sigess.facade.scm;
 import co.sigess.entities.scm.Recomendaciones;
 import co.sigess.entities.scm.ScmLogs;
 import co.sigess.facade.com.AbstractFacade;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -34,8 +35,7 @@ public class ScmLogsFacade extends AbstractFacade<ScmLogs>{
     
     
      public ScmLogs create(ScmLogs logs, Integer empresaId) throws Exception {
-        
-
+      
         super.create(logs);
         return logs;
     }
@@ -45,6 +45,8 @@ public class ScmLogsFacade extends AbstractFacade<ScmLogs>{
         query.setParameter(1, userDocument);
         List<ScmLogs> list = (List<ScmLogs>) query.getResultList();
         return list;
-    }
+    }  
+         
+      
      
 }
