@@ -355,6 +355,7 @@ public class CasoMedicoREST extends ServiceREST {
         try {
 
             ObjectMapper mapper = new ObjectMapper();
+            seguimientoCaso.setEliminado(false);
             seguimientoCaso = this.seguimientoFacade.create(seguimientoCaso);
             String json = mapper.writeValueAsString(seguimientoCaso);
             this.logScm("Creacion de Seguimiento", json, seguimientoCaso.getPkCase(), seguimientoCaso.getClass().toString());
@@ -371,7 +372,7 @@ public class CasoMedicoREST extends ServiceREST {
     public Response getSeguimiento(@PathParam("parametro") String parametro) {
         try {
 
-            List<SeguimientoCaso> list = this.seguimientoFacade.findAll();
+            List<SeguimientoCaso> list = this.seguimientoFacade.buscar(parametro);
             return Response.ok(list).build();
         } catch (Exception ex) {
             return Util.manageException(ex, ReporteREST.class);
