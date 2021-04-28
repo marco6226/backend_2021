@@ -16,6 +16,7 @@ import co.sigess.facade.scm.ScmLogsFacade;
 import co.sigess.restful.CriteriaFilter;
 import co.sigess.restful.Filter;
 import co.sigess.restful.FilterQuery;
+import co.sigess.restful.FilterResponse;
 import co.sigess.restful.ServiceREST;
 import co.sigess.restful.security.Secured;
 import co.sigess.util.FileUtil;
@@ -188,6 +189,7 @@ public class DirectorioREST extends ServiceREST {
                     filtradoUsuario = true;
                 }
             }
+            
             if (!filtradoEmpresa) {
                 Filter empFilt = new Filter();
                 empFilt.setCriteria("eq");
@@ -195,9 +197,13 @@ public class DirectorioREST extends ServiceREST {
                 empFilt.setValue1(super.getEmpresaIdRequestContext().toString());
                 filterQuery.getFilterList().add(empFilt);
             }
-
+            long numRows = filterQuery.isCount() ? directorioFacade.countWithFilter(filterQuery) : -1;
             List<Directorio> list = directorioFacade.findWithFilter(filterQuery);
-            return Response.ok(list).build();
+
+              FilterResponse filterResponse = new FilterResponse();
+            filterResponse.setData(list);
+            filterResponse.setCount(numRows);
+            return Response.ok(filterResponse).build();
         } catch (Exception ex) {
             return Util.manageException(ex, DirectorioREST.class);
         }
