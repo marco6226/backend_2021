@@ -58,6 +58,25 @@ public class Empresa implements Serializable {
     @Size(max = 45)
     @Column(name = "nit")
     private String nit;
+    
+     @Size(max = 45)
+    @Column(name = "direccion")
+    private String direccion;
+     
+      @Size(max = 45)
+    @Column(name = "telefono")
+    private String telefono;
+      
+       @Size(max = 45)
+    @Column(name = "email")
+    private String email;
+       
+        @Size(max = 45)
+    @Column(name = "web")
+    private String web;
+        
+        @Column(name = "numero_sedes")
+    private Integer numero_sedes;
 
     @Column(name = "activo")
     private Boolean activo;
@@ -94,6 +113,76 @@ public class Empresa implements Serializable {
     @JoinColumn(name = "fk_ciiu_id", referencedColumnName = "id")
     @ManyToOne
     private Ciiu ciiu;
+
+    /**
+     * @return the direccion
+     */
+    public String getDireccion() {
+        return direccion;
+    }
+
+    /**
+     * @param direccion the direccion to set
+     */
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
+    }
+
+    /**
+     * @return the telefono
+     */
+    public String getTelefono() {
+        return telefono;
+    }
+
+    /**
+     * @param telefono the telefono to set
+     */
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
+    /**
+     * @return the email
+     */
+    public String getEmail() {
+        return email;
+    }
+
+    /**
+     * @param email the email to set
+     */
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    /**
+     * @return the web
+     */
+    public String getWeb() {
+        return web;
+    }
+
+    /**
+     * @param web the web to set
+     */
+    public void setWeb(String web) {
+        this.web = web;
+    }
+
+    /**
+     * @return the numero_sedes
+     */
+    public Integer getNumero_sedes() {
+        return numero_sedes;
+    }
+
+    /**
+     * @param numero_sedes the numero_sedes to set
+     */
+    public void setNumero_sedes(Integer numero_sedes) {
+        this.numero_sedes = numero_sedes;
+    }
 
     public Empresa() {
     }

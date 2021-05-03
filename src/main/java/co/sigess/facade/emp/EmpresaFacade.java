@@ -96,6 +96,11 @@ public class EmpresaFacade extends AbstractFacade<Empresa> {
     public Empresa edit(Empresa emp) throws Exception {
         Empresa empresaDB = this.find(emp.getId());
         empresaDB.setRazonSocial(emp.getRazonSocial());
+        empresaDB.setDireccion(emp.getDireccion());
+        empresaDB.setTelefono(emp.getTelefono());
+        empresaDB.setEmail(emp.getEmail());
+        empresaDB.setWeb(emp.getWeb());
+        empresaDB.setNumero_sedes(emp.getNumero_sedes());
         empresaDB.setNombreComercial(emp.getNombreComercial());
         if (emp.getArl() != null && emp.getArl().getId() == null) {
             empresaDB.setArl(null);
