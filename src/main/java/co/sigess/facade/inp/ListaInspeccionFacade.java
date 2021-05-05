@@ -80,7 +80,7 @@ public class ListaInspeccionFacade extends AbstractFacade<ListaInspeccion> {
     }
 
     public List<ListaInspeccion> findAllByEmpresa(Integer empresaId) {
-        Query query = this.em.createQuery("SELECT new co.sigess.entities.inp.ListaInspeccion(li.listaInspeccionPK, li.nombre, li.codigo, li.descripcion, li.numeroPreguntas) from ListaInspeccion li where li.empresa.id = :empresaId");
+        Query query = this.em.createQuery("SELECT new co.sigess.entities.inp.ListaInspeccion(li.listaInspeccionPK, li.nombre, li.codigo, li.descripcion, li.numeroPreguntas) from ListaInspeccion li where  li.empresa.id = :empresaId");
         query.setParameter("empresaId", empresaId);
         List<ListaInspeccion> list = (List<ListaInspeccion>) query.getResultList();
         return list;
