@@ -45,7 +45,7 @@ public class Peligro implements Serializable {
     @Column(name = "id")
     private Integer id;
     
-    @Size(max = 45)
+    @Size(max = 255)
     @Column(name = "nombre")
     private String nombre;
     

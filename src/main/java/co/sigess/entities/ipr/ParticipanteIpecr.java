@@ -43,15 +43,15 @@ public class ParticipanteIpecr implements Serializable {
     @Column(name = "id")
     private Integer id;
 
-    @Size(max = 100)
+    @Size(max = 255)
     @Column(name = "nombres")
     private String nombres;
 
-    @Size(max = 100)
+    @Size(max = 255)
     @Column(name = "apellidos")
     private String apellidos;
 
-    @Size(max = 100)
+    @Size(max = 255)
     @Column(name = "cargo")
     private String cargo;
 

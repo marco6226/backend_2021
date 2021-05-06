@@ -55,7 +55,7 @@ public class Ipecr implements Serializable {
     @Column(name = "rutinario")
     private Boolean rutinario;
     
-    @Size(max = 45)
+    @Size(max = 255)
     @Column(name = "ejecucion")
     private String ejecucion;
     
