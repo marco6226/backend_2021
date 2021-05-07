@@ -71,12 +71,13 @@ public class Empresa implements Serializable {
     @Column(name = "email")
     private String email;
        
-        @Size(max = 45)
+    @Size(max = 45)
     @Column(name = "web")
     private String web;
-        
-        @Column(name = "numero_sedes")
-    private Integer numero_sedes;
+    
+    
+    @Column(name = "numero_sedes")
+    private Integer numeroSedes;
 
     @Column(name = "activo")
     private Boolean activo;
@@ -170,19 +171,7 @@ public class Empresa implements Serializable {
         this.web = web;
     }
 
-    /**
-     * @return the numero_sedes
-     */
-    public Integer getNumero_sedes() {
-        return numero_sedes;
-    }
-
-    /**
-     * @param numero_sedes the numero_sedes to set
-     */
-    public void setNumero_sedes(Integer numero_sedes) {
-        this.numero_sedes = numero_sedes;
-    }
+ 
 
     public Empresa() {
     }
@@ -324,4 +313,18 @@ public class Empresa implements Serializable {
 //    public void setPerfilList(List<Perfil> perfilList) {
 //        this.perfilList = perfilList;
 //    }
+
+    /**
+     * @return the numeroSedes
+     */
+    public Integer getNumeroSedes() {
+        return numeroSedes;
+    }
+
+    /**
+     * @param numeroSedes the numeroSedes to set
+     */
+    public void setNumeroSedes(Integer numeroSedes) {
+        this.numeroSedes = numeroSedes;
+    }
 }

@@ -39,6 +39,7 @@ import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+
 /**
  *
  * @author fmoreno
@@ -54,7 +55,7 @@ public class AnalisisDesviacion implements Serializable {
     @SequenceGenerator(name = "analisis_desviacion_id_seq", schema = "sec", sequenceName = "analisis_desviacion_id_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "analisis_desviacion_id_seq")
     @Basic(optional = false)
-    @Column(name = "id")
+    @Column(name = "id") 
     private Integer id;
 
     @Size(max = 512)

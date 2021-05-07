@@ -6,19 +6,32 @@
 package co.sigess.entities.scm;
 
 import co.sigess.entities.emp.Empleado;
+import co.sigess.entities.emp.UsuarioEmpresa;
+import co.sigess.entities.inp.ElementoInspeccion;
+import co.sigess.entities.sec.TareaDesviacion;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import javax.enterprise.inject.Default;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -50,25 +63,21 @@ public class Recomendaciones implements Serializable {
     @Column(name = "generate_recomendaciones")
     @Size(max = 2147483647)
     private String generateRecomendaciones;
-    
-    
-    @Column(name = "actionplan")
-    @Size(max = 2147483647)
-    private String actionPlan;
-     @Column(name = "actividad")
+
+    @Column(name = "actividad")
     @Size(max = 2147483647)
     private String actividad;
-      @Column(name = "descripcion_act")
+    @Column(name = "descripcion_act")
     @Size(max = 2147483647)
     private String descripcion_act;
-       @Column(name = "fecha_proyectada")
+    @Column(name = "fecha_proyectada")
     @Temporal(TemporalType.DATE)
     private Date fecha_proyectada;
-    
+
     @Column(name = "action_plan_responsable")
     @Size(max = 2147483647)
     private String actionPlanResponsable;
-     
+
     @Column(name = "entidad_emit_recomendaciones")
     @Size(max = 2147483647)
     private String entidadEmitRecomendaciones;
@@ -87,14 +96,15 @@ public class Recomendaciones implements Serializable {
     @Column(name = "responsable_externo")
     @Size(max = 2147483647)
     private String responsableExterno;
-    
-    @Column(name = "eliminado",columnDefinition = "boolean default false")
+
+    @Column(name = "eliminado", columnDefinition = "boolean default false")
     private boolean eliminado;
-    
-     @Column(name = "recomendaciones")
+
+
+    @Column(name = "recomendaciones")
     @Size(max = 2147483647)
     private String recomendaciones;
-    
+
     @Id
     @Basic(optional = false)
     @NotNull
@@ -105,13 +115,12 @@ public class Recomendaciones implements Serializable {
     @ManyToOne(optional = false)
     private Empleado responsableEmpresa;
 
-    
     @Id
     @Basic(optional = false)
     @NotNull
     @Column(name = "pk_case")
     private Long pkCase;
-    
+
     public Recomendaciones() {
     }
 
@@ -119,13 +128,10 @@ public class Recomendaciones implements Serializable {
         this.pkUser = pkUser;
     }
 
-
     public void setFechaInicio(Date fechaInicio) {
         this.fechaInicio = fechaInicio;
     }
 
-
-    
     public Long getPkUser() {
         return pkUser;
     }
@@ -229,15 +235,14 @@ public class Recomendaciones implements Serializable {
         this.fecha_proyectada = fecha_proyectada;
     }
 
-     @PrePersist
+    @PrePersist
     public void onPrePersist() {
         audit("INSERT");
     }
-    
-    
+
     private void audit(String operation) {
         System.out.print(operation);
-        
+
     }
 
     /**
@@ -360,20 +365,6 @@ public class Recomendaciones implements Serializable {
     }
 
     /**
-     * @return the actionPlan
-     */
-    public String getActionPlan() {
-        return actionPlan;
-    }
-
-    /**
-     * @param actionPlan the actionPlan to set
-     */
-    public void setActionPlan(String actionPlan) {
-        this.actionPlan = actionPlan;
-    }
-
-    /**
      * @return the actionPlanResponsable
      */
     public String getActionPlanResponsable() {
@@ -386,5 +377,8 @@ public class Recomendaciones implements Serializable {
     public void setActionPlanResponsable(String actionPlanResponsable) {
         this.actionPlanResponsable = actionPlanResponsable;
     }
-    
+
+
+  
+
 }

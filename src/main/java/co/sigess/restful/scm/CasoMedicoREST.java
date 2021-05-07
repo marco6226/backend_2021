@@ -67,44 +67,44 @@ import javax.ws.rs.core.Response;
 @Secured
 @Path("casomedico")
 public class CasoMedicoREST extends ServiceREST {
-
+    
     public final static String EMAIL_AON = "email_aon";
     public final static String PASS_AON = "pass_aon";
     @EJB
     private SistemaAfectadoFacade sistemaAfectadoFacade;
-
+    
     @EJB
     private SMSFacade smsFacade;
-
+    
     @EJB
     private SveFacade sve;
-
+    
     @EJB
     private CasosMedicosFacade casosmedicosFacade;
-
+    
     @EJB
     private tratamientosFacade tratamientoFacade;
-
+    
     @EJB
     private diagnosticoFacade diagnosticoFacade;
-
+    
     @EJB
     private SeguimientoCasoFacade seguimientoFacade;
-
+    
     @EJB
     private ReporteAusentismoFacade reporteAusentismoFacade;
-
+    
     @EJB
     private ScmLogsFacade scmLogsFacade;
-
+    
     @EJB
     private RecomendacionesFacade recomendacionesFacade;
-
+    
     public CasoMedicoREST() {
         super(CasosMedicosFacade.class);
-
+        
     }
-
+    
     @GET
     @Path("all")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -116,23 +116,23 @@ public class CasoMedicoREST extends ServiceREST {
             return Util.manageException(ex, ReporteREST.class);
         }
     }
-
+    
     @POST
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response create(CasosMedicos casosmedicos) {
         try {
-
+            
             casosmedicos.setEmpresa(new Empresa(super.getEmpresaIdRequestContext()));
             casosmedicos.setStatusCaso("1");
             casosmedicos = this.casosmedicosFacade.create(casosmedicos);
             this.logScm("Creacion de caso", "", casosmedicos.getId().toString(), casosmedicos.getClass().toString());
-
+            
             return Response.ok(casosmedicos.getId()).build();
         } catch (Exception ex) {
             return Util.manageException(ex, ReporteREST.class);
         }
     }
-
+    
     @PUT
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response edit(CasosMedicos casosmedicos) {
@@ -140,7 +140,7 @@ public class CasoMedicoREST extends ServiceREST {
             ObjectMapper mapper = new ObjectMapper();
             String json = mapper.writeValueAsString(casosmedicos);
             casosmedicos.setEmpresa(new Empresa(super.getEmpresaIdRequestContext()));
-
+            
             this.logScm("Edicion de caso medico", json, casosmedicos.getId().toString(), casosmedicos.getClass().toString());
             casosmedicos = this.casosmedicosFacade.update(casosmedicos);
             return Response.ok(casosmedicos.getId()).build();
@@ -148,22 +148,22 @@ public class CasoMedicoREST extends ServiceREST {
             return Util.manageException(ex, ReporteREST.class);
         }
     }
-
+    
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Override
     public Response findWithFilter(@BeanParam FilterQuery filterQuery) {
         try {
             boolean filtradoEmpresa = false;
-
+            
+            filtradoEmpresa = filterQuery.getFilterList().stream().anyMatch(find -> find.getField().equals("empresa.id"));
+            
             for (Filter filter : filterQuery.getFilterList()) {
-                System.out.print(filter.getField());
                 if (filter.getField().equals("empresa.id")) {
                     filtradoEmpresa = true;
                 }
-
             }
-
+            
             if (!filtradoEmpresa) {
                 Filter empFilt = new Filter();
                 empFilt.setCriteria("eq");
@@ -171,9 +171,9 @@ public class CasoMedicoREST extends ServiceREST {
                 empFilt.setValue1(super.getEmpresaIdRequestContext().toString());
                 filterQuery.getFilterList().add(empFilt);
             }
-
+            
             long numRows = filterQuery.isCount() ? casosmedicosFacade.countWithFilter(filterQuery) : -1;
-
+            
             List list = casosmedicosFacade.findWithFilter(filterQuery);
             FilterResponse filterResponse = new FilterResponse();
             filterResponse.setData(list);
@@ -183,20 +183,20 @@ public class CasoMedicoREST extends ServiceREST {
             return Util.manageException(ex, EmpleadoREST.class);
         }
     }
-
+    
     @GET
     @Path("recomendation/{parametro}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response listReco(@PathParam("parametro") String parametro) {
         try {
-
+            
             List<Recomendaciones> list = this.recomendacionesFacade.buscar(parametro);
             return Response.ok(list).build();
         } catch (Exception ex) {
             return Util.manageException(ex, ReporteREST.class);
         }
     }
-
+    
     @POST
     @Path("recomendation")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -204,16 +204,15 @@ public class CasoMedicoREST extends ServiceREST {
         try {
             ObjectMapper mapper = new ObjectMapper();
             String json = mapper.writeValueAsString(recomendaciones);
-
             this.logScm("Creacion de recomendacion", json, recomendaciones.getPkCase().toString(), recomendaciones.getClass().toString());
-            recomendaciones = this.recomendacionesFacade.create(recomendaciones);
-
+            recomendaciones = this.recomendacionesFacade.crear(recomendaciones, super.getEmpresaIdRequestContext());
+            
             return Response.ok(recomendaciones.getId()).build();
         } catch (Exception ex) {
             return Util.manageException(ex, ReporteREST.class);
         }
     }
-
+    
     @PUT
     @Path("recomendation")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -221,7 +220,7 @@ public class CasoMedicoREST extends ServiceREST {
         try {
             ObjectMapper mapper = new ObjectMapper();
             String json = mapper.writeValueAsString(recomendaciones);
-
+            
             this.logScm("Se edito una recomendacion", json, recomendaciones.getPkCase().toString(), recomendaciones.getClass().toString());
             recomendaciones = this.recomendacionesFacade.update(recomendaciones);
             return Response.ok(recomendaciones).build();
@@ -229,7 +228,7 @@ public class CasoMedicoREST extends ServiceREST {
             return Util.manageException(ex, ReporteREST.class);
         }
     }
-
+    
     @GET
     @Path("scmausentismo/{parametro}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -242,17 +241,15 @@ public class CasoMedicoREST extends ServiceREST {
             return Util.manageException(ex, ReporteREST.class);
         }
     }
-
+    
     @GET
     @Path("case/{id}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response buscarCaso(@PathParam("id") String id) {
         try {
-
             
             CasosMedicos list = casosmedicosFacade.find(Integer.parseInt(id));
             return Response.ok(list).build();
-           
             
         } catch (Exception ex) {
             return Util.manageException(ex, EmpleadoREST.class);
@@ -265,129 +262,129 @@ public class CasoMedicoREST extends ServiceREST {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response buscar(@PathParam("parametro") String parametro) {
         try {
-
+            
             List<CasosMedicos> list = casosmedicosFacade.buscar(parametro);
-
+            
             return Response.ok(list).build();
-
+            
         } catch (Exception ex) {
             return Util.manageException(ex, EmpleadoREST.class);
         }
     }
-
+    
     @GET
     @Path("logs/{parametro}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response getLogs(@PathParam("parametro") String parametro) {
         try {
-
+            
             List<ScmLogs> list = this.scmLogsFacade.findAllById(parametro);
             return Response.ok(list).build();
         } catch (Exception ex) {
             return Util.manageException(ex, ReporteREST.class);
         }
     }
-
+    
     @GET
     @Path("diagnosticos/{parametro}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response getDiagnosticos(@PathParam("parametro") String parametro) {
         try {
-
+            
             List<Diagnosticos> list = this.diagnosticoFacade.findAllById(parametro);
             return Response.ok(list).build();
         } catch (Exception ex) {
             return Util.manageException(ex, ReporteREST.class);
         }
     }
-
+    
     @POST
     @Path("diagnosticos")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response createDiag(Diagnosticos diagnosticos) {
         try {
             diagnosticos.setCreadoPor(super.getUsuarioRequestContext().getEmail());
-
+            
             ObjectMapper mapper = new ObjectMapper();
             String json = mapper.writeValueAsString(diagnosticos);
-
+            
             this.logScm("Creacion de Diagnostico", json, diagnosticos.getPkCase(), diagnosticos.getClass().toString());
             diagnosticos = this.diagnosticoFacade.create(diagnosticos);
-
+            
             return Response.ok(diagnosticos.getId()).build();
         } catch (Exception ex) {
             return Util.manageException(ex, ReporteREST.class);
         }
     }
-
+    
     @Secured(validarPermiso = false)
     @GET
     @Path("sistemaafectado")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response getSistemasAfectados() {
         try {
-
+            
             List<SistemaAfectado> list = this.sistemaAfectadoFacade.findAll();
             return Response.ok(list).build();
         } catch (Exception ex) {
             return Util.manageException(ex, ReporteREST.class);
         }
     }
-
+    
     @Secured(validarPermiso = false)
     @GET
     @Path("svelist")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response getSve() {
         try {
-
+            
             List<Sve> list = this.sve.findAll();
             return Response.ok(list).build();
         } catch (Exception ex) {
             return Util.manageException(ex, ReporteREST.class);
         }
     }
-
+    
     @POST
     @Path("seguimiento")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response createSeg(SeguimientoCaso seguimientoCaso) {
         try {
-
+            
             ObjectMapper mapper = new ObjectMapper();
             seguimientoCaso.setEliminado(false);
             seguimientoCaso = this.seguimientoFacade.create(seguimientoCaso);
             String json = mapper.writeValueAsString(seguimientoCaso);
             this.logScm("Creacion de Seguimiento", json, seguimientoCaso.getPkCase(), seguimientoCaso.getClass().toString());
-
+            
             return Response.ok(seguimientoCaso).build();
         } catch (Exception ex) {
             return Util.manageException(ex, ReporteREST.class);
         }
     }
-
+    
     @GET
     @Path("seguimiento/{parametro}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response getSeguimiento(@PathParam("parametro") String parametro) {
         try {
-
+            
             List<SeguimientoCaso> list = this.seguimientoFacade.buscar(parametro);
             return Response.ok(list).build();
         } catch (Exception ex) {
             return Util.manageException(ex, ReporteREST.class);
         }
     }
-
+    
     @PUT
     @Path("seguimiento")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response editSeg(SeguimientoCaso seguimientoCaso) {
         try {
-
+            
             ObjectMapper mapper = new ObjectMapper();
             String json = mapper.writeValueAsString(seguimientoCaso);
-
+            
             this.logScm("Se edito un seguimiento", json, seguimientoCaso.getPkCase(), seguimientoCaso.getClass().toString());
             seguimientoCaso = this.seguimientoFacade.update(seguimientoCaso);
             return Response.ok(seguimientoCaso).build();
@@ -403,10 +400,24 @@ public class CasoMedicoREST extends ServiceREST {
         try {
             System.out.print(id);
             
-            this.logScm("Se Elimino un seguimiento", null , id , "Seguimiento");
-
+            this.logScm("Se Elimino un seguimiento", null, id, "Seguimiento");
+            
             int seg = this.seguimientoFacade.eliminar(Long.parseLong(id));
             return Response.ok(seg).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, ReporteREST.class);
+        }
+    }
+    
+    @PUT
+    @Path("diagnosticos/{id}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response editDiag(@PathParam("id") String id) {
+        try {
+            
+            this.logScm("Se borro un diagnostico ", null, id, "Reomendacion");
+            int diag = this.diagnosticoFacade.eliminar(Long.parseLong(id));
+            return Response.ok(diag).build();
         } catch (Exception ex) {
             return Util.manageException(ex, ReporteREST.class);
         }
@@ -417,43 +428,42 @@ public class CasoMedicoREST extends ServiceREST {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response deleteReco(@PathParam("id") String id) {
         try {
-            System.out.print(id);
             
-            this.logScm("Se Elimino una recomendacion", null , id , "Reomendacion");
-
+            this.logScm("Se Elimino una recomendacion", null, id, "Reomendacion");
+            
             int seg = this.recomendacionesFacade.eliminar(Long.parseLong(id));
             return Response.ok(seg).build();
         } catch (Exception ex) {
             return Util.manageException(ex, ReporteREST.class);
         }
     }
-
+    
     @POST
     @Path("tratamiento")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response createTrat(Tratamientos tratamiento) {
         try {
-
+            
             ObjectMapper mapper = new ObjectMapper();
             tratamiento = this.tratamientoFacade.create(tratamiento);
             String json = mapper.writeValueAsString(tratamiento);
             this.logScm("Creacion de tratamiento", json, tratamiento.getPkCase().toString(), tratamiento.getClass().toString());
-
+            
             return Response.ok(tratamiento).build();
         } catch (Exception ex) {
             return Util.manageException(ex, ReporteREST.class);
         }
     }
-
+    
     @PUT
     @Path("tratamiento")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response editTrat(Tratamientos tratamiento) {
         try {
-
+            
             ObjectMapper mapper = new ObjectMapper();
             String json = mapper.writeValueAsString(tratamiento);
-
+            
             this.logScm("Se edito un tratamiento", json, tratamiento.getPkCase().toString(), tratamiento.getClass().toString());
             tratamiento = this.tratamientoFacade.update(tratamiento);
             return Response.ok(tratamiento).build();
@@ -461,7 +471,7 @@ public class CasoMedicoREST extends ServiceREST {
             return Util.manageException(ex, ReporteREST.class);
         }
     }
-
+    
     @GET
     @Path("tratamiento/{parametro}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -473,7 +483,7 @@ public class CasoMedicoREST extends ServiceREST {
             return Util.manageException(ex, ReporteREST.class);
         }
     }
-
+    
     @Secured(validarPermiso = false)
     @GET
     @Path("test")
@@ -486,11 +496,11 @@ public class CasoMedicoREST extends ServiceREST {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        
         return Response.ok(test).build();
-
+        
     }
-
+    
     private void logScm(String action, String json, String documento, String entity) {
         try {
             Calendar fechaActual = Calendar.getInstance();
@@ -502,10 +512,10 @@ public class CasoMedicoREST extends ServiceREST {
             log.setEntity(entity);
             log.setJson(json);
             scmLogsFacade.create(log);
-
+            
         } catch (Exception e) {
-
+            
         }
-
+        
     }
 }

@@ -10,7 +10,7 @@ import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
-import javax.persistence.Entity; 
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author leonardo
  */
 @Entity
-@Table(name = "diagnosticos",schema="scm")
+@Table(name = "diagnosticos", schema = "scm")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Diagnosticos.findAll", query = "SELECT d FROM Diagnosticos d"),
@@ -42,7 +42,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Diagnosticos implements Serializable {
 
     private static final long serialVersionUID = 1L;
-     @Id
+    @Id
     @Basic(optional = false)
     @NotNull
     @SequenceGenerator(name = "diagnosticos_id_seq", schema = "scm", sequenceName = "diagnosticos_id_seq", allocationSize = 1)
@@ -58,18 +58,20 @@ public class Diagnosticos implements Serializable {
     @Size(max = 2147483647)
     @Column(name = "pk_case")
     private String pkCase;
-      @Column(name = "fecha_diagnostico")
+    @Column(name = "fecha_diagnostico")
     @Temporal(TemporalType.DATE)
     private Date fechaDiagnostico;
-    
+    @Column(name = "eliminado", columnDefinition = "boolean default false")
+    private boolean eliminado;
+
     @Size(max = 2147483647)
     @Column(name = "creado_por")
     private String creadoPor;
     @JoinColumn(name = "sistema_afectado", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private SistemaAfectado sistemaAfectado;
-        
-     @Size(max = 2147483647)
+
+    @Size(max = 2147483647)
     @Column(name = "pk_user")
     private String pkUser;
     @Size(max = 2147483647)
@@ -78,7 +80,6 @@ public class Diagnosticos implements Serializable {
     @Size(max = 2147483647)
     @Column(name = "origen")
     private String origen;
-   
 
     public Diagnosticos() {
     }
@@ -124,7 +125,7 @@ public class Diagnosticos implements Serializable {
     public void setCodigoCie10(String codigoCie10) {
         this.codigoCie10 = codigoCie10;
     }
-    
+
     public String getOrigen() {
         return origen;
     }
@@ -189,8 +190,6 @@ public class Diagnosticos implements Serializable {
         this.pkCase = pkCase;
     }
 
-  
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -229,5 +228,19 @@ public class Diagnosticos implements Serializable {
     public void setDetalle(String detalle) {
         this.detalle = detalle;
     }
-    
+
+    /**
+     * @return the eliminado
+     */
+    public boolean isEliminado() {
+        return eliminado;
+    }
+
+    /**
+     * @param eliminado the eliminado to set
+     */
+    public void setEliminado(boolean eliminado) {
+        this.eliminado = eliminado;
+    }
+
 }

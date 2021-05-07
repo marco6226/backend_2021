@@ -6,6 +6,7 @@
 package co.sigess.facade.scm;
 
 import co.sigess.entities.scm.CasosMedicos;
+import co.sigess.entities.scm.PlanAccion;
 import co.sigess.entities.scm.Recomendaciones;
 import co.sigess.entities.scm.SeguimientoCaso;
 import co.sigess.facade.com.AbstractFacade;
@@ -29,41 +30,42 @@ public class RecomendacionesFacade extends AbstractFacade<Recomendaciones> {
     protected EntityManager getEntityManager() {
         return em;
     }
-    
-    public RecomendacionesFacade(){
+
+    public RecomendacionesFacade() {
         super(Recomendaciones.class);
     }
-    
-    
-     public Recomendaciones create(Recomendaciones recomendaciones, Integer empresaId) throws Exception {
-        
+
+    public Recomendaciones crear(Recomendaciones recomendaciones, Integer empresaId) throws Exception {
 
         super.create(recomendaciones);
+        
+        
         return recomendaciones;
     }
-     
-      public Recomendaciones update(Recomendaciones recomendaciones) throws Exception {
-       
+
+    public Recomendaciones update(Recomendaciones recomendaciones) throws Exception {
+
         recomendaciones = super.edit(recomendaciones);
         return recomendaciones;
     }
 
-      public List<Recomendaciones> buscar(String parametro) {
+    public List<Recomendaciones> buscar(String parametro) {
         System.out.println(parametro);
 
-        Query q = this.em.createNativeQuery("SELECT * FROM scm.recomendaciones  WHERE pk_case = ?1 and eliminado != true order by fecha_inicio desc",Recomendaciones.class);
-        
-        q.setParameter(1,Integer.parseInt(parametro));
+        Query q = this.em.createNativeQuery("SELECT * FROM scm.recomendaciones  WHERE pk_case = ?1 and eliminado != true order by fecha_inicio desc", Recomendaciones.class);
+
+        q.setParameter(1, Integer.parseInt(parametro));
         List<Recomendaciones> list = (List<Recomendaciones>) q.getResultList();
         return list;
 
-      }
-       public int eliminar(Long parametro) {
+    }
+
+    public int eliminar(Long parametro) {
         //3117537464
         Query q = this.em.createNativeQuery("UPDATE scm.recomendaciones  SET eliminado = true WHERE id = ?1");
         q.setParameter(1, parametro);
-        int deleted  =  q.executeUpdate();
+        int deleted = q.executeUpdate();
         return deleted;
     }
-    
+
 }
