@@ -60,9 +60,6 @@ public class PlanAccion implements Serializable {
     private BigInteger responsableExterno;
 
     
-    @OneToOne
-    private Recomendaciones test;
-
     public PlanAccion() {
     }
 
