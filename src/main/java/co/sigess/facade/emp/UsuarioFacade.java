@@ -36,6 +36,8 @@ import javax.persistence.TemporalType;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import javax.ws.rs.core.Context;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 /**
  *
@@ -221,7 +223,29 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
         List<Usuario> list = (List<Usuario>) query.getResultList();
         return list;
     }
+    
+    public ByteArrayOutputStream consultarConsolidado(Integer empresaIdRequestContext) throws IOException {
+        Query q = this.em.createNativeQuery("SELECT distinct u.email \n" +  
+                "FROM emp.usuario u\n" +
+"JOIN emp.usuario_empresa ue \n" +
+"on  ue.pk_usuario_id=u.id\n" +
+"\n" +
+"WHERE ue.pk_empresa_id = ?1 order by u.email ASC");
+        q.setParameter(1, empresaIdRequestContext);
+        
+        List<String> lines = q.getResultList();
+        if (lines.isEmpty() || lines.size() <= 1) {
+            throw new UserMessageException("Datos no encontrados", "No se hallaron usaurios ", TipoMensaje.info);
+        }
 
+        ByteArrayOutputStream bOutput = new ByteArrayOutputStream(2_000 + (lines.size() * 400));
+
+        for (String line : lines) {
+            bOutput.write(line.getBytes());
+            bOutput.write("\n".getBytes());
+        }
+        return bOutput;
+    }
     public void filtrarUsuarioEmpresa(Usuario usuario, Integer empresaId) {
         for (Iterator<UsuarioEmpresa> iterator = usuario.getUsuarioEmpresaList().iterator(); iterator.hasNext();) {
             UsuarioEmpresa ue = iterator.next();

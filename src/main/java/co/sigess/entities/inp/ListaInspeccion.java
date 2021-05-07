@@ -74,6 +74,10 @@ public class ListaInspeccion implements Serializable {
     @Column(name = "tipo_lista")
     private String tipoLista;
     
+    @Size(max = 45)
+    @Column(name = "estado")
+    private String estado;
+    
     @Column(name = "numero_preguntas")
     private Integer numeroPreguntas;
     
@@ -153,7 +157,19 @@ public class ListaInspeccion implements Serializable {
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
+/**
+     * @return the estado
+     */
+    public String getEstado() {
+        return estado;
+    }
 
+    /**
+     * @param estado the estado to set
+     */
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
     public Empresa getEmpresa() {
         return empresa;
     }
@@ -250,5 +266,7 @@ public class ListaInspeccion implements Serializable {
     public String toString() {
         return "co.sigess.entities.inp.ListaInspeccion[ listaInspeccionPK=" + listaInspeccionPK + " ]";
     }
+
+    
     
 }

@@ -37,6 +37,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+
+import java.io.ByteArrayOutputStream;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 
 /**
@@ -213,6 +216,23 @@ public class UsuarioREST extends ServiceREST {
         try {
             usuarioFacade.aceptarTerminos(super.getUsuarioRequestContext(), aceptar);
             return Response.ok().build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, UsuarioREST.class);
+        }
+    }
+    
+    @GET
+    @Path("consusuarios")
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_OCTET_STREAM})
+    public Response consultarConsolidado(
+            @QueryParam("empresa") int empresa
+            
+    ) {
+        
+        
+        try {
+            ByteArrayOutputStream out = ((UsuarioFacade) super.beanInstance).consultarConsolidado(super.getEmpresaIdRequestContext());
+            return Response.ok(out.toByteArray(), MediaType.APPLICATION_OCTET_STREAM_TYPE).build();
         } catch (Exception ex) {
             return Util.manageException(ex, UsuarioREST.class);
         }

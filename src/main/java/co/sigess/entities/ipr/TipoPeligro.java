@@ -48,7 +48,7 @@ public class TipoPeligro implements Serializable {
     private Integer id;
     
     @NotNull(message = "El campo nombre es requerido para el tipo de peligro")
-    @Size(max = 45)
+    @Size(max = 255)
     @Column(name = "nombre")
     private String nombre;
     
