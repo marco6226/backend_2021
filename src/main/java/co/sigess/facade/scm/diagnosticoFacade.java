@@ -45,6 +45,13 @@ public class diagnosticoFacade extends AbstractFacade<Diagnosticos> {
         return list;
     }
 
+      public Diagnosticos update(Diagnosticos diagnosticos) throws Exception {
+
+        diagnosticos = super.edit(diagnosticos);
+        return diagnosticos;
+    }
+
+    
     public int eliminar(Long parametro) {
         //3117537464
         Query q = this.em.createNativeQuery("UPDATE scm.diagnosticos  SET eliminado = true WHERE id = ?1");

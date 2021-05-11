@@ -8,6 +8,7 @@ package co.sigess.entities.scm;
 import co.sigess.entities.emp.Empleado;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,6 +19,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -87,6 +89,7 @@ public class Recomendaciones implements Serializable {
     private boolean eliminado;
 
 
+    
     @Column(name = "recomendaciones")
     @Size(max = 2147483647)
     private String recomendaciones;

@@ -317,6 +317,22 @@ public class CasoMedicoREST extends ServiceREST {
         }
     }
     
+    @PUT
+    @Path("diagnosticos")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response editDiag(Diagnosticos diagnosticos) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            String json = mapper.writeValueAsString(diagnosticos);
+            
+            this.logScm("Se edito un diagnostico", json, diagnosticos.getPkCase().toString(), diagnosticos.getClass().toString());
+            diagnosticos = this.diagnosticoFacade.update(diagnosticos);
+            return Response.ok(diagnosticos).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, ReporteREST.class);
+        }
+    }
+    
     @Secured(validarPermiso = false)
     @GET
     @Path("sistemaafectado")

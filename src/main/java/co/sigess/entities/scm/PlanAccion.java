@@ -19,6 +19,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -58,6 +59,11 @@ public class PlanAccion implements Serializable {
     private BigInteger responsableEmpresa;
     @Column(name = "responsable_externo")
     private BigInteger responsableExterno;
+    
+
+    @Column(name = "pk_reco")
+    private Long pkReco;
+    
 
     
     public PlanAccion() {
