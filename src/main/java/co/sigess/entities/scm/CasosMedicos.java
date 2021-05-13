@@ -28,6 +28,7 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.jvnet.hk2.annotations.Optional;
 
 /**
  *
@@ -121,13 +122,15 @@ public class CasosMedicos implements Serializable {
     @Size(max = 128)
     @Column(name = "entidad_emite_calificacion")
     private String entidadEmiteCalificacion;
+    @Optional
+    @Column(name = "entidad_emitida")
+    private Integer entidadEmitida;
     @Size(max = 128)
     @Column(name = "concept_rehabilitacion")
     private String conceptRehabilitacion;
     @Column(name = "fecha_concept_rehabilitacion")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaConceptRehabilitacion;
-    
     
     @JoinColumn(name = "fk_empresa_id", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
@@ -524,6 +527,30 @@ public class CasosMedicos implements Serializable {
     public void setDocumento(String documento) {
         this.documento = documento;
     }
+
+    /**
+     * @return the entidadEmitida
+     */
+    public Integer getEntidadEmitida() {
+        return entidadEmitida;
+    }
+
+    /**
+     * @param entidadEmitida the entidadEmitida to set
+     */
+    public void setEntidadEmitida(Integer entidadEmitida) {
+        this.entidadEmitida = entidadEmitida;
+    }
+
+    /**
+     * @return the entidadEmitida
+     */
+   
+
+    /**
+     * @param entidadEmitida the entidadEmitida to set
+     */
+    
 
     
 

@@ -8,6 +8,7 @@ package co.sigess.entities.scm;
 import co.sigess.entities.emp.Empleado;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -39,6 +40,20 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Recomendaciones.findAll", query = "SELECT r FROM Recomendaciones r")})
 public class Recomendaciones implements Serializable {
+
+    /**
+     * @return the test
+     */
+    public List getTest() {
+        return actionPlan;
+    }
+
+    /**
+     * @param test the test to set
+     */
+    public void setTest(List test) {
+        this.actionPlan = test;
+    }
 
     @Id
     @SequenceGenerator(name = "recomendaciones_id_seq", schema = "scm", sequenceName = "recomendaciones_id_seq", allocationSize = 1)
@@ -89,7 +104,7 @@ public class Recomendaciones implements Serializable {
     private boolean eliminado;
 
 
-    
+    private List actionPlan;
     @Column(name = "recomendaciones")
     @Size(max = 2147483647)
     private String recomendaciones;
