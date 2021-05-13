@@ -23,6 +23,7 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.jvnet.hk2.annotations.Optional;
 
 /**
  *
@@ -47,6 +48,9 @@ public class Tratamientos implements Serializable {
     @Size(max = 2147483647)
     @Column(name = "descripcion")
     private String descripcion;
+    @Optional
+    @Column(name = "tipo")
+    private Integer tipo;
     @Column(name = "fecha")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fecha;
@@ -130,6 +134,20 @@ public class Tratamientos implements Serializable {
     @Override
     public String toString() {
         return "co.sigess.entities.scm.Tratamientos[ id=" + id + " ]";
+    }
+
+    /**
+     * @return the tipo
+     */
+    public Integer getTipo() {
+        return tipo;
+    }
+
+    /**
+     * @param tipo the tipo to set
+     */
+    public void setTipo(Integer tipo) {
+        this.tipo = tipo;
     }
     
 }
