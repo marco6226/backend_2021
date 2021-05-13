@@ -202,6 +202,8 @@ public class CasoMedicoREST extends ServiceREST {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response createReco(Recomendaciones recomendaciones) {
         try {
+            
+            recomendaciones.getTest().forEach(System.out::println);
             ObjectMapper mapper = new ObjectMapper();
             String json = mapper.writeValueAsString(recomendaciones);
             this.logScm("Creacion de recomendacion", json, recomendaciones.getPkCase().toString(), recomendaciones.getClass().toString());

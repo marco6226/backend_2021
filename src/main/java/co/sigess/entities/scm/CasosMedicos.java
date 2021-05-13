@@ -125,12 +125,21 @@ public class CasosMedicos implements Serializable {
     @Optional
     @Column(name = "entidad_emitida")
     private Integer entidadEmitida;
+    @Optional
+    @Column(name = "entidad_emitidatwo")
+    private Integer entidadEmitidaTwo;
     @Size(max = 128)
     @Column(name = "concept_rehabilitacion")
     private String conceptRehabilitacion;
+     @Size(max = 128)
+    @Column(name = "concept_rehabilitaciontwo")
+    private String conceptRehabilitacionTwo;
     @Column(name = "fecha_concept_rehabilitacion")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaConceptRehabilitacion;
+    @Column(name = "fecha_concept_rehabilitaciontwo")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaConceptRehabilitacionTwo;
     
     @JoinColumn(name = "fk_empresa_id", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
@@ -138,6 +147,9 @@ public class CasosMedicos implements Serializable {
     @Size(max = 128)
     @Column(name = "entidad_emite_concepto")
     private String entidadEmiteConcepto;
+    @Size(max = 128)
+    @Column(name = "entidad_emite_conceptotwo")
+    private String entidadEmiteConceptoTwo;
     @Size(max = 128)
     @Column(name = "requiere_intervencion")
     private String requiereIntervencion;
@@ -543,17 +555,61 @@ public class CasosMedicos implements Serializable {
     }
 
     /**
-     * @return the entidadEmitida
+     * @return the entidadEmitidaTwo
      */
-   
+    public Integer getEntidadEmitidaTwo() {
+        return entidadEmitidaTwo;
+    }
 
     /**
-     * @param entidadEmitida the entidadEmitida to set
+     * @param entidadEmitidaTwo the entidadEmitidaTwo to set
      */
-    
+    public void setEntidadEmitidaTwo(Integer entidadEmitidaTwo) {
+        this.entidadEmitidaTwo = entidadEmitidaTwo;
+    }
+
+    /**
+     * @return the conceptRehabilitacionTwo
+     */
+    public String getConceptRehabilitacionTwo() {
+        return conceptRehabilitacionTwo;
+    }
+
+    /**
+     * @param conceptRehabilitacionTwo the conceptRehabilitacionTwo to set
+     */
+    public void setConceptRehabilitacionTwo(String conceptRehabilitacionTwo) {
+        this.conceptRehabilitacionTwo = conceptRehabilitacionTwo;
+    }
+
+    /**
+     * @return the fechaConceptRehabilitacionTwo
+     */
+    public Date getFechaConceptRehabilitacionTwo() {
+        return fechaConceptRehabilitacionTwo;
+    }
+
+    /**
+     * @param fechaConceptRehabilitacionTwo the fechaConceptRehabilitacionTwo to set
+     */
+    public void setFechaConceptRehabilitacionTwo(Date fechaConceptRehabilitacionTwo) {
+        this.fechaConceptRehabilitacionTwo = fechaConceptRehabilitacionTwo;
+    }
+
+    /**
+     * @return the entidadEmiteConceptoTwo
+     */
+    public String getEntidadEmiteConceptoTwo() {
+        return entidadEmiteConceptoTwo;
+    }
+
+    /**
+     * @param entidadEmiteConceptoTwo the entidadEmiteConceptoTwo to set
+     */
+    public void setEntidadEmiteConceptoTwo(String entidadEmiteConceptoTwo) {
+        this.entidadEmiteConceptoTwo = entidadEmiteConceptoTwo;
+    }
 
     
-
-   
     
 }
