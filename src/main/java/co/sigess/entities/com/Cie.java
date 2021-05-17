@@ -38,6 +38,9 @@ public class Cie implements Serializable {
     @Size(max = 255)
     @Column(name = "nombre")
     private String nombre;
+    @Size(max = 255)
+    @Column(name = "tipo")
+    private String tipo;
 //    @JoinColumn(name = "fk_tipo_cie_id", referencedColumnName = "id")
 //    @ManyToOne(optional = false)
 //    private TipoCie tipoCie;
@@ -80,7 +83,6 @@ public class Cie implements Serializable {
 //    public void setTipoCie(TipoCie tipoCie) {
 //        this.tipoCie = tipoCie;
 //    }
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -105,5 +107,19 @@ public class Cie implements Serializable {
     public String toString() {
         return "co.sigess.entities.com.Cie[ id=" + id + " ]";
     }
-    
+
+    /**
+     * @return the tipo
+     */
+    public String getTipo() {
+        return tipo;
+    }
+
+    /**
+     * @param tipo the tipo to set
+     */
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
 }

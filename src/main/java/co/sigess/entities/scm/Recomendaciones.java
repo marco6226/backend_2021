@@ -29,6 +29,7 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.jvnet.hk2.annotations.Optional;
 
 /**
  *
@@ -63,6 +64,9 @@ public class Recomendaciones implements Serializable {
     @Column(name = "fecha_inicio")
     @Temporal(TemporalType.DATE)
     private Date fechaInicio;
+    @Optional
+    @Column(name = "entidad_emitida")
+    private Integer entidadEmitida;
     @Column(name = "fecha_expiracion")
     @Temporal(TemporalType.DATE)
     private Date fechaExpiracion;
@@ -311,6 +315,20 @@ public class Recomendaciones implements Serializable {
      */
     public void setActionPlanList(List<PlanAccion> actionPlanList) {
         this.actionPlanList = actionPlanList;
+    }
+
+    /**
+     * @return the entidadEmitida
+     */
+    public Integer getEntidadEmitida() {
+        return entidadEmitida;
+    }
+
+    /**
+     * @param entidadEmitida the entidadEmitida to set
+     */
+    public void setEntidadEmitida(Integer entidadEmitida) {
+        this.entidadEmitida = entidadEmitida;
     }
     
 }
