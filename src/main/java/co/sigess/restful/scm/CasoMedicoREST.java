@@ -202,10 +202,9 @@ public class CasoMedicoREST extends ServiceREST {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response createReco(Recomendaciones recomendaciones) {
         try {
-            
-            recomendaciones.getTest().forEach(System.out::println);
             ObjectMapper mapper = new ObjectMapper();
             String json = mapper.writeValueAsString(recomendaciones);
+            recomendaciones.setEliminado(false);
             this.logScm("Creacion de recomendacion", json, recomendaciones.getPkCase().toString(), recomendaciones.getClass().toString());
             recomendaciones = this.recomendacionesFacade.crear(recomendaciones, super.getEmpresaIdRequestContext());
             
@@ -222,7 +221,8 @@ public class CasoMedicoREST extends ServiceREST {
         try {
             ObjectMapper mapper = new ObjectMapper();
             String json = mapper.writeValueAsString(recomendaciones);
-            
+                 recomendaciones.setEliminado(false);
+
             this.logScm("Se edito una recomendacion", json, recomendaciones.getPkCase().toString(), recomendaciones.getClass().toString());
             recomendaciones = this.recomendacionesFacade.update(recomendaciones);
             return Response.ok(recomendaciones).build();

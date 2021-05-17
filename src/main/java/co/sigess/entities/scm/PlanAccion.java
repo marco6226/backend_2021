@@ -5,21 +5,23 @@
  */
 package co.sigess.entities.scm;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.math.BigInteger;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -30,8 +32,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author leonardo
  */
 @Entity
-
-@Table(name = "plan_accion")
+@Table(name = "plan_accion", schema = "scm")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "PlanAccion.findAll", query = "SELECT p FROM PlanAccion p")
@@ -40,8 +41,9 @@ public class PlanAccion implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
- 
     @Id
+    @SequenceGenerator(name = "plan_accion_id_seq", schema = "scm", sequenceName = "plan_accion_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "plan_accion_id_seq")
     @Basic(optional = false)
     @NotNull
     @Column(name = "id")
@@ -59,13 +61,15 @@ public class PlanAccion implements Serializable {
     private BigInteger responsableEmpresa;
     @Column(name = "responsable_externo")
     private BigInteger responsableExterno;
-    
-
-    @Column(name = "pk_reco")
-    private Long pkReco;
-    
 
     
+    @JsonIgnore
+     @JoinColumns({
+        @JoinColumn(name = "fk_recomendaciones_id", referencedColumnName = "id",insertable=false, updatable=false),
+     })
+    @ManyToOne(optional = false,fetch = FetchType.EAGER)
+    private Recomendaciones listaActionPlan;
+
     public PlanAccion() {
     }
 
@@ -73,6 +77,14 @@ public class PlanAccion implements Serializable {
         this.id = id;
     }
 
+    @JsonIgnore
+    public Recomendaciones getListaPlanAccion() {
+        return listaActionPlan;
+    }
+
+    public void setListaPlanAccion(Recomendaciones listaActionPlan) {
+        this.listaActionPlan = listaActionPlan;
+    }
 
     public Long getId() {
         return id;
@@ -147,6 +159,6 @@ public class PlanAccion implements Serializable {
         return "co.sigess.entities.scm.PlanAccion[ id=" + id + " ]";
     }
 
- 
+  
 
 }
