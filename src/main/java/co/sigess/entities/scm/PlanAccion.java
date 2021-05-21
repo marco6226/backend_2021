@@ -58,8 +58,9 @@ public class PlanAccion implements Serializable {
     @Size(max = 2147483647)
     @Column(name = "fecha_proyectada")
     private String fechaProyectada;
+    @Size(max = 2147483647)
     @Column(name = "responsable_externo")
-    private BigInteger responsableExterno;
+    private String responsableExterno;
     
     @JoinColumn(name = "responsable_empresa", referencedColumnName = "id")
     @ManyToOne(optional = false)
@@ -120,11 +121,11 @@ public class PlanAccion implements Serializable {
         this.fechaProyectada = fechaProyectada;
     }
 
-    public BigInteger getResponsableExterno() {
+    public String getResponsableExterno() {
         return responsableExterno;
     }
 
-    public void setResponsableExterno(BigInteger responsableExterno) {
+    public void setResponsableExterno(String responsableExterno) {
         this.responsableExterno = responsableExterno;
     }
 
