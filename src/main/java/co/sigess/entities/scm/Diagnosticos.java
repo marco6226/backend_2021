@@ -67,9 +67,9 @@ public class Diagnosticos implements Serializable {
     @Size(max = 2147483647)
     @Column(name = "creado_por")
     private String creadoPor;
-    @JoinColumn(name = "sistema_afectado", referencedColumnName = "id")
-    @ManyToOne(optional = false)
-    private SistemaAfectado sistemaAfectado;
+    @Size(max = 2147483647)
+    @Column(name = "sistema_afectado")
+    private String sistemaAfectado;
 
     @Size(max = 2147483647)
     @Column(name = "pk_user")
@@ -141,12 +141,7 @@ public class Diagnosticos implements Serializable {
         return pkCase;
     }
 
-    /**
-     * @return the sistemaAfectado
-     */
-    public SistemaAfectado getSistemaAfectado() {
-        return sistemaAfectado;
-    }
+ 
 
     /**
      * @return the fechaDiagnostico
@@ -176,12 +171,6 @@ public class Diagnosticos implements Serializable {
         this.fechaDiagnostico = fechaDiagnostico;
     }
 
-    /**
-     * @param sistemaAfectado the sistemaAfectado to set
-     */
-    public void setSistemaAfectado(SistemaAfectado sistemaAfectado) {
-        this.sistemaAfectado = sistemaAfectado;
-    }
 
     /**
      * @param pkCase the pkCase to set
@@ -241,6 +230,20 @@ public class Diagnosticos implements Serializable {
      */
     public void setEliminado(boolean eliminado) {
         this.eliminado = eliminado;
+    }
+
+    /**
+     * @return the sistemaAfectado
+     */
+    public String getSistemaAfectado() {
+        return sistemaAfectado;
+    }
+
+    /**
+     * @param sistemaAfectado the sistemaAfectado to set
+     */
+    public void setSistemaAfectado(String sistemaAfectado) {
+        this.sistemaAfectado = sistemaAfectado;
     }
 
 }
