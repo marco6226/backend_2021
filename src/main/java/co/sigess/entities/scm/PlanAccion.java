@@ -5,6 +5,7 @@
  */
 package co.sigess.entities.scm;
 
+import co.sigess.entities.emp.Empleado;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.math.BigInteger;
@@ -57,11 +58,12 @@ public class PlanAccion implements Serializable {
     @Size(max = 2147483647)
     @Column(name = "fecha_proyectada")
     private String fechaProyectada;
-    @Column(name = "responsable_empresa")
-    private BigInteger responsableEmpresa;
     @Column(name = "responsable_externo")
     private BigInteger responsableExterno;
-
+    
+    @JoinColumn(name = "responsable_empresa", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private Empleado responsableEmpresa;
     
     @JsonIgnore
      @JoinColumns({
@@ -118,14 +120,6 @@ public class PlanAccion implements Serializable {
         this.fechaProyectada = fechaProyectada;
     }
 
-    public BigInteger getResponsableEmpresa() {
-        return responsableEmpresa;
-    }
-
-    public void setResponsableEmpresa(BigInteger responsableEmpresa) {
-        this.responsableEmpresa = responsableEmpresa;
-    }
-
     public BigInteger getResponsableExterno() {
         return responsableExterno;
     }
@@ -159,6 +153,21 @@ public class PlanAccion implements Serializable {
         return "co.sigess.entities.scm.PlanAccion[ id=" + id + " ]";
     }
 
+    /**
+     * @return the responsableEmpresa
+     */
+    public Empleado getResponsableEmpresa() {
+        return responsableEmpresa;
+    }
+
+    /**
+     * @param responsableEmpresa the responsableEmpresa to set
+     */
+    public void setResponsableEmpresa(Empleado responsableEmpresa) {
+        this.responsableEmpresa = responsableEmpresa;
+    }
+
+    
   
 
 }
