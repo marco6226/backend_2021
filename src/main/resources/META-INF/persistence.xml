@@ -4,6 +4,7 @@
     <jta-data-source>java:app/NB_SIGESS_DS</jta-data-source>
     <class>co.sigess.entities.scm.Recomendaciones</class>
     <class>co.sigess.entities.scm.CasosMedicos</class>
+    <class>co.sigess.entities.scm.Pcl</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="eclipselink.cache.shared.default" value="false"/>

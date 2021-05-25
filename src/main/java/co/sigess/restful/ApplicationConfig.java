@@ -95,6 +95,7 @@ public class ApplicationConfig extends Application {
         resources.add(co.sigess.restful.ipr.TipoPeligroREST.class);
         resources.add(co.sigess.restful.rai.ReporteREST.class);
         resources.add(co.sigess.restful.scm.CasoMedicoREST.class);
+        resources.add(co.sigess.restful.scm.PclREST.class);
         resources.add(co.sigess.restful.sec.AnalisisDesviacionREST.class);
         resources.add(co.sigess.restful.sec.DesviacionREST.class);
         resources.add(co.sigess.restful.sec.SistemaCausaAdministrativaREST.class);
@@ -112,6 +113,13 @@ public class ApplicationConfig extends Application {
         resources.add(co.sigess.restful.sge.ReportesSGEREST.class);
         resources.add(co.sigess.restful.sge.RespuestaREST.class);
         resources.add(co.sigess.restful.sge.SistemaGestionREST.class);
+        resources.add(com.fasterxml.jackson.jaxrs.base.JsonMappingExceptionMapper.class);
+        resources.add(com.fasterxml.jackson.jaxrs.base.JsonParseExceptionMapper.class);
+        resources.add(com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider.class);
+        resources.add(com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider.class);
+        resources.add(com.fasterxml.jackson.jaxrs.json.JsonMappingExceptionMapper.class);
+        resources.add(com.fasterxml.jackson.jaxrs.json.JsonParseExceptionMapper.class);
+        resources.add(org.glassfish.jersey.server.wadl.internal.WadlResource.class);
     }
     
 }
