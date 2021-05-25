@@ -104,8 +104,8 @@ public class SMSFacade {
          // add request parameters or form parameters
         StringBuilder json = new StringBuilder();
         json.append("{");
-        json.append("\"email\":\"user.telefonica@aon.com\",");
-        json.append("\"password\":\"pG5VIu248B#j\"");
+        json.append("\"email\":\"user.api@lerprevencion.com\",");
+        json.append("\"password\":\"VK1TG1hu\"");
         json.append("}");
 
         post.setEntity(new StringEntity(json.toString()));
