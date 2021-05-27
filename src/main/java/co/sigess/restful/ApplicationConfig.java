@@ -95,7 +95,6 @@ public class ApplicationConfig extends Application {
         resources.add(co.sigess.restful.ipr.TipoPeligroREST.class);
         resources.add(co.sigess.restful.rai.ReporteREST.class);
         resources.add(co.sigess.restful.scm.CasoMedicoREST.class);
-        resources.add(co.sigess.restful.scm.PclREST.class);
         resources.add(co.sigess.restful.sec.AnalisisDesviacionREST.class);
         resources.add(co.sigess.restful.sec.DesviacionREST.class);
         resources.add(co.sigess.restful.sec.SistemaCausaAdministrativaREST.class);
