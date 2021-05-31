@@ -6,12 +6,15 @@
 package co.sigess.entities.scm;
 
 import java.io.Serializable;
-import javax.persistence.Basic;
+import javax.persistence.Basic; 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -22,19 +25,28 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author leonardo
  */
 @Entity
-@Table(name = "pcl",schema = "scm")
+@Table(name = "pcl" ,schema = "scm")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Pcl.findAll", query = "SELECT p FROM Pcl p")})
+    @NamedQuery(name = "Pcl.findAll", query = "SELECT p FROM Pcl p"),
+    @NamedQuery(name = "Pcl.findById", query = "SELECT p FROM Pcl p WHERE p.id = :id"),
+    @NamedQuery(name = "Pcl.findByPorcentajePcl", query = "SELECT p FROM Pcl p WHERE p.porcentajePcl = :porcentajePcl"),
+    @NamedQuery(name = "Pcl.findByEmisionPclFecha", query = "SELECT p FROM Pcl p WHERE p.emisionPclFecha = :emisionPclFecha"),
+    @NamedQuery(name = "Pcl.findByEntidadEmitePcl", query = "SELECT p FROM Pcl p WHERE p.entidadEmitePcl = :entidadEmitePcl"),
+    @NamedQuery(name = "Pcl.findByPcl", query = "SELECT p FROM Pcl p WHERE p.pcl = :pcl"),
+    @NamedQuery(name = "Pcl.findByDiag", query = "SELECT p FROM Pcl p WHERE p.diag = :diag"),
+    @NamedQuery(name = "Pcl.findByEliminado", query = "SELECT p FROM Pcl p WHERE p.eliminado = :eliminado")})
 public class Pcl implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
     @Id
     @Basic(optional = false)
+    @SequenceGenerator(name = "pcl_id_seq", schema = "scm", sequenceName = "pcl_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pcl_id_seq")
     @NotNull
     @Column(name = "id")
     private Long id;
+    
     @Size(max = 2147483647)
     @Column(name = "porcentaje_pcl")
     private String porcentajePcl;
@@ -42,7 +54,7 @@ public class Pcl implements Serializable {
     @Column(name = "emision_pcl_fecha")
     private String emisionPclFecha;
     @Size(max = 2147483647)
-    @Column(name = "pcl_emit_entidad")
+    @Column(name = "entidad_emite_pcl")
     private String entidadEmitePcl;
     @Size(max = 2147483647)
     @Column(name = "pcl")
@@ -50,6 +62,8 @@ public class Pcl implements Serializable {
     @Size(max = 2147483647)
     @Column(name = "diag")
     private String diag;
+    @Column(name = "eliminado")
+    private Boolean eliminado;
 
     public Pcl() {
     }
@@ -82,11 +96,11 @@ public class Pcl implements Serializable {
         this.emisionPclFecha = emisionPclFecha;
     }
 
-    public String getPclEmitEntidad() {
+    public String getEntidadEmitePcl() {
         return entidadEmitePcl;
     }
 
-    public void setPclEmitEntidad(String entidadEmitePcl) {
+    public void setEntidadEmitePcl(String entidadEmitePcl) {
         this.entidadEmitePcl = entidadEmitePcl;
     }
 
@@ -104,6 +118,14 @@ public class Pcl implements Serializable {
 
     public void setDiag(String diag) {
         this.diag = diag;
+    }
+
+    public Boolean getEliminado() {
+        return eliminado;
+    }
+
+    public void setEliminado(Boolean eliminado) {
+        this.eliminado = eliminado;
     }
 
     @Override
