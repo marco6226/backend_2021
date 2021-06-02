@@ -53,7 +53,7 @@ public class EmpresaREST extends ServiceREST {
                     filtradoEmpresa = true;
                 }
             }
-            
+
             if (!filtradoEmpresa) {
                 Filter empFilt = new Filter();
                 empFilt.setCriteriaEnum(CriteriaFilter.EQUALS);
@@ -61,10 +61,10 @@ public class EmpresaREST extends ServiceREST {
                 empFilt.setValue1(String.valueOf(getUsuarioRequestContext().getId()));
                 filterQuery.getFilterList().add(empFilt);
             }
-            
+
             long numRows = filterQuery.isCount() ? empresaFacade.countWithFilter(filterQuery) : -1;
             List list = empresaFacade.findWithFilter(filterQuery);
-            
+
             FilterResponse filterResponse = new FilterResponse();
             filterResponse.setData(list);
             filterResponse.setCount(numRows);
@@ -126,6 +126,16 @@ public class EmpresaREST extends ServiceREST {
     @Path("usuario/{usuarioId}")
     public Response findByUsuario(@PathParam("usuarioId") Integer usuarioId) {
         List<Empresa> empresa = empresaFacade.findByUsuario(usuarioId);
+        return Response.ok(empresa).build();
+    }
+
+    @GET
+    @Secured(validarPermiso = false)
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Path("selected")
+    public Response findBySelected() {
+         
+      Empresa  empresa = empresaFacade.find(super.getEmpresaIdRequestContext());
         return Response.ok(empresa).build();
     }
 
