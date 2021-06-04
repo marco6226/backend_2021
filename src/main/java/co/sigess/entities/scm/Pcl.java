@@ -74,8 +74,9 @@ public class Pcl implements Serializable {
     private String entidadEmiteCalificacion;
     @Column(name = "entidad_emitida_calificacion")
     private Integer entidadEmitidaCalificacion;
+    @Size(max = 2147483647)
     @Column(name = "entidad_emitida")
-    private Integer entidadEmitida;
+    private String entidadEmitida;
 
     public Pcl() {
     }
@@ -172,11 +173,11 @@ public class Pcl implements Serializable {
         this.entidadEmitidaCalificacion = entidadEmitidaCalificacion;
     }
 
-    public Integer getEntidadEmitida() {
+    public String getEntidadEmitida() {
         return entidadEmitida;
     }
 
-    public void setEntidadEmitida(Integer entidadEmitida) {
+    public void setEntidadEmitida(String entidadEmitida) {
         this.entidadEmitida = entidadEmitida;
     }
 
