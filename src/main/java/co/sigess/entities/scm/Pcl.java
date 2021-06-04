@@ -6,7 +6,7 @@
 package co.sigess.entities.scm;
 
 import java.io.Serializable;
-import javax.persistence.Basic; 
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -46,7 +46,6 @@ public class Pcl implements Serializable {
     @NotNull
     @Column(name = "id")
     private Long id;
-    
     @Size(max = 2147483647)
     @Column(name = "porcentaje_pcl")
     private String porcentajePcl;
@@ -64,6 +63,19 @@ public class Pcl implements Serializable {
     private String diag;
     @Column(name = "eliminado")
     private Boolean eliminado;
+    @Size(max = 2147483647)
+    @Column(name = "status_de_calificacion")
+    private String statusDeCalificacion;
+    @Size(max = 2147483647)
+    @Column(name = "fecha_calificacion")
+    private String fechaCalificacion;
+    @Size(max = 2147483647)
+    @Column(name = "entidad_emite_calificacion")
+    private String entidadEmiteCalificacion;
+    @Column(name = "entidad_emitida_calificacion")
+    private Integer entidadEmitidaCalificacion;
+    @Column(name = "entidad_emitida")
+    private Integer entidadEmitida;
 
     public Pcl() {
     }
@@ -126,6 +138,46 @@ public class Pcl implements Serializable {
 
     public void setEliminado(Boolean eliminado) {
         this.eliminado = eliminado;
+    }
+
+    public String getStatusDeCalificacion() {
+        return statusDeCalificacion;
+    }
+
+    public void setStatusDeCalificacion(String statusDeCalificacion) {
+        this.statusDeCalificacion = statusDeCalificacion;
+    }
+
+    public String getFechaCalificacion() {
+        return fechaCalificacion;
+    }
+
+    public void setFechaCalificacion(String fechaCalificacion) {
+        this.fechaCalificacion = fechaCalificacion;
+    }
+
+    public String getEntidadEmiteCalificacion() {
+        return entidadEmiteCalificacion;
+    }
+
+    public void setEntidadEmiteCalificacion(String entidadEmiteCalificacion) {
+        this.entidadEmiteCalificacion = entidadEmiteCalificacion;
+    }
+
+    public Integer getEntidadEmitidaCalificacion() {
+        return entidadEmitidaCalificacion;
+    }
+
+    public void setEntidadEmitidaCalificacion(Integer entidadEmitidaCalificacion) {
+        this.entidadEmitidaCalificacion = entidadEmitidaCalificacion;
+    }
+
+    public Integer getEntidadEmitida() {
+        return entidadEmitida;
+    }
+
+    public void setEntidadEmitida(Integer entidadEmitida) {
+        this.entidadEmitida = entidadEmitida;
     }
 
     @Override
