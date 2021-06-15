@@ -111,7 +111,12 @@
             <version>7.0</version>
             <scope>provided</scope>
         </dependency>
-        
+         <!-- https new-->
+        <dependency>              
+            <groupId>com.konghq</groupId>
+            <artifactId>unirest-java</artifactId>
+            <version>3.11.09</version>
+        </dependency>
         <!-- https://mvnrepository.com/artifact/javax.mail/mail -->
         <dependency>
             <groupId>javax.mail</groupId>

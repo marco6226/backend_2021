@@ -60,12 +60,15 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import kong.unirest.HttpResponse;
+import kong.unirest.JsonNode;
+import kong.unirest.Unirest;
+import kong.unirest.UnirestException;
 
 /**
  *
  * @author leonardo
  */
-@Stateless
 @Secured
 @Path("casomedico")
 public class CasoMedicoREST extends ServiceREST {
@@ -76,7 +79,7 @@ public class CasoMedicoREST extends ServiceREST {
     private SistemaAfectadoFacade sistemaAfectadoFacade;
 
     @EJB
-    private SMSFacade smsFacade;
+    private LoaderFacade loaderFacade;
 
     @EJB
     private SveFacade sve;
@@ -509,18 +512,48 @@ public class CasoMedicoREST extends ServiceREST {
 
     @Secured(validarPermiso = false)
     @GET
-    @Path("test")
+    @Path("aon")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public Response test() throws MalformedURLException, IOException {
-        String test = "";
+    public Response token() throws MalformedURLException, IOException {
+        Properties prop = this.loaderFacade.getSmsProperties();
         try {
-            test = this.smsFacade.test("https://www.qa.segurosaon.com.co/API/login");
-            System.out.println(test);
-        } catch (IOException e) {
-            e.printStackTrace();
+            HttpResponse<String> response = Unirest.post("http://localhost:3000/api/v1/aon/token")
+                    .header("accept", "application/json")
+                    .queryString("email", prop.getProperty(EMAIL_AON))
+                    .queryString("password", prop.getProperty(PASS_AON))
+                    .asString();
+
+            return Response.ok(response.getBody()).build();
+        } catch (UnirestException ex) {
+            return Util.manageException(ex, CasoMedicoREST.class);
         }
 
-        return Response.ok(test).build();
+    }
+
+    @Secured(validarPermiso = false)
+    @GET
+    @Path("aon/registers/{token}/{cc}/{fechai}/{fechafi}")
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    public Response oanregisters(
+            @PathParam("token") String token,
+            @PathParam("cc") String cc,
+            @PathParam("fechai") String fechai,
+            @PathParam("fechafi") String fechafi
+    ) throws MalformedURLException, IOException {
+        Properties prop = this.loaderFacade.getSmsProperties();
+        try {
+            HttpResponse<String> response = Unirest.get("http://localhost:3000/api/v1/aon/registers")
+                    .header("accept", "application/json")
+                    .queryString("token", token)
+                    .queryString("cc", cc)
+                    .queryString("fechai", fechai)
+                    .queryString("fechafi", fechafi)
+                    .asString();
+
+            return Response.ok(response.getBody()).build();
+        } catch (UnirestException ex) {
+            return Util.manageException(ex, CasoMedicoREST.class);
+        }
 
     }
 
