@@ -6,6 +6,7 @@
 package co.sigess.entities.sec;
 
 import co.sigess.entities.emp.Area;
+import co.sigess.entities.emp.Empleado;
 import co.sigess.entities.emp.Empresa;
 import co.sigess.entities.emp.Usuario;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -56,7 +57,7 @@ public class TareaDesviacion implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "id")
+    @Column(name = "id") 
     private Integer id;
 
     @Size(max = 256)
@@ -126,6 +127,10 @@ public class TareaDesviacion implements Serializable {
     @ManyToOne
     private Area areaResponsable;
 
+    @JoinColumn(name = "fk_empleado_responsable_id", referencedColumnName = "id")
+    @ManyToOne
+    private Empleado empResponsable;
+    
     @NotNull
     @JoinTable(name = "analisis_desviacion_tarea_desviacion", schema = "sec", joinColumns = {
         @JoinColumn(name = "pk_tarea_desviacion_id", referencedColumnName = "id")}, inverseJoinColumns = {
@@ -334,6 +339,20 @@ public class TareaDesviacion implements Serializable {
     @Override
     public String toString() {
         return "co.sigess.entities.sec.TareaDesviacion[ id=" + id + " ]";
+    }
+
+    /**
+     * @return the EmpResponsable
+     */
+    public Empleado getEmpResponsable() {
+        return empResponsable;
+    }
+
+    /**
+     * @param empResponsable
+     */
+    public void setEmpResponsable(Empleado empResponsable) {
+        this.empResponsable = empResponsable;
     }
 
 }
