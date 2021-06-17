@@ -17,10 +17,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -127,8 +129,9 @@ public class TareaDesviacion implements Serializable {
     @ManyToOne
     private Area areaResponsable;
 
-    @JoinColumn(name = "fk_empleado_responsable_id", referencedColumnName = "id")
-    @ManyToOne
+     @JsonIgnoreProperties({"jefeInmediato","businessPartner","tipoIdentificacion"})
+    @JoinColumn(name = "fk_emp_responsable_id", referencedColumnName = "id")
+    @ManyToOne(cascade = CascadeType.REFRESH )
     private Empleado empResponsable;
     
     @NotNull
@@ -342,17 +345,18 @@ public class TareaDesviacion implements Serializable {
     }
 
     /**
-     * @return the EmpResponsable
+     * @return the empResponsable
      */
     public Empleado getEmpResponsable() {
         return empResponsable;
     }
 
     /**
-     * @param empResponsable
+     * @param empResponsable the empResponsable to set
      */
     public void setEmpResponsable(Empleado empResponsable) {
         this.empResponsable = empResponsable;
     }
 
+   
 }
