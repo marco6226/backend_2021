@@ -20,7 +20,7 @@ import javax.persistence.Query;
  */
 @Stateless
 public class CasosMedicosFacade  extends AbstractFacade<CasosMedicos>{
-    
+     
      @PersistenceContext(unitName = "SIGESS_PU")
     private EntityManager em;
 
