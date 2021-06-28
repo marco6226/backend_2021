@@ -58,6 +58,18 @@ public class TareaDesviacionREST extends ServiceREST {
         }
     }
 
+    @GET
+    @Secured(validarPermiso = false)
+    @Path("{tareaId}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response find(@PathParam("tareaId") Integer tareaId) {
+        try {
+            TareaDesviacion tareaDesviacion = ((TareaDesviacionFacade) beanInstance).find(tareaId);
+            return Response.ok(tareaDesviacion).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, AnalisisDesviacionREST.class);
+        }
+    }
     @PUT
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response edit(TareaDesviacion tarea) {
