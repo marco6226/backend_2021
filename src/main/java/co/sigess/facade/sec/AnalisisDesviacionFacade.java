@@ -133,6 +133,7 @@ public class AnalisisDesviacionFacade extends AbstractFacade<AnalisisDesviacion>
                         tareaDB.setDescripcion(tarea.getDescripcion());
                         tareaDB.setFechaProyectada(tarea.getFechaProyectada());
                         tareaDB.setNombre(tarea.getNombre());
+                        tareaDB.setjerarquia(tarea.getjerarquia());
                         tareaDB.setModulo(tarea.getModulo());
                         tareaDB.setEmpResponsable(tarea.getEmpResponsable());
                         tareaDB.setCodigo(tarea.getCodigo());
