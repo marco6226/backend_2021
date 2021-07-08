@@ -66,6 +66,7 @@ public class DirectorioREST extends ServiceREST {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response create(Directorio directorio) {
         try {
+            System.out.print(directorio.getCaseId());
             directorio.setEmpresa(new Empresa(super.getEmpresaIdRequestContext()));
             directorio.setUsuario(super.getUsuarioRequestContext());
             directorio = directorioFacade.create(directorio);

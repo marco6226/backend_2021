@@ -118,6 +118,22 @@ public class TareaDesviacionREST extends ServiceREST {
         }
     }
 
+        
+
+    @GET
+    @Secured(validarPermiso = false)
+    @Path("detail/{tareaId}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response findByDetailId(@PathParam("tareaId") Integer tareaId) {
+        try {
+           
+            String json = tareaDesviacionFacade.findById(tareaId);
+            return Response.ok(json).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, TareaDesviacionREST.class);
+        }
+    }
+    
     @GET
     @Path("usuario/{usuarioId}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
