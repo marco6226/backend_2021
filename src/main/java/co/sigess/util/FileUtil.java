@@ -26,6 +26,7 @@ public class FileUtil {
 
     public static final String RELATIVE_PATH = "RELATIVE_PATH";
     public static final String FILE_SIZE = "FILE_SIZE";
+     private final static int BUFFER_LENGHT = 65536;
     public static final String SEF_EXT = "sef";
     public static final String ROOT_DIR = System.getProperty("user.home") + File.separator + "sigess_fs" + File.separator;
 
@@ -37,8 +38,29 @@ public class FileUtil {
         rootDir = null;
     }
 
-    public static Map<String, Object> saveInVirtualFS(InputStream fileInputStream) throws FileNotFoundException, IOException, Exception {
+    public static Map<String, Object> saveInVirtualFS(InputStream in) throws FileNotFoundException, IOException, Exception {
+         byte[] ibuf = new byte[BUFFER_LENGHT];
 
+        String pathfile = Util.getFechaId() + "." + "jpg";
+          int len;
+       
+        File outFile = new File(ROOT_DIR + File.separator + pathfile);
+        FileOutputStream out = new FileOutputStream(outFile);
+        
+         while ((len = in.read(ibuf)) != -1) {
+                out.write(ibuf,0,len);       
+        }
+         // FileEncryption.getInstance().encrypt(fileInputStream, fos);
+
+        Map<String, Object> map = new HashMap<>();
+        map.put(RELATIVE_PATH, pathfile);
+        map.put(FILE_SIZE, outFile.length());
+        return map;
+    }
+    
+    
+      public static Map<String, Object> saveInPathFS(InputStream fileInputStream) throws FileNotFoundException, IOException, Exception {
+            
         String pathfile = Util.getFechaId() + "." + SEF_EXT;
         File outFile = new File(ROOT_DIR + File.separator + pathfile);
         FileOutputStream fos = new FileOutputStream(outFile);
@@ -49,6 +71,7 @@ public class FileUtil {
         map.put(FILE_SIZE, outFile.length());
         return map;
     }
+    
 
     public static boolean removeFromVirtualFS(String ruta) throws FileNotFoundException, IOException {
         File documento = new File(ROOT_DIR + ruta);

@@ -213,6 +213,9 @@ public class CasoMedicoREST extends ServiceREST {
             ObjectMapper mapper = new ObjectMapper();
             String json = mapper.writeValueAsString(recomendaciones);
             recomendaciones.setEliminado(false);
+           if("".equals(recomendaciones.getActionPlanResponsable())) {
+               recomendaciones.setActionPlanResponsable("0");
+           } 
             this.logScm("Creacion de recomendacion", json, recomendaciones.getPkCase().toString(), recomendaciones.getClass().toString());
             recomendaciones = this.recomendacionesFacade.crear(recomendaciones, super.getEmpresaIdRequestContext());
 

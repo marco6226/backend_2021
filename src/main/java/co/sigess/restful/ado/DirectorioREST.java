@@ -93,6 +93,37 @@ public class DirectorioREST extends ServiceREST {
             return Util.manageException(ex, DirectorioREST.class);
         }
     }
+    
+    @Secured(validarPermiso = false)
+    @POST
+    @Path("uploadv2")
+    @Consumes({MediaType.MULTIPART_FORM_DATA})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response uploadFile(
+            @FormDataParam("file") InputStream fileInputStream,
+            @FormDataParam("file") FormDataContentDisposition fileMetaData
+    ) throws Exception {
+        try {
+
+            if (fileMetaData != null) {
+                if (fileMetaData.getFileName() == null) {
+                    throw new IllegalArgumentException("No se ha especificado un nombre para el archivo a guardar");
+                }
+                String fileName = fileMetaData.getFileName();
+                Map<String, Object> map = FileUtil.saveInVirtualFS(fileInputStream);
+                String relativePath = (String) map.get(FileUtil.RELATIVE_PATH);
+
+                ObjectMapper mapper = new ObjectMapper();
+                String json = mapper.writeValueAsString(relativePath);
+
+                return Response.ok(json).build();
+            }
+        } catch (Exception ex) {
+            return Util.manageException(ex, DirectorioREST.class);
+        }
+        return null;
+
+    }
 
     @POST
     @Path("upload")
@@ -140,10 +171,10 @@ public class DirectorioREST extends ServiceREST {
             } else {
                 directorioFacade.eliminarDocumentos(modulo, modParam);
             }
-           ObjectMapper mapper = new ObjectMapper();
+            ObjectMapper mapper = new ObjectMapper();
             String json = mapper.writeValueAsString(dir);
             if (caseId != null) {
-            this.logScm("Guardado de ausentismo", json, dir.getId().toString(), directorioFacade.getClass().toString());
+                this.logScm("Guardado de ausentismo", json, dir.getId().toString(), directorioFacade.getClass().toString());
             }
             return Response.ok(dir).build();
         } catch (Exception ex) {
@@ -190,7 +221,7 @@ public class DirectorioREST extends ServiceREST {
                     filtradoUsuario = true;
                 }
             }
-            
+
             if (!filtradoEmpresa) {
                 Filter empFilt = new Filter();
                 empFilt.setCriteria("eq");
@@ -201,7 +232,7 @@ public class DirectorioREST extends ServiceREST {
             long numRows = filterQuery.isCount() ? directorioFacade.countWithFilter(filterQuery) : -1;
             List<Directorio> list = directorioFacade.findWithFilter(filterQuery);
 
-              FilterResponse filterResponse = new FilterResponse();
+            FilterResponse filterResponse = new FilterResponse();
             filterResponse.setData(list);
             filterResponse.setCount(numRows);
             return Response.ok(filterResponse).build();
@@ -382,10 +413,10 @@ public class DirectorioREST extends ServiceREST {
             return Util.manageException(ex, DirectorioREST.class);
         }
     }
-    
-  private void logScm(String action , String json ,String documento,String entity){
+
+    private void logScm(String action, String json, String documento, String entity) {
         try {
-            
+
             ScmLogs log = new ScmLogs();
             log.setAction(action);
             log.setPkUser(documento);
@@ -396,5 +427,5 @@ public class DirectorioREST extends ServiceREST {
         } catch (Exception e) {
 
         }
-      }
+    }
 }
