@@ -263,6 +263,17 @@ public class Empresa implements Serializable {
         this.ciiu = ciiu;
     }
 
+    public Integer getNumeroSedes() {
+        return numeroSedes;
+    }
+
+    /**
+     * @param numeroSedes the numeroSedes to set
+     */
+    public void setNumeroSedes(Integer numeroSedes) {
+        this.numeroSedes = numeroSedes;
+    }
+    
     public String getLogo() {
         return logo;
     }
@@ -314,17 +325,6 @@ public class Empresa implements Serializable {
 //        this.perfilList = perfilList;
 //    }
 
-    /**
-     * @return the numeroSedes
-     */
-    public Integer getNumeroSedes() {
-        return numeroSedes;
-    }
 
-    /**
-     * @param numeroSedes the numeroSedes to set
-     */
-    public void setNumeroSedes(Integer numeroSedes) {
-        this.numeroSedes = numeroSedes;
-    }
+    
 }

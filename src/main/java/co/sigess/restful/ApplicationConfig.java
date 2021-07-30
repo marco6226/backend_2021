@@ -48,6 +48,7 @@ public class ApplicationConfig extends Application {
         resources.add(co.sigess.restful.com.DepartamentoREST.class);
         resources.add(co.sigess.restful.com.EnumeracionesREST.class);
         resources.add(co.sigess.restful.com.EpsREST.class);
+        resources.add(co.sigess.restful.com.PrepagadasREST.class);
         resources.add(co.sigess.restful.conf.ConfiguracionGeneralREST.class);
         resources.add(co.sigess.restful.conf.ManualREST.class);
         resources.add(co.sigess.restful.conf.OfflineServiceREST.class);
@@ -112,13 +113,6 @@ public class ApplicationConfig extends Application {
         resources.add(co.sigess.restful.sge.ReportesSGEREST.class);
         resources.add(co.sigess.restful.sge.RespuestaREST.class);
         resources.add(co.sigess.restful.sge.SistemaGestionREST.class);
-        resources.add(com.fasterxml.jackson.jaxrs.base.JsonMappingExceptionMapper.class);
-        resources.add(com.fasterxml.jackson.jaxrs.base.JsonParseExceptionMapper.class);
-        resources.add(com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider.class);
-        resources.add(com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider.class);
-        resources.add(com.fasterxml.jackson.jaxrs.json.JsonMappingExceptionMapper.class);
-        resources.add(com.fasterxml.jackson.jaxrs.json.JsonParseExceptionMapper.class);
-        resources.add(org.glassfish.jersey.server.wadl.internal.WadlResource.class);
     }
     
 }

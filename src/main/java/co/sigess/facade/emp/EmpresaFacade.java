@@ -102,6 +102,7 @@ public class EmpresaFacade extends AbstractFacade<Empresa> {
         empresaDB.setWeb(emp.getWeb());
         empresaDB.setNumeroSedes(emp.getNumeroSedes());
         empresaDB.setNombreComercial(emp.getNombreComercial());
+        empresaDB.setLogo(emp.getLogo());
         if (emp.getArl() != null && emp.getArl().getId() == null) {
             empresaDB.setArl(null);
         } else {
