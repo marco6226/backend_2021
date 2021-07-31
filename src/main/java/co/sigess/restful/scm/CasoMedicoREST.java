@@ -575,11 +575,11 @@ public class CasoMedicoREST extends ServiceREST {
     }
 
     @GET
-    @Path("pcl")
+    @Path("pcl/{id}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response listPcl() {
+    public Response listPcl(  @PathParam("id") String id) {
         try {
-            List list = this.pclFacade.findAllById(null);
+            List list = this.pclFacade.findAllById(id);
             return Response.ok(list).build();
         } catch (Exception ex) {
             return Util.manageException(ex, CasoMedicoREST.class);

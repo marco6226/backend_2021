@@ -47,8 +47,11 @@ public class PclFacade extends AbstractFacade<Pcl> {
     }
 
     public List<Pcl> findAllById(String caseId) {
-        Query query = this.em.createNativeQuery("SELECT * FROM scm.pcl WHERE eliminado !=true", Pcl.class);
-        //query.setParameter(1, Integer.parseInt(caseId));
+        Query query = this.em.createNativeQuery("select *  from scm.pcl as pcl\n" +
+"	right join scm.diagnosticos as diag\n" +
+"	on CAST (pcl.diag as bigint)=diag.id	\n" +
+"	where pk_case='36' and pcl.eliminado=false", Pcl.class);
+        query.setParameter(1, Integer.parseInt(caseId));
         List<Pcl> list = (List<Pcl>) query.getResultList();
         return list; 
     }
