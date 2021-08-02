@@ -146,7 +146,7 @@ public class DirectorioREST extends ServiceREST {
                     throw new IllegalArgumentException("No se ha especificado un nombre para el archivo a guardar");
                 }
                 String fileName = fileMetaData.getFileName();
-                Map<String, Object> map = FileUtil.saveInVirtualFS(fileInputStream);
+                Map<String, Object> map = FileUtil.saveInPathFS(fileInputStream);
                 String relativePath = (String) map.get(FileUtil.RELATIVE_PATH);
                 dir = new Directorio();
                 dir.setEsDocumento(true);
