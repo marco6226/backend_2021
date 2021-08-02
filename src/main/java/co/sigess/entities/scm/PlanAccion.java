@@ -63,7 +63,7 @@ public class PlanAccion implements Serializable {
     private String responsableExterno;
     
     @JoinColumn(name = "responsable_empresa", referencedColumnName = "id")
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = true)
     private Empleado responsableEmpresa;
     
     @JsonIgnore

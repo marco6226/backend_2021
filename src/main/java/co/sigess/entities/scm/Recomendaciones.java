@@ -113,7 +113,7 @@ public class Recomendaciones implements Serializable {
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER,orphanRemoval = true)
     @JoinColumn(name="fk_recomendaciones_id")
     private List<PlanAccion> actionPlanList  = new ArrayList<PlanAccion>();
-    
+   
     public Recomendaciones() {
     }
 
