@@ -213,7 +213,7 @@ public class CasoMedicoREST extends ServiceREST {
             ObjectMapper mapper = new ObjectMapper();
             String json = mapper.writeValueAsString(recomendaciones);
             recomendaciones.setEliminado(false);
-          
+
             this.logScm("Creacion de recomendacion", json, recomendaciones.getPkCase().toString(), recomendaciones.getClass().toString());
             recomendaciones = this.recomendacionesFacade.crear(recomendaciones, super.getEmpresaIdRequestContext());
 
@@ -472,7 +472,9 @@ public class CasoMedicoREST extends ServiceREST {
         try {
 
             ObjectMapper mapper = new ObjectMapper();
+            tratamiento.setEliminado(false);
             tratamiento = this.tratamientoFacade.create(tratamiento);
+
             String json = mapper.writeValueAsString(tratamiento);
             this.logScm("Creacion de tratamiento", json, tratamiento.getPkCase().toString(), tratamiento.getClass().toString());
 
@@ -575,7 +577,7 @@ public class CasoMedicoREST extends ServiceREST {
     @GET
     @Path("pcl/{id}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response listPcl(  @PathParam("id") String id) {
+    public Response listPcl(@PathParam("id") String id) {
         try {
             List list = this.pclFacade.findAllById(id);
             return Response.ok(list).build();

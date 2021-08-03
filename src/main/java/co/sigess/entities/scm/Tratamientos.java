@@ -41,6 +41,7 @@ import org.jvnet.hk2.annotations.Optional;
     @NamedQuery(name = "Tratamientos.findByPkCase", query = "SELECT t FROM Tratamientos t WHERE t.pkCase = :pkCase")})
 public class Tratamientos implements Serializable {
 
+ 
     private static final long serialVersionUID = 1L;
     @Size(max = 2147483647)
     @Column(name = "tipo_intervencion")
@@ -54,6 +55,8 @@ public class Tratamientos implements Serializable {
     @Column(name = "fecha")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fecha;
+    @Column(name = "eliminado",columnDefinition = "boolean default false")
+    private Boolean eliminado;
     @Id
     @Basic(optional = false)
     @NotNull
@@ -134,6 +137,19 @@ public class Tratamientos implements Serializable {
     @Override
     public String toString() {
         return "co.sigess.entities.scm.Tratamientos[ id=" + id + " ]";
+    }
+   /**
+     * @return the eliminado
+     */
+    public Boolean getEliminado() {
+        return eliminado;
+    }
+
+    /**
+     * @param eliminado the eliminado to set
+     */
+    public void setEliminado(Boolean eliminado) {
+        this.eliminado = eliminado;
     }
 
     /**

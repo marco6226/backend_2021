@@ -34,14 +34,13 @@ public class tratamientosFacade extends AbstractFacade<Tratamientos> {
     }
 
     public Tratamientos create(Tratamientos trat, Integer empresaId) throws Exception {
-
         super.create(trat);
         return trat;
 
     }
 
     public List<Tratamientos> findAllById(String caseId) {
-        Query query = this.em.createNativeQuery("SELECT * FROM scm.tratamientos WHERE pk_case = ?1 order by fecha desc", Tratamientos.class);
+        Query query = this.em.createNativeQuery("SELECT * FROM scm.tratamientos WHERE pk_case = ?1 and eliminado != true order by fecha desc", Tratamientos.class);
         query.setParameter(1, Integer.parseInt(caseId));
         List<Tratamientos> list = (List<Tratamientos>) query.getResultList();
         return list;
