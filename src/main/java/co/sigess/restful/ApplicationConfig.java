@@ -49,6 +49,7 @@ public class ApplicationConfig extends Application {
         resources.add(co.sigess.restful.com.EnumeracionesREST.class);
         resources.add(co.sigess.restful.com.EpsREST.class);
         resources.add(co.sigess.restful.com.PrepagadasREST.class);
+        resources.add(co.sigess.restful.com.ProvedorSaludREST.class);
         resources.add(co.sigess.restful.conf.ConfiguracionGeneralREST.class);
         resources.add(co.sigess.restful.conf.ManualREST.class);
         resources.add(co.sigess.restful.conf.OfflineServiceREST.class);
