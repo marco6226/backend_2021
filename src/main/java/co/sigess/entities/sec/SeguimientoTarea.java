@@ -6,6 +6,7 @@
 package co.sigess.entities.sec;
 
 import co.sigess.entities.emp.Empleado;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -67,6 +68,7 @@ public class SeguimientoTarea implements Serializable {
     @JoinColumn(name="fk_seg_id")
     private List<EvidencesFiles> evidences  = new ArrayList<EvidencesFiles>();
     
+    @JsonIgnoreProperties({"jefeInmediato","businessPartner","cargo","area"})
     @JoinColumn(name = "fk_user_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Empleado pkUser;

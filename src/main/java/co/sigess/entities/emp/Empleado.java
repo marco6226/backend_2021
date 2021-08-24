@@ -57,7 +57,7 @@ public class Empleado implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @Basic(optional = false)
+    @Basic(optional = false) 
     @NotNull
     @SequenceGenerator(name = "empleado_id_seq", schema = "emp", sequenceName = "empleado_id_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "empleado_id_seq")
