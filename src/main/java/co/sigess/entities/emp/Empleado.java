@@ -11,7 +11,6 @@ import co.sigess.entities.com.Afp;
 import co.sigess.entities.com.Ccf;
 import co.sigess.entities.com.Ciudad;
 import co.sigess.entities.com.TipoIdentificacion;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.util.Date;

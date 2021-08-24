@@ -25,16 +25,23 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author leonardo
  */
 @Entity
-@Table(name = "pcl" ,schema = "scm")
+@Table(name = "pcl", schema = "scm")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Pcl.findAll", query = "SELECT p FROM Pcl p ORDER BY p.emisionPclFecha DESC"),
-    @NamedQuery(name = "Pcl.findById", query = "SELECT p FROM Pcl p WHERE p.id = :id ORDER BY p.emisionPclFecha DESC"),
-    @NamedQuery(name = "Pcl.findByPorcentajePcl", query = "SELECT p FROM Pcl p WHERE p.porcentajePcl = :porcentajePcl"),
-    @NamedQuery(name = "Pcl.findByEmisionPclFecha", query = "SELECT p FROM Pcl p WHERE p.emisionPclFecha = :emisionPclFecha"),
-    @NamedQuery(name = "Pcl.findByEntidadEmitePcl", query = "SELECT p FROM Pcl p WHERE p.entidadEmitePcl = :entidadEmitePcl"),
-    @NamedQuery(name = "Pcl.findByPcl", query = "SELECT p FROM Pcl p WHERE p.pcl = :pcl"),
-    @NamedQuery(name = "Pcl.findByDiag", query = "SELECT p FROM Pcl p WHERE p.diag = :diag ORDER BY p.emisionPclFecha DESC"),
+    @NamedQuery(name = "Pcl.findAll", query = "SELECT p FROM Pcl p ORDER BY p.emisionPclFecha DESC")
+    ,
+    @NamedQuery(name = "Pcl.findById", query = "SELECT p FROM Pcl p WHERE p.id = :id ORDER BY p.emisionPclFecha DESC")
+    ,
+    @NamedQuery(name = "Pcl.findByPorcentajePcl", query = "SELECT p FROM Pcl p WHERE p.porcentajePcl = :porcentajePcl")
+    ,
+    @NamedQuery(name = "Pcl.findByEmisionPclFecha", query = "SELECT p FROM Pcl p WHERE p.emisionPclFecha = :emisionPclFecha")
+    ,
+    @NamedQuery(name = "Pcl.findByEntidadEmitePcl", query = "SELECT p FROM Pcl p WHERE p.entidadEmitePcl = :entidadEmitePcl")
+    ,
+    @NamedQuery(name = "Pcl.findByPcl", query = "SELECT p FROM Pcl p WHERE p.pcl = :pcl")
+    ,
+    @NamedQuery(name = "Pcl.findByDiag", query = "SELECT p FROM Pcl p WHERE p.diag = :diag ORDER BY p.emisionPclFecha DESC")
+    ,
     @NamedQuery(name = "Pcl.findByEliminado", query = "SELECT p FROM Pcl p WHERE p.eliminado = :eliminado ORDER BY p.emisionPclFecha DESC")})
 public class Pcl implements Serializable {
 
@@ -205,5 +212,5 @@ public class Pcl implements Serializable {
     public String toString() {
         return "co.sigess.entities.scm.Pcl[ id=" + id + " ]";
     }
-    
+
 }

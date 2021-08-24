@@ -149,7 +149,7 @@ public class EmpleadoFacade extends AbstractFacade<Empleado> {
                
             } catch (Exception e) {
                 System.out.println(e.getMessage()+"Aqui la prueba");
-                Mensaje mu = new Mensaje("Error al procesar el empleado: " + empleado.getNumeroIdentificacion(), e.getMessage(), TipoMensaje.error);
+                Mensaje mu = new Mensaje("Error al procesar el empleado con : " + empleado.getNumeroIdentificacion(), e.getMessage(), TipoMensaje.error);
                 listErrors.add(mu);
             }
         }
@@ -185,7 +185,7 @@ public class EmpleadoFacade extends AbstractFacade<Empleado> {
                     super.edit(emp);
                 }
             } catch (Exception e) {
-                Mensaje mu = new Mensaje("Error al procesar el empleado: " + emp.getNumeroIdentificacion(), e.getMessage(), TipoMensaje.error);
+                Mensaje mu = new Mensaje("Error al procesar el empleado ya existe: " + emp.getNumeroIdentificacion(), e.getMessage(), TipoMensaje.error);
                 listErrors.add(mu);
             }
         }
