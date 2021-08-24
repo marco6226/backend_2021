@@ -52,11 +52,11 @@ public class SeguimientoTareaFacade extends AbstractFacade<SeguimientoTarea>{
     }
     
     
-      public  HashMap<String, List<String>>  findFileV2(Integer documentoId) throws Exception{
+      public  HashMap<String, List<String>>  findFileV2(Integer documentoId,String type) throws Exception{
         HashMap<String, List<String>> files = new HashMap<String, List<String>>();
           FilterQuery fq = new FilterQuery();
         List<Filter> fl = new ArrayList<>();
-        Filter filter = new Filter("fkSegId", Integer.toString(documentoId), null, CriteriaFilter.EQUALS);
+        Filter filter = new Filter(type, Integer.toString(documentoId), null, CriteriaFilter.EQUALS);
         fl.add(filter);
         fq.setFilterList(fl);
          List<EvidencesFiles> evidences = evidencesFacade.findWithFilter(fq);

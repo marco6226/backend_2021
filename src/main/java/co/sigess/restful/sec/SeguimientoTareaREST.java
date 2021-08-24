@@ -80,15 +80,17 @@ public class SeguimientoTareaREST extends ServiceREST {
         }
     }
     
-    @GET
+
+      
+     @GET
     @Secured(validarPermiso = false)
     @Path("download/{id}")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_OCTET_STREAM})
-    public Response downloadFileV2(@PathParam("id") Integer documentoId) throws Exception {
+    public Response downloadFileV2(@PathParam("id") Integer documentoId,@PathParam("type") String type) throws Exception {
         try {
                 
            
-            HashMap<String, List<String>> file = seguimientoTareaFacade.findFileV2(documentoId);
+            HashMap<String, List<String>> file = seguimientoTareaFacade.findFileV2(documentoId,type);
      
             return Response.ok(file , MediaType.APPLICATION_JSON).build();
         
@@ -96,5 +98,5 @@ public class SeguimientoTareaREST extends ServiceREST {
             return Util.manageException(ex, DirectorioREST.class);
         }
     }
-       
+    
 }

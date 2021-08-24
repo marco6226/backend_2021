@@ -44,6 +44,8 @@ public class EvidencesFiles implements Serializable {
     private Integer id;
     @Column(name = "fk_seg_id")
     private Integer fkSegId;
+    @Column(name = "fk_tarea_cierre")
+    private Integer fkTareaCierre;
     @Size(max = 2147483647)
     @Column(name = "ruta")
     private String ruta;
@@ -102,6 +104,20 @@ public class EvidencesFiles implements Serializable {
     @Override
     public String toString() {
         return "co.sigess.entities.sec.EvidencesFiles[ id=" + id + " ]";
+    }
+
+    /**
+     * @return the fkTareaCierre
+     */
+    public Integer getFkTareaCierre() {
+        return fkTareaCierre;
+    }
+
+    /**
+     * @param fkTareaCierre the fkTareaCierre to set
+     */
+    public void setFkTareaCierre(Integer fkTareaCierre) {
+        this.fkTareaCierre = fkTareaCierre;
     }
     
 }
