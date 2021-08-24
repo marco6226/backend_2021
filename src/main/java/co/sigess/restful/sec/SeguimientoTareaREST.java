@@ -84,7 +84,7 @@ public class SeguimientoTareaREST extends ServiceREST {
       
      @GET
     @Secured(validarPermiso = false)
-    @Path("download/{id}")
+    @Path("download/{id}/{type}")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_OCTET_STREAM})
     public Response downloadFileV2(@PathParam("id") Integer documentoId,@PathParam("type") String type) throws Exception {
         try {
