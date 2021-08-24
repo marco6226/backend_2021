@@ -51,7 +51,7 @@ public class CasosMedicosFacade  extends AbstractFacade<CasosMedicos>{
         System.out.println(parametro);
 
         Query q = this.em.createNativeQuery("SELECT * FROM scm.casos_medicos  WHERE pk_user = ?1 order by fecha_creacion desc ",CasosMedicos.class);
-
+//esta query hace relacion a busqueda por empleados.
         
         q.setParameter(1,Integer.parseInt(parametro));
          System.out.println(q);
