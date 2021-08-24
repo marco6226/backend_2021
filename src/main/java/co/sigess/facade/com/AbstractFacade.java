@@ -7,6 +7,7 @@ package co.sigess.facade.com;
 
 import co.sigess.entities.ado.Modulo;
 import co.sigess.entities.emp.Empresa;
+import co.sigess.entities.sec.EvidencesFiles;
 import co.sigess.restful.CriteriaFilter;
 import co.sigess.restful.Filter;
 import co.sigess.restful.FilterQuery;
@@ -285,6 +286,14 @@ public abstract class AbstractFacade<T> {
         CriteriaQuery cq = cb.createQuery();
         Root<T> root = cq.from(entityClass);
         cq.select(root).where(cb.equal(root.get("empresa"), new Empresa(empresaId))).orderBy(cb.asc(root.get("id")));
+        return getEntityManager().createQuery(cq).getResultList();
+    }
+    
+    public List<T> findAllByCustom(Integer id, String custom) {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery cq = cb.createQuery();
+        Root<T> root = cq.from(entityClass);
+        cq.select(root).where(cb.equal(root.get(custom), new EvidencesFiles(id))).orderBy(cb.asc(root.get("id")));
         return getEntityManager().createQuery(cq).getResultList();
     }
 

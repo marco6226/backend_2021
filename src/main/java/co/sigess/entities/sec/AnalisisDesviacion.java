@@ -62,6 +62,10 @@ public class AnalisisDesviacion implements Serializable {
     @Column(name = "observacion")
     private String observacion;
 
+    @Size(max = 512)
+    @Column(name = "descripcion_cierre")
+    private String descripcionCierre;
+    
     @Column(name = "participantes")
     private String participantes;
 
@@ -104,6 +108,8 @@ public class AnalisisDesviacion implements Serializable {
     @ManyToOne
     private Empresa empresa;
 
+    
+    
     @Column(name = "fecha_elaboracion", updatable = false)
     @Temporal(value = TemporalType.TIMESTAMP)
     private Date fechaElaboracion;
@@ -112,9 +118,18 @@ public class AnalisisDesviacion implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaModificacion;
 
-    @Column(name = "fk_usuario_elabora_id", updatable = false)
+    @Column(name = "fecha_cierra")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaCierre;
+       
+       
+    @Column(name = "fk_usuario_cierra", updatable = false)
+    private Integer usuarioCierra;
+
+        @Column(name = "fk_usuario_elabora_id", updatable = false)
     private Integer usuarioElaboraId;
 
+    
     @Column(name = "fk_usuario_modifica_id")
     private Integer usuarioModificaId;
 
