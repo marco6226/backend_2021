@@ -70,6 +70,12 @@ public abstract class AbstractFacade<T> {
         return entity;
     }
 
+    
+    public T editV(T entity) throws Exception {
+        getEntityManager().persist(entity);
+        return entity;
+    }
+    
     public void remove(T entity) throws Exception {
         getEntityManager().remove(getEntityManager().merge(entity));
     }

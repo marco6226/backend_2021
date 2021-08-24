@@ -70,6 +70,11 @@ public class TareaDesviacion implements Serializable {
     @Column(name = "descripcion")
     private String descripcion;
 
+    @Size(max = 1024)
+    @Column(name = "descripcion_cierre")
+    private String descripcionCierre;
+
+    
     @Size(max = 20)
     @Column(name = "modulo")
     private String modulo;
@@ -105,6 +110,10 @@ public class TareaDesviacion implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaVerificacion;
 
+    @Column(name = "fecha_cierre")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaCierre;
+    
     @Column(name = "fecha_realizacion")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaRealizacion;
@@ -121,6 +130,12 @@ public class TareaDesviacion implements Serializable {
     @ManyToOne
     private Usuario usuarioRealiza;
 
+    
+    @JoinColumn(name = "fk_usuario_cierre", referencedColumnName = "id")
+    @ManyToOne
+    private Usuario usuarioCierre;
+    
+    
     @JoinColumn(name = "fk_usuario_verifica_id", referencedColumnName = "id")
     @ManyToOne
     private Usuario usuarioVerifica;
@@ -356,6 +371,48 @@ public class TareaDesviacion implements Serializable {
      */
     public void setEmpResponsable(Empleado empResponsable) {
         this.empResponsable = empResponsable;
+    }
+
+    /**
+     * @return the fechaCierre
+     */
+    public Date getFechaCierre() {
+        return fechaCierre;
+    }
+
+    /**
+     * @param fechaCierre the fechaCierre to set
+     */
+    public void setFechaCierre(Date fechaCierre) {
+        this.fechaCierre = fechaCierre;
+    }
+
+    /**
+     * @return the descripcionCierre
+     */
+    public String getDescripcionCierre() {
+        return descripcionCierre;
+    }
+
+    /**
+     * @param descripcionCierre the descripcionCierre to set
+     */
+    public void setDescripcionCierre(String descripcionCierre) {
+        this.descripcionCierre = descripcionCierre;
+    }
+
+    /**
+     * @return the usuarioCierre
+     */
+    public Usuario getUsuarioCierre() {
+        return usuarioCierre;
+    }
+
+    /**
+     * @param usuarioCierre the usuarioCierre to set
+     */
+    public void setUsuarioCierre(Usuario usuarioCierre) {
+        this.usuarioCierre = usuarioCierre;
     }
 
    

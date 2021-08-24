@@ -82,6 +82,21 @@ public class TareaDesviacionFacade extends AbstractFacade<TareaDesviacion> {
         tareaDB.setjerarquia(entity.getjerarquia());
         return super.edit(tareaDB); //To change body of generated methods, choose Tools | Templates.
     }
+    
+    
+    
+    public TareaDesviacion closeTask(TareaDesviacion entity) throws Exception {
+        if (entity.getId() == null) {
+            throw new IllegalArgumentException("Entity update without id is not possible");
+        }
+                TareaDesviacion tareaDB = this.find(entity.getId());
+                tareaDB.setFechaCierre(entity.getFechaCierre());
+                tareaDB.setDescripcionCierre(entity.getDescripcionCierre());
+                tareaDB.setUsuarioCierre(entity.getUsuarioCierre());
+
+        return super.edit(tareaDB); //To change body of generated methods, choose Tools | Templates.
+    }
+    
 
     public List<TareaDesviacion> findByUsuarioEmpresa(Integer usuarioId, Integer empresaId) {
         String sql = "select t.*\n"
