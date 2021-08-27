@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -32,6 +33,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -70,6 +72,11 @@ public class TareaDesviacion implements Serializable {
     @Column(name = "descripcion")
     private String descripcion;
 
+    @Size(max = 1024)
+    @Column(name = "descripcion_cierre")
+    private String descripcionCierre;
+
+    
     @Size(max = 20)
     @Column(name = "modulo")
     private String modulo;
@@ -105,6 +112,10 @@ public class TareaDesviacion implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaVerificacion;
 
+    @Column(name = "fecha_cierre")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaCierre;
+    
     @Column(name = "fecha_realizacion")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaRealizacion;
@@ -121,6 +132,16 @@ public class TareaDesviacion implements Serializable {
     @ManyToOne
     private Usuario usuarioRealiza;
 
+    
+    @JoinColumn(name = "fk_usuario_cierre", referencedColumnName = "id")
+    @ManyToOne
+    private Usuario usuarioCierre;
+    
+    
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER,orphanRemoval = true)
+    @JoinColumn(name="fk_tarea_cierre")
+    private List<EvidencesFiles> evidences  = new ArrayList<EvidencesFiles>();
+    
     @JoinColumn(name = "fk_usuario_verifica_id", referencedColumnName = "id")
     @ManyToOne
     private Usuario usuarioVerifica;
@@ -356,6 +377,62 @@ public class TareaDesviacion implements Serializable {
      */
     public void setEmpResponsable(Empleado empResponsable) {
         this.empResponsable = empResponsable;
+    }
+
+    /**
+     * @return the fechaCierre
+     */
+    public Date getFechaCierre() {
+        return fechaCierre;
+    }
+
+    /**
+     * @param fechaCierre the fechaCierre to set
+     */
+    public void setFechaCierre(Date fechaCierre) {
+        this.fechaCierre = fechaCierre;
+    }
+
+    /**
+     * @return the descripcionCierre
+     */
+    public String getDescripcionCierre() {
+        return descripcionCierre;
+    }
+
+    /**
+     * @param descripcionCierre the descripcionCierre to set
+     */
+    public void setDescripcionCierre(String descripcionCierre) {
+        this.descripcionCierre = descripcionCierre;
+    }
+
+    /**
+     * @return the usuarioCierre
+     */
+    public Usuario getUsuarioCierre() {
+        return usuarioCierre;
+    }
+
+    /**
+     * @param usuarioCierre the usuarioCierre to set
+     */
+    public void setUsuarioCierre(Usuario usuarioCierre) {
+        this.usuarioCierre = usuarioCierre;
+    }
+
+    /**
+     * @return the evidences
+     */
+    public List<EvidencesFiles> getEvidences() {
+        return evidences;
+    }
+
+    /**
+     * @param evidences the evidences to set
+     */
+    public void setEvidences(List<EvidencesFiles> evidences) {
+        this.evidences = evidences;
     }
 
    

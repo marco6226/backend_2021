@@ -82,6 +82,21 @@ public class TareaDesviacionFacade extends AbstractFacade<TareaDesviacion> {
         tareaDB.setjerarquia(entity.getjerarquia());
         return super.edit(tareaDB); //To change body of generated methods, choose Tools | Templates.
     }
+    
+    
+    
+    public TareaDesviacion closeTask(TareaDesviacion entity) throws Exception {
+        if (entity.getId() == null) {
+            throw new IllegalArgumentException("Entity update without id is not possible");
+        }
+                TareaDesviacion tareaDB = this.find(entity.getId());
+                tareaDB.setFechaCierre(entity.getFechaCierre());
+                tareaDB.setDescripcionCierre(entity.getDescripcionCierre());
+                tareaDB.setUsuarioCierre(entity.getUsuarioCierre());
+                tareaDB.setEvidences(entity.getEvidences());
+        return super.edit(tareaDB); //To change body of generated methods, choose Tools | Templates.
+    }
+    
 
     public List<TareaDesviacion> findByUsuarioEmpresa(Integer usuarioId, Integer empresaId) {
         String sql = "select t.*\n"
@@ -122,6 +137,9 @@ public class TareaDesviacionFacade extends AbstractFacade<TareaDesviacion> {
                 + "'email',  eu.email,\n"
                 + "'fecha_proyectada',  td.fecha_proyectada,\n"
                 + "'fecha_realizacion',  td.fecha_realizacion,\n"
+                + "'fecha_cierre',  td.fecha_cierre,\n"
+                + "'fk_usuario_cierre',    td.fk_usuario_cierre,\n"
+                + "'descripcion_cierre',    td.descripcion_cierre,\n"
                 + "'observaciones_realizacion',  td.observaciones_realizacion,\n"
                 + "'fk_usuario_realiza_id',    td.fk_usuario_realiza_id,\n"
                 + "'estado',  td.estado,\n"

@@ -193,6 +193,8 @@ public class DirectorioREST extends ServiceREST {
             return Util.manageException(ex, DirectorioREST.class);
         }
     }
+    
+   
 
     @GET
     @Path("usuario")

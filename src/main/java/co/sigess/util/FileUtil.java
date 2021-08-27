@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -98,5 +99,15 @@ public class FileUtil {
         OutputStream fos = new ByteArrayOutputStream();
         FileEncryption.getInstance().decrypt(fis, fos);
         return fos;
+    }
+    
+     public static String getFromVirtualFS2(String relativePath) throws FileNotFoundException, Exception {
+                 File f =  new File(ROOT_DIR + relativePath);
+                 FileInputStream fileInputStreamReader = new FileInputStream(f);
+                 byte[] bytes = new byte[(int)f.length()];
+                 fileInputStreamReader.read(bytes);
+                 return new String(Base64.getEncoder().encodeToString(bytes));
+
+      
     }
 }

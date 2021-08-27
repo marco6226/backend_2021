@@ -57,6 +57,33 @@ public class TareaDesviacionREST extends ServiceREST {
             return Util.manageException(ex, TareaDesviacionREST.class);
         }
     }
+    
+    @PUT
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response edit(TareaDesviacion tarea) {
+        try {
+            tarea.setEmpresa(new Empresa(super.getEmpresaIdRequestContext()));
+            tarea = tareaDesviacionFacade.edit(tarea);
+            return Response.ok(tarea).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, TareaDesviacionREST.class);
+        }
+    }
+
+
+    @PUT
+    @Secured(validarPermiso = false)
+    @Path("close")
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_JSON})
+    public Response closeTask(TareaDesviacion tarea) {
+        try {
+            tarea.setEmpresa(new Empresa(super.getEmpresaIdRequestContext()));
+            tarea = tareaDesviacionFacade.closeTask(tarea);
+            return Response.ok(tarea).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, TareaDesviacionREST.class);
+        }
+    }    
 
     @GET
     @Secured(validarPermiso = false)
@@ -70,17 +97,7 @@ public class TareaDesviacionREST extends ServiceREST {
             return Util.manageException(ex, AnalisisDesviacionREST.class);
         }
     }
-    @PUT
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response edit(TareaDesviacion tarea) {
-        try {
-            tarea.setEmpresa(new Empresa(super.getEmpresaIdRequestContext()));
-            tarea = tareaDesviacionFacade.edit(tarea);
-            return Response.ok(tarea).build();
-        } catch (Exception ex) {
-            return Util.manageException(ex, TareaDesviacionREST.class);
-        }
-    }
+    
 
     @PUT
     @Path("reportarCumplimiento")
