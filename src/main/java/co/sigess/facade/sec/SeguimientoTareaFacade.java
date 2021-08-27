@@ -54,7 +54,7 @@ public class SeguimientoTareaFacade extends AbstractFacade<SeguimientoTarea>{
     
       public  HashMap<String, List<String>>  findFileV2(Integer documentoId,String type) throws Exception{
         HashMap<String, List<String>> files = new HashMap<String, List<String>>();
-          FilterQuery fq = new FilterQuery();
+        FilterQuery fq = new FilterQuery();
         List<Filter> fl = new ArrayList<>();
         Filter filter = new Filter(type, Integer.toString(documentoId), null, CriteriaFilter.EQUALS);
         fl.add(filter);
@@ -63,7 +63,7 @@ public class SeguimientoTareaFacade extends AbstractFacade<SeguimientoTarea>{
          if (evidences == null) {
             throw new IllegalArgumentException("parámetro id no válido");
         }
-        System.out.print(evidences.size());
+         
        List<String> List = null;
        files.put("error", List);
        List<String> file = new ArrayList<String>();
