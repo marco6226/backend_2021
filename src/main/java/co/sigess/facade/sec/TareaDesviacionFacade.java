@@ -89,11 +89,22 @@ public class TareaDesviacionFacade extends AbstractFacade<TareaDesviacion> {
         if (entity.getId() == null) {
             throw new IllegalArgumentException("Entity update without id is not possible");
         }
+        
                 TareaDesviacion tareaDB = this.find(entity.getId());
+                
+                if (entity.getEvidencesV() != null) {
+                tareaDB.setFechaVerificacion(entity.getFechaVerificacion());
+                tareaDB.setUsuarioVerifica(entity.getUsuarioVerifica());
+                tareaDB.setEvidencesV(entity.getEvidencesV());
+                }else{
                 tareaDB.setFechaCierre(entity.getFechaCierre());
                 tareaDB.setDescripcionCierre(entity.getDescripcionCierre());
                 tareaDB.setUsuarioCierre(entity.getUsuarioCierre());
                 tareaDB.setEvidences(entity.getEvidences());
+                }
+              
+            
+        
         return super.edit(tareaDB); //To change body of generated methods, choose Tools | Templates.
     }
     

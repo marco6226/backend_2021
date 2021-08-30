@@ -142,6 +142,10 @@ public class TareaDesviacion implements Serializable {
     @JoinColumn(name="fk_tarea_cierre")
     private List<EvidencesFiles> evidences  = new ArrayList<EvidencesFiles>();
     
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER,orphanRemoval = true)
+    @JoinColumn(name="fk_verify")
+    private List<EvidencesFiles> evidencesV  = new ArrayList<EvidencesFiles>();
+    
     @JoinColumn(name = "fk_usuario_verifica_id", referencedColumnName = "id")
     @ManyToOne
     private Usuario usuarioVerifica;
@@ -433,6 +437,20 @@ public class TareaDesviacion implements Serializable {
      */
     public void setEvidences(List<EvidencesFiles> evidences) {
         this.evidences = evidences;
+    }
+
+    /**
+     * @return the evidencesV
+     */
+    public List<EvidencesFiles> getEvidencesV() {
+        return evidencesV;
+    }
+
+    /**
+     * @param evidencesV the evidencesV to set
+     */
+    public void setEvidencesV(List<EvidencesFiles> evidencesV) {
+        this.evidencesV = evidencesV;
     }
 
    
