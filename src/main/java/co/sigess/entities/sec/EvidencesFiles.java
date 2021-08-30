@@ -46,6 +46,8 @@ public class EvidencesFiles implements Serializable {
     private Integer fkSegId;
     @Column(name = "fk_tarea_cierre")
     private Integer fkTareaCierre;
+    @Column(name = "fk_verify")
+    private Integer fkVerify;
     @Size(max = 2147483647)
     @Column(name = "ruta")
     private String ruta;
@@ -118,6 +120,20 @@ public class EvidencesFiles implements Serializable {
      */
     public void setFkTareaCierre(Integer fkTareaCierre) {
         this.fkTareaCierre = fkTareaCierre;
+    }
+
+    /**
+     * @return the fkVerify
+     */
+    public Integer getFkVerify() {
+        return fkVerify;
+    }
+
+    /**
+     * @param fkVerify the fkVerify to set
+     */
+    public void setFkVerify(Integer fkVerify) {
+        this.fkVerify = fkVerify;
     }
     
 }
