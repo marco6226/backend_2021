@@ -95,6 +95,7 @@ public class TareaDesviacionFacade extends AbstractFacade<TareaDesviacion> {
                 if (entity.getFechaVerificacion() != null) {
                 tareaDB.setFechaVerificacion(entity.getFechaVerificacion());
                 tareaDB.setUsuarioVerifica(entity.getUsuarioVerifica());
+                tareaDB.setObservacionesVerificacion(entity.getObservacionesVerificacion());
                 tareaDB.setEvidencesV(entity.getEvidencesV());
                 }else{
                  
