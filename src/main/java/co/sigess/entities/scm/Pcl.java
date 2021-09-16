@@ -59,6 +59,12 @@ public class Pcl implements Serializable {
     @Column(name = "pcl")
     private String pcl;
     @Size(max = 2147483647)
+    @Column(name = "observaciones")
+    private String observaciones;
+    @Size(max = 2147483647)
+    @Column(name = "origen")
+    private String origen;
+    @Size(max = 2147483647)
     @Column(name = "diag")
     private String diag;
     @Column(name = "eliminado")
@@ -204,6 +210,34 @@ public class Pcl implements Serializable {
     @Override
     public String toString() {
         return "co.sigess.entities.scm.Pcl[ id=" + id + " ]";
+    }
+
+    /**
+     * @return the origen
+     */
+    public String getOrigen() {
+        return origen;
+    }
+
+    /**
+     * @param origen the origen to set
+     */
+    public void setOrigen(String origen) {
+        this.origen = origen;
+    }
+
+    /**
+     * @return the observaciones
+     */
+    public String getObservaciones() {
+        return observaciones;
+    }
+
+    /**
+     * @param observaciones the observaciones to set
+     */
+    public void setObservaciones(String observaciones) {
+        this.observaciones = observaciones;
     }
     
 }
