@@ -53,6 +53,9 @@ public class EmailFacade {
                 case CREACION_USUARIO:
                     plantilla = loaderFacade.getPlantillaMailCreacionUsuario();
                     break;
+                case NOTIFICACION_NUEVA:
+                    plantilla = loaderFacade.getPlantillaMailNotificacionNueva();
+                    break;
             }
             plantilla = replaceParameters(parametros, plantilla);
             contenido = contenido.replace(PARAM_PLANT_PRINCIPAL, plantilla);
@@ -64,6 +67,18 @@ public class EmailFacade {
     }
 
     public void sendEmail(String msg, String asunto, String destinatario) {
+        try {
+            Message message = new MimeMessage(mailSession);
+            message.setSubject(asunto);
+            message.setRecipient(Message.RecipientType.TO, new InternetAddress(destinatario));
+            message.setContent(msg, "text/html; charset=utf-8");
+            Transport.send(message);
+        } catch (MessagingException me) {
+            Logger.getLogger(EmailFacade.class.getName()).log(Level.SEVERE, "", me);
+        }
+    }
+    
+    public void sendNotication(String msg, String asunto, String destinatario) {
         try {
             Message message = new MimeMessage(mailSession);
             message.setSubject(asunto);

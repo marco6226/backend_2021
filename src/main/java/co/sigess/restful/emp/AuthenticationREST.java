@@ -289,6 +289,19 @@ public class AuthenticationREST {
             return Util.manageException(ex, AuthenticationREST.class);
         }
     }
+    
+    @GET
+    @Path("enviarCorreo/{email}")
+    public Response enviarCorreo(@PathParam("email") String email) {
+        try {
+            if (email != null) {
+                Usuario usuario = usuarioFacade.enviarCorreo(email.trim().toLowerCase());
+            }
+            return Response.ok(new Mensaje("Nueva tarea", "Se le ha asignado una tarea para gestionar", TipoMensaje.success)).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, AuthenticationREST.class);
+        }
+    }
 
     @POST
     @Path("activetokens")

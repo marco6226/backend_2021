@@ -10,6 +10,7 @@ import co.sigess.entities.com.TipoMensaje;
 import co.sigess.facade.com.AbstractFacade;
 import co.sigess.entities.emp.EstadoUsuario;
 import co.sigess.entities.emp.Usuario;
+import co.sigess.entities.sec.TareaDesviacion;
 import co.sigess.entities.emp.UsuarioEmpresa;
 import co.sigess.entities.emp.UsuarioEmpresaPK;
 import co.sigess.exceptions.UserMessageException;
@@ -19,7 +20,6 @@ import co.sigess.facade.core.TipoMail;
 import co.sigess.restful.security.AuthorizationFacade;
 import co.sigess.restful.security.UtilSecurity;
 import co.sigess.util.Util;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -34,7 +34,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TemporalType;
 import javax.servlet.http.HttpServletRequest;
-import javax.transaction.Transactional;
 import javax.ws.rs.core.Context;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -304,7 +303,31 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
         }
         return user;
     }
+public Usuario enviarCorreo(String email) throws Exception {
+        Usuario user = this.findByEmail(email);
+        if (user != null) {                 
+            switch (user.getEstado()) {
+                case BLOQUEADO:
+                case ELIMINADO:
+                case INACTIVO:
+                    throw new UserMessageException("SOLICITUD NO PERMITIDA", "El estado del usuario no permite la operación", TipoMensaje.warn);
+            }
+            String nuevoPasswd = UtilSecurity.generatePassword();
+            String shaPassw = UtilSecurity.createEmailPasswordHash(email, UtilSecurity.toSHA256(nuevoPasswd));
+            Calendar expPassed = Calendar.getInstance();
+            expPassed.add(Calendar.SECOND, UtilSecurity.CAMBIO_PASSWD_TIMEOUT);
 
+            user.setEstado(EstadoUsuario.CAMBIO_PASSWD);
+            user.setPassword(shaPassw);
+            user.setExpiraPassword(expPassed.getTime());
+            this.edit(user);
+
+            Map<String, String> parametros = new HashMap<>();
+            parametros.put(EmailFacade.PARAM_COD_RECUP, nuevoPasswd);
+            emailFacade.sendEmail(parametros, TipoMail.NOTIFICACION_NUEVA, "Nueva tarea", email);
+        }
+        return user;
+    }
     public Usuario cambiarPasswd(Integer idUsuario, String newPasswd, String newPasswdConfirm, String oldPasswd) throws Exception {
         Usuario user = super.find(idUsuario);
         if (user == null) {

@@ -12,5 +12,6 @@ package co.sigess.facade.core;
 public enum TipoMail {
     RECUPERACION_PASSWD,
     CREACION_USUARIO,
-    CAMBIO_PASSWD;
+    CAMBIO_PASSWD,
+    NOTIFICACION_NUEVA;
 }

@@ -38,6 +38,7 @@ public class LoaderFacade {
     private String plantillaMailRecPasswd;
     private String plantillaMailCambioPasswd;
     private String plantillaMailCreacionUsuario;
+    private String PlantillaMailNotificacionNueva;
 
     private ApiVersion apiVersion;
     private Properties smsProp;
@@ -48,6 +49,7 @@ public class LoaderFacade {
         getPlantillaMailRecPasswd();
         getPlantillaMailCambioPasswd();
         getPlantillaMailCreacionUsuario();
+        getPlantillaMailNotificacionNueva();
         getApiVersion();
         getSmsProperties();
        
@@ -84,8 +86,8 @@ public class LoaderFacade {
         }
         return plantillaMailRecPasswd;
     }
-
-    public String getPlantillaMailCambioPasswd() {
+    
+       public String getPlantillaMailCambioPasswd() {
         if (this.plantillaMailCambioPasswd == null) {
             try {
                 String ruta = getClass().getResource(Recursos.PLANTILLA_MAIL_CAMBIO_PASSW.getRuta()).getPath();
@@ -98,6 +100,20 @@ public class LoaderFacade {
             }
         }
         return plantillaMailCambioPasswd;
+    }
+       public String getPlantillaMailNotificacionNueva() {
+        if (this.PlantillaMailNotificacionNueva == null) {
+            try {
+                String ruta = getClass().getResource(Recursos.PLANTILLA_MAIL_NOT_NEW.getRuta()).getPath();
+                int y = ruta.length(); 
+                String x = isWindows(ruta,y);
+                this.PlantillaMailNotificacionNueva = new String(Files.readAllBytes(Paths.get(x)));
+            } catch (IOException ex) {
+                Logger.getLogger(LoaderFacade.class.getName()).log(Level.SEVERE, null, ex);
+                throw new IllegalArgumentException("No se ha podido inicializar correctamente la plantilla PLANTILLA_MAIL_NOT_NEW");
+            }
+        }
+        return PlantillaMailNotificacionNueva;
     }
 
     public String getPlantillaMailCreacionUsuario() {

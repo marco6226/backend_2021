@@ -220,24 +220,10 @@ public class Pcl implements Serializable {
     }
 
     /**
-     * @return the observaciones
-     */
-    public String getObservaciones() {
-        return observaciones;
-    }
-
-    /**
      * @return the origen
      */
     public String getOrigen() {
         return origen;
-    }
-
-    /**
-     * @param observaciones the observaciones to set
-     */
-    public void setObservaciones(String observaciones) {
-        this.observaciones = observaciones;
     }
 
     /**
@@ -247,4 +233,18 @@ public class Pcl implements Serializable {
         this.origen = origen;
     }
 
+    /**
+     * @return the observaciones
+     */
+    public String getObservaciones() {
+        return observaciones;
+    }
+
+    /**
+     * @param observaciones the observaciones to set
+     */
+    public void setObservaciones(String observaciones) {
+        this.observaciones = observaciones;
+    }
+    
 }
