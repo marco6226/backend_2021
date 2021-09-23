@@ -8,6 +8,7 @@ package co.sigess.restful.emp;
 import co.sigess.entities.com.ApiVersion;
 import co.sigess.entities.com.Mensaje;
 import co.sigess.entities.com.TipoMensaje;
+import co.sigess.entities.emp.Empleado;
 import co.sigess.entities.emp.TokenActivo;
 import co.sigess.entities.emp.Usuario;
 import co.sigess.exceptions.UserMessageException;
@@ -303,8 +304,9 @@ public class AuthenticationREST {
                 String nombre = tarea.getNombre();
                 Integer id = tarea.getId();
                 Date  FechaProyectada= tarea.getFechaProyectada();
+                Empleado responsable = tarea.getEmpResponsable();
                 
-                Usuario usuario = usuarioFacade.enviarCorreo(email.trim().toLowerCase(),nombre,id,FechaProyectada);
+                Usuario usuario = usuarioFacade.enviarCorreo(email.trim().toLowerCase(),responsable,nombre,id,FechaProyectada);
             }
             return Response.ok(new Mensaje("Nueva tarea", "Se le ha asignado una tarea para gestionar", TipoMensaje.success)).build();
         } catch (Exception ex) {

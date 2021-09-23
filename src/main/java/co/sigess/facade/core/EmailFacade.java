@@ -28,7 +28,10 @@ public class EmailFacade {
     public static final String PARAM_PLANT_PRINCIPAL = "P{contenido_plantilla}";
     public static final String PARAM_COD_RECUP = "P{codigo_recuperacion}";
     public static final String PARAM_MENSAJE = "P{mensaje}";
-
+    public static final String PARAM_ACTIVIDAD = "P{actividad}";
+    public static final String PARAM_ID = "P{id}";
+    public static final String PARAM_FECHA_PROY = "P{fechaproyectada}";
+    public static final String PARAM_RESPONSABLE = "P{responsables}";
     @EJB
     private LoaderFacade loaderFacade;
 

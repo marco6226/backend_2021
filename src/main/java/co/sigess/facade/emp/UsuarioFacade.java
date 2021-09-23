@@ -7,6 +7,7 @@ package co.sigess.facade.emp;
 
 import co.sigess.entities.com.Mensaje;
 import co.sigess.entities.com.TipoMensaje;
+import co.sigess.entities.emp.Empleado;
 import co.sigess.facade.com.AbstractFacade;
 import co.sigess.entities.emp.EstadoUsuario;
 import co.sigess.entities.emp.Usuario;
@@ -37,6 +38,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Context;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 
 /**
  *
@@ -303,7 +305,7 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
         }
         return user;
     }
-public Usuario enviarCorreo(String email,String nombre, Integer id,  Date fechaproyectada) throws Exception {
+public Usuario enviarCorreo(String email,Empleado responsable,String nombre, Integer id,  Date fechaproyectada) throws Exception {
     
         Usuario user = this.findByEmail(email);
         if (user != null) {                 
@@ -314,7 +316,8 @@ public Usuario enviarCorreo(String email,String nombre, Integer id,  Date fechap
                     throw new UserMessageException("SOLICITUD NO PERMITIDA", "El estado del usuario no permite la operación", TipoMensaje.warn);
             }
             
-            
+            String responsables  = responsable.getPrimerNombre() + " " + responsable.getPrimerApellido();
+            String fechaproyectadas = fechaproyectada.toString();
             String nuevoPasswd = UtilSecurity.generatePassword();
             String shaPassw = UtilSecurity.createEmailPasswordHash(email, UtilSecurity.toSHA256(nuevoPasswd));
             Calendar expPassed = Calendar.getInstance();
@@ -327,6 +330,10 @@ public Usuario enviarCorreo(String email,String nombre, Integer id,  Date fechap
 
             Map<String, String> parametros = new HashMap<>();
             parametros.put(EmailFacade.PARAM_COD_RECUP, nuevoPasswd);
+            parametros.put(EmailFacade.PARAM_ACTIVIDAD, nombre);
+            parametros.put(EmailFacade.PARAM_RESPONSABLE, responsables);
+            parametros.put(EmailFacade.PARAM_ID, id.toString());
+            parametros.put(EmailFacade.PARAM_FECHA_PROY, fechaproyectadas);
             emailFacade.sendEmail(parametros, TipoMail.NOTIFICACION_NUEVA, "Nueva tarea", email);
         }
         return user;
