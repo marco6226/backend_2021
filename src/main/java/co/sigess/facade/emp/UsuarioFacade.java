@@ -332,7 +332,9 @@ public Usuario enviarCorreo(String email,Empleado responsable,String nombre, Int
             parametros.put(EmailFacade.PARAM_COD_RECUP, nuevoPasswd);
             parametros.put(EmailFacade.PARAM_ACTIVIDAD, nombre);
             parametros.put(EmailFacade.PARAM_RESPONSABLE, responsables);
+            if (id != null) { 
             parametros.put(EmailFacade.PARAM_ID, id.toString());
+            }
             parametros.put(EmailFacade.PARAM_FECHA_PROY, fechaproyectadas);
             emailFacade.sendEmail(parametros, TipoMail.NOTIFICACION_NUEVA, "Nueva tarea", email);
         }
