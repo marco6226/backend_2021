@@ -14,6 +14,8 @@ import co.sigess.exceptions.UserMessageException;
 import co.sigess.facade.core.LoaderFacade;
 import co.sigess.facade.emp.TokenFacade;
 import co.sigess.facade.emp.UsuarioFacade;
+import co.sigess.entities.sec.TareaDesviacion;
+import co.sigess.facade.sec.TareaDesviacionFacade;
 import co.sigess.restful.security.Auditable;
 import co.sigess.restful.security.RollBackResponse;
 import co.sigess.restful.security.UtilSecurity;
@@ -56,6 +58,9 @@ public class AuthenticationREST {
 
     @EJB
     private UsuarioFacade usuarioFacade;
+    
+    @EJB
+    private TareaDesviacionFacade TareaDesviacionFacade;
 
     @EJB
     private TokenFacade tokenFacade;
@@ -290,12 +295,16 @@ public class AuthenticationREST {
         }
     }
     
-    @GET
+    @POST
     @Path("enviarCorreo/{email}")
-    public Response enviarCorreo(@PathParam("email") String email) {
+    public Response enviarCorreo(@PathParam("email") String email, TareaDesviacion tarea) {
         try {
             if (email != null) {
-                Usuario usuario = usuarioFacade.enviarCorreo(email.trim().toLowerCase());
+                String nombre = tarea.getNombre();
+                Integer id = tarea.getId();
+                Date  FechaProyectada= tarea.getFechaProyectada();
+                
+                Usuario usuario = usuarioFacade.enviarCorreo(email.trim().toLowerCase(),nombre,id,FechaProyectada);
             }
             return Response.ok(new Mensaje("Nueva tarea", "Se le ha asignado una tarea para gestionar", TipoMensaje.success)).build();
         } catch (Exception ex) {

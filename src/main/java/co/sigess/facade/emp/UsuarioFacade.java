@@ -303,7 +303,8 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
         }
         return user;
     }
-public Usuario enviarCorreo(String email) throws Exception {
+public Usuario enviarCorreo(String email,String nombre, Integer id,  Date fechaproyectada) throws Exception {
+    
         Usuario user = this.findByEmail(email);
         if (user != null) {                 
             switch (user.getEstado()) {
@@ -312,6 +313,8 @@ public Usuario enviarCorreo(String email) throws Exception {
                 case INACTIVO:
                     throw new UserMessageException("SOLICITUD NO PERMITIDA", "El estado del usuario no permite la operación", TipoMensaje.warn);
             }
+            
+            
             String nuevoPasswd = UtilSecurity.generatePassword();
             String shaPassw = UtilSecurity.createEmailPasswordHash(email, UtilSecurity.toSHA256(nuevoPasswd));
             Calendar expPassed = Calendar.getInstance();
