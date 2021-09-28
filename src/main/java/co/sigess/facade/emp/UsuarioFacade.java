@@ -336,7 +336,7 @@ public Usuario enviarCorreo(String email,Empleado responsable,String nombre, Int
             parametros.put(EmailFacade.PARAM_ID, id.toString());
             }
             parametros.put(EmailFacade.PARAM_FECHA_PROY, fechaproyectadas);
-            emailFacade.sendEmail(parametros, TipoMail.NOTIFICACION_NUEVA, "Nueva tarea", email);
+            emailFacade.sendEmail(parametros, TipoMail.NOTIFICACION_NUEVA, "Tarea", email);
         }
         return user;
     }

@@ -308,7 +308,7 @@ public class AuthenticationREST {
                 
                 Usuario usuario = usuarioFacade.enviarCorreo(email.trim().toLowerCase(),responsable,nombre,id,FechaProyectada);
             }
-            return Response.ok(new Mensaje("Nueva tarea", "Se le ha asignado una tarea para gestionar", TipoMensaje.success)).build();
+            return Response.ok(new Mensaje("Tarea", "Se le ha enviado un correo al responsable", TipoMensaje.success)).build();
         } catch (Exception ex) {
             return Util.manageException(ex, AuthenticationREST.class);
         }

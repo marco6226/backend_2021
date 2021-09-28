@@ -42,7 +42,7 @@ public class EmailFacade {
         try {
             Message message = new MimeMessage(mailSession);
             message.setSubject("SIGESS - " + asunto + " de " + destinatario);            	
-            message.addRecipients(Message.RecipientType.CC, InternetAddress.parse("sistema@sigess.app"));
+            message.addRecipients(Message.RecipientType.BCC, InternetAddress.parse("sistema@sigess.app"));
             message.setRecipient(Message.RecipientType.TO, new InternetAddress(destinatario));
             String contenido = loaderFacade.getPlantillaMail();
             String plantilla = null;
