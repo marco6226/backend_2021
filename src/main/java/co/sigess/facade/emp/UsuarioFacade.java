@@ -39,6 +39,10 @@ import javax.ws.rs.core.Context;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 /**
  *
@@ -318,6 +322,17 @@ public Usuario enviarCorreo(String email,Empleado responsable,String nombre, Int
             
             String responsables  = responsable.getPrimerNombre() + " " + responsable.getPrimerApellido();
             String fechaproyectadas = fechaproyectada.toString();
+            
+            
+            DateTimeFormatter f = DateTimeFormatter.ofPattern( "E MMM dd HH:mm:ss z yyyy",Locale.ENGLISH);
+                                       
+            ZonedDateTime zdt = ZonedDateTime.parse( fechaproyectadas , f ); 
+            
+            LocalDate ld = zdt.toLocalDate();
+            DateTimeFormatter fLocalDate = DateTimeFormatter.ofPattern( "dd/MM/yyyy" );
+            String output = ld.format( fLocalDate) ;
+            
+            
             String nuevoPasswd = UtilSecurity.generatePassword();
             String shaPassw = UtilSecurity.createEmailPasswordHash(email, UtilSecurity.toSHA256(nuevoPasswd));
             Calendar expPassed = Calendar.getInstance();
@@ -335,7 +350,7 @@ public Usuario enviarCorreo(String email,Empleado responsable,String nombre, Int
             if (id != null) { 
             parametros.put(EmailFacade.PARAM_ID, id.toString());
             }
-            parametros.put(EmailFacade.PARAM_FECHA_PROY, fechaproyectadas);
+            parametros.put(EmailFacade.PARAM_FECHA_PROY, output);
             emailFacade.sendEmail(parametros, TipoMail.NOTIFICACION_NUEVA, "Tarea", email);
         }
         return user;
