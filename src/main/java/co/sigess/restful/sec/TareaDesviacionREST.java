@@ -40,7 +40,7 @@ public class TareaDesviacionREST extends ServiceREST {
         super(TareaDesviacionFacade.class);
     }    
 
-    @ValidadorArea("areaResponsable.id")
+    //@ValidadorArea("areaResponsable.id")
     @Override
     public Response findWithFilter(FilterQuery filterQuery) {
         return super.findWithFilter(filterQuery);
