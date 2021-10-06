@@ -214,7 +214,8 @@ public class TareaDesviacionFacade extends AbstractFacade<TareaDesviacion> {
                 + "'trackings', Count(st.fk_tarea_id) ,"
                 + "'fecha_verificacion',  td.fecha_verificacion,\n"
                 + "'observaciones_verificacion',  td.observaciones_verificacion,\n"
-                + "'fk_usuario_verifica_id',  td.fk_usuario_verifica_id\n"
+                + "'fk_usuario_verifica_id',  td.fk_usuario_verifica_id,\n"
+                + "'ado.nombre', ado.nombre\n"
                 + "				 )\n"
                 + "	from sec.tarea_desviacion as td\n"
                 + "	left join emp.empleado as ee\n"
@@ -229,6 +230,12 @@ public class TareaDesviacionFacade extends AbstractFacade<TareaDesviacion> {
                 + "	on adtd.pk_analisis_desviacion_id=dad.fk_analisis_desviacion_id	\n"
                 + "	left join sec.vw_desviacion as vd\n"
                 + "	on vd.hash_id=dad.pk_desviacion_hash_id\n"
+                + "               left join inp.calificacion as cali\n"
+		+ "		on vd.id=cali.fk_inspeccion_id and  vd.elemento=cali.fk_elemento_inspeccion_id\n"
+                + "		left join inp.documento_calificacion as dc\n"
+		+ "		on dc.fk_calificacion_id=cali.id\n"
+		+ "		left join ado.documento as ado\n"
+		+ "		on dc.fk_documento_id=ado.id\n"
                 + "	left join emp.area as area\n"
                 + "	on vd.fk_area_id=area.id\n"
                 + "	left join emp.area as regional\n"
@@ -258,6 +265,7 @@ public class TareaDesviacionFacade extends AbstractFacade<TareaDesviacion> {
                 + "                st.fk_tarea_id ,\n"
                 + "                td.fecha_verificacion, \n"
                 + "                td.observaciones_verificacion, \n"
+                + "                ado.nombre, \n"
                 + "                td.fk_usuario_verifica_id";
         Query query = this.em.createNativeQuery(sql);
         sql = query.getResultList().toString();
