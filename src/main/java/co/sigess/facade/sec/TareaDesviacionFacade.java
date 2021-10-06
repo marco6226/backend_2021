@@ -180,7 +180,7 @@ public class TareaDesviacionFacade extends AbstractFacade<TareaDesviacion> {
                 + "	where td.id= ?1";
         Query query = this.em.createNativeQuery(sql);
         query.setParameter(1, tareaId);
-        sql = query.getSingleResult().toString();
+        sql = query.getResultList().get(0).toString();
         return sql;
     }
 
