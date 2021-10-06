@@ -333,18 +333,10 @@ public Usuario enviarCorreo(String email,Empleado responsable,String nombre, Int
             String output = ld.format( fLocalDate) ;
             
             
-            String nuevoPasswd = UtilSecurity.generatePassword();
-            String shaPassw = UtilSecurity.createEmailPasswordHash(email, UtilSecurity.toSHA256(nuevoPasswd));
-            Calendar expPassed = Calendar.getInstance();
-            expPassed.add(Calendar.SECOND, UtilSecurity.CAMBIO_PASSWD_TIMEOUT);
-
-            user.setEstado(EstadoUsuario.CAMBIO_PASSWD);
-            user.setPassword(shaPassw);
-            user.setExpiraPassword(expPassed.getTime());
-            this.edit(user);
+            
 
             Map<String, String> parametros = new HashMap<>();
-            parametros.put(EmailFacade.PARAM_COD_RECUP, nuevoPasswd);
+            
             parametros.put(EmailFacade.PARAM_ACTIVIDAD, nombre);
             parametros.put(EmailFacade.PARAM_RESPONSABLE, responsables);
             if (id != null) { 
