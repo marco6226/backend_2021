@@ -11,7 +11,15 @@ import co.sigess.entities.sec.EstadoTarea;
 import co.sigess.entities.sec.TareaDesviacion;
 import co.sigess.exceptions.UserMessageException;
 import co.sigess.facade.com.AbstractFacade;
+import co.sigess.util.FileUtil;
+import static co.sigess.util.FileUtil.ROOT_DIR;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -184,7 +192,7 @@ public class TareaDesviacionFacade extends AbstractFacade<TareaDesviacion> {
         return sql;
     }
 
-    public String findWithDetails() {
+    public String findWithDetails(Integer idEmp) {
         String sql = "select \n"
                 + "\n"
                 + " json_build_object("
@@ -233,6 +241,7 @@ public class TareaDesviacionFacade extends AbstractFacade<TareaDesviacion> {
                 + "	on vd.fk_area_id=area.id\n"
                 + "	left join emp.area as regional\n"
                 + "	on area.fk_area_padre_id=regional.id\n"
+                + "         where td.fk_empresa_id= ?1"
                 + " GROUP by vd.modulo, \n"
                 + "vd.fecha_reporte, \n"
                 + "regional.nombre, \n"
@@ -260,6 +269,8 @@ public class TareaDesviacionFacade extends AbstractFacade<TareaDesviacion> {
                 + "                td.observaciones_verificacion, \n"
                 + "                td.fk_usuario_verifica_id";
         Query query = this.em.createNativeQuery(sql);
+                query.setParameter(1, idEmp);
+
         sql = query.getResultList().toString();
         return sql;
     }
@@ -277,6 +288,63 @@ public class TareaDesviacionFacade extends AbstractFacade<TareaDesviacion> {
 
         tareaDB = super.edit(tareaDB);
         return tareaDB;
+    }
+
+    public HashMap<String, List<String>> getImages(int tareaId) {
+        TareaDesviacion tareaDB = super.find(tareaId);
+        if (tareaDB == null) {
+            throw new UserMessageException("No es posible reportar la tarea", "La tarea que intenta reportar no existe", TipoMensaje.warn);
+        }
+
+        String sql = ""
+                + "select  \n"
+                + " ado.ruta\n"
+                + "from sec.tarea_desviacion as td\n"
+                + "inner join sec.analisis_desviacion_tarea_desviacion as adtd\n"
+                + "on td.id=adtd.pk_tarea_desviacion_id\n"
+                + "inner join sec.desviacion_analisis_desviacion as dad\n"
+                + "on adtd.pk_analisis_desviacion_id=dad.fk_analisis_desviacion_id	\n"
+                + "left join sec.vw_desviacion as vd\n"
+                + "on vd.hash_id=dad.pk_desviacion_hash_id\n"
+                + "left join inp.calificacion as cali\n"
+                + "on vd.id=cali.fk_inspeccion_id and  vd.elemento=cali.fk_elemento_inspeccion_id\n"
+                + "left join inp.documento_calificacion as dc\n"
+                + "on dc.fk_calificacion_id=cali.id\n"
+                + "left join ado.documento as ado\n"
+                + "on dc.fk_documento_id=ado.id\n"
+                + "where td.id= ?1 and ruta is not null";
+
+        Query query = this.em.createNativeQuery(sql);
+        query.setParameter(1, tareaId);
+        List<String> dtoList = query.getResultList();
+        //System.out.print(dtoList.get(0));
+        HashMap<String, List<String>> files = new HashMap<String, List<String>>();
+        List<String> List = null;
+        List<String> file = new ArrayList<String>();
+        files.put("error", List);
+       for (int i = 0; i < dtoList.size(); i++) {
+             // System.out.print(dtoList.get(i));
+              try {
+                  OutputStream output = FileUtil.getFromVirtualFS(dtoList.get(i));
+                   File f = new File(ROOT_DIR + dtoList.get(i));
+                   FileInputStream input = new FileInputStream(f);
+                   byte[] buffer = new byte[1024]; // Adjust if you want
+                    int bytesRead;
+                     while ((bytesRead = input.read(buffer)) != -1)
+    {
+        output.write(buffer, 0, bytesRead);
+    }
+                  
+                  System.out.println(new String(Base64.getEncoder().encodeToString(buffer)).toString() + " " + "Este el file");
+                    file.add(new String(Base64.getEncoder().encodeToString(buffer)).toString());
+                 
+             
+              } catch (Exception ex) {
+                  //System.out.print("Erro" + ex.getMessage());
+             }
+          }
+           files.put("files", file);
+            return files;
     }
 
     public TareaDesviacion reportarVerificacion(TareaDesviacion tarea, Usuario usuario) throws Exception {

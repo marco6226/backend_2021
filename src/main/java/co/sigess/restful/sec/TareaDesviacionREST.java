@@ -13,6 +13,7 @@ import co.sigess.restful.ServiceREST;
 import co.sigess.restful.security.Secured;
 import co.sigess.restful.security.ValidadorArea;
 import co.sigess.util.Util;
+import java.util.HashMap;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ws.rs.DELETE;
@@ -98,6 +99,19 @@ public class TareaDesviacionREST extends ServiceREST {
         }
     }
     
+    @GET
+    @Secured(validarPermiso = false)
+    @Path("images/{tareaId}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response findImages(@PathParam("tareaId") Integer tareaId) {
+        try {
+             HashMap<String, List<String>> file = tareaDesviacionFacade.getImages(tareaId);
+            return Response.ok(file).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, AnalisisDesviacionREST.class);
+        }
+    }
+    
 
     @PUT
     @Path("reportarCumplimiento")
@@ -157,8 +171,9 @@ public class TareaDesviacionREST extends ServiceREST {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response findWithDetails() {
         try {
-           
-            String json = tareaDesviacionFacade.findWithDetails();
+            Empresa emp;
+            emp = new Empresa (super.getEmpresaIdRequestContext());
+            String json = tareaDesviacionFacade.findWithDetails(emp.getId());
             return Response.ok(json).build();
         } catch (Exception ex) {
             return Util.manageException(ex, TareaDesviacionREST.class);
