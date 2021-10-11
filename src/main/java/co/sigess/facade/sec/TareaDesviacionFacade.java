@@ -313,7 +313,7 @@ public class TareaDesviacionFacade extends AbstractFacade<TareaDesviacion> {
 
         String sql = ""
                 + "select  \n"
-                + " ado.ruta\n"
+                + " ado.id as ruta \n"
                 + "from sec.tarea_desviacion as td\n"
                 + "inner join sec.analisis_desviacion_tarea_desviacion as adtd\n"
                 + "on td.id=adtd.pk_tarea_desviacion_id\n"
@@ -331,34 +331,21 @@ public class TareaDesviacionFacade extends AbstractFacade<TareaDesviacion> {
 
         Query query = this.em.createNativeQuery(sql);
         query.setParameter(1, tareaId);
-        List<String> dtoList = query.getResultList();
-        //System.out.print(dtoList.get(0));
+        List<String> dtoList = query.setMaxResults(3).getResultList();
+        System.out.print(dtoList.size());
         HashMap<String, List<String>> files = new HashMap<String, List<String>>();
         List<String> List = null;
         List<String> file = new ArrayList<String>();
         files.put("error", List);
-       for (int i = 0; i < dtoList.size(); i++) {
+       for (int i = 0; i <= dtoList.size(); i++) {
              // System.out.print(dtoList.get(i));
               try {
-                  OutputStream output = FileUtil.getFromVirtualFS(dtoList.get(i));
-                   File f = new File(ROOT_DIR + dtoList.get(i));
-                   FileInputStream input = new FileInputStream(f);
-                   byte[] buffer = new byte[1024]; // Adjust if you want
-                    int bytesRead;
-                     while ((bytesRead = input.read(buffer)) != -1)
-    {
-        output.write(buffer, 0, bytesRead);
-    }
-                  
-                  System.out.println(new String(Base64.getEncoder().encodeToString(buffer)).toString() + " " + "Este el file");
-                    file.add(new String(Base64.getEncoder().encodeToString(buffer)).toString());
-                 
-             
+                  file.add(dtoList.get(i));
               } catch (Exception ex) {
                   //System.out.print("Erro" + ex.getMessage());
              }
           }
-           files.put("files", file);
+           files.put("files", dtoList);
             return files;
     }
 
