@@ -167,13 +167,19 @@ public class TareaDesviacionREST extends ServiceREST {
     
     @GET
     @Secured(validarPermiso = false)
-    @Path("details")
+    @Path("detalle/{types}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response findWithDetails() {
+    public Response findWithDetails(@PathParam("types")String type) {   
         try {
+            String[] arrString = type.split(",");
+              int[] areasId = new int[arrString.length];
+              for (int i = 0; i < arrString.length; i++) {
+                  areasId[i] = Integer.parseInt(arrString[i]);
+                
+            }
             Empresa emp;
             emp = new Empresa (super.getEmpresaIdRequestContext());
-            String json = tareaDesviacionFacade.findWithDetails(emp.getId());
+            String json = tareaDesviacionFacade.findWithDetails(emp.getId(),arrString);
             return Response.ok(json).build();
         } catch (Exception ex) {
             return Util.manageException(ex, TareaDesviacionREST.class);
