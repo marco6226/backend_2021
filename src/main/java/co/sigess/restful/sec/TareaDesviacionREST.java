@@ -112,6 +112,18 @@ public class TareaDesviacionREST extends ServiceREST {
         }
     }
     
+    @GET
+    @Secured(validarPermiso = false)
+    @Path("images/{tareaId}/{modulo}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response findImages(@PathParam("tareaId") Integer tareaId, @PathParam("modulo") String modulo) {
+        try {
+             HashMap<String, List<String>> file = tareaDesviacionFacade.getImages(tareaId, modulo);
+            return Response.ok(file).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, AnalisisDesviacionREST.class);
+        }
+    }
 
     @PUT
     @Path("reportarCumplimiento")
