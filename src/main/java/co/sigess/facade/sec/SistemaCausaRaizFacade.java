@@ -33,7 +33,7 @@ public class SistemaCausaRaizFacade extends AbstractFacade<SistemaCausaRaiz> {
     }
 
     public List<SistemaCausaRaiz> findByEmpresa(Integer empresaId) {
-        Query query = this.em.createQuery("SELECT s FROM SistemaCausaRaiz s WHERE s.empresaId = ?1");
+        Query query = this.em.createQuery("SELECT s FROM SistemaCausaRaiz s WHERE s.empresaId = ?1 order by 1");
         query.setParameter(1, empresaId);
         List<SistemaCausaRaiz> list = (List<SistemaCausaRaiz>) query.getResultList();
         return list;
@@ -41,7 +41,7 @@ public class SistemaCausaRaizFacade extends AbstractFacade<SistemaCausaRaiz> {
     }
 
     public SistemaCausaRaiz findDefault(Integer empresaId) {
-        Query query = this.em.createQuery("SELECT s FROM SistemaCausaRaiz s WHERE s.empresaId = ?1");
+        Query query = this.em.createQuery("SELECT s FROM SistemaCausaRaiz s WHERE s.empresaId = ?1 order by 1");
         query.setParameter(1, empresaId);
         query.setMaxResults(1);
         SistemaCausaRaiz scr = query.getResultList().isEmpty() ? new SistemaCausaRaiz() : (SistemaCausaRaiz) query.getResultList().get(0);

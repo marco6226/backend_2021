@@ -33,7 +33,7 @@ public class SistemaCausaAdministrativaFacade extends AbstractFacade<SistemaCaus
     }
 
     public SistemaCausaAdministrativa getDefault(Integer empresaIdRequestContext) {
-        Query q = this.em.createQuery("SELECT c FROM SistemaCausaAdministrativa c WHERE c.empresaId = ?1 AND c.selected = true");
+        Query q = this.em.createQuery("SELECT c FROM SistemaCausaAdministrativa c WHERE c.empresaId = ?1 AND c.selected = true order by 1");
         q.setParameter(1, empresaIdRequestContext);
         List<SistemaCausaAdministrativa> list = q.getResultList();
         return list == null || list.isEmpty() ? null : list.get(0);

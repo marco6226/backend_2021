@@ -78,8 +78,8 @@ public class ObservacionFacade extends AbstractFacade<Observacion> {
         if(observacion.getUsuarioRevisa() == null){
             throw new IllegalArgumentException("Debe establecer el usuario que acepta la observación");
         }
-        if(observacion.getCausaRaizAprobadaList() == null || observacion.getCausaRaizAprobadaList().isEmpty()){
-            throw new IllegalArgumentException("Debe establecer las causas raiz aprobadas para la observación");
+        if(observacion.getMotivo()== null || observacion.getMotivo().isEmpty()){
+            throw new IllegalArgumentException("Debe establecer el motivo de denegación de la observación");
         }
         Observacion observDB = this.find(observacion.getId());
         if(observDB == null){
@@ -88,7 +88,8 @@ public class ObservacionFacade extends AbstractFacade<Observacion> {
         observDB.setUsuarioRevisa(observacion.getUsuarioRevisa());
         observDB.setFechaRespuesta(new Date());
         observDB.setAceptada(Boolean.TRUE);
-        observDB.setCausaRaizAprobadaList(observacion.getCausaRaizAprobadaList());
+        observDB.setMotivo(observacion.getMotivo());
+        
         return super.edit(observDB); //To change body of generated methods, choose Tools | Templates.
     }
     

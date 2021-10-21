@@ -186,7 +186,7 @@ public class AuthorizationFacade {
                 String param = "{}";
                 if (areaVal != null) {
                     if (requestContext.getUriInfo().getQueryParameters().get("filterList") == null) {
-                        Mensaje msg = new Mensaje("ACCESO NO PERMITIDO", "No ha establecido el area a consultar", TipoMensaje.warn);
+                        Mensaje msg = new Mensaje("ACCESO NO PERMITIDO", "No ha establecido el area a consultar.", TipoMensaje.warn);
                         return Response.status(Response.Status.FORBIDDEN).entity(msg).build();
                     }
                     String filterList = requestContext.getUriInfo().getQueryParameters().get("filterList").get(0);
