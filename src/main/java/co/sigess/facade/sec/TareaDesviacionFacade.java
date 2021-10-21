@@ -363,6 +363,65 @@ public class TareaDesviacionFacade extends AbstractFacade<TareaDesviacion> {
             return files;
     }
 
+     public HashMap<String, List<String>> getImages(int tareaId, String modulo) {
+        TareaDesviacion tareaDB = super.find(tareaId);
+        if (tareaDB == null) {
+            throw new UserMessageException("No es posible reportar la tarea", "La tarea que intenta reportar no existe", TipoMensaje.warn);
+        }
+        
+                String sql = ""
+                + "select  \n"
+                + " ado.id as ruta \n"
+                + "from sec.tarea_desviacion as td\n"
+                + "inner join sec.analisis_desviacion_tarea_desviacion as adtd\n"
+                + "on td.id=adtd.pk_tarea_desviacion_id\n"
+                + "inner join sec.desviacion_analisis_desviacion as dad\n"
+                + "on adtd.pk_analisis_desviacion_id=dad.fk_analisis_desviacion_id	\n"
+                + "left join sec.vw_desviacion as vd\n"
+                + "on vd.hash_id=dad.pk_desviacion_hash_id\n";
+                        
+            switch(modulo){
+                case "OBS":
+                    sql+= "left join auc.documento_observacion as dc\n"
+                    + "on dc.fk_observacion_id=vd.id\n"
+                    + "left join ado.documento as ado\n"
+                    + "on dc.fk_documento_id=ado.id\n"
+                    + "where td.id= ?1 and ruta is not null";
+                    break;
+                case "INP":
+                    sql+= "left join inp.calificacion as cali\n"
+                    + "on vd.id=cali.fk_inspeccion_id and  vd.elemento=cali.fk_elemento_inspeccion_id\n"
+                    + "left join inp.documento_calificacion as dc\n"
+                    + "on dc.fk_calificacion_id=cali.id\n"
+                    + "left join ado.documento as ado\n"
+                    + "on dc.fk_documento_id=ado.id\n"
+                    + "where td.id= ?1 and ruta is not null";
+                    break;
+                default:
+                    break;
+            }
+                              
+        System.out.print(sql);
+        Query query = this.em.createNativeQuery(sql);
+        query.setParameter(1, tareaId);
+        List<String> dtoList = query.setMaxResults(3).getResultList();
+        System.out.print(dtoList.size());
+        HashMap<String, List<String>> files = new HashMap<String, List<String>>();
+        List<String> List = null;
+        List<String> file = new ArrayList<String>();
+        files.put("error", List);
+       for (int i = 0; i <= dtoList.size(); i++) {
+             // System.out.print(dtoList.get(i));
+              try {
+                  file.add(dtoList.get(i));
+              } catch (Exception ex) {
+                  //System.out.print("Erro" + ex.getMessage());
+             }
+          }
+           files.put("files", dtoList);
+            return files;
+    }
+     
     public TareaDesviacion reportarVerificacion(TareaDesviacion tarea, Usuario usuario) throws Exception {
         TareaDesviacion tareaDB = super.find(tarea.getId());
         if (tareaDB == null) {
