@@ -11,9 +11,12 @@ import co.sigess.entities.inp.ListaInspeccionPK;
 import co.sigess.facade.inp.ListaInspeccionFacade;
 import co.sigess.restful.FilterQuery;
 import co.sigess.restful.ServiceREST;
+import co.sigess.restful.sec.AnalisisDesviacionREST;
 import co.sigess.restful.security.Compress;
 import co.sigess.restful.security.Secured;
 import co.sigess.util.Util;
+import java.util.HashMap;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -162,4 +165,17 @@ public class ListaInspeccionREST extends ServiceREST {
         }
     }
    
+    @GET
+    @Secured(validarPermiso = false)
+    @Path("images/{lista_id}/{version_id}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response findImages(@PathParam("lista_id") Integer lista_id, @PathParam("version_id") Integer version_id) {
+        try {
+             HashMap<String, List<String>> file = listaInspeccionFacade.getImages(lista_id, version_id);
+            return Response.ok(file).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, ListaInspeccionREST.class);
+        }
+    }
+    
 }

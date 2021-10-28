@@ -20,7 +20,8 @@ public enum Modulo {
     RAI("Reporte accidentes/incidentes"),
     SEC("Seguimiento y control"),
     SGE("Sistema de gestión"),
-    COP("COPASST");
+    COP("COPASST"),
+    LISTA("Lista Inspeccion");
     
     private String nombre;
 

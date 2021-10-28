@@ -17,6 +17,7 @@ import co.sigess.facade.cop.ActaFacade;
 import co.sigess.facade.emp.EmpleadoFacade;
 import co.sigess.facade.inp.CalificacionFacade;
 import co.sigess.facade.sec.AnalisisDesviacionFacade;
+import co.sigess.facade.inp.ListaInspeccionFacade;
 import co.sigess.util.FileUtil;
 import java.io.File;
 import java.io.OutputStream;
@@ -57,6 +58,9 @@ public class DirectorioFacade extends AbstractFacade<Directorio> {
     
     @EJB
     private ActaFacade actaFacade;
+    
+    @EJB
+    private ListaInspeccionFacade ListaInspeccionFacade;
 
     @Override
     protected EntityManager getEntityManager() {
@@ -114,6 +118,7 @@ public class DirectorioFacade extends AbstractFacade<Directorio> {
                 case COP:
                     Long actaId = Long.valueOf(modParam);
                     this.actaFacade.relacionarDocumento(documento, actaId);
+                    break;
                 default:
                     break;
             }
@@ -123,6 +128,12 @@ public class DirectorioFacade extends AbstractFacade<Directorio> {
         return directorio;
     }
 
+     public void create(Integer documentoId, Integer  modParam, Integer version) throws Exception {
+        
+        this.ListaInspeccionFacade.guardarImagen(documentoId, modParam, version);
+             
+    }
+     
     public OutputStream findFile(Long documentoId) {
         Documento documento = documentoFacade.find(documentoId);
         if (documento == null) {
