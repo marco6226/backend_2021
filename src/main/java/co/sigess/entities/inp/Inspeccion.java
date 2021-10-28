@@ -63,6 +63,14 @@ public class Inspeccion implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaRealizada;
     
+    @Column(name = "fecha_visto_ing")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechavistoing;
+    
+    @Column(name = "fecha_visto_hse")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechavistohse;
+    
     @Column(name = "fecha_modificacion")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaModificacion;
@@ -120,6 +128,14 @@ public class Inspeccion implements Serializable {
     @ManyToOne
     private Usuario usuarioModifica;
     
+     @JoinColumn(name = "fk_empleado_ing", referencedColumnName = "id")
+    @ManyToOne
+    private Usuario empleadoing;
+    
+     @JoinColumn(name = "fk_empleado_hse", referencedColumnName = "id")
+    @ManyToOne
+    private Usuario empleadohse;
+     
     @JoinColumns({
         @JoinColumn(name = "fk_lista_inspeccion_id", referencedColumnName = "id")
         , @JoinColumn(name = "fk_lista_inspeccion_version", referencedColumnName = "version")})
@@ -306,6 +322,62 @@ public class Inspeccion implements Serializable {
     @Override
     public String toString() {
         return "co.sigess.entities.inp.Inspeccion[ id=" + id + " ]";
+    }
+
+    /**
+     * @return the empleadohse
+     */
+    public Usuario getEmpleadohse() {
+        return empleadohse;
+    }
+
+    /**
+     * @return the empleadoing
+     */
+    public Usuario getEmpleadoing() {
+        return empleadoing;
+    }
+
+    /**
+     * @return the fechavistohse
+     */
+    public Date getFechavistohse() {
+        return fechavistohse;
+    }
+
+    /**
+     * @return the fechavistoing
+     */
+    public Date getFechavistoing() {
+        return fechavistoing;
+    }
+
+    /**
+     * @param empleadohse the empleadohse to set
+     */
+    public void setEmpleadohse(Usuario empleadohse) {
+        this.empleadohse = empleadohse;
+    }
+
+    /**
+     * @param empleadoing the empleadoing to set
+     */
+    public void setEmpleadoing(Usuario empleadoing) {
+        this.empleadoing = empleadoing;
+    }
+
+    /**
+     * @param fechavistohse the fechavistohse to set
+     */
+    public void setFechavistohse(Date fechavistohse) {
+        this.fechavistohse = fechavistohse;
+    }
+
+    /**
+     * @param fechavistoing the fechavistoing to set
+     */
+    public void setFechavistoing(Date fechavistoing) {
+        this.fechavistoing = fechavistoing;
     }
 
 }
