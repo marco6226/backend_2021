@@ -70,7 +70,15 @@ public class Observacion implements Serializable {
     @Size(max = 512)
     @Column(name = "recomendacion")
     private String recomendacion;
-
+    
+    @Size(max = 512)
+    @Column(name = "personas_observadas")
+    private String personasobservadas;
+    
+    @Size(max = 512)
+    @Column(name = "personas_abordadas")
+    private String personasabordadas;
+            
     @Column(name = "fecha_observacion")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaObservacion;
@@ -303,6 +311,34 @@ public class Observacion implements Serializable {
     @Override
     public String toString() {
         return "co.sigess.entities.auc.Observacion[ id=" + id + " ]";
+    }
+
+    /**
+     * @return the personasabordadas
+     */
+    public String getPersonasabordadas() {
+        return personasabordadas;
+    }
+
+    /**
+     * @return the personasobservadas
+     */
+    public String getPersonasobservadas() {
+        return personasobservadas;
+    }
+
+    /**
+     * @param personasabordadas the personasabordadas to set
+     */
+    public void setPersonasabordadas(String personasabordadas) {
+        this.personasabordadas = personasabordadas;
+    }
+
+    /**
+     * @param personasobservadas the personasobservadas to set
+     */
+    public void setPersonasobservadas(String personasobservadas) {
+        this.personasobservadas = personasobservadas;
     }
 
 }
