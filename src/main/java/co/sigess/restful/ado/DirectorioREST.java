@@ -183,6 +183,25 @@ public class DirectorioREST extends ServiceREST {
     }
 
     @POST
+    @Path("uploadv3")
+    @Consumes({MediaType.MULTIPART_FORM_DATA})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response uploadFile(
+            @FormDataParam("documentoId") Integer documentoId,
+            @FormDataParam("paramId") Integer paramId,
+            @FormDataParam("modulo") String modulo
+    ) throws Exception {
+        try {
+            
+            directorioFacade.create(documentoId, paramId, modulo);
+            
+            return Response.ok().build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, DirectorioREST.class);
+        }
+    }
+    
+    @POST
     @Path("uploadv4")
     @Consumes({MediaType.MULTIPART_FORM_DATA})
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -200,7 +219,6 @@ public class DirectorioREST extends ServiceREST {
             return Util.manageException(ex, DirectorioREST.class);
         }
     }
-
     
     @GET
     @Path("download/{id}")

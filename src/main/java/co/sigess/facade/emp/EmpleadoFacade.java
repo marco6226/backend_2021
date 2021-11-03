@@ -212,5 +212,46 @@ public class EmpleadoFacade extends AbstractFacade<Empleado> {
             throw new UserMessageException("Operación no permitida", "No puede editar datos de empleado diferente al suyo", TipoMensaje.error);
         }
     }
+    
+    public void guardarImagen(Integer id_documento, Integer id_empleado) {
+        Query query = this.em.createNativeQuery("INSERT INTO emp.documento_firma_empleado(fk_documento_id, fk_empleado_id) VALUES (?1, ?2)");
+        query.setParameter(1, id_documento);
+        query.setParameter(2, id_empleado);
+        query.executeUpdate();
+    }
+    
+    public HashMap<String, List<String>> getImages(int empleado_id) {
+                
+                String sql = ""
+                +"select ado.id as idimagen\n"
+                +"from emp.empleado as li\n"
+                    +"inner join emp.documento_firma_empleado as dli\n"
+                    +"on li.id = dli.fk_empleado_id\n"
+                    +"inner join ado.documento as ado\n"
+                    +"on dli.fk_documento_id = ado.id\n"
+                        +"where dli.fk_empleado_id = ?1";
+                              
+        System.out.print(sql);
+        Query query = this.em.createNativeQuery(sql);
+        query.setParameter(1, empleado_id);
+        
+        List<String> dtoList = query.setMaxResults(3).getResultList();
+        System.out.print(dtoList.size());
+        HashMap<String, List<String>> files = new HashMap<String, List<String>>();
+        List<String> List = null;
+        List<String> file = new ArrayList<String>();
+        files.put("error", List);
+       for (int i = 0; i <= dtoList.size(); i++) {
+             // System.out.print(dtoList.get(i));
+              try {
+                  file.add(dtoList.get(i));
+              } catch (Exception ex) {
+                  //System.out.print("Erro" + ex.getMessage());
+             }
+          }
+           files.put("files", dtoList);
+            return files;
+    }
+     
 
 }

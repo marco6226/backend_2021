@@ -12,9 +12,11 @@ import co.sigess.restful.Filter;
 import co.sigess.restful.FilterQuery;
 import co.sigess.restful.FilterResponse;
 import co.sigess.restful.ServiceREST;
+import co.sigess.restful.inp.ListaInspeccionREST;
 import co.sigess.restful.security.Auditable;
 import co.sigess.restful.security.Secured;
 import co.sigess.util.Util;
+import java.util.HashMap;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ws.rs.BeanParam;
@@ -142,6 +144,19 @@ public class EmpleadoREST extends ServiceREST {
             return Response.ok().build();
         } catch (Exception ex) {
             return Util.manageException(ex, EmpleadoREST.class);
+        }
+    }
+    
+    @GET
+    @Secured(validarPermiso = false)
+    @Path("images/{empleado_id}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response findImages(@PathParam("empleado_id") Integer empleado_id) {
+        try {
+             HashMap<String, List<String>> file = empleadoFacade.getImages(empleado_id);
+            return Response.ok(file).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, ListaInspeccionREST.class);
         }
     }
 

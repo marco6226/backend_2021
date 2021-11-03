@@ -134,6 +134,19 @@ public class DirectorioFacade extends AbstractFacade<Directorio> {
              
     }
      
+     public void create(Integer documentoId, Integer  paramId, String modulo) throws Exception {
+        
+         switch(modulo){
+            case "EMP":
+                this.empleadoFacade.guardarImagen(documentoId, paramId);
+                break;
+            default:
+                break;
+         }
+        
+             
+    }
+     
     public OutputStream findFile(Long documentoId) {
         Documento documento = documentoFacade.find(documentoId);
         if (documento == null) {
