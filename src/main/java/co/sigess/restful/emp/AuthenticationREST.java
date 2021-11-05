@@ -5,6 +5,7 @@
  */
 package co.sigess.restful.emp;
 
+import co.sigess.entities.auc.Observacion;
 import co.sigess.entities.com.ApiVersion;
 import co.sigess.entities.com.Mensaje;
 import co.sigess.entities.com.TipoMensaje;
@@ -16,6 +17,8 @@ import co.sigess.facade.core.LoaderFacade;
 import co.sigess.facade.emp.TokenFacade;
 import co.sigess.facade.emp.UsuarioFacade;
 import co.sigess.entities.sec.TareaDesviacion;
+import co.sigess.facade.auc.ObservacionFacade;
+import co.sigess.facade.core.EmailFacade;
 import co.sigess.facade.sec.TareaDesviacionFacade;
 import co.sigess.restful.security.Auditable;
 import co.sigess.restful.security.RollBackResponse;
@@ -61,8 +64,8 @@ public class AuthenticationREST {
     private UsuarioFacade usuarioFacade;
     
     @EJB
-    private TareaDesviacionFacade TareaDesviacionFacade;
-
+    private ObservacionFacade observacionFacade;
+    
     @EJB
     private TokenFacade tokenFacade;
 
@@ -307,6 +310,27 @@ public class AuthenticationREST {
                 Empleado responsable = tarea.getEmpResponsable();
                 
                 Usuario usuario = usuarioFacade.enviarCorreo(email.trim().toLowerCase(),responsable,nombre,id,FechaProyectada);
+            }
+            return Response.ok(new Mensaje("Tarea", "Se le ha enviado un correo al responsable", TipoMensaje.success)).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, AuthenticationREST.class);
+        }
+    }
+    
+    @POST
+    @Path("enviarCorreoDenegada/{email}")
+    public Response enviarCorreoObservacionDenegada(@PathParam("email") String email, Observacion observacion) {
+        try {
+            if (email != null) {
+                Long id = observacion.getId();
+                String nombre = observacion.getTipoObservacion();
+                String motivo = observacion.getMotivo();
+                Date  fechaRechazo = observacion.getFechaObservacion();
+                Integer idResponsable = observacion.getUsuarioReporta().getId();
+                
+                
+                observacion = observacionFacade.enviarCorreo(email.trim().toLowerCase(), idResponsable, nombre, id, fechaRechazo);
+//                observacion = observacionFacade.enviarCorreo(email.trim().toLowerCase(),responsable,nombre,id,fechaRechazo);
             }
             return Response.ok(new Mensaje("Tarea", "Se le ha enviado un correo al responsable", TipoMensaje.success)).build();
         } catch (Exception ex) {

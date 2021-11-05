@@ -8,12 +8,23 @@ package co.sigess.facade.auc;
 import co.sigess.entities.ado.Documento;
 import co.sigess.entities.auc.Observacion;
 import co.sigess.entities.auc.Tarjeta;
+import co.sigess.entities.com.TipoMensaje;
 import co.sigess.entities.emp.Empleado;
+import co.sigess.entities.emp.Usuario;
+import co.sigess.exceptions.UserMessageException;
 import co.sigess.facade.com.AbstractFacade;
+import co.sigess.facade.core.EmailFacade;
+import co.sigess.facade.core.TipoMail;
 import co.sigess.facade.emp.EmpleadoFacade;
+import java.time.LocalDate;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -35,6 +46,9 @@ public class ObservacionFacade extends AbstractFacade<Observacion> {
 
     @EJB
     private EmpleadoFacade empleadoFacade;
+    
+    @EJB
+    private EmailFacade emailFacade;
 
     @Override
     protected EntityManager getEntityManager() {
@@ -114,6 +128,49 @@ public class ObservacionFacade extends AbstractFacade<Observacion> {
         return super.edit(observDB); //To change body of generated methods, choose Tools | Templates.
     }
     
+    public Observacion enviarCorreo(String email,Integer idResponsable,String nombre, Long id,  Date fechaproyectada) throws Exception {
+    
+        Observacion observacion = this.find(id);
+        if (observacion != null) {                 
+//            switch (user.getEstado()) {
+//                case BLOQUEADO:
+//                case ELIMINADO:
+//                case INACTIVO:
+//                    throw new UserMessageException("SOLICITUD NO PERMITIDA", "El estado del usuario no permite la operación", TipoMensaje.warn);
+//            }
+          
+            Empleado responsable = findEmpleadoById(idResponsable);
+            String responsables  = responsable.getPrimerNombre() + " " + responsable.getPrimerApellido();
+            String fechaproyectadas = fechaproyectada.toString();
+            
+            System.out.println(responsables);
+            
+            DateTimeFormatter f = DateTimeFormatter.ofPattern( "E MMM dd HH:mm:ss z yyyy",Locale.ENGLISH);
+                                       
+            ZonedDateTime zdt = ZonedDateTime.parse( fechaproyectadas , f ); 
+            
+            LocalDate ld = zdt.toLocalDate();
+            DateTimeFormatter fLocalDate = DateTimeFormatter.ofPattern( "dd/MM/yyyy" );
+            String output = ld.format( fLocalDate) ;
+            String motivo = observacion.getMotivo();
+            
+            
+            
+
+            Map<String, String> parametros = new HashMap<>();
+            parametros.put(EmailFacade.PARAM_MENSAJE, "OBSERVACION DENEGADA");
+            parametros.put(EmailFacade.PARAM_ACTIVIDAD, nombre);
+            parametros.put(EmailFacade.PARAM_RESPONSABLE, responsables);
+            parametros.put(EmailFacade.PARAM_MOTIVO, motivo);
+            if (id != null) { 
+            parametros.put(EmailFacade.PARAM_ID, id.toString());
+            }
+            parametros.put(EmailFacade.PARAM_FECHA_PROY, output);
+            emailFacade.sendEmail(parametros, TipoMail.OBSERVACION_DENEGADA, "Observacion", email);
+        }
+        return observacion;
+    }
+    
 //    public List<Observacion> findAllByUsuarioEmpresa(Integer usuarioId, Integer empresaId) {
 //        Empleado empleado = empleadoFacade.findByUsuario(usuarioId);
 //        if (empleado == null) {
@@ -122,6 +179,20 @@ public class ObservacionFacade extends AbstractFacade<Observacion> {
 //            return this.findAllByArea(empleado.getArea().getId());
 //        }
 //    }
+    
+    
+    public Empleado findEmpleadoById(Integer idUser) {
+//        String consulta = "SELECT DISTINCT u FROM Usuario u JOIN u.usuarioEmpresaList ue WHERE ue.empresa.id = ?1";
+        String consulta = "SELECT * FROM emp.empleado WHERE fk_usuario_id = ?1";
+        Query query = this.em.createQuery(consulta);
+        query.setParameter(1, idUser);
+        List<Empleado> list = (List<Empleado>) query.getResultList();
+        System.out.println("EMPLEADO: " + list.get(0).getPrimerNombre());
+        return list.get(0);
+//        Empleado empleado = new Empleado();
+//        empleado = em.find(Empleado.class, idUser);
+//        return empleado;
+    }
     
     @Override
     public List<Observacion> findAllByEmpresa(Integer empresaId){
