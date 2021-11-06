@@ -39,6 +39,7 @@ public class LoaderFacade {
     private String plantillaMailCambioPasswd;
     private String plantillaMailCreacionUsuario;
     private String PlantillaMailNotificacionNueva;
+    private String PlantillaMailObservacionDenegada;
 
     private ApiVersion apiVersion;
     private Properties smsProp;
@@ -129,6 +130,22 @@ public class LoaderFacade {
             }
         }
         return plantillaMailCreacionUsuario;
+    }
+    
+    public String getPlantillaMailObservacionDenegada() {
+        if (this.PlantillaMailObservacionDenegada == null) {
+            try {
+                String ruta = getClass().getResource(Recursos.PLANTILLA_MAIL_OBSERVACION_DENEGADA.getRuta()).getPath();
+                int y = ruta.length(); 
+               String x  = isWindows(ruta,y);
+                System.out.println(x + "añsdkasñldsadasd");
+                this.PlantillaMailObservacionDenegada = new String(Files.readAllBytes(Paths.get(x)));               
+            } catch (IOException ex) {
+                Logger.getLogger(LoaderFacade.class.getName()).log(Level.SEVERE, null, ex);
+                throw new IllegalArgumentException("No se ha podido inicializar correctamente la plantilla PLANTILLA_MAIL_OBSERVACION_DENEGADA");
+            }
+        }
+        return PlantillaMailObservacionDenegada;
     }
 
     public ApiVersion getApiVersion() {

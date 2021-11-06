@@ -6,7 +6,11 @@
 package co.sigess.restful.auc;
 
 import co.sigess.entities.auc.Observacion;
+import co.sigess.entities.emp.Usuario;
 import co.sigess.facade.auc.ObservacionFacade;
+import co.sigess.facade.core.EmailFacade;
+import co.sigess.facade.core.TipoMail;
+import co.sigess.facade.emp.UsuarioFacade;
 import co.sigess.restful.Filter;
 import co.sigess.restful.FilterQuery;
 import co.sigess.restful.FilterResponse;
@@ -14,7 +18,10 @@ import co.sigess.restful.ServiceREST;
 import co.sigess.restful.sec.TareaDesviacionREST;
 import co.sigess.restful.security.Secured;
 import co.sigess.util.Util;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.ejb.EJB;
 import javax.ws.rs.BeanParam;
 import javax.ws.rs.GET;
@@ -35,6 +42,9 @@ public class ObservacionREST extends ServiceREST {
 
     @EJB
     private ObservacionFacade observacionFacade;
+    
+    @EJB
+    private UsuarioFacade usuarioFacade;
 
     @POST
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})

@@ -32,6 +32,7 @@ public class EmailFacade {
     public static final String PARAM_ID = "P{id}";
     public static final String PARAM_FECHA_PROY = "P{fechaproyectada}";
     public static final String PARAM_RESPONSABLE = "P{responsables}";
+    public static final String PARAM_MOTIVO = "P{motivo}";
     @EJB
     private LoaderFacade loaderFacade;
 
@@ -58,6 +59,9 @@ public class EmailFacade {
                     break;
                 case NOTIFICACION_NUEVA:
                     plantilla = loaderFacade.getPlantillaMailNotificacionNueva();
+                    break;
+                case OBSERVACION_DENEGADA:
+                    plantilla = loaderFacade.getPlantillaMailObservacionDenegada();
                     break;
             }
             plantilla = replaceParameters(parametros, plantilla);
