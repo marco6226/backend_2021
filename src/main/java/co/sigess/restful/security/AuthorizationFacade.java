@@ -110,7 +110,7 @@ public class AuthorizationFacade {
             ruta += listTemp.get(i).getTemplate();
         }
         String empresa_id = requestContext.getHeaderString("param-emp");
-
+        
         TokenActivo tokenAct = null;
         try {
             tokenAct = UtilSecurity.verifyJWT(token, false);
@@ -204,7 +204,11 @@ public class AuthorizationFacade {
 
                 query.setParameter(1, method);
                 query.setParameter(2, ruta);
-                query.setParameter(3, Integer.parseInt(empresa_id));
+                if(empresa_id.length() == 0){
+                    query.setParameter(3, 0);
+                }else{
+                    query.setParameter(3, Integer.parseInt(empresa_id));
+                }
                 query.setParameter(4, tokenAct.getId());
                 query.setParameter(5, tokenAct.getUsuario().getId());
                 query.setParameter(6, param);

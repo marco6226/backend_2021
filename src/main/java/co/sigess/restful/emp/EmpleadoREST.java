@@ -86,6 +86,18 @@ public class EmpleadoREST extends ServiceREST {
             return Util.manageException(ex, EmpleadoREST.class);
         }
     }
+    
+    @GET
+    @Path("buscarempleado/{parametro}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response buscarempleado(@PathParam("parametro") String parametro) {
+        try {
+            Empleado empleado = empleadoFacade.findByUsuario(Integer.parseInt(parametro));
+            return Response.ok(empleado).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, EmpleadoREST.class);
+        }
+    }
 
     @POST
     @Auditable

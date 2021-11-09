@@ -171,26 +171,15 @@ public class ObservacionFacade extends AbstractFacade<Observacion> {
         return observacion;
     }
     
-//    public List<Observacion> findAllByUsuarioEmpresa(Integer usuarioId, Integer empresaId) {
-//        Empleado empleado = empleadoFacade.findByUsuario(usuarioId);
-//        if (empleado == null) {
-//            return this.findAllByEmpresa(empresaId);
-//        } else {
-//            return this.findAllByArea(empleado.getArea().getId());
-//        }
-//    }
+
     
     
     public List<Empleado> findEmpleadoById(Integer idUser) {
-//        String consulta = "SELECT DISTINCT u FROM Usuario u JOIN u.usuarioEmpresaList ue WHERE ue.empresa.id = ?1",Empleado.class);
-        Query q = this.em.createNativeQuery("SELECT e.* FROM emp.empleado e WHERE fk_usuario_id = ?1",Empleado.class);
-      //  Query q = this.em.createNativeQuery("SELECT * FROM aus.reporte_ausentismo  WHERE fk_empleado_id = ?1 order by fecha_elaboracion desc ",Empleado.class);
-      //  Query query = this.em.createNativeQuery(query);
+
+        Query q = this.em.createNativeQuery("SELECT e.* FROM emp.empleado e WHERE fk_usuario_id = ?1",Empleado.class);   
         q.setParameter(1, idUser);
-        List<Empleado> list = (List<Empleado>) q.getResultList();
-        //System.out.println("EMPLEADO: " + list.get(0).getPrimerNombre());
-        return list;
-//        
+        List<Empleado> list = (List<Empleado>) q.getResultList();   
+        return list;     
     }
     
     @Override
