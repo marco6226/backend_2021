@@ -269,5 +269,15 @@ public class ListaInspeccionFacade extends AbstractFacade<ListaInspeccion> {
         query.setParameter(3, id_version);
         query.executeUpdate();
     }
+     
+     public void actualizarImagen(Integer id_documento, Integer id_lista, Integer id_version) {
+        Query query = this.em.createNativeQuery("UPDATE inp.documento_lista_inspeccion\n" +
+            "	SET fk_documento_id=?1\n" +
+            "	WHERE fk_lista_inspeccion_id=?2 AND fk_lista_inspeccion_version=?3;");
+        query.setParameter(1, id_documento);
+        query.setParameter(2, id_lista);
+        query.setParameter(3, id_version);
+        query.executeUpdate();
+    }
 
 }
