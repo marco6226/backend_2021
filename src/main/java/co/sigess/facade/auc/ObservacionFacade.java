@@ -46,7 +46,7 @@ public class ObservacionFacade extends AbstractFacade<Observacion> {
 
     @EJB
     private EmpleadoFacade empleadoFacade;
-    
+
     @EJB
     private EmailFacade emailFacade;
 
@@ -86,128 +86,125 @@ public class ObservacionFacade extends AbstractFacade<Observacion> {
     }
 
     public Observacion aceptarObservacion(Observacion observacion) throws Exception {
-        if(observacion.getId() == null){
+        if (observacion.getId() == null) {
             throw new IllegalArgumentException("No ha especificado el id de la observación a modificar");
         }
-        if(observacion.getUsuarioRevisa() == null){
+        if (observacion.getUsuarioRevisa() == null) {
             throw new IllegalArgumentException("Debe establecer el usuario que acepta la observación");
         }
-        if(observacion.getMotivo()== null || observacion.getMotivo().isEmpty()){
+        if (observacion.getMotivo() == null || observacion.getMotivo().isEmpty()) {
             throw new IllegalArgumentException("Debe establecer el motivo de denegación de la observación");
         }
         Observacion observDB = this.find(observacion.getId());
-        if(observDB == null){
+        if (observDB == null) {
             throw new IllegalArgumentException("Ha especificado una observación inválida");
         }
         observDB.setUsuarioRevisa(observacion.getUsuarioRevisa());
         observDB.setFechaRespuesta(new Date());
         observDB.setAceptada(Boolean.TRUE);
         observDB.setMotivo(observacion.getMotivo());
+        //
         observDB.setPersonasabordadas(observacion.getPersonasabordadas());
         observDB.setPersonasobservadas(observacion.getPersonasobservadas());
-        
-        return super.edit(observDB); //To change body of generated methods, choose Tools | Templates.
+
+        return super.edit(observDB); // To change body of generated methods, choose Tools | Templates.
     }
-    
+
     public Observacion denegarObservacion(Observacion observacion) throws Exception {
-        if(observacion.getId() == null){
+        if (observacion.getId() == null) {
             throw new IllegalArgumentException("No ha especificado el id de la observación a modificar");
         }
-        if(observacion.getUsuarioRevisa() == null){
+        if (observacion.getUsuarioRevisa() == null) {
             throw new IllegalArgumentException("Debe establecer el usuario que deniega la observación");
         }
-        if(observacion.getMotivo()== null || observacion.getMotivo().isEmpty()){
+        if (observacion.getMotivo() == null || observacion.getMotivo().isEmpty()) {
             throw new IllegalArgumentException("Debe establecer el motivo de denegación de la observación");
         }
         Observacion observDB = this.find(observacion.getId());
-        if(observDB == null){
+        if (observDB == null) {
             throw new IllegalArgumentException("Ha especificado una observación inválida");
         }
         observDB.setUsuarioRevisa(observacion.getUsuarioRevisa());
         observDB.setFechaRespuesta(new Date());
         observDB.setAceptada(Boolean.FALSE);
         observDB.setMotivo(observacion.getMotivo());
-        return super.edit(observDB); //To change body of generated methods, choose Tools | Templates.
+        return super.edit(observDB); // To change body of generated methods, choose Tools | Templates.
     }
-    
-    public Observacion enviarCorreo(String email,Integer idResponsable,String nombre, Long id,  Date fechaproyectada) throws Exception {
-    
+
+    public Observacion enviarCorreo(String email, Integer idResponsable, String nombre, Long id, Date fechaproyectada throws Exception {
+
         Observacion observacion = this.find(id);
-        if (observacion != null) {                 
-//            switch (user.getEstado()) {
-//                case BLOQUEADO:
-//                case ELIMINADO:
-//                case INACTIVO:
-//                    throw new UserMessageException("SOLICITUD NO PERMITIDA", "El estado del usuario no permite la operación", TipoMensaje.warn);
-//            }
-          
+        if (observacion != null) {
+            // switch (user.getEstado()) {
+            // case BLOQUEADO:
+            // case ELIMINADO:
+            // case INACTIVO:
+            // throw new UserMessageException("SOLICITUD NO PERMITIDA", "El estado del usuario no permite la operación", TipoMensaje.warn);
+            // }
+
             Empleado responsable = findEmpleadoById(idResponsable);
-            String responsables  = responsable.getPrimerNombre() + " " + responsable.getPrimerApellido();
+            String responsables = responsable.getPrimerNombre() + " " + responsable.getPrimerApellido();
             String fechaproyectadas = fechaproyectada.toString();
-            
+
             System.out.println(responsables);
-            
-            DateTimeFormatter f = DateTimeFormatter.ofPattern( "E MMM dd HH:mm:ss z yyyy",Locale.ENGLISH);
-                                       
-            ZonedDateTime zdt = ZonedDateTime.parse( fechaproyectadas , f ); 
-            
+
+            DateTimeFormatter f = DateTimeFormatter.ofPattern("E MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
+
+            ZonedDateTime zdt = ZonedDateTime.parse(fechaproyectadas, f);
+
             LocalDate ld = zdt.toLocalDate();
-            DateTimeFormatter fLocalDate = DateTimeFormatter.ofPattern( "dd/MM/yyyy" );
-            String output = ld.format( fLocalDate) ;
+            DateTimeFormatter fLocalDate = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            String output = ld.format(fLocalDate);
             String motivo = observacion.getMotivo();
-            
-            
-            
 
             Map<String, String> parametros = new HashMap<>();
             parametros.put(EmailFacade.PARAM_MENSAJE, "OBSERVACION DENEGADA");
             parametros.put(EmailFacade.PARAM_ACTIVIDAD, nombre);
             parametros.put(EmailFacade.PARAM_RESPONSABLE, responsables);
             parametros.put(EmailFacade.PARAM_MOTIVO, motivo);
-            if (id != null) { 
-            parametros.put(EmailFacade.PARAM_ID, id.toString());
+            if (id != null) {
+                parametros.put(EmailFacade.PARAM_ID, id.toString());
             }
             parametros.put(EmailFacade.PARAM_FECHA_PROY, output);
             emailFacade.sendEmail(parametros, TipoMail.OBSERVACION_DENEGADA, "Observacion", email);
         }
         return observacion;
     }
-    
-//    public List<Observacion> findAllByUsuarioEmpresa(Integer usuarioId, Integer empresaId) {
-//        Empleado empleado = empleadoFacade.findByUsuario(usuarioId);
-//        if (empleado == null) {
-//            return this.findAllByEmpresa(empresaId);
-//        } else {
-//            return this.findAllByArea(empleado.getArea().getId());
-//        }
-//    }
-    
-    
+
+    // public List<Observacion> findAllByUsuarioEmpresa(Integer usuarioId, Integer empresaId) {
+    // Empleado empleado = empleadoFacade.findByUsuario(usuarioId);
+    // if (empleado == null) {
+    // return this.findAllByEmpresa(empresaId);
+    // } else {
+    // return this.findAllByArea(empleado.getArea().getId());
+    // }
+    // }
+
     public Empleado findEmpleadoById(Integer idUser) {
-//        String consulta = "SELECT DISTINCT u FROM Usuario u JOIN u.usuarioEmpresaList ue WHERE ue.empresa.id = ?1";
+        // String consulta = "SELECT DISTINCT u FROM Usuario u JOIN u.usuarioEmpresaList ue WHERE ue.empresa.id = ?1";
         String consulta = "SELECT * FROM emp.empleado WHERE fk_usuario_id = ?1";
         Query query = this.em.createQuery(consulta);
         query.setParameter(1, idUser);
         List<Empleado> list = (List<Empleado>) query.getResultList();
         System.out.println("EMPLEADO: " + list.get(0).getPrimerNombre());
         return list.get(0);
-//        Empleado empleado = new Empleado();
-//        empleado = em.find(Empleado.class, idUser);
-//        return empleado;
+        // Empleado empleado = new Empleado();
+        // empleado = em.find(Empleado.class, idUser);
+        // return empleado;
     }
-    
+
     @Override
-    public List<Observacion> findAllByEmpresa(Integer empresaId){
+    public List<Observacion> findAllByEmpresa(Integer empresaId) {
         Query q = this.em.createQuery("SELECT ob FROM Observacion ob WHERE ob.tarjeta.empresa.id = ?1 ORDER BY ob.fechaObservacion DESC");
         q.setParameter(1, empresaId);
-        List<Observacion> list = (List<Observacion> )q.getResultList();
+        List<Observacion> list = (List<Observacion>) q.getResultList();
         return list;
     }
-    
-    public List<Observacion> findAllByArea(Long areaId){
+
+    public List<Observacion> findAllByArea(Long areaId) {
         Query q = this.em.createQuery("SELECT ob FROM Observacion ob WHERE ob.area.id = ?1 ORDER BY ob.fechaObservacion DESC");
         q.setParameter(1, areaId);
-        List<Observacion> list = (List<Observacion> )q.getResultList();
+        List<Observacion> list = (List<Observacion>) q.getResultList();
         return list;
     }
 
@@ -220,6 +217,5 @@ public class ObservacionFacade extends AbstractFacade<Observacion> {
         list.add(documento);
         super.edit(ad);
     }
-
 
 }
