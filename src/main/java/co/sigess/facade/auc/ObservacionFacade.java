@@ -103,6 +103,8 @@ public class ObservacionFacade extends AbstractFacade<Observacion> {
         observDB.setFechaRespuesta(new Date());
         observDB.setAceptada(Boolean.TRUE);
         observDB.setMotivo(observacion.getMotivo());
+        observDB.setPersonasabordadas(observacion.getPersonasabordadas());
+        observDB.setPersonasobservadas(observacion.getPersonasobservadas());
         
         return super.edit(observDB); //To change body of generated methods, choose Tools | Templates.
     }
