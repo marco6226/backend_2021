@@ -117,22 +117,9 @@ public class ObservacionREST extends ServiceREST {
     @Path("denegar")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response denegarObservacion(Observacion observacion) {
-//        EmailFacade emailFacade = new EmailFacade();
         try {
             observacion.setUsuarioRevisa(super.getUsuarioRequestContext());
             observacion = observacionFacade.denegarObservacion(observacion);
-            
-//        Map<String, String> parametros = new HashMap<>();
-//        parmetros.put("P{email_usuario}", "javaal0604@gmail.com");
-//        parametros.put("P{direccion_ip}", "127.0.0.1");
-//        parametros.put("P{fecha_hora}", Util.SIMPLE_DATE_FORMAT_ISO.format(new Date(2020, 12, 11)));
-//        parametros.put("P{cliente}", "Mozilla/5.0 (X11; Fedora; Linux) Gecko/20100101 Firefox/64.0");
-        
-//        emailFacade.sendEmail("HOLA", "DENEGADA LA OBSSRVACION", "javaal0604@gmail.com");
-            
-
-//            Usuario usuario = usuarioFacade.enviarCorreo(email.trim().toLowerCase(), responsable, nombre, id, FechaProyectada);
-             
             return Response.ok(observacion).build();
         } catch (Exception ex) {
             return Util.manageException(ex, TareaDesviacionREST.class);

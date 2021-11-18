@@ -134,6 +134,12 @@ public class DirectorioFacade extends AbstractFacade<Directorio> {
              
     }
      
+     public void update(Integer documentoId, Integer  modParam, Integer version) throws Exception {
+        
+        this.ListaInspeccionFacade.actualizarImagen(documentoId, modParam, version);
+             
+    }
+     
      public void create(Integer documentoId, Integer  paramId, String modulo) throws Exception {
         
          switch(modulo){

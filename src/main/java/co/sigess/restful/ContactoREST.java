@@ -34,7 +34,7 @@ public class ContactoREST {
             String nombres = map.get("nombres");
             String email = map.get("email");
             String msg = nombres + " escribió: " + map.get("mensaje");
-            emailFacade.sendEmail(msg, "[CONTACTO] " + email, "javaal0604@gmail.com");
+            emailFacade.sendEmail(msg, "[CONTACTO] " + email, "soporte@sigess.app");
             return Response.ok().build();
         } catch (Exception ex) {
             return Util.manageException(ex, ContactoREST.class);

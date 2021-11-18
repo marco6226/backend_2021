@@ -142,11 +142,11 @@ public class ObservacionFacade extends AbstractFacade<Observacion> {
             // throw new UserMessageException("SOLICITUD NO PERMITIDA", "El estado del usuario no permite la operación", TipoMensaje.warn);
             // }
 
-            Empleado responsable = findEmpleadoById(idResponsable);
-            String responsables = responsable.getPrimerNombre() + " " + responsable.getPrimerApellido();
+             List<Empleado> empleado = findEmpleadoById(idResponsable);
+            String responsable  = empleado.get(0).getPrimerNombre()+" " + empleado.get(0).getPrimerApellido();
             String fechaproyectadas = fechaproyectada.toString();
 
-            System.out.println(responsables);
+        //    System.out.println(responsables);
 
             DateTimeFormatter f = DateTimeFormatter.ofPattern("E MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
 
@@ -160,7 +160,7 @@ public class ObservacionFacade extends AbstractFacade<Observacion> {
             Map<String, String> parametros = new HashMap<>();
             parametros.put(EmailFacade.PARAM_MENSAJE, "OBSERVACION DENEGADA");
             parametros.put(EmailFacade.PARAM_ACTIVIDAD, nombre);
-            parametros.put(EmailFacade.PARAM_RESPONSABLE, responsables);
+            parametros.put(EmailFacade.PARAM_RESPONSABLE, responsable);
             parametros.put(EmailFacade.PARAM_MOTIVO, motivo);
             if (id != null) {
                 parametros.put(EmailFacade.PARAM_ID, id.toString());
@@ -171,26 +171,14 @@ public class ObservacionFacade extends AbstractFacade<Observacion> {
         return observacion;
     }
 
-    // public List<Observacion> findAllByUsuarioEmpresa(Integer usuarioId, Integer empresaId) {
-    // Empleado empleado = empleadoFacade.findByUsuario(usuarioId);
-    // if (empleado == null) {
-    // return this.findAllByEmpresa(empresaId);
-    // } else {
-    // return this.findAllByArea(empleado.getArea().getId());
-    // }
-    // }
 
-    public Empleado findEmpleadoById(Integer idUser) {
-        // String consulta = "SELECT DISTINCT u FROM Usuario u JOIN u.usuarioEmpresaList ue WHERE ue.empresa.id = ?1";
-        String consulta = "SELECT * FROM emp.empleado WHERE fk_usuario_id = ?1";
-        Query query = this.em.createQuery(consulta);
-        query.setParameter(1, idUser);
-        List<Empleado> list = (List<Empleado>) query.getResultList();
-        System.out.println("EMPLEADO: " + list.get(0).getPrimerNombre());
-        return list.get(0);
-        // Empleado empleado = new Empleado();
-        // empleado = em.find(Empleado.class, idUser);
-        // return empleado;
+    
+    public List<Empleado> findEmpleadoById(Integer idUser) {
+
+        Query q = this.em.createNativeQuery("SELECT e.* FROM emp.empleado e WHERE fk_usuario_id = ?1",Empleado.class);   
+        q.setParameter(1, idUser);
+        List<Empleado> list = (List<Empleado>) q.getResultList();   
+        return list;     
     }
 
     @Override
