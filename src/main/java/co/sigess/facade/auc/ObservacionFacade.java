@@ -131,7 +131,7 @@ public class ObservacionFacade extends AbstractFacade<Observacion> {
         return super.edit(observDB); // To change body of generated methods, choose Tools | Templates.
     }
 
-    public Observacion enviarCorreo(String email, Integer idResponsable, String nombre, Long id, Date fechaproyectada throws Exception {
+    public Observacion enviarCorreo(String email, Integer idResponsable, String nombre, Long id, Date fechaproyectada) throws Exception {
 
         Observacion observacion = this.find(id);
         if (observacion != null) {
