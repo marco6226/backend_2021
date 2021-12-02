@@ -87,6 +87,10 @@ public class Directorio implements Serializable {
     @JoinColumn(name = "fk_directorio_padre_id", referencedColumnName = "id")
     @ManyToOne
     private Directorio directorioPadre;
+    
+    @Size(max = 255, message = "Máximo 255 caracteres para el campo nivel de  Acceso")
+    @Column(name = "nivel_acceso")
+    private String nivelAcceso;
 
     @JsonIgnore
     @OneToMany(mappedBy = "directorio")
@@ -171,6 +175,14 @@ public class Directorio implements Serializable {
     @JsonProperty(value = "directorioPadre")
     public void setDirectorioPadre(Directorio directorioPadre) {
         this.directorioPadre = directorioPadre;
+    }
+
+    public String getNivelAcceso() {
+        return nivelAcceso;
+    }
+
+    public void setNivelAcceso(String nivelAcceso) {
+        this.nivelAcceso = nivelAcceso;
     }
 
     public boolean getEsDocumento() {

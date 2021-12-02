@@ -279,5 +279,5 @@ public class ListaInspeccionFacade extends AbstractFacade<ListaInspeccion> {
         query.setParameter(3, id_version);
         query.executeUpdate();
     }
-
+     
 }
