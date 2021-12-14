@@ -63,6 +63,10 @@ public class ElementoInspeccion implements Serializable {
     @Column(name = "descripcion")
     private String descripcion;
     
+    @Size(max = 512)
+    @Column(name = "criticidad")
+    private String criticidad;
+    
     @Column(name = "calificable")
     private boolean calificable;
     
@@ -126,6 +130,14 @@ public class ElementoInspeccion implements Serializable {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+    
+    public String getCriticidad() {
+        return criticidad;
+    }
+
+    public void setCriticidad(String criticidad) {
+        this.criticidad = criticidad;
     }
 
     public List<ElementoInspeccion> getElementoInspeccionList() {
