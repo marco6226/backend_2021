@@ -5,7 +5,6 @@
  */
 package co.sigess.entities.inp;
 
-import co.sigess.entities.auc.Implicacion;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;

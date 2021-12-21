@@ -62,6 +62,9 @@ public class Area implements Serializable {
     @Column(name = "estructura", updatable = false)
     private String estructura;
     
+      @Column(name = "contacto_area", updatable = false)
+    private String contacto;
+    
     @Column(name = "nivel")
     private Short nivel;
         
@@ -185,6 +188,20 @@ public class Area implements Serializable {
     @Override
     public String toString() {
         return "co.sigess.entities.empArea[ id=" + id + " ]";
+    }
+
+    /**
+     * @return the contacto
+     */
+    public String getContacto() {
+        return contacto;
+    }
+
+    /**
+     * @param contacto the contacto to set
+     */
+    public void setContacto(String contacto) {
+        this.contacto = contacto;
     }
     
 }

@@ -76,7 +76,7 @@ public class AuthorizationFacade {
         if (map == null || (Boolean) map.get("req_update")) {
             Mensaje msg = new Mensaje(
                     "La versión de la app no es compatible",
-                    "Por favor asegurese de actualizar a la versión mas reciente",
+                    "Por favor asegurese de actualizar a la versión mas reciente.",
                     TipoMensaje.warn, Mensaje.COD_VERSION_APP_NO_COMPATIBLE
             );
             Map<String, String> msgData = new HashMap<>();
@@ -88,18 +88,19 @@ public class AuthorizationFacade {
 
         String tParam = requestContext.getHeaderString(UtilSecurity.TOKEN_NAME);
         if (tParam == null) {
-            Mensaje msg = new Mensaje("ACCESO DENEGADO", "Token proporcionado no es válido", TipoMensaje.error, Mensaje.COD_TOKEN_NO_VALIDO);
+            Mensaje msg = new Mensaje("ACCESO DENEGADO", "Token proporcionado no es válido.", TipoMensaje.error, Mensaje.COD_TOKEN_NO_VALIDO);
             return Response.status(Response.Status.FORBIDDEN).entity(msg).build();
         }
         String[] paramArr = tParam.split(" ");
         if (paramArr.length != 2) {
-            Mensaje msg = new Mensaje("ACCESO DENEGADO", "Token proporcionado no es válido", TipoMensaje.error, Mensaje.COD_TOKEN_NO_VALIDO);
+            Mensaje msg = new Mensaje("ACCESO DENEGADO", "Token proporcionado no es válido..", TipoMensaje.error, Mensaje.COD_TOKEN_NO_VALIDO);
+            
             return Response.status(Response.Status.FORBIDDEN).entity(msg).build();
         }
 
         String token = paramArr[1];
         if (token == null || token.isEmpty()) {
-            Mensaje msg = new Mensaje("ACCESO DENEGADO", "Token proporcionado no es válido", TipoMensaje.error, Mensaje.COD_TOKEN_NO_VALIDO);
+            Mensaje msg = new Mensaje("ACCESO DENEGADO", "Token proporcionado no es válido...", TipoMensaje.error, Mensaje.COD_TOKEN_NO_VALIDO);
             return Response.status(Response.Status.FORBIDDEN).entity(msg).build();
         }
 
@@ -294,7 +295,7 @@ public class AuthorizationFacade {
             Mensaje msg = new Mensaje("ACCESO DENEGADO", "No tiene asignado el permiso \"" + nombreRecurso + "\" [" + codigoRecurso + "]", TipoMensaje.warn, Mensaje.COD_PERMISOS_INSUFICIENTES);
             return Response.status(Response.Status.FORBIDDEN).entity(msg).build();
         } else {
-            Mensaje msg = new Mensaje("ACCESO DENEGADO", "Token proporcionado no es válido", TipoMensaje.error, Mensaje.COD_TOKEN_NO_VALIDO);
+            Mensaje msg = new Mensaje("ACCESO DENEGADO", "Token proporcionado no es válido....", TipoMensaje.error, Mensaje.COD_TOKEN_NO_VALIDO);
             return Response.status(Response.Status.FORBIDDEN).entity(msg).build();
         }
     }

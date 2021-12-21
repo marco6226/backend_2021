@@ -135,7 +135,7 @@ public class Empleado implements Serializable {
     @Column(name = "telefono2")
     private String telefono2;
 
-    @Size(max = 45)
+    @Size(max = 255)
     @Column(name = "direccion_gerencia")
     private String direccionGerencia;
 
