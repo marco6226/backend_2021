@@ -136,7 +136,9 @@ public class ListaInspeccionREST extends ServiceREST {
             }
             else if
                     (actualizarVersion == null || actualizarVersion.equals(Boolean.FALSE)) {
-                listaInspeccion = listaInspeccionFacade.edit(listaInspeccion);
+//                    listaInspeccion = listaInspeccionFacade.edit(listaInspeccion);
+                    res = listaInspeccionFacade.editEstado(listaInspeccion);
+                    return Response.ok(res).build();
             } 
             else {
                 listaInspeccion = listaInspeccionFacade.actualizarVersion(listaInspeccion);
