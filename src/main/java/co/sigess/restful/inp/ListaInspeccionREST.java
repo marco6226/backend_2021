@@ -136,12 +136,16 @@ public class ListaInspeccionREST extends ServiceREST {
             }
             else if
                     (actualizarVersion == null || actualizarVersion.equals(Boolean.FALSE)) {
-//                    listaInspeccion = listaInspeccionFacade.edit(listaInspeccion);
-                    res = listaInspeccionFacade.editEstado(listaInspeccion);
-                    return Response.ok(res).build();
+                    if(listaInspeccion.getEstado().equals("inactivo")){
+                        listaInspeccion = listaInspeccionFacade.editarForzado(listaInspeccion);
+                    }else{
+                        listaInspeccion = listaInspeccionFacade.edit(listaInspeccion);
+                    }
+                    
             } 
             else {
                 listaInspeccion = listaInspeccionFacade.actualizarVersion(listaInspeccion);
+                
             }
             return Response.ok(listaInspeccion).build();
         } catch (Exception ex) {

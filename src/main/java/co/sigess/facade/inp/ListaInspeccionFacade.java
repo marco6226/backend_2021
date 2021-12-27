@@ -96,13 +96,16 @@ public class ListaInspeccionFacade extends AbstractFacade<ListaInspeccion> {
         }
         
         ListaInspeccion listInpDB = this.find(listInp.getListaInspeccionPK());
+        if(listInp.getEstado().equals("inactivo")){
             if (listInpDB.getProgramacionList() != null && !listInpDB.getProgramacionList().isEmpty()) {
                 listInpDB.getProgramacionList().stream().filter((programacion) -> (programacion.getInspeccionList() != null && !programacion.getInspeccionList().isEmpty())).forEachOrdered((_item) -> {
                     throw new UserMessageException("No es posible modificar la lista de inspección", "Existen inspecciones realizadas con la lista que intenta modificar", TipoMensaje.warn);
                 });
             }
-
-            elementoInspeccionFacade.removeElementosInspeccion(listInpDB);
+        }
+        
+         
+        elementoInspeccionFacade.removeElementosInspeccion(listInpDB);
         opcionCalificacionFacade.removeOpcionesCalificacion(listInpDB);
         formularioFacade.edit(listInp.getFormulario());
 
@@ -113,6 +116,36 @@ public class ListaInspeccionFacade extends AbstractFacade<ListaInspeccion> {
             opcionCalificacion.setListaInspeccion(listInp);
             opcionCalificacionFacade.create(opcionCalificacion);
         }
+
+        listInp = super.edit(listInp);
+
+        return listInp;
+    }
+    
+    public ListaInspeccion editarForzado(ListaInspeccion listInp) throws Exception {
+        if (listInp.getListaInspeccionPK() == null) {
+            throw new IllegalArgumentException("La lista de inspección a actualizar no cuenta con un id válido");
+        }
+        
+        ListaInspeccion listInpDB = this.find(listInp.getListaInspeccionPK());
+//            if (listInpDB.getProgramacionList() != null && !listInpDB.getProgramacionList().isEmpty()) {
+//                listInpDB.getProgramacionList().stream().filter((programacion) -> (programacion.getInspeccionList() != null && !programacion.getInspeccionList().isEmpty())).forEachOrdered((_item) -> {
+//                    throw new UserMessageException("No es posible modificar la lista de inspección", "Existen inspecciones realizadas con la lista que intenta modificar", TipoMensaje.warn);
+//                });
+//        }
+        
+//        opcionCalificacionFacade.removeOpcionesCalificacion(listInpDB);
+//        elementoInspeccionFacade.removeElementosInspeccion(listInpDB);
+//        
+//        formularioFacade.edit(listInp.getFormulario());
+//
+//        Integer numeroPreguntas = elementoInspeccionFacade.createElementosInspeccion(listInp);
+//        listInp.setNumeroPreguntas(numeroPreguntas);
+//
+//        for (OpcionCalificacion opcionCalificacion : listInp.getOpcionCalificacionList()) {
+//            opcionCalificacion.setListaInspeccion(listInp);
+//            opcionCalificacionFacade.create(opcionCalificacion);
+//        }
 
         listInp = super.edit(listInp);
 
@@ -139,14 +172,15 @@ public class ListaInspeccionFacade extends AbstractFacade<ListaInspeccion> {
             throw new IllegalArgumentException("La lista de inspección a actualizar no cuenta con un id válido");
         }
 
-             System.out.print(listInp.getFkPerfilId() + " " + listInp.getListaInspeccionPK().getId());
-             Query query = this.em.createNativeQuery("UPDATE inp.lista_inspeccion SET  estado = ? where id = ? ;");
-             System.out.println("ESTADO: " + listInp.getEstado());
-             query.setParameter(1, listInp.getEstado());
-             query.setParameter(2, listInp.getListaInspeccionPK().getId());
-                
-              int res = query.executeUpdate();
+            System.out.print(listInp.getFkPerfilId() + " " + listInp.getListaInspeccionPK().getId());
+            Query query = this.em.createNativeQuery("UPDATE inp.lista_inspeccion SET  estado = 'inactivo' where id = ? AND version = ?;");
+            System.out.println("ESTADO: " + listInp.getEstado());
+            query.setParameter(1, listInp.getListaInspeccionPK().getId());
+            query.setParameter(2, listInp.getListaInspeccionPK().getVersion());
+            int res = query.executeUpdate();
 
+            
+            
         return res;
     }
 
@@ -155,12 +189,15 @@ public class ListaInspeccionFacade extends AbstractFacade<ListaInspeccion> {
         if (listaInspeccion.getListaInspeccionPK() == null) {
             throw new IllegalArgumentException("La lista de inspección a actualizar no cuenta con un id válido");
         }
+        
+        editEstado(listaInspeccion);
         listaInspeccion.getListaInspeccionPK().setVersion(listaInspeccion.getListaInspeccionPK().getVersion() + 1);
         listaInspeccion.getFormulario().setId(null);
         listaInspeccion.getFormulario().getCampoList().forEach(campo -> campo.setId(null));
         listaInspeccion.getOpcionCalificacionList().forEach((opc) -> opc.setId(null));
         listaInspeccion.setProgramacionList(null);
         this.reiniciarId(listaInspeccion.getElementoInspeccionList());
+        
 
         return this.create(listaInspeccion);
     }
