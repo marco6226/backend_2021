@@ -15,6 +15,7 @@ import co.sigess.entities.inp.Programacion;
 import co.sigess.exceptions.UserMessageException;
 import co.sigess.facade.com.AbstractFacade;
 import co.sigess.facade.conf.RespuestaCampoFacade;
+import co.sigess.facade.core.EmailFacade;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Date;
@@ -24,6 +25,9 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import java.util.HashMap;
+import co.sigess.facade.core.TipoMail;
+import java.util.Map;
 
 /**
  *
@@ -40,6 +44,9 @@ public class InspeccionFacade extends AbstractFacade<Inspeccion> {
 
     @EJB
     private RespuestaCampoFacade respuestaCampoFacade;
+    
+    @EJB
+    private EmailFacade emailFacade;
 
     @PersistenceContext(unitName = "SIGESS_PU")
     private EntityManager em;
@@ -192,7 +199,7 @@ public class InspeccionFacade extends AbstractFacade<Inspeccion> {
             }
             this.calificacionFacade.edit(calificacion);
         }
-
+ // List<String> lines =  inspDB.getCalificacionList());
         return super.edit(inspDB); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -202,6 +209,44 @@ public class InspeccionFacade extends AbstractFacade<Inspeccion> {
         query.setParameter(1, empresaId);
         List<Inspeccion> list = (List<Inspeccion>) query.getResultList();
         return list;
+    }
+    public void enviarCorreoCriticos(String email, String[]hallazgos) throws Exception {
+
+       // Observacion observacion = this.find(id);
+        if (hallazgos != null) {
+            // switch (user.getEstado()) {
+            // case BLOQUEADO:
+            // case ELIMINADO:
+            // case INACTIVO:
+            // throw new UserMessageException("SOLICITUD NO PERMITIDA", "El estado del usuario no permite la operación", TipoMensaje.warn);
+            // }
+
+           //  List<Empleado> empleado = findEmpleadoById(idResponsable);
+          //  String responsable  = empleado.get(0).getPrimerNombre()+" " + empleado.get(0).getPrimerApellido();
+           // String fechaproyectadas = fechaproyectada.toString();
+
+        //    System.out.println(responsables);
+
+      //     DateTimeFormatter f = DateTimeFormatter.ofPattern("E MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
+
+         //   ZonedDateTime zdt = ZonedDateTime.parse(fechaproyectadas, f);
+
+         //   LocalDate ld = zdt.toLocalDate();
+          //  DateTimeFormatter fLocalDate = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+         //   String output = ld.format(fLocalDate);
+         //   String motivo = observacion.getMotivo();
+         
+
+            Map<String, String> parametros = new HashMap<>();
+            parametros.put(EmailFacade.PARAM_MENSAJE, "OBSERVACION DENEGADA");
+            parametros.put(EmailFacade.PARAM_ACTIVIDAD, hallazgos.toString());
+            parametros.put(EmailFacade.PARAM_RESPONSABLE, email);
+            parametros.put(EmailFacade.PARAM_MOTIVO, email);
+            
+            parametros.put(EmailFacade.PARAM_FECHA_PROY, new Date().toString() );
+            emailFacade.sendEmail(parametros, TipoMail.OBSERVACION_DENEGADA, "no cumple criticos", email);
+        }
+        
     }
 
     public ByteArrayOutputStream consultarConsolidado(Integer empresaId, Date desde, Date hasta, Integer listaId, Integer listaVersion) throws IOException {

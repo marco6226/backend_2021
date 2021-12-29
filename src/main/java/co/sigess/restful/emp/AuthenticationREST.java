@@ -6,6 +6,7 @@
 package co.sigess.restful.emp;
 
 import co.sigess.entities.auc.Observacion;
+import co.sigess.entities.inp.Inspeccion;
 import co.sigess.entities.com.ApiVersion;
 import co.sigess.entities.com.Mensaje;
 import co.sigess.entities.com.TipoMensaje;
@@ -20,6 +21,7 @@ import co.sigess.entities.sec.TareaDesviacion;
 import co.sigess.facade.auc.ObservacionFacade;
 import co.sigess.facade.core.EmailFacade;
 import co.sigess.facade.sec.TareaDesviacionFacade;
+import co.sigess.facade.inp.InspeccionFacade;
 import co.sigess.restful.security.Auditable;
 import co.sigess.restful.security.RollBackResponse;
 import co.sigess.restful.security.UtilSecurity;
@@ -65,6 +67,9 @@ public class AuthenticationREST {
     
     @EJB
     private ObservacionFacade observacionFacade;
+    
+    @EJB
+    private InspeccionFacade inspeccionFacade;
     
     @EJB
     private TokenFacade tokenFacade;
@@ -330,7 +335,24 @@ public class AuthenticationREST {
                 
                 
                 observacion = observacionFacade.enviarCorreo(email.trim().toLowerCase(), idResponsable, nombre, id, fechaRechazo);
-//                observacion = observacionFacade.enviarCorreo(email.trim().toLowerCase(),responsable,nombre,id,fechaRechazo);
+//             
+            }
+            return Response.ok(new Mensaje("Tarea", "Se le ha enviado un correo al responsable", TipoMensaje.success)).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, AuthenticationREST.class);
+        }
+    }
+    @POST
+    @Path("enviarHallazgosCriticos/{email}")
+    public Response enviarHallazgosCriticos(@PathParam("email") String email,   String[] hallazgos) {
+        try {
+            if (email != null) {
+                
+                
+               
+                
+            inspeccionFacade.enviarCorreoCriticos(email.trim().toLowerCase(), hallazgos);
+//             
             }
             return Response.ok(new Mensaje("Tarea", "Se le ha enviado un correo al responsable", TipoMensaje.success)).build();
         } catch (Exception ex) {
