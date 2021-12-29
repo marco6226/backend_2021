@@ -96,12 +96,10 @@ public class ListaInspeccionFacade extends AbstractFacade<ListaInspeccion> {
         }
         
         ListaInspeccion listInpDB = this.find(listInp.getListaInspeccionPK());
-        if(listInp.getEstado().equals("inactivo")){
-            if (listInpDB.getProgramacionList() != null && !listInpDB.getProgramacionList().isEmpty()) {
-                listInpDB.getProgramacionList().stream().filter((programacion) -> (programacion.getInspeccionList() != null && !programacion.getInspeccionList().isEmpty())).forEachOrdered((_item) -> {
-                    throw new UserMessageException("No es posible modificar la lista de inspección", "Existen inspecciones realizadas con la lista que intenta modificar", TipoMensaje.warn);
-                });
-            }
+        if (listInpDB.getProgramacionList() != null && !listInpDB.getProgramacionList().isEmpty()) {
+            listInpDB.getProgramacionList().stream().filter((programacion) -> (programacion.getInspeccionList() != null && !programacion.getInspeccionList().isEmpty())).forEachOrdered((_item) -> {
+                throw new UserMessageException("No es posible modificar la lista de inspección", "Existen inspecciones realizadas con la lista que intenta modificar", TipoMensaje.warn);
+            });
         }
         
          
