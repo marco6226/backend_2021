@@ -57,7 +57,7 @@ public class Inspeccion implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "inspeccion_id_seq")
     @Basic(optional = false)
     @Column(name = "id")
-    private Long id;
+    public Long id;
 
     @Column(name = "fecha_realizada")
     @Temporal(TemporalType.TIMESTAMP)

@@ -13,6 +13,7 @@ import co.sigess.entities.com.TipoMensaje;
 import co.sigess.entities.emp.Empleado;
 import co.sigess.entities.emp.TokenActivo;
 import co.sigess.entities.emp.Usuario;
+import co.sigess.entities.inp.ElementoInspeccion;
 import co.sigess.exceptions.UserMessageException;
 import co.sigess.facade.core.LoaderFacade;
 import co.sigess.facade.emp.TokenFacade;
@@ -32,6 +33,7 @@ import io.jsonwebtoken.SignatureException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import java.util.Calendar;
 import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,6 +52,10 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import jdk.nashorn.internal.runtime.JSONFunctions;
+import org.glassfish.jersey.media.multipart.FormDataParam;
+        import javax.ws.rs.*;
+
+import javax.ws.rs.core.*;
 
 /**
  * REST Web Service
@@ -343,18 +349,14 @@ public class AuthenticationREST {
         }
     }
     @POST
-    @Path("enviarHallazgosCriticos/{email}")
-    public Response enviarHallazgosCriticos(@PathParam("email") String email,   String[] hallazgos) {
+    @Path("enviarHallazgosCriticos/{id}")    
+    public Response enviarHallazgosCriticos(@PathParam("id")  String id, List<ElementoInspeccion> elementosList ) {
         try {
-            if (email != null) {
-                
-                
-               
-                
-            inspeccionFacade.enviarCorreoCriticos(email.trim().toLowerCase(), hallazgos);
-//             
+            if (id != null) {   
+             inspeccionFacade.enviarCorreoCriticos(Long.parseLong(id), elementosList);
+           
             }
-            return Response.ok(new Mensaje("Tarea", "Se le ha enviado un correo al responsable", TipoMensaje.success)).build();
+            return Response.ok(new Mensaje("Inspeccion", "Se le ha enviado un correo de los hallazgos criticos al responsable", TipoMensaje.success)).build();
         } catch (Exception ex) {
             return Util.manageException(ex, AuthenticationREST.class);
         }

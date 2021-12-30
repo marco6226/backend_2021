@@ -17,6 +17,7 @@ public enum Recursos {
     PLANTILLA_MAIL_CREACION_USUARIO("/mail/templates/PlantillaCreacionUsuario.html"),
     PLANTILLA_MAIL_NOT_NEW("/mail/templates/PlantillaNotificacionNueva.html"),
     PLANTILLA_MAIL_OBSERVACION_DENEGADA("/mail/templates/PlantillaObservacionDenegada.html"),
+    PLANTILLA_MAIL_RIESGOS_CRITICOS("/mail/templates/PlantillaNocumplecriticos.html"),
     
     SMS_INTEGRACION_PROPERTIES("/sms/integracion.properties");
     

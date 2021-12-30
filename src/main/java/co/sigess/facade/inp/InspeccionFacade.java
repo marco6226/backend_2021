@@ -11,6 +11,7 @@ import co.sigess.entities.conf.RespuestaCampo;
 import co.sigess.entities.inp.Calificacion;
 import co.sigess.entities.inp.Inspeccion;
 import co.sigess.entities.inp.ListaInspeccion;
+import co.sigess.entities.inp.ElementoInspeccion;
 import co.sigess.entities.inp.Programacion;
 import co.sigess.exceptions.UserMessageException;
 import co.sigess.facade.com.AbstractFacade;
@@ -28,6 +29,10 @@ import javax.persistence.Query;
 import java.util.HashMap;
 import co.sigess.facade.core.TipoMail;
 import java.util.Map;
+import java.time.format.DateTimeFormatter;
+import java.time.LocalDate;
+import java.time.ZonedDateTime;
+import java.util.Locale;
 
 /**
  *
@@ -210,41 +215,48 @@ public class InspeccionFacade extends AbstractFacade<Inspeccion> {
         List<Inspeccion> list = (List<Inspeccion>) query.getResultList();
         return list;
     }
-    public void enviarCorreoCriticos(String email, String[]hallazgos) throws Exception {
+    public void enviarCorreoCriticos(Long id, List<ElementoInspeccion> elementosList) throws Exception {
 
        // Observacion observacion = this.find(id);
-        if (hallazgos != null) {
+        if (elementosList != null) {
             // switch (user.getEstado()) {
             // case BLOQUEADO:
             // case ELIMINADO:
             // case INACTIVO:
             // throw new UserMessageException("SOLICITUD NO PERMITIDA", "El estado del usuario no permite la operación", TipoMensaje.warn);
             // }
+Inspeccion inspeccion =  this.find(id);
+
 
            //  List<Empleado> empleado = findEmpleadoById(idResponsable);
           //  String responsable  = empleado.get(0).getPrimerNombre()+" " + empleado.get(0).getPrimerApellido();
-           // String fechaproyectadas = fechaproyectada.toString();
+            String fecharealizada =  inspeccion.getFechaRealizada().toString();
 
         //    System.out.println(responsables);
 
-      //     DateTimeFormatter f = DateTimeFormatter.ofPattern("E MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
+          //Tue Dec 28 23:03:45 COT 2021
+          
+         // DateTimeFormatter f = DateTimeFormatter.ofPattern("EE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
+         // DateTimeFormatter f = DateTimeFormatter.ofPattern("EEEE, MMM d, yyyy hh:mm:ss a", Locale.US);
 
-         //   ZonedDateTime zdt = ZonedDateTime.parse(fechaproyectadas, f);
+         // ZonedDateTime zdt = ZonedDateTime.parse(fecharealizada, f);
 
          //   LocalDate ld = zdt.toLocalDate();
-          //  DateTimeFormatter fLocalDate = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-         //   String output = ld.format(fLocalDate);
-         //   String motivo = observacion.getMotivo();
+          //  DateTimeFormatter fLocalDate = DateTimeFormatter.ofPattern("dd MM yyyy HH:mm");
+         //  String output = ld.format(fLocalDate);
+         
          
 
             Map<String, String> parametros = new HashMap<>();
-            parametros.put(EmailFacade.PARAM_MENSAJE, "OBSERVACION DENEGADA");
-            parametros.put(EmailFacade.PARAM_ACTIVIDAD, hallazgos.toString());
-            parametros.put(EmailFacade.PARAM_RESPONSABLE, email);
-            parametros.put(EmailFacade.PARAM_MOTIVO, email);
-            
-            parametros.put(EmailFacade.PARAM_FECHA_PROY, new Date().toString() );
-            emailFacade.sendEmail(parametros, TipoMail.OBSERVACION_DENEGADA, "no cumple criticos", email);
+            parametros.put(EmailFacade.PARAM_MENSAJE, "HALLAZGO CRITICO");
+            parametros.put(EmailFacade.PARAM_ID, "INP-" + inspeccion.id.toString());           
+            parametros.put(EmailFacade.PARAM_RESPONSABLE, inspeccion.getArea().getContacto());
+            parametros.put(EmailFacade.PARAM_FECHA_REALIZADA, fecharealizada);
+            parametros.put(EmailFacade.PARAM_NOMBRE_INSPECCION, inspeccion.getListaInspeccion().getNombre());
+            parametros.put(EmailFacade.PARAM_RIESGO_CRITICO, elementosList.get(0).getCodigo()+ " " + elementosList.get(0).getNombre());
+            parametros.put(EmailFacade.PARAM_CRITICIDAD, elementosList.get(0).getCriticidad());
+            parametros.put(EmailFacade.PARAM_AREA, inspeccion.getArea().getNombre() );
+            emailFacade.sendEmail(parametros, TipoMail.RIESGOS_CRITICOS, "Hallazgos criticos", inspeccion.getArea().getContacto());
         }
         
     }

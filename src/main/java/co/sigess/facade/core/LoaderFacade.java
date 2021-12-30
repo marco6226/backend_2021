@@ -40,6 +40,7 @@ public class LoaderFacade {
     private String plantillaMailCreacionUsuario;
     private String PlantillaMailNotificacionNueva;
     private String PlantillaMailObservacionDenegada;
+    private String PlantillaMailRiesgosCriticos;
 
     private ApiVersion apiVersion;
     private Properties smsProp;
@@ -138,7 +139,7 @@ public class LoaderFacade {
                 String ruta = getClass().getResource(Recursos.PLANTILLA_MAIL_OBSERVACION_DENEGADA.getRuta()).getPath();
                 int y = ruta.length(); 
                String x  = isWindows(ruta,y);
-                System.out.println(x + "añsdkasñldsadasd");
+                System.out.println(x + "observacion");
                 this.PlantillaMailObservacionDenegada = new String(Files.readAllBytes(Paths.get(x)));               
             } catch (IOException ex) {
                 Logger.getLogger(LoaderFacade.class.getName()).log(Level.SEVERE, null, ex);
@@ -146,6 +147,22 @@ public class LoaderFacade {
             }
         }
         return PlantillaMailObservacionDenegada;
+    }
+    
+    public String getPlantillaMailRiesgosCriticos(){
+        if (this.PlantillaMailRiesgosCriticos == null) {
+            try {
+                String ruta = getClass().getResource(Recursos.PLANTILLA_MAIL_RIESGOS_CRITICOS.getRuta()).getPath();
+                int y = ruta.length(); 
+               String x  = isWindows(ruta,y);
+                System.out.println(x + "riesgos");
+                this.PlantillaMailRiesgosCriticos = new String(Files.readAllBytes(Paths.get(x)));               
+            } catch (IOException ex) {
+                Logger.getLogger(LoaderFacade.class.getName()).log(Level.SEVERE, null, ex);
+                throw new IllegalArgumentException("No se ha podido inicializar correctamente la plantilla PLANTILLA_MAIL_RIESGOS_CRITICOS");
+            }
+        }
+        return PlantillaMailRiesgosCriticos;
     }
 
     public ApiVersion getApiVersion() {

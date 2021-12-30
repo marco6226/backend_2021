@@ -31,8 +31,15 @@ public class EmailFacade {
     public static final String PARAM_ACTIVIDAD = "P{actividad}";
     public static final String PARAM_ID = "P{id}";
     public static final String PARAM_FECHA_PROY = "P{fechaproyectada}";
+    public static final String PARAM_FECHA_ENVIO = "P{fechaenvio}";
     public static final String PARAM_RESPONSABLE = "P{responsables}";
+    public static final String PARAM_FECHA_REALIZADA = "P{fecharealizada}";
     public static final String PARAM_MOTIVO = "P{motivo}";
+    public static final String PARAM_RIESGO_CRITICO = "P{riesgo}";
+    public static final String PARAM_NOMBRE_INSPECCION = "P{nombreinspeccion}";
+    public static final String PARAM_CRITICIDAD = "P{criticidad}";
+    public static final String PARAM_AREA = "P{area}";
+    
     @EJB
     private LoaderFacade loaderFacade;
 
@@ -41,10 +48,10 @@ public class EmailFacade {
 
     public void sendEmail(Map<String, String> parametros, TipoMail tipoMail, String asunto, String destinatario) {
         try {
-            Message message = new MimeMessage(mailSession);
+            Message message = new MimeMessage(mailSession);            
             message.setSubject("SIGESS - " + asunto + " de " + destinatario);            	
             message.addRecipients(Message.RecipientType.BCC, InternetAddress.parse("sistema@sigess.app"));
-            message.setRecipient(Message.RecipientType.TO, new InternetAddress(destinatario));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(destinatario));
             String contenido = loaderFacade.getPlantillaMail();
             String plantilla = null;
             switch (tipoMail) {
@@ -62,6 +69,9 @@ public class EmailFacade {
                     break;
                 case OBSERVACION_DENEGADA:
                     plantilla = loaderFacade.getPlantillaMailObservacionDenegada();
+                    break;
+                case RIESGOS_CRITICOS:
+                    plantilla = loaderFacade.getPlantillaMailRiesgosCriticos();
                     break;
             }
             plantilla = replaceParameters(parametros, plantilla);
