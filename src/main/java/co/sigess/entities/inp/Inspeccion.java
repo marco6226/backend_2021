@@ -403,18 +403,20 @@ public class Inspeccion implements Serializable {
     }
 
     /**
-     * @param conceptoing the fechavistoing to set
+     * @param conceptohse the conceptohse to set
+     */
+    public void setConceptohse(String conceptohse) {
+        this.conceptohse = conceptohse;
+    }
+
+    /**
+     * @param conceptoing the conceptoing to set
      */
     public void setConceptoing(String conceptoing) {
         this.conceptoing = conceptoing;
     }
 
-    /**
-     * @param conceptohse the fechavistoing to set
-     */
-    public void setConceptohse(String conceptohse) {
-        this.conceptohse = conceptohse;
-    }
+   
 
 
 
