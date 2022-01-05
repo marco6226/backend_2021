@@ -245,6 +245,11 @@ Inspeccion inspeccion =  this.find(id);
           //  DateTimeFormatter fLocalDate = DateTimeFormatter.ofPattern("dd MM yyyy HH:mm");
          //  String output = ld.format(fLocalDate);
          
+         String critico=elementosList.get(0).getCodigo()+ " " + elementosList.get(0).getNombre() + " - Criticidad:" + elementosList.get(0).getCriticidad();            
+            for (int i = 1; i < elementosList.size(); i++) {
+             critico+= " <br> "+ elementosList.get(i).getCodigo()+ " " + elementosList.get(i).getNombre() + " - Criticidad:" + elementosList.get(i).getCriticidad(); 
+            }
+         
          
 
             Map<String, String> parametros = new HashMap<>();
@@ -253,8 +258,8 @@ Inspeccion inspeccion =  this.find(id);
             parametros.put(EmailFacade.PARAM_RESPONSABLE, inspeccion.getArea().getContacto());
             parametros.put(EmailFacade.PARAM_FECHA_REALIZADA, fecharealizada);
             parametros.put(EmailFacade.PARAM_NOMBRE_INSPECCION, inspeccion.getListaInspeccion().getNombre());
-            parametros.put(EmailFacade.PARAM_RIESGO_CRITICO, elementosList.get(0).getCodigo()+ " " + elementosList.get(0).getNombre());
-            parametros.put(EmailFacade.PARAM_CRITICIDAD, elementosList.get(0).getCriticidad());
+            parametros.put(EmailFacade.PARAM_RIESGO_CRITICO, critico);
+            //parametros.put(EmailFacade.PARAM_CRITICIDAD, elementosList.get(0).getCriticidad());
             parametros.put(EmailFacade.PARAM_AREA, inspeccion.getArea().getNombre() );
             emailFacade.sendEmail(parametros, TipoMail.RIESGOS_CRITICOS, "Hallazgos criticos", inspeccion.getArea().getContacto());
         }
