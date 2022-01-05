@@ -174,6 +174,12 @@ public class InspeccionFacade extends AbstractFacade<Inspeccion> {
             }
         }
         Inspeccion inspDB = this.find(inspeccion.getId());
+        inspDB.setConceptohse(inspeccion.getConceptohse());
+        inspDB.setConceptoing(inspeccion.getConceptoing());
+        inspDB.setFechavistohse(inspeccion.getFechavistohse());
+        inspDB.setFechavistoing(inspeccion.getFechavistoing());
+        inspDB.setEmpleadohse(inspeccion.getEmpleadohse());
+        inspDB.setEmpleadoing(inspeccion.getEmpleadoing());
         inspDB.setUsuarioModifica(inspeccion.getUsuarioModifica());
         inspDB.setFechaModificacion(new Date());
         inspDB.setDescripcion(inspeccion.getDescripcion());
