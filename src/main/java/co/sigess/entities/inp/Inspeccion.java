@@ -66,7 +66,7 @@ public class Inspeccion implements Serializable {
     @Column(name = "fecha_visto_ing")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechavistoing;
-    
+
     @Column(name = "fecha_visto_hse")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechavistohse;
@@ -102,6 +102,14 @@ public class Inspeccion implements Serializable {
     @Size(max = 512)
     @Column(name = "descripcion")
     private String descripcion;
+    
+    @Size(max = 512)
+    @Column(name = "concepto_ing")
+    private String conceptoing;
+
+    @Size(max = 512)
+    @Column(name = "concepto_hse")
+    private String conceptohse;
 
     @JoinColumn(name = "fk_empresa_id", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
@@ -353,6 +361,20 @@ public class Inspeccion implements Serializable {
     }
 
     /**
+     * @return the fechavistoing
+     */
+    public String getConceptohse() {
+        return conceptohse;
+    }
+
+    /**
+     * @return the fechavistoing
+     */
+    public String getConceptoing() {
+        return conceptoing;
+    }
+
+    /**
      * @param empleadohse the empleadohse to set
      */
     public void setEmpleadohse(Usuario empleadohse) {
@@ -379,5 +401,21 @@ public class Inspeccion implements Serializable {
     public void setFechavistoing(Date fechavistoing) {
         this.fechavistoing = fechavistoing;
     }
+
+    /**
+     * @param conceptoing the fechavistoing to set
+     */
+    public void setConceptoing(String conceptoing) {
+        this.conceptoing = conceptoing;
+    }
+
+    /**
+     * @param conceptohse the fechavistoing to set
+     */
+    public void setConceptohse(String conceptohse) {
+        this.conceptohse = conceptohse;
+    }
+
+
 
 }
