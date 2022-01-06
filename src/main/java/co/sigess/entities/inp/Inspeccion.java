@@ -7,6 +7,7 @@ package co.sigess.entities.inp;
 
 import co.sigess.entities.conf.RespuestaCampo;
 import co.sigess.entities.emp.Area;
+import co.sigess.entities.emp.Empleado;
 import co.sigess.entities.emp.Empresa;
 import co.sigess.entities.emp.Usuario;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -64,11 +65,9 @@ public class Inspeccion implements Serializable {
     private Date fechaRealizada;
     
     @Column(name = "fecha_visto_ing")
-    @Temporal(TemporalType.TIMESTAMP)
     private Date fechavistoing;
 
     @Column(name = "fecha_visto_hse")
-    @Temporal(TemporalType.TIMESTAMP)
     private Date fechavistohse;
     
     @Column(name = "fecha_modificacion")
@@ -136,13 +135,15 @@ public class Inspeccion implements Serializable {
     @ManyToOne
     private Usuario usuarioModifica;
     
-     @JoinColumn(name = "fk_empleado_ing", referencedColumnName = "id")
+    @JsonIgnoreProperties({"tipoIdentificacion"})
+    @JoinColumn(name = "fk_empleado_ing", referencedColumnName = "id")
     @ManyToOne
-    private Usuario empleadoing;
+    private Empleado empleadoing;
     
-     @JoinColumn(name = "fk_empleado_hse", referencedColumnName = "id")
+    @JsonIgnoreProperties({"tipoIdentificacion"})
+    @JoinColumn(name = "fk_empleado_hse", referencedColumnName = "id")
     @ManyToOne
-    private Usuario empleadohse;
+    private Empleado empleadohse;
      
     @JoinColumns({
         @JoinColumn(name = "fk_lista_inspeccion_id", referencedColumnName = "id")
@@ -335,14 +336,16 @@ public class Inspeccion implements Serializable {
     /**
      * @return the empleadohse
      */
-    public Usuario getEmpleadohse() {
+    
+    public Empleado getEmpleadohse() {
         return empleadohse;
     }
 
     /**
      * @return the empleadoing
      */
-    public Usuario getEmpleadoing() {
+    
+    public Empleado getEmpleadoing() {
         return empleadoing;
     }
 
@@ -376,15 +379,16 @@ public class Inspeccion implements Serializable {
 
     /**
      * @param empleadohse the empleadohse to set
-     */
-    public void setEmpleadohse(Usuario empleadohse) {
+     */    
+    public void setEmpleadohse(Empleado empleadohse) {
         this.empleadohse = empleadohse;
     }
 
     /**
      * @param empleadoing the empleadoing to set
      */
-    public void setEmpleadoing(Usuario empleadoing) {
+    
+    public void setEmpleadoing(Empleado empleadoing) {
         this.empleadoing = empleadoing;
     }
 
