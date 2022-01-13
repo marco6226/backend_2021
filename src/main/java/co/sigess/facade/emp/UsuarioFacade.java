@@ -140,6 +140,7 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
         }
         Usuario usrDB = this.findByEmail(usuario.getEmail());
         if (usrDB != null) {
+            //System.out.println("INGRESANDO SI SEÑOR");
             throw new UserMessageException(
                     "USUARIO YA REGISTRADO",
                     "El usuario que intenta registrar con el correo electrónico "
@@ -148,6 +149,7 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
                     TipoMensaje.warn
             );
         }
+        //System.out.println("SALIENDO");
         String passwd = UtilSecurity.generatePassword();
         usuario.setPassword(UtilSecurity.createEmailPasswordHash(usuario.getEmail(), UtilSecurity.toSHA256(passwd)));
         usuario.setEstado(EstadoUsuario.CAMBIO_PASSWD);
@@ -166,7 +168,8 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
         if (sendEmail) {
               emailFacade.sendEmail(parametros, TipoMail.CREACION_USUARIO, "Creación de cuenta", usuario.getEmail());
         }
-        
+        //System.out.println("TERMINANDO");
+        //System.out.println("USUARIO:" + usuario.getAsJSON());
         return usuario;
     }
 
