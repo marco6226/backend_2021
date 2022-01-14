@@ -134,7 +134,9 @@ public class EmpleadoFacade extends AbstractFacade<Empleado> {
     public List<Mensaje> createList(List<Empleado> list, Integer empresaId) throws Exception,UserMessageException {
 
         List<Mensaje> listErrors = new ArrayList<>();
+        boolean ignorarRegistro;
         for (Empleado empleado : list) {
+            ignorarRegistro = false;
             try {
                 if (empleado.getUsuario() == null) {
                     throw new IllegalArgumentException("El empleado a crear no contiene un usuario");
@@ -143,13 +145,36 @@ public class EmpleadoFacade extends AbstractFacade<Empleado> {
                     throw new IllegalArgumentException("El campo email es necesario");
                 }
               
-               
-                usuarioFacade.create(empleado.getUsuario(), empresaId,false);
-                super.create(empleado);
+                try{
+                    //System.out.println("EMPLEADO EMAIL" + empleado.getUsuario().getEmail());
+                     Usuario user = usuarioFacade.create(empleado.getUsuario(), empresaId,false);
+                     //System.out.println("USUARIO FACADE: " + user.getAsJSON());
+                }catch(Exception e){
+                    //System.out.println("INGRESA A LA EXCEPCION");
+                    if(e.getClass().equals(EJBTransactionRolledbackException.class)){
+                        Mensaje mu = new Mensaje(
+                            "ERROR: Empleado(a) " + empleado.getPrimerNombre() + " " + empleado.getPrimerApellido() + 
+                                    " (" + empleado.getUsuario().getEmail() + ") ya se encuentra registrado.", 
+                            e.getMessage(), 
+                            TipoMensaje.error
+                        );
+                        listErrors.add(mu);
+                        ignorarRegistro = true;
+                    }
+                }
+                if(!ignorarRegistro){
+                    super.create(empleado);
+                }
+                
                
             } catch (Exception e) {
                 System.out.println(e.getMessage()+"Aqui la prueba");
-                Mensaje mu = new Mensaje("Error al procesar el empleado con : " + empleado.getNumeroIdentificacion(), e.getMessage(), TipoMensaje.error);
+                Mensaje mu = new Mensaje(
+                    "Error al procesar el empleado(a) " + empleado.getPrimerNombre() + " " + empleado.getPrimerApellido() +
+                    " con identificación No. " + empleado.getNumeroIdentificacion(), 
+                    e.getMessage(), 
+                    TipoMensaje.error
+                );
                 listErrors.add(mu);
             }
         }
