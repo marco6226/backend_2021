@@ -260,7 +260,8 @@ Inspeccion inspeccion =  this.find(id);
 
             Map<String, String> parametros = new HashMap<>();
             parametros.put(EmailFacade.PARAM_MENSAJE, "HALLAZGO CRITICO");
-            parametros.put(EmailFacade.PARAM_ID, "INP-" + inspeccion.id.toString());           
+            parametros.put(EmailFacade.PARAM_ID, "INP-" + inspeccion.id.toString());
+            parametros.put(EmailFacade.PARAM_IDS, inspeccion.id.toString());           
             parametros.put(EmailFacade.PARAM_RESPONSABLE, inspeccion.getArea().getContacto());
             parametros.put(EmailFacade.PARAM_FECHA_REALIZADA, fecharealizada);
             parametros.put(EmailFacade.PARAM_NOMBRE_INSPECCION, inspeccion.getListaInspeccion().getNombre());
