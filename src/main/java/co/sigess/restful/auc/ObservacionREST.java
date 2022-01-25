@@ -126,4 +126,16 @@ public class ObservacionREST extends ServiceREST {
         }
     }
 
+@PUT
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response edit(Observacion observacion) {
+        try {
+            //observacion.setUsuarioModifica(super.getUsuarioRequestContext());
+            observacion = observacionFacade.edit(observacion);
+            return Response.ok(observacion).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, ObservacionREST.class);
+        }
+    }
+
 }

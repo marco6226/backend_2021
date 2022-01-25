@@ -206,4 +206,33 @@ public class ObservacionFacade extends AbstractFacade<Observacion> {
         super.edit(ad);
     }
 
+    @Override
+    public Observacion edit(Observacion observacion)throws Exception{
+        Observacion obsDB = this.find(observacion.getId());
+
+        if (observacion.getId() == null) {
+            throw new IllegalArgumentException("La observacion no tiene ID");
+        }
+        
+        //if(observacion!=null && observacion.getId()!=null){
+            
+            obsDB.setAfecta(observacion.getAfecta());
+            obsDB.setCausaRaizList(observacion.getCausaRaizList());
+            obsDB.setDescripcion(observacion.getDescripcion());
+            obsDB.setImplicacionList(observacion.getImplicacionList());
+            obsDB.setNivelRiesgo(observacion.getNivelRiesgo());
+            obsDB.setPersonasabordadas(observacion.getPersonasabordadas());
+            obsDB.setPersonasobservadas(observacion.getPersonasobservadas());
+            obsDB.setRecomendacion(observacion.getRecomendacion());
+            obsDB.setTipoObservacion(observacion.getTipoObservacion());
+            obsDB.setArea(observacion.getArea());
+            obsDB.setAfecta(observacion.getAfecta());
+            return super.edit(obsDB);
+        //}
+        //else{
+        //    return obsDB;
+        //}
+
+        
+    }
 }
