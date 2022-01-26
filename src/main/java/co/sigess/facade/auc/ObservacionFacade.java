@@ -143,7 +143,15 @@ public class ObservacionFacade extends AbstractFacade<Observacion> {
             // }
 
              List<Empleado> empleado = findEmpleadoById(idResponsable);
-            String responsable  = empleado.get(0).getPrimerNombre()+" " + empleado.get(0).getPrimerApellido();
+             String responsable;
+              System.out.println(empleado);
+             if (empleado.size() > 0 ){
+             responsable  = empleado.get(0).getPrimerNombre()+" " + empleado.get(0).getPrimerApellido();  
+            }
+             else 
+             {
+                  responsable = email;
+             }
             String fechaproyectadas = fechaproyectada.toString();
 
         //    System.out.println(responsables);

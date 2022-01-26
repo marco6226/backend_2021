@@ -31,6 +31,7 @@ import co.sigess.facade.core.TipoMail;
 import java.util.Map;
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.Locale;
 
@@ -231,7 +232,7 @@ public class InspeccionFacade extends AbstractFacade<Inspeccion> {
             // case INACTIVO:
             // throw new UserMessageException("SOLICITUD NO PERMITIDA", "El estado del usuario no permite la operación", TipoMensaje.warn);
             // }
-Inspeccion inspeccion =  this.find(id);
+            Inspeccion inspeccion =  this.find(id);
 
 
            //  List<Empleado> empleado = findEmpleadoById(idResponsable);
@@ -242,14 +243,14 @@ Inspeccion inspeccion =  this.find(id);
 
           //Tue Dec 28 23:03:45 COT 2021
           
-         // DateTimeFormatter f = DateTimeFormatter.ofPattern("EE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
+          DateTimeFormatter f = DateTimeFormatter.ofPattern("EE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
          // DateTimeFormatter f = DateTimeFormatter.ofPattern("EEEE, MMM d, yyyy hh:mm:ss a", Locale.US);
 
-         // ZonedDateTime zdt = ZonedDateTime.parse(fecharealizada, f);
+          ZonedDateTime zdt = ZonedDateTime.parse(fecharealizada, f);
 
-         //   LocalDate ld = zdt.toLocalDate();
-          //  DateTimeFormatter fLocalDate = DateTimeFormatter.ofPattern("dd MM yyyy HH:mm");
-         //  String output = ld.format(fLocalDate);
+          LocalDateTime ld = zdt.toLocalDateTime();
+          DateTimeFormatter fLocalDate = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm a");
+           String output = ld.format(fLocalDate);
          
          String critico=elementosList.get(0).getCodigo()+ " " + elementosList.get(0).getNombre() + " - Criticidad:" + elementosList.get(0).getCriticidad();            
             for (int i = 1; i < elementosList.size(); i++) {
@@ -263,7 +264,7 @@ Inspeccion inspeccion =  this.find(id);
             parametros.put(EmailFacade.PARAM_ID, "INP-" + inspeccion.id.toString());
             parametros.put(EmailFacade.PARAM_IDS, inspeccion.id.toString());           
             parametros.put(EmailFacade.PARAM_RESPONSABLE, inspeccion.getArea().getContacto());
-            parametros.put(EmailFacade.PARAM_FECHA_REALIZADA, fecharealizada);
+            parametros.put(EmailFacade.PARAM_FECHA_REALIZADA, output);
             parametros.put(EmailFacade.PARAM_NOMBRE_INSPECCION, inspeccion.getListaInspeccion().getNombre());
             parametros.put(EmailFacade.PARAM_RIESGO_CRITICO, critico);
             //parametros.put(EmailFacade.PARAM_CRITICIDAD, elementosList.get(0).getCriticidad());
