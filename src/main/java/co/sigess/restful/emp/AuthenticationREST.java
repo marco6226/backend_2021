@@ -349,14 +349,18 @@ public class AuthenticationREST {
         }
     }
     @POST
-    @Path("enviarHallazgosCriticos/{id}")    
-    public Response enviarHallazgosCriticos(@PathParam("id")  String id, List<ElementoInspeccion> elementosList ) {
+    @Path("enviarHallazgosCriticos/{id}/{economico}/{ubicacion}")  
+    
+    public Response enviarHallazgosCriticos(@PathParam("id")String id, List<ElementoInspeccion> elementosList,@PathParam("economico")String economico,@PathParam("ubicacion")String ubicacion ) {
         try {
             if (id != null) {   
-             inspeccionFacade.enviarCorreoCriticos(Long.parseLong(id), elementosList);
-           
+             inspeccionFacade.enviarCorreoCriticos(Long.parseLong(id), elementosList,economico,ubicacion);
+           return Response.ok(new Mensaje("Inspeccion", "Se le ha enviado un correo de los hallazgos criticos al responsable", TipoMensaje.success)).build();
             }
-            return Response.ok(new Mensaje("Inspeccion", "Se le ha enviado un correo de los hallazgos criticos al responsable", TipoMensaje.success)).build();
+            else{
+              return Response.ok(new Mensaje("Inspeccion", "fallo el envio de correo", TipoMensaje.success)).build();  
+            }
+           
         } catch (Exception ex) {
             return Util.manageException(ex, AuthenticationREST.class);
         }

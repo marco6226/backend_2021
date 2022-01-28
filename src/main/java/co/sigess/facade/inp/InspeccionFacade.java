@@ -34,6 +34,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.Locale;
+import co.sigess.exceptions.UserMessageException;
 
 /**
  *
@@ -222,7 +223,7 @@ public class InspeccionFacade extends AbstractFacade<Inspeccion> {
         List<Inspeccion> list = (List<Inspeccion>) query.getResultList();
         return list;
     }
-    public void enviarCorreoCriticos(Long id, List<ElementoInspeccion> elementosList) throws Exception {
+    public void enviarCorreoCriticos(Long id, List<ElementoInspeccion> elementosList, String numeroeconomico, String ubicacion) throws Exception {
 
        // Observacion observacion = this.find(id);
         if (elementosList != null) {
@@ -261,6 +262,8 @@ public class InspeccionFacade extends AbstractFacade<Inspeccion> {
 
             Map<String, String> parametros = new HashMap<>();
             parametros.put(EmailFacade.PARAM_MENSAJE, "HALLAZGO CRITICO");
+            parametros.put(EmailFacade.PARAM_ECONOMICO, numeroeconomico);
+            parametros.put(EmailFacade.PARAM_UBICACION, ubicacion);
             parametros.put(EmailFacade.PARAM_ID, "INP-" + inspeccion.id.toString());
             parametros.put(EmailFacade.PARAM_IDS, inspeccion.id.toString());           
             parametros.put(EmailFacade.PARAM_RESPONSABLE, inspeccion.getArea().getContacto());
@@ -269,8 +272,20 @@ public class InspeccionFacade extends AbstractFacade<Inspeccion> {
             parametros.put(EmailFacade.PARAM_RIESGO_CRITICO, critico);
             //parametros.put(EmailFacade.PARAM_CRITICIDAD, elementosList.get(0).getCriticidad());
             parametros.put(EmailFacade.PARAM_AREA, inspeccion.getArea().getNombre() );
-            emailFacade.sendEmail(parametros, TipoMail.RIESGOS_CRITICOS, "Hallazgos criticos", inspeccion.getArea().getContacto());
+            String contacto = inspeccion.getArea().getContacto();
+            System.out.println(contacto);
+            
+            
+            if (contacto != null){
+            emailFacade.sendEmail(parametros, TipoMail.RIESGOS_CRITICOS, "Hallazgos criticos", contacto);
+            }
+            else{
+                
+                 throw new UserMessageException("El area no tiene un contacto asociado ", "favor comunicarse con soporte técnico", TipoMensaje.warn);
+            }
         }
+        
+        
         
     }
 

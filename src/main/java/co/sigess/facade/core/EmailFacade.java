@@ -40,6 +40,9 @@ public class EmailFacade {
     public static final String PARAM_CRITICIDAD = "P{criticidad}";
     public static final String PARAM_AREA = "P{area}";
     public static final String PARAM_IDS = "P{ids}";
+    public static final String PARAM_ECONOMICO = "P{economico}";
+    public static final String PARAM_UBICACION = "P{ubicacion}";
+    
 
     @EJB
     private LoaderFacade loaderFacade;
