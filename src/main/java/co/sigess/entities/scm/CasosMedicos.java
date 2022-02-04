@@ -166,6 +166,9 @@ public class CasosMedicos implements Serializable {
     @Column(name = "justification")
     private String justification;
     
+    @Column(name = "eliminado")
+    private Boolean eliminado;
+    
 
     @JoinColumn(name = "pk_user", referencedColumnName = "id")
     @ManyToOne(optional = false)
@@ -608,6 +611,20 @@ public class CasosMedicos implements Serializable {
      */
     public void setEntidadEmiteConceptoTwo(String entidadEmiteConceptoTwo) {
         this.entidadEmiteConceptoTwo = entidadEmiteConceptoTwo;
+    }
+
+    /**
+     * @return the eliminado
+     */
+    public Boolean getEliminado() {
+        return eliminado;
+    }
+
+    /**
+     * @param eliminado the eliminado to set
+     */
+    public void setEliminado(Boolean eliminado) {
+        this.eliminado = eliminado;
     }
 
     
