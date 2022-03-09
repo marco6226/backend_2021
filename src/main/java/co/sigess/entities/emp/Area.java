@@ -30,6 +30,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 /**
  *
@@ -146,7 +148,9 @@ public class Area implements Serializable {
         this.estructura = estructura;
     }
 
-    @JsonIgnore
+@JsonIdentityInfo(
+   generator = ObjectIdGenerators.PropertyGenerator.class,
+   property = "nombre")
     public Area getAreaPadre() {
         return areaPadre;
     }
