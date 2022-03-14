@@ -148,9 +148,7 @@ public class Area implements Serializable {
         this.estructura = estructura;
     }
 
-//@JsonIdentityInfo(
-//   generator = ObjectIdGenerators.PropertyGenerator.class,
-//   property = "nombre")
+
    @JsonIgnore
    public Area getAreaPadre() {
         return areaPadre;
