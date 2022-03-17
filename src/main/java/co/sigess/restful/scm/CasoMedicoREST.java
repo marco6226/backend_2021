@@ -129,11 +129,14 @@ public class CasoMedicoREST extends ServiceREST {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response create(CasosMedicos casosmedicos) {
         try {
+            
+            ObjectMapper mapper = new ObjectMapper();
+            String json = mapper.writeValueAsString(casosmedicos);
 
             casosmedicos.setEmpresa(new Empresa(super.getEmpresaIdRequestContext()));
             casosmedicos.setStatusCaso("1");
             casosmedicos = this.casosmedicosFacade.create(casosmedicos);
-            this.logScm("Creacion de caso", "", casosmedicos.getId().toString(), casosmedicos.getClass().toString());
+            this.logScm("Creacion de caso", json, casosmedicos.getId().toString(), casosmedicos.getClass().toString());
 
             return Response.ok(casosmedicos.getId()).build();
         } catch (Exception ex) {
