@@ -59,10 +59,10 @@ public class CasosMedicos implements Serializable {
     @Size(max = 1024)
     @Column(name = "descripcion_cargo")
     private String descripcionCargo;
-    @Size(max = 1024)
+    @Size(max = 2048)
     @Column(name = "observaciones")
     private String observaciones;
-    @Size(max = 128) 
+    @Size(max = 2048) 
     @Column(name = "origen")
     private String origen;
     @Size(max = 128)
