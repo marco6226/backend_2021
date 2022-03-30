@@ -8,10 +8,12 @@ package co.sigess.facade.inp;
 import co.sigess.entities.com.Mensaje;
 import co.sigess.entities.com.TipoMensaje;
 import co.sigess.entities.conf.RespuestaCampo;
+import co.sigess.entities.inp.Bitacora;
 import co.sigess.entities.inp.Calificacion;
 import co.sigess.entities.inp.Inspeccion;
 import co.sigess.entities.inp.ListaInspeccion;
 import co.sigess.entities.inp.ElementoInspeccion;
+import co.sigess.entities.inp.NumeroEconomico;
 import co.sigess.entities.inp.Programacion;
 import co.sigess.exceptions.UserMessageException;
 import co.sigess.facade.com.AbstractFacade;
@@ -35,6 +37,8 @@ import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.Locale;
 import co.sigess.exceptions.UserMessageException;
+import java.util.ArrayList;
+import javax.persistence.TemporalType;
 
 /**
  *
@@ -310,4 +314,54 @@ public class InspeccionFacade extends AbstractFacade<Inspeccion> {
         return bOutput;
     }
 
+    public List<NumeroEconomico> getAllNumeroEconomico(){
+       
+        Query query = this.em.createQuery("SELECT inp FROM NumeroEconomico inp");
+        //query.setParameter(1, empresaId);
+        List<NumeroEconomico> list = (List<NumeroEconomico>) query.getResultList();
+        return list;
+    }
+
+   
+    public List<NumeroEconomico> getNumeroEconomicoByNumeroEconomico(String numeroEconomico){
+       
+        Query query = this.em.createQuery("SELECT inp FROM NumeroEconomico inp WHERE inp.numero_economico = ?1");
+        query.setParameter(1, numeroEconomico);
+        List<NumeroEconomico> list = (List<NumeroEconomico>) query.getResultList();
+        return list;
+    }
+
+    public List<Bitacora> getBitacora(String numeroEconomicoId, String inspeccionId){
+       
+        Query query = this.em.createQuery("SELECT inp FROM Bitacora inp WHERE inp.pk_numero_economico_id = ?1 AND inp.pk_inspeccion_id = ?2");
+        query.setParameter(1, Long.parseLong(numeroEconomicoId));
+        query.setParameter(2, Long.parseLong(inspeccionId));
+        List<Bitacora> list = (List<Bitacora>) query.getResultList();
+        return list;
+    }
+
+    public int getCountBitacora(){
+       
+        Query query = this.em.createQuery("SELECT inp FROM Bitacora inp");
+        List<Bitacora> list = (List<Bitacora>) query.getResultList();
+        int count= list.size();
+        return count;
+    }
+
+    public Bitacora crearBitacora(Bitacora bitacora) throws Exception {
+        int idBitacora = getCountBitacora()+1;
+        Query query = this.em.createNativeQuery("INSERT INTO inp.bitacora (id, fecha, observacion, pk_numero_economico_id, pk_inspeccion_id) VALUES (?1, ?2, ?3, ?4, ?5)");
+        query.setParameter(1, idBitacora);
+        query.setParameter(2, bitacora.getFecha());
+        query.setParameter(3, bitacora.getObservacion());
+        query.setParameter(4, bitacora.getPk_numero_economico_id());
+        query.setParameter(5, bitacora.getPk_inspeccion_id());
+        query.executeUpdate();
+        
+        return bitacora;
+    }
 }
+
+
+
+ 

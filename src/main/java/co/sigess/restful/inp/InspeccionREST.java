@@ -6,7 +6,9 @@
 package co.sigess.restful.inp;
 
 import co.sigess.entities.emp.Empresa;
+import co.sigess.entities.inp.Bitacora;
 import co.sigess.entities.inp.Inspeccion;
+import co.sigess.entities.inp.NumeroEconomico;
 import co.sigess.facade.inp.InspeccionFacade;
 import co.sigess.restful.FilterQuery;
 import co.sigess.restful.ServiceREST;
@@ -15,6 +17,7 @@ import co.sigess.restful.security.Secured;
 import co.sigess.util.Util;
 import java.io.ByteArrayOutputStream;
 import java.util.Date;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -101,6 +104,8 @@ public class InspeccionREST extends ServiceREST {
         }
     }
 
+
+
     @PUT
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response edit(Inspeccion inspeccion) {
@@ -113,4 +118,58 @@ public class InspeccionREST extends ServiceREST {
         }
     }
 
+    @GET
+    @Path("numeroEconomico")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response findNumeroEconomico() {
+            
+            try {
+
+            List<NumeroEconomico> insp = inspeccionFacade.getAllNumeroEconomico();
+            return Response.ok(insp).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, InspeccionREST.class);
+        }
+    }
+
+    @GET
+    @Path("bitacora/{numeroEconomicoId}/{inspeccionId}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response findBitacora(@PathParam("numeroEconomicoId") String numeroEconomicoId,@PathParam("inspeccionId") String inspeccionId) {
+            
+            try {
+            List<Bitacora> insp = inspeccionFacade.getBitacora(numeroEconomicoId,inspeccionId);
+            return Response.ok(insp).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, InspeccionREST.class);
+        }
+    }
+
+    @GET
+    @Path("numeroEconomico{numeroEconomico}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response findNumeroEconomico2(@PathParam("numeroEconomico") String numeroEconomico) {
+            
+            try {
+            List<NumeroEconomico> insp = inspeccionFacade.getNumeroEconomicoByNumeroEconomico(numeroEconomico);
+            return Response.ok(insp).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, InspeccionREST.class);
+        }
+    }
+
+
+    @POST
+    @Path("bitacora")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response create2(Bitacora bitacora) {
+        try {
+            Bitacora bita=inspeccionFacade.crearBitacora(bitacora);
+            return Response.ok(bita).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, InspeccionREST.class);
+        }
+    }
+    
+    
 }
