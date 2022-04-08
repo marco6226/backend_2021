@@ -57,6 +57,17 @@ public class Desviacion implements Serializable {
     @Column(name = "analisis_id")
     private Integer analisisId;
     
+    @Column(name = "criticidad")
+    private String criticidad;
+
+    public String getCriticidad() {
+        return criticidad;
+    }
+
+    public void setCriticidad(String criticidad) {
+        this.criticidad = criticidad;
+    }
+
     public Desviacion() {
     }
 
