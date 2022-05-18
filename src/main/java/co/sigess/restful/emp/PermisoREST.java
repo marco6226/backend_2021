@@ -5,8 +5,10 @@
  */
 package co.sigess.restful.emp;
 
+import co.sigess.entities.com.TipoMensaje;
 import co.sigess.entities.emp.Empresa;
 import co.sigess.entities.emp.Permiso;
+import co.sigess.exceptions.UserMessageException;
 import co.sigess.facade.emp.PermisoFacade;
 import co.sigess.restful.FilterQuery;
 import co.sigess.restful.ServiceREST;
@@ -69,6 +71,7 @@ public class PermisoREST extends ServiceREST {
             permisoFacade.edit(permiso);
             return Response.ok(permiso).build();
         } catch (Exception ex) {
+           // throw new UserMessageException("No es posible verificar la tarea", "La tarea que intenta verificar no existe", TipoMensaje.warn);
             return Util.manageException(ex, PermisoREST.class);
         }
     }

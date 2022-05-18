@@ -155,6 +155,12 @@ public class Empleado implements Serializable {
     @Size(max = 20)
     @Column(name = "tipo_vinculacion")
     private String tipoVinculacion;
+    
+    @Column(name = "empresa")
+    private String empresa;
+    
+    @Column(name = "nit")
+    private String nit;
 
     @JoinColumn(name = "fk_eps_id", referencedColumnName = "id")
     @ManyToOne(optional = true)
@@ -602,6 +608,34 @@ public class Empleado implements Serializable {
      */
     public void setCorporativePhone(String corporativePhone) {
         this.corporativePhone = corporativePhone;
+    }
+
+    /**
+     * @return the empresa
+     */
+    public String getEmpresa() {
+        return empresa;
+    }
+
+    /**
+     * @return the nit
+     */
+    public String getNit() {
+        return nit;
+    }
+
+    /**
+     * @param empresa the empresa to set
+     */
+    public void setEmpresa(String empresa) {
+        this.empresa = empresa;
+    }
+
+    /**
+     * @param nit the nit to set
+     */
+    public void setNit(String nit) {
+        this.nit = nit;
     }
 
 }

@@ -289,6 +289,9 @@ public class Reporte implements Serializable {
     @Column(name = "descripcion")
     private String descripcion;
     
+    @Column(name = "numero_furat")
+    private String numero_furat;
+    
     @Size(max = 100, message = "Máximo 100 caracteres para el campo sitio")
     @Column(name = "sitio")
     private String sitio;
@@ -1234,6 +1237,20 @@ public class Reporte implements Serializable {
     @Override
     public String toString() {
         return "co.sigess.entities.rai.Reporte[ id=" + getId() + " ]";
+    }
+
+    /**
+     * @return the numero_furat
+     */
+    public String getNumero_furat() {
+        return numero_furat;
+    }
+
+    /**
+     * @param numero_furat the numero_furat to set
+     */
+    public void setNumero_furat(String numero_furat) {
+        this.numero_furat = numero_furat;
     }
 
 }

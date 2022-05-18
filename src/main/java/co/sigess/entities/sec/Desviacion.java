@@ -59,6 +59,23 @@ public class Desviacion implements Serializable {
     
     @Column(name = "criticidad")
     private String criticidad;
+    
+    @Column(name = "nombre")
+    private String nombre;
+    
+     @Column(name = "hora")
+    private String hora;
+     
+     @Column(name = "empresa")
+    private String empresa;
+     
+     @Column(name = "nit")
+    private String nit;
+     
+     @Column(name = "severidad")
+    private String severidad;
+     
+     
 
     public String getCriticidad() {
         return criticidad;
@@ -147,6 +164,76 @@ public class Desviacion implements Serializable {
      */
     public void setFechaReporte(String fechaReporte) {
         this.fechaReporte = fechaReporte;
+    }
+
+    /**
+     * @return the nombre
+     */
+    public String getNombre() {
+        return nombre;
+    }
+
+    /**
+     * @param nombre the nombre to set
+     */
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    /**
+     * @return the hora
+     */
+    public String getHora() {
+        return hora;
+    }
+
+    /**
+     * @param hora the hora to set
+     */
+    public void setHora(String hora) {
+        this.hora = hora;
+    }
+
+    /**
+     * @return the severidad
+     */
+    public String getSeveridad() {
+        return severidad;
+    }
+
+    /**
+     * @param severidad the severidad to set
+     */
+    public void setSeveridad(String severidad) {
+        this.severidad = severidad;
+    }
+
+    /**
+     * @return the empresa
+     */
+    public String getEmpresa() {
+        return empresa;
+    }
+
+    /**
+     * @return the nit
+     */
+    public String getNit() {
+        return nit;
+    }
+
+    /**
+     * @param empresa the empresa to set
+     */
+    public void setEmpresa(String empresa) {
+        this.empresa = empresa;
+    }
+
+    /**
+     * @param nit the nit to set
+     */
+    public void setNit(String nit) {
+        this.nit = nit;
     }
     
 }

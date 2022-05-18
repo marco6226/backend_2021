@@ -109,8 +109,16 @@ public class ReporteFacade extends AbstractFacade<Reporte> {
         reporte.setTelefonoEmpleado(empleado.getTelefono1());
         reporte.setTelefono2Empleado(empleado.getTelefono2());
         reporte.setTipoIdentificacionEmpresa("NI");
-        reporte.setIdentificacionEmpresa(empresa.getNit());
-        reporte.setRazonSocial(empresa.getRazonSocial());
+        if (empresa.getId() == 3) {
+            reporte.setIdentificacionEmpresa(empleado.getNit());
+            reporte.setRazonSocial(empleado.getEmpresa());
+            }
+        else {
+            
+             reporte.setIdentificacionEmpresa(empresa.getNit());
+             reporte.setRazonSocial(empresa.getRazonSocial());
+        }
+            
         reporte.setFechaReporte(new Date());
 
         Empleado empleadoReporta = this.empleadoFacade.findByUsuario(usuarioId);
