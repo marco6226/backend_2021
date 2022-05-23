@@ -63,6 +63,7 @@ public class AnalisisDesviacion implements Serializable {
     private String observacion;
 
 
+    
     @Column(name = "participantes")
     private String participantes;
 
@@ -288,6 +289,17 @@ public class AnalisisDesviacion implements Serializable {
 
     public void setUsuarioModificaId(Integer usuarioModificaId) {
         this.usuarioModificaId = usuarioModificaId;
+    }
+
+    @Column(name = "flow_chart")
+    private String flow_chart;
+
+    public String getFlow_chart() {
+        return flow_chart;
+    }
+
+    public void setFlow_chart(String flow_chart) {
+        this.flow_chart = flow_chart;
     }
 
 }
