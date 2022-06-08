@@ -47,6 +47,10 @@ import org.apache.poi.ss.usermodel.*;
 @Stateless
 public class ReporteFacade extends AbstractFacade<Reporte> {
 
+    private static int empresaId;
+    
+    private static int empresaactualid;
+
     @PersistenceContext(unitName = "SIGESS_PU")
     private EntityManager em;
 
@@ -134,6 +138,20 @@ public class ReporteFacade extends AbstractFacade<Reporte> {
 
     @Override
     public Reporte create(Reporte reporte) throws Exception {
+        
+        if( reporte.getEmpresa().getId() ==3){
+        Reporte num_furat = this.findByfurat(reporte.getNumero_furat());
+        if (num_furat != null) {
+            //System.out.println("INGRESANDO SI SEÑOR");
+            throw new UserMessageException(
+                    "REPORTE YA REGISTRADO",
+                    "el numero de  FURAT "
+                    + reporte.getNumero_furat()
+                    + " ya se encuentra registrado, corrija los datos e intente cargar nuevamente el archivo",
+                    TipoMensaje.warn
+            );
+        }
+        }
         if (reporte.getTipo() == null) {
             throw new IllegalArgumentException("Debe establecer el tipo de reporte");
         }
@@ -186,6 +204,7 @@ public class ReporteFacade extends AbstractFacade<Reporte> {
             throws IOException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, ParseException, Exception {
         Query q = this.em.createQuery("SELECT esq From EsquemaCarga esq WHERE esq.empresaId = ?1");
         q.setParameter(1, empresaId);
+        empresaactualid  = empresaId;
         List<EsquemaCarga> list = q.getResultList();
         if (list == null || list.isEmpty()) {
             throw new UserMessageException("CONFIGURACIÓN NO ENCONTRADA", "No se encontró el esquema de carga masiva para el reporte AT", TipoMensaje.error);
@@ -281,6 +300,17 @@ public class ReporteFacade extends AbstractFacade<Reporte> {
             }
         }
         return true;
+    }
+    
+    public Reporte findByfurat(String furat) {
+        Query query = em.createQuery("SELECT u from Reporte u where u.numero_furat = :furat");
+        query.setParameter("furat", furat);
+        try {
+            Reporte reporte = (Reporte) query.getSingleResult();
+            return reporte;
+        } catch (Exception ejbExc) {
+            return null;
+        }
     }
 
 }
