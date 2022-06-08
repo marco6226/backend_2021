@@ -99,6 +99,7 @@ public class AnalisisDesviacionFacade extends AbstractFacade<AnalisisDesviacion>
         adDB.setObservacion(anDesv.getObservacion());
         adDB.setParticipantes(anDesv.getParticipantes());
         adDB.setFlow_chart(anDesv.getFlow_chart());
+        adDB.setFactor_causal(anDesv.getFactor_causal());
         adDB.setUsuarioModificaId(anDesv.getUsuarioModificaId());
         adDB.setEmpresa(anDesv.getEmpresa());
         adDB = super.edit(adDB); //To change body of generated methods, choose Tools | Templates.

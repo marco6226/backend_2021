@@ -302,4 +302,15 @@ public class AnalisisDesviacion implements Serializable {
         this.flow_chart = flow_chart;
     }
 
+    @Column(name = "factor_causal")
+    private String factor_causal;
+
+    public String getFactor_causal() {
+        return factor_causal;
+    }
+
+    public void setFactor_causal(String factor_causal) {
+        this.factor_causal = factor_causal;
+    }
+
 }
