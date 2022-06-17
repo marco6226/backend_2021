@@ -313,4 +313,14 @@ public class AnalisisDesviacion implements Serializable {
         this.factor_causal = factor_causal;
     }
 
+    @Column(name = "incapacidades")
+    private String incapacidades;
+
+    public String getIncapacidades() {
+        return incapacidades;
+    }
+
+    public void setIncapacidades(String incapacidades) {
+        this.incapacidades = incapacidades;
+    }
 }
