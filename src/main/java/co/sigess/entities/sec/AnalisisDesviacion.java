@@ -323,4 +323,16 @@ public class AnalisisDesviacion implements Serializable {
     public void setIncapacidades(String incapacidades) {
         this.incapacidades = incapacidades;
     }
+
+    @Column (name = "complementaria")
+    private String complementaria;
+
+    public String getComplementaria() {
+        return complementaria;
+    }
+
+    public void setComplementaria(String complementaria) {
+        this.complementaria = complementaria;
+    }
+
 }
