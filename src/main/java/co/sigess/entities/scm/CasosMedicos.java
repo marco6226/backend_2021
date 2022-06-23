@@ -98,6 +98,10 @@ public class CasosMedicos implements Serializable {
     @Size(max = 1024)
     @Column(name = "caso_medico_laboral")
     private String casoMedicoLaboral;
+    @Column(name = "prioridad_caso")
+    private String prioridadCaso;
+    @Column(name = "tipo_caso")
+    private String tipoCaso;
     @Size(max = 128)
     @Column(name = "razon")
     private String razon;
@@ -292,6 +296,22 @@ public class CasosMedicos implements Serializable {
 
     public void setCasoMedicoLaboral(String casoMedicoLaboral) {
         this.casoMedicoLaboral = casoMedicoLaboral;
+    }
+
+    public String getPrioridadCaso() {
+        return prioridadCaso;
+    }
+
+    public void setPrioridadCaso(String prioridadCaso) {
+        this.prioridadCaso = prioridadCaso;
+    }
+
+    public String getTipoCaso() {
+        return tipoCaso;
+    }
+
+    public void setTipoCaso(String tipoCaso) {
+        this.tipoCaso = tipoCaso;
     }
 
     public String getRazon() {
