@@ -50,52 +50,52 @@ public class CasosMedicos implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    @Size(max = 128)
+    
     @Column(name = "status_caso")
     private String statusCaso;
-    @Size(max = 128)
+    
     @Column(name = "fecha_final")
     private String fechaFinal;
-    @Size(max = 1024)
+    
     @Column(name = "descripcion_cargo")
     private String descripcionCargo;
-    @Size(max = 2048)
+    
     @Column(name = "observaciones")
     private String observaciones;
-    @Size(max = 2048) 
+    
     @Column(name = "origen")
     private String origen;
-    @Size(max = 128)
+    
     @Column(name = "codigo_cie10")
     private String codigoCie10;
-    @Size(max = 128)
+    
     @Column(name = "region")
     private String region;
     @Column(name = "fecha_creacion")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaCreacion;
-    @Size(max = 128)
+    
     @Column(name = "ciudad")
     private String ciudad;
-    @Size(max = 128)
+    
     @Column(name = "names")
     private String names;
-    @Size(max = 128)
+    
     @Column(name = "cargo")
     private String cargo;
-    @Size(max = 128)
+    
     @Column(name = "salud_status")
     private String saludStatus;
-    @Size(max = 128)
+    
     @Column(name = "sistema_afectado")
     private String sistemaAfectado;
-    @Size(max = 128)
+    
     @Column(name = "diagnostico")
     private String diagnostico;
-    @Size(max = 1024)
+   
     @Column(name = "descripcion_completa_caso")
     private String descripcionCompletaCaso;
-    @Size(max = 1024)
+    
     @Column(name = "caso_medico_laboral")
     private String casoMedicoLaboral;
     @Column(name = "prioridad_caso")
@@ -105,25 +105,25 @@ public class CasosMedicos implements Serializable {
     @Size(max = 128)
     @Column(name = "razon")
     private String razon;
-    @Size(max = 128)
+    
     @Column(name = "pcl")
     private String pcl;
-    @Size(max = 128)
+    
     @Column(name = "porcentaje_pcl")
     private String porcentajePcl;
-    @Size(max = 128)
+    
     @Column(name = "emision_pcl_fecha")
     private String emisionPclFecha;
-    @Size(max = 128)
+    
     @Column(name = "pcl_emit_entidad")
     private String pclEmitEntidad;
-    @Size(max = 128)
+    
     @Column(name = "status_de_calificacion")
     private String statusDeCalificacion;
-    @Size(max = 128)
+    
     @Column(name = "fecha_calificacion")
     private String fechaCalificacion;
-    @Size(max = 128)
+    
     @Column(name = "entidad_emite_calificacion")
     private String entidadEmiteCalificacion;
     @Optional
@@ -132,10 +132,10 @@ public class CasosMedicos implements Serializable {
     @Optional
     @Column(name = "entidad_emitidatwo")
     private Integer entidadEmitidaTwo;
-    @Size(max = 128)
+    
     @Column(name = "concept_rehabilitacion")
     private String conceptRehabilitacion;
-     @Size(max = 128)
+    
     @Column(name = "concept_rehabilitaciontwo")
     private String conceptRehabilitacionTwo;
     @Column(name = "fecha_concept_rehabilitacion")
@@ -148,25 +148,25 @@ public class CasosMedicos implements Serializable {
     @JoinColumn(name = "fk_empresa_id", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Empresa empresa;
-    @Size(max = 128)
+    
     @Column(name = "entidad_emite_concepto")
     private String entidadEmiteConcepto;
-    @Size(max = 128)
+    
     @Column(name = "entidad_emite_conceptotwo")
     private String entidadEmiteConceptoTwo;
-    @Size(max = 128)
+    
     @Column(name = "requiere_intervencion")
     private String requiereIntervencion;
-    @Size(max = 128)
+    
     @Column(name = "sve")
     private String sve;
-    @Size(max = 128)
+    
     @Column(name = "documento")
     private String documento;
-    @Size(max = 128)
+    
     @Column(name = "professional_area")
     private String professionalArea;
-    @Size(max = 128)
+    
     @Column(name = "justification")
     private String justification;
     
