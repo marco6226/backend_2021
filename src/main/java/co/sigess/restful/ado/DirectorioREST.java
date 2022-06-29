@@ -189,6 +189,7 @@ public class DirectorioREST extends ServiceREST {
     public Response uploadFile(
             @FormDataParam("file") InputStream fileInputStream,
             @FormDataParam("file") FormDataContentDisposition fileMetaData,
+            @FormDataParam("descripcion") String descripcion,
             @FormDataParam("dpId") Long directorioPadreId,
             @FormDataParam("mod") String modulo,
             @FormDataParam("modParam") String modParam,
@@ -216,6 +217,7 @@ public class DirectorioREST extends ServiceREST {
                 dir.setDocumento(new Documento());
                 dir.getDocumento().setRuta(relativePath);
                 dir.getDocumento().setNombre(fileName);
+                dir.getDocumento().setDescripcion(descripcion);
                 dir.getDocumento().setTamanio((long) map.get(FileUtil.FILE_SIZE));
                 dir.getDocumento().setModulo(Modulo.valueOf(modulo));
                 if (docMetaData != null) {
@@ -434,7 +436,7 @@ public class DirectorioREST extends ServiceREST {
             @FormDataParam("modParam") String modParam,
             @FormDataParam("docMetaData") String docMetaData
     ) throws Exception {
-        return this.uploadFile(fileInputStream, fileMetaData, null, Modulo.SEC.name(), modParam, docMetaData, null, "PUBLICO");
+        return this.uploadFile(fileInputStream, fileMetaData,null, null, Modulo.SEC.name(), modParam, docMetaData, null, "PUBLICO");
     }
 
     @GET
@@ -500,7 +502,7 @@ public class DirectorioREST extends ServiceREST {
             @FormDataParam("file") FormDataContentDisposition fileMetaData,
             @FormDataParam("modParam") String modParam
     ) throws Exception {
-        return this.uploadFile(fileInputStream, fileMetaData, null, Modulo.COP.name(), modParam, null, null, "PUBLICO");
+        return this.uploadFile(fileInputStream, fileMetaData,null, null, Modulo.COP.name(), modParam, null, null, "PUBLICO");
     }
 
     @GET
