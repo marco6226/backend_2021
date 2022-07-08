@@ -100,6 +100,7 @@ public class AnalisisDesviacionFacade extends AbstractFacade<AnalisisDesviacion>
         adDB.setParticipantes(anDesv.getParticipantes());
         adDB.setFlow_chart(anDesv.getFlow_chart());
         adDB.setFactor_causal(anDesv.getFactor_causal());
+        adDB.setPlan_accion(anDesv.getPlan_accion());
         adDB.setUsuarioModificaId(anDesv.getUsuarioModificaId());
         adDB.setEmpresa(anDesv.getEmpresa());
         adDB.setIncapacidades(anDesv.getIncapacidades());
