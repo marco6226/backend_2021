@@ -241,6 +241,67 @@ public class DirectorioREST extends ServiceREST {
             return Util.manageException(ex, DirectorioREST.class);
         }
     }
+    @POST
+    @Path("uploadEvidencias")
+    @Consumes({MediaType.MULTIPART_FORM_DATA})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response uploadFile(
+            @FormDataParam("file") InputStream fileInputStream,
+            @FormDataParam("file") FormDataContentDisposition fileMetaData,
+            @FormDataParam("descripcion") String descripcion,
+            @FormDataParam("dpId") Long directorioPadreId,
+            @FormDataParam("mod") String modulo,
+            @FormDataParam("modParam") String modParam,
+            @FormDataParam("docMetaData") String docMetaData,
+            @FormDataParam("caseId") Long caseId,
+            @FormDataParam("nivelAcceso") String nivelAcceso,
+            @FormDataParam("tipoEvidencias") String tipoEvidencias
+    ) throws Exception {
+        try {
+            directorioFacade.validarParametrosUpload(modulo, modParam);
+            Directorio dir = null;
+            if (fileMetaData != null) {
+                if (fileMetaData.getFileName() == null) {
+                    throw new IllegalArgumentException("No se ha especificado un nombre para el archivo a guardar");
+                }
+                String fileName = fileMetaData.getFileName();
+                Map<String, Object> map = FileUtil.saveInPathFS(fileInputStream);
+                String relativePath = (String) map.get(FileUtil.RELATIVE_PATH);
+                dir = new Directorio();
+                dir.setEsDocumento(true);
+                dir.setNombre(fileName);
+                dir.setCaseId(caseId);
+                dir.setNivelAcceso(nivelAcceso);
+                dir.setEmpresa(new Empresa(super.getEmpresaIdRequestContext()));
+                dir.setUsuario(super.getUsuarioRequestContext());
+                dir.setDocumento(new Documento());
+                dir.getDocumento().setRuta(relativePath);
+                dir.getDocumento().setNombre(fileName);
+                dir.getDocumento().setDescripcion(descripcion);
+                dir.getDocumento().setProceso(tipoEvidencias);
+                dir.getDocumento().setTamanio((long) map.get(FileUtil.FILE_SIZE));
+                dir.getDocumento().setModulo(Modulo.valueOf(modulo));
+                if (docMetaData != null) {
+                    Documento docObj = Util.fromJson(docMetaData, Documento.class);
+                    dir.getDocumento().setDescripcion(docObj.getDescripcion());
+                }
+                if (directorioPadreId != null) {
+                    dir.setDirectorioPadre(new Directorio(directorioPadreId));
+                }
+                directorioFacade.create(dir, modParam,tipoEvidencias);
+            } else {
+                directorioFacade.eliminarDocumentos(modulo, modParam);
+            }
+            ObjectMapper mapper = new ObjectMapper();
+            String json = mapper.writeValueAsString(dir);
+            if (caseId != null) {
+                this.logScm("Guardado de ausentismo", json, dir.getId().toString(), directorioFacade.getClass().toString());
+            }
+            return Response.ok(dir).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, DirectorioREST.class);
+        }
+    }
     
     @POST
     @Path("uploadv3")

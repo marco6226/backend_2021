@@ -173,10 +173,29 @@ public class AnalisisDesviacionFacade extends AbstractFacade<AnalisisDesviacion>
             list = new ArrayList<>();
         }
         list.add(documento);
+     //   Query query = this.em.createNativeQuery("INSERT INTO sec.documento_analisis_desviacion (id, fecha, observacion, pk_numero_economico_id, pk_inspeccion_id) VALUES (?1, ?2, ?3, ?4, ?5)");
+        super.edit(ad);
+    }
+    
+     public void relacionarDocumentoEvidencia(Documento documento, Integer analisisId,String tipoEvidencias) throws Exception {
+        AnalisisDesviacion ad = this.find(analisisId);
+        List<Documento> list = ad.getDocumentosList();
+        if (list == null) {
+            list = new ArrayList<>();
+        }
+        list.add(documento);
         super.edit(ad);
     }
 
     public void retirarDocumento(Documento documento) throws Exception {
+        Query q = this.em.createQuery("SELECT c FROM AnalisisDesviacion c JOIN c.documentosList d WHERE d.id = ?1 ");
+        q.setParameter(1, documento.getId());
+        AnalisisDesviacion analisis = (AnalisisDesviacion) q.getSingleResult();
+        analisis.getDocumentosList().remove(documento);
+        super.edit(analisis);
+    }
+    
+    public void retirarDocumentoEvidencia(Documento documento) throws Exception {
         Query q = this.em.createQuery("SELECT c FROM AnalisisDesviacion c JOIN c.documentosList d WHERE d.id = ?1 ");
         q.setParameter(1, documento.getId());
         AnalisisDesviacion analisis = (AnalisisDesviacion) q.getSingleResult();

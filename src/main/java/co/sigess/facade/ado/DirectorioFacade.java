@@ -127,6 +127,50 @@ public class DirectorioFacade extends AbstractFacade<Directorio> {
         directorio.setEliminado(Boolean.FALSE);
         return directorio;
     }
+    
+    public Directorio create(Directorio directorio, String modParam, String tipoEvidencias) throws Exception {
+        directorio.setFechaCreacion(new Date());
+        Documento documento = directorio.getDocumento();
+        if (documento == null) {
+            directorio.setEsDocumento(false);
+            super.create(directorio);
+        } else {
+            directorio.setDocumento(null);
+            super.create(directorio);
+            documento.setId(directorio.getId());
+            documento.setDirectorio(directorio);
+            documentoFacade.create(documento);
+            directorio.setDocumento(documento);
+
+            switch (documento.getModulo()) {
+                case EMP:
+                    Integer empleadoId = Integer.valueOf(modParam);
+                    this.empleadoFacade.relacionarDocumento(documento, empleadoId);
+                    break;
+                case INP:
+                    Long calificacionId = Long.valueOf(modParam);
+                    this.calificacionFacade.relacionarDocumento(documento, calificacionId);
+                    break;
+                case SEC:
+                    Integer analisisId = Integer.valueOf(modParam);                    
+                    this.analisisDesviacionFacade.relacionarDocumentoEvidencia(documento, analisisId, tipoEvidencias);
+                    break;
+                case AUC:
+                    Long observacionId = Long.valueOf(modParam);
+                    this.observacionFacade.relacionarDocumento(documento, observacionId);
+                    break;
+                case COP:
+                    Long actaId = Long.valueOf(modParam);
+                    this.actaFacade.relacionarDocumento(documento, actaId);
+                    break;
+                default:
+                    break;
+            }
+
+        }
+        directorio.setEliminado(Boolean.FALSE);
+        return directorio;
+    }
 
      public void create(Integer documentoId, Integer  modParam, Integer version) throws Exception {
         

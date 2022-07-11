@@ -89,13 +89,13 @@ public class AnalisisDesviacion implements Serializable {
 
     @JoinTable(name = "desviacion_analisis_desviacion", schema = "sec", joinColumns = {
         @JoinColumn(name = "fk_analisis_desviacion_id", referencedColumnName = "id")}, inverseJoinColumns = {
-        @JoinColumn(name = "pk_desviacion_hash_id", referencedColumnName = "hash_id")})
+        @JoinColumn(name = "pk_desviacion_hash_id", referencedColumnName = "hash_id")})    
     @ManyToMany
     private List<Desviacion> desviacionesList;
 
     @JoinTable(name = "documento_analisis_desviacion", schema = "sec", joinColumns = {
         @JoinColumn(name = "fk_analisis_desviacion_id", referencedColumnName = "id")}, inverseJoinColumns = {
-        @JoinColumn(name = "fk_documento_id", referencedColumnName = "id")})
+        @JoinColumn(name = "fk_documento_id", referencedColumnName = "id")})   
     @ManyToMany
     private List<Documento> documentosList;
 
