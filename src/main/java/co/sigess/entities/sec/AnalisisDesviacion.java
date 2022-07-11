@@ -335,6 +335,17 @@ public class AnalisisDesviacion implements Serializable {
         this.complementaria = complementaria;
     }
 
+    @Column (name = "informe")
+    private String informe;
+
+    public String getInforme() {
+        return informe;
+    }
+
+    public void setInforme(String informe) {
+        this.informe = informe;
+    }
+
     @Column (name = "plan_accion")
     private String plan_accion;
 
