@@ -346,4 +346,14 @@ public class AnalisisDesviacion implements Serializable {
         this.plan_accion = plan_accion;
     }
 
+    @Column (name = "miembros_equipo")
+    private String miembros_equipo;
+
+    public String getMiembros_equipo() {
+        return miembros_equipo;
+    }
+
+    public void setMiembros_equipo(String miembros_equipo) {
+        this.miembros_equipo = miembros_equipo;
+    }
 }
