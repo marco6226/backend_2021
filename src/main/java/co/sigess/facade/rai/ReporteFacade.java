@@ -113,7 +113,7 @@ public class ReporteFacade extends AbstractFacade<Reporte> {
         reporte.setTelefonoEmpleado(empleado.getTelefono1());
         reporte.setTelefono2Empleado(empleado.getTelefono2());
         reporte.setTipoIdentificacionEmpresa("NI");
-        if (empresa.getId() == 3) {
+        if (empresa.getId() == 22) {
             reporte.setIdentificacionEmpresa(empleado.getNit());
             reporte.setRazonSocial(empleado.getEmpresa());
             }
