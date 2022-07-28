@@ -13,6 +13,7 @@ import co.sigess.entities.scm.Recomendaciones;
 import co.sigess.entities.scm.ScmLogs;
 import co.sigess.entities.scm.Diagnosticos;
 import co.sigess.entities.scm.Pcl;
+import co.sigess.entities.scm.Reintegro;
 import co.sigess.entities.scm.SeguimientoCaso;
 import co.sigess.entities.scm.SistemaAfectado;
 import co.sigess.entities.scm.Sve;
@@ -23,6 +24,7 @@ import co.sigess.facade.core.SMSFacade;
 import co.sigess.facade.scm.CasosMedicosFacade;
 import co.sigess.facade.scm.PclFacade;
 import co.sigess.facade.scm.RecomendacionesFacade;
+import co.sigess.facade.scm.ReintegroFacade;
 import co.sigess.facade.scm.ScmLogsFacade;
 import co.sigess.facade.scm.SeguimientoCasoFacade;
 import co.sigess.facade.scm.SistemaAfectadoFacade;
@@ -107,6 +109,9 @@ public class CasoMedicoREST extends ServiceREST {
 
     @EJB
     private RecomendacionesFacade recomendacionesFacade;
+
+    @EJB
+    private ReintegroFacade reintegroFacade;
 
     public CasoMedicoREST() {
         super(CasosMedicosFacade.class);
@@ -638,4 +643,36 @@ public class CasoMedicoREST extends ServiceREST {
         }
 
     }
+
+    @POST
+    @Path("reintegro")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response create(Reintegro reintegro) {
+        try {
+//            reintegro.setEliminado(false);
+            reintegro = this.reintegroFacade.create(reintegro);
+//            this.logScm("Creacion de reintegro", null, reintegro.getId().toString(), reintegro.getClass().toString());
+            System.out.println(reintegro);
+            return Response.ok(reintegro).build();
+//            return Response.ok(reintegro.getId()).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, CasoMedicoREST.class);
+        }
+    }
+
+    @GET
+    @Path("reintegro/{id}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response listReintegro(@PathParam("id") String id) {
+        try {
+//            reintegro.setEliminado(false);
+            List<Reintegro> list = (List<Reintegro>) this.reintegroFacade.getAllByCasoID(id);
+            return Response.ok(list).build();
+//            return Response.ok(reintegro.getId()).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, CasoMedicoREST.class);
+        }
+    }
 }
+
+
