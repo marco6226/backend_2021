@@ -5,6 +5,7 @@
 package co.sigess.entities.scm;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -53,7 +54,7 @@ public class Reintegro implements Serializable {
     private String reintegro_exitoso;
 
     @Column(name = "fecha_cierre")
-    private String fecha_cierre;
+    private Date fecha_cierre;
 
     @Column(name = "observacion")
     private String observacion;
@@ -109,11 +110,11 @@ public class Reintegro implements Serializable {
         this.reintegro_exitoso = reintegro_exitoso;
     }
 
-    public String getFecha_cierre() {
+    public Date getFecha_cierre() {
         return fecha_cierre;
     }
 
-    public void setFecha_cierre(String fecha_cierre) {
+    public void setFecha_cierre(Date fecha_cierre) {
         this.fecha_cierre = fecha_cierre;
     }
 
