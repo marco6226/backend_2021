@@ -75,6 +75,9 @@ public class Desviacion implements Serializable {
      @Column(name = "severidad")
     private String severidad;
      
+       @Column(name = "furat")
+    private String furat;
+     
      
 
     public String getCriticidad() {
@@ -234,6 +237,20 @@ public class Desviacion implements Serializable {
      */
     public void setNit(String nit) {
         this.nit = nit;
+    }
+
+    /**
+     * @return the furat
+     */
+    public String getFurat() {
+        return furat;
+    }
+
+    /**
+     * @param furat the furat to set
+     */
+    public void setFurat(String furat) {
+        this.furat = furat;
     }
     
 }
