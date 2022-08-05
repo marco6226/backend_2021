@@ -673,6 +673,23 @@ public class CasoMedicoREST extends ServiceREST {
             return Util.manageException(ex, CasoMedicoREST.class);
         }
     }
+
+    @PUT
+    @Path("reintegro")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response editReintegro(Reintegro reintegro) {
+        try {
+
+            ObjectMapper mapper = new ObjectMapper();
+            String json = mapper.writeValueAsString(reintegro);
+
+            this.logScm("Se edito un reintegro", json, reintegro.getPk_case(), reintegro.getClass().toString());
+            reintegro = this.reintegroFacade.update(reintegro);
+            return Response.ok(reintegro).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, ReporteREST.class);
+        }
+    }
 }
 
 
