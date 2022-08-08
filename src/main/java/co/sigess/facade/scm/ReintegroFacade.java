@@ -42,5 +42,11 @@ public class ReintegroFacade extends AbstractFacade<Reintegro> {
         return list;
         //return q.getResultList();
     }
+    
+    public Reintegro update(Reintegro reintegro) throws Exception {
+
+        reintegro = super.edit(reintegro);
+        return reintegro;
+    }
 
 }
