@@ -375,6 +375,7 @@ public class AuthenticationREST {
              Map<String, String> da = new HashMap<>();
             String passw = array[1];
             Usuario user = usuarioFacade.findByEmail(email);
+            if(user != null){
             List tokens = tokenFacade.getTokensByUser(user);
             if (tokens.size() > 0) {
                
@@ -383,6 +384,11 @@ public class AuthenticationREST {
             }
              da.put("exit", "false");
                return Response.ok(da).build();
+            }
+            else{
+                da.put("exit", "false");
+               return Response.ok(da).build();
+            }
     }
     
     
