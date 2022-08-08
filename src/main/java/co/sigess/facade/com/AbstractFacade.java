@@ -206,10 +206,7 @@ public abstract class AbstractFacade<T> {
                     predicate = cb.isNotNull(expression);
                     break;
                 case LIKE:
-                    predicate = cb.like(expression, filter.getValue1());
-                    System.out.println("hola mundo");
-                    System.out.println(expression);
-                    System.out.println(filter.getValue1().toLowerCase());
+                    predicate = cb.like(cb.lower(expression), filter.getValue1().toLowerCase());
                     break;
                 case NOT_EQUALS:
                     if (filter.isExpression()) {
