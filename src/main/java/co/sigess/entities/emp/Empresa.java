@@ -93,6 +93,18 @@ public class Empresa implements Serializable {
     @Column(name = "logo")
     private String logo;
 
+    @Column(name = "tipo_persona")
+    private String tipo_persona;
+
+    @Column(name = "actividades_contratadas")
+    private String actividades_contratadas;
+
+    @Column(name = "localidad")
+    private String localidad;
+
+    @Column(name = "division")
+    private String division;    
+
     @JoinColumn(name = "fk_arl_id", referencedColumnName = "id")
     @ManyToOne
     private Arl arl;
@@ -280,6 +292,38 @@ public class Empresa implements Serializable {
 
     public void setLogo(String logo) {
         this.logo = logo;
+    }
+
+public String getTipo_persona() {
+        return tipo_persona;
+    }
+
+    public void setTipo_persona(String tipo_persona) {
+        this.tipo_persona = tipo_persona;
+    }
+
+    public String getActividades_contratadas() {
+        return actividades_contratadas;
+    }
+
+    public void setActividades_contratadas(String actividades_contratadas) {
+        this.actividades_contratadas = actividades_contratadas;
+    }
+
+    public String getLocalidad() {
+        return localidad;
+    }
+
+    public void setLocalidad(String localidad) {
+        this.localidad = localidad;
+    }
+
+    public String getDivision() {
+        return division;
+    }
+
+    public void setDivision(String division) {
+        this.division = division;
     }
 
     @Override
