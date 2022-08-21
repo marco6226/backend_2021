@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -94,7 +95,7 @@ public class Empresa implements Serializable {
     private String logo;
 
     @Column(name = "tipo_persona")
-    private String tipo_persona;
+    private String tipoPersona;
 
     @Column(name = "actividades_contratadas")
     private String actividades_contratadas;
@@ -104,6 +105,21 @@ public class Empresa implements Serializable {
 
     @Column(name = "division")
     private String division;    
+
+    @Column(name = "fecha_creacion")
+    private Date fechaCreacion;  
+
+    @Column(name = "fecha_actualizacion")
+    private Date fechaActualizacion;   
+
+    @Column(name = "calificacion")
+    private String calificacion;   
+
+    @Column(name = "estado")
+    private String estado;   
+
+    @Column(name = "vigencia")
+    private String vigencia;   
 
     @JoinColumn(name = "fk_arl_id", referencedColumnName = "id")
     @ManyToOne
@@ -126,6 +142,7 @@ public class Empresa implements Serializable {
     @JoinColumn(name = "fk_ciiu_id", referencedColumnName = "id")
     @ManyToOne
     private Ciiu ciiu;
+
 
     /**
      * @return the direccion
@@ -295,11 +312,11 @@ public class Empresa implements Serializable {
     }
 
 public String getTipo_persona() {
-        return tipo_persona;
+        return tipoPersona;
     }
 
-    public void setTipo_persona(String tipo_persona) {
-        this.tipo_persona = tipo_persona;
+    public void setTipo_persona(String tipoPersona) {
+        this.tipoPersona = tipoPersona;
     }
 
     public String getActividades_contratadas() {
@@ -325,6 +342,56 @@ public String getTipo_persona() {
     public void setDivision(String division) {
         this.division = division;
     }
+
+    public String getTipoPersona() {
+        return tipoPersona;
+    }
+
+    public void setTipoPersona(String tipoPersona) {
+        this.tipoPersona = tipoPersona;
+    }
+
+    public Date getFechaCreacion() {
+        return fechaCreacion;
+    }
+
+    public void setFechaCreacion(Date fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
+    }
+
+    public Date getFechaActualizacion() {
+        return fechaActualizacion;
+    }
+
+    public void setFechaActualizacion(Date fechaActualizacion) {
+        this.fechaActualizacion = fechaActualizacion;
+    }
+
+    public String getCalificacion() {
+        return calificacion;
+    }
+
+    public void setCalificacion(String calificacion) {
+        this.calificacion = calificacion;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public String getVigencia() {
+        return vigencia;
+    }
+
+    public void setVigencia(String vigencia) {
+        this.vigencia = vigencia;
+    }
+
+
 
     @Override
     public int hashCode() {
