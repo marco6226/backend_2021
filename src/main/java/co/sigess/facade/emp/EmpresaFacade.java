@@ -103,6 +103,18 @@ public class EmpresaFacade extends AbstractFacade<Empresa> {
         empresaDB.setNumeroSedes(emp.getNumeroSedes());
         empresaDB.setNombreComercial(emp.getNombreComercial());
         empresaDB.setLogo(emp.getLogo());
+        empresaDB.setTipo_persona(emp.getTipo_persona());
+        empresaDB.setActividades_contratadas(emp.getActividades_contratadas());
+        empresaDB.setLocalidad(emp.getLocalidad());
+        empresaDB.setDivision(emp.getDivision());
+        empresaDB.setFechaCreacion(emp.getFechaCreacion());
+        empresaDB.setFechaActualizacion(emp.getFechaActualizacion());
+        empresaDB.setCalificacion(emp.getCalificacion());
+        empresaDB.setEstado(emp.getEstado());
+        empresaDB.setVigencia(emp.getVigencia());
+
+
+
         if (emp.getArl() != null && emp.getArl().getId() == null) {
             empresaDB.setArl(null);
         } else {
