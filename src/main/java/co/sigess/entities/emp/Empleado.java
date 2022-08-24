@@ -71,7 +71,7 @@ public class Empleado implements Serializable {
     @Column(name = "zona_residencia")
     private String zonaResidencia;
 
-    @Size(max = 45)
+    @Size(max = 500)
     @Column(name = "direccion")
     private String direccion;
 
