@@ -121,6 +121,9 @@ public class Empresa implements Serializable {
     @Column(name = "vigencia")
     private String vigencia;   
 
+    @Column(name = "id_empresa_aliada")
+    private Integer idEmpresaAliada;   
+
     @JoinColumn(name = "fk_arl_id", referencedColumnName = "id")
     @ManyToOne
     private Arl arl;
@@ -390,6 +393,15 @@ public String getTipo_persona() {
     public void setVigencia(String vigencia) {
         this.vigencia = vigencia;
     }
+
+    public Integer getIdEmpresaAliada() {
+        return idEmpresaAliada;
+    }
+
+    public void setIdEmpresaAliada(Integer idEmpresaAliada) {
+        this.idEmpresaAliada = idEmpresaAliada;
+    }
+
 
 
 
