@@ -112,6 +112,7 @@ public class EmpresaFacade extends AbstractFacade<Empresa> {
         empresaDB.setCalificacion(emp.getCalificacion());
         empresaDB.setEstado(emp.getEstado());
         empresaDB.setVigencia(emp.getVigencia());
+        empresaDB.setIdEmpresaAliada(emp.getIdEmpresaAliada());
 
 
 

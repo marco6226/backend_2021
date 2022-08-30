@@ -58,7 +58,7 @@ public class AnalisisDesviacion implements Serializable {
     @Column(name = "id") 
     private Integer id;
 
-    @Size(max = 512)
+    @Size(max = 5120)
     @Column(name = "observacion")
     private String observacion;
 
