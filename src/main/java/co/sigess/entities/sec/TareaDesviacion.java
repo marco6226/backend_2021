@@ -76,6 +76,8 @@ public class TareaDesviacion implements Serializable {
     @Column(name = "descripcion_cierre")
     private String descripcionCierre;
 
+    @Column(name = "enviocorreo")
+    private Boolean envioCorreo;
     
     @Size(max = 20)
     @Column(name = "modulo")
@@ -183,6 +185,14 @@ public class TareaDesviacion implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Boolean getEnvioCorreo() {
+        return envioCorreo;
+    }
+
+    public void setEnvioCorreo(Boolean envioCorreo) {
+        this.envioCorreo = envioCorreo;
     }
 
     public String getNombre() {
@@ -452,6 +462,4 @@ public class TareaDesviacion implements Serializable {
     public void setEvidencesV(List<EvidencesFiles> evidencesV) {
         this.evidencesV = evidencesV;
     }
-
-   
 }
