@@ -319,29 +319,23 @@ public class AuthenticationREST {
 
 
         try {
-
             Boolean correo = tarea.getEnvioCorreo();
-            Integer id2 = tarea.getId();
-            System.out.println(correo);
-            System.out.println(id2);
-            if(!correo || correo==null){
-                System.out.println("ENTRO");
+            if(correo==null){
+               correo=false;}
+            if(!correo){
                 tarea.setEnvioCorreo(true);
                 tareaDesviacionFacade.edit(tarea);
-                System.out.println("leido");
                 if (email != null) {
                     String nombre = tarea.getNombre();
                     Integer id = tarea.getId();
                     Date  FechaProyectada= tarea.getFechaProyectada();
                     Empleado responsable = tarea.getEmpResponsable();
 
-                        System.out.println(id);
                     Usuario usuario = usuarioFacade.enviarCorreo(email.trim().toLowerCase(),responsable,nombre,id,FechaProyectada);
-
                 }
                 return Response.ok(new Mensaje("Tarea", "Se le ha enviado un correo al responsable", TipoMensaje.success)).build();
             }else{
-                return Response.ok(new Mensaje("Tarea", "Actualizada", TipoMensaje.success)).build();
+                return Response.ok().build();
             }
         } catch (Exception ex) {
             return Util.manageException(ex, AuthenticationREST.class);
