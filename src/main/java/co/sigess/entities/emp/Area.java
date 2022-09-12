@@ -53,7 +53,7 @@ public class Area implements Serializable {
     @Column(name = "id")
     private Long id;
     
-    @Size(max = 45)
+    @Size(max = 255)
     @Column(name = "nombre")
     private String nombre;
     
@@ -69,6 +69,9 @@ public class Area implements Serializable {
     
     @Column(name = "nivel")
     private Short nivel;
+
+    @Column(name = "padre_nombre")
+    private String padreNombre;
         
     @OneToMany(mappedBy = "areaPadre")
     private List<Area> areaList;
@@ -105,6 +108,14 @@ public class Area implements Serializable {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public String getPadreNombre() {
+        return padreNombre;
+    }
+
+    public void setPadreNombre(String padreNombre) {
+        this.padreNombre = padreNombre;
     }
 
     public Short getNivel() {

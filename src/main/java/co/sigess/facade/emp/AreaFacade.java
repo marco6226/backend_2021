@@ -47,6 +47,7 @@ public class AreaFacade extends AbstractFacade<Area> {
 
     @Override
     public Area create(Area area) throws Exception {
+        Area a = new Area();
         if (area == null) {
             throw new IllegalArgumentException("Area a crear no contiene datos");
         }
@@ -67,7 +68,11 @@ public class AreaFacade extends AbstractFacade<Area> {
         } else {
             area.setNivel((short) 0);
         }
-        return super.create(area);
+        a=super.create(area);
+
+        Query q = this.em.createNativeQuery("SELECT emp.campo_padre_areas()");
+        q.getResultList();
+        return a;
     }
 
     @Override

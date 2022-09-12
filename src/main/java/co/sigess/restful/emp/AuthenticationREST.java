@@ -14,6 +14,7 @@ import co.sigess.entities.emp.Empleado;
 import co.sigess.entities.emp.TokenActivo;
 import co.sigess.entities.emp.Usuario;
 import co.sigess.entities.inp.ElementoInspeccion;
++++import co.sigess.entities.sec.CorreoEstados;
 import co.sigess.exceptions.UserMessageException;
 import co.sigess.facade.core.LoaderFacade;
 import co.sigess.facade.emp.TokenFacade;
@@ -23,6 +24,8 @@ import co.sigess.facade.auc.ObservacionFacade;
 import co.sigess.facade.core.EmailFacade;
 import co.sigess.facade.sec.TareaDesviacionFacade;
 import co.sigess.facade.inp.InspeccionFacade;
+import co.sigess.facade.scm.CasosMedicosFacade;
+import co.sigess.facade.sec.CorreoEstadosFacade;
 import co.sigess.restful.security.Auditable;
 import co.sigess.restful.security.RollBackResponse;
 import co.sigess.restful.security.UtilSecurity;
@@ -35,12 +38,16 @@ import java.util.Calendar;
 import java.util.Date;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Produces;
@@ -65,6 +72,9 @@ import javax.ws.rs.core.*;
 @Path("authenticate")
 public class AuthenticationREST {
 
+    @PersistenceContext(unitName = "SIGESS_PU")
+    private EntityManager em;
+
     @Context
     HttpServletRequest httpRequest;
 
@@ -85,6 +95,12 @@ public class AuthenticationREST {
 
     @EJB
     private TareaDesviacionFacade tareaDesviacionFacade;
+
+    @EJB
+    private CorreoEstadosFacade correoEstadosFacade;
+
+    @EJB
+    private CasosMedicosFacade casosmedicosFacade;
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
@@ -208,6 +224,9 @@ public class AuthenticationREST {
         
     }
 
+   
+
+
     @POST
     @Path("refrescarToken")
     @Produces(MediaType.APPLICATION_JSON)
@@ -316,7 +335,7 @@ public class AuthenticationREST {
     @POST
     @Path("enviarCorreo/{email}")
     public Response enviarCorreo(@PathParam("email") String email, TareaDesviacion tarea) {
-
+//correoLunes();
 
         try {
             Boolean correo = tarea.getEnvioCorreo();
@@ -335,14 +354,47 @@ public class AuthenticationREST {
                 }
                 return Response.ok(new Mensaje("Tarea", "Se le ha enviado un correo al responsable", TipoMensaje.success)).build();
             }else{
-                return Response.ok().build();
+                return Response.ok(new Mensaje("Enviado", "ya se habia enviado", TipoMensaje.success)).build();
             }
         } catch (Exception ex) {
             return Util.manageException(ex, AuthenticationREST.class);
         }
 
     }
-    
+
+    protected EntityManager getEntityManager() {
+        return em;
+    }
+
+        @GET
+    @Path("enviarCorreoSemanal")
+public void correoLunes(){
+        Query q1 = this.em.createNativeQuery("SELECT sec.paso1_limpiartabla()");
+        q1.getResultList();
+        Query q2 = this.em.createNativeQuery("SELECT sec.paso2_llenartabla()");
+        q2.getResultList();
+        Query q3 = this.em.createNativeQuery("SELECT sec.paso3_llenarceros()");
+        q3.getResultList();
+        Query q4 = this.em.createNativeQuery("SELECT sec.paso4_llenarestados()");
+        q4.getResultList();
+        
+        List<CorreoEstados> list = this.correoEstadosFacade.findAll();
+        for (int i=0;i<list.size();i++) {
+        //int i =1;
+                  String email="juanbernalasd@lerprevencion.com";
+                  //String email=list.get(i).getEmail();
+                  //System.out.println(email2);
+                  String pNombre=list.get(i).getPrimerNombre()+" "+list.get(i).getPrimerApellido();
+                  //String pApellido=list.get(i).getPrimerApellido();
+                  String contTotal= Long.toString(list.get(i).getCount());
+                  String abierto= Integer.toString(list.get(i).getAbierto());
+                  String seguimiento=Integer.toString(list.get(i).getSeguimiento());
+                  String vencida=Integer.toString(list.get(i).getVencida());
+                  usuarioFacade.enviarCorreoSemanal(contTotal,email,pNombre,abierto,seguimiento,vencida);
+                  //System.out.println("paso");
+       }
+}    
+
     @POST
     @Path("enviarCorreoDenegada/{email}")
     public Response enviarCorreoObservacionDenegada(@PathParam("email") String email, Observacion observacion) {
@@ -364,8 +416,7 @@ public class AuthenticationREST {
         }
     }
     @POST
-    @Path("enviarHallazgosCriticos/{id}/{economico}/{ubicacion}")  
-    
+    @Path("enviarHallazgosCriticos/{id}/{economico}/{ubicacion}")
     public Response enviarHallazgosCriticos(@PathParam("id")String id, List<ElementoInspeccion> elementosList,@PathParam("economico")String economico,@PathParam("ubicacion")String ubicacion ) {
         try {
             if (id != null) {   

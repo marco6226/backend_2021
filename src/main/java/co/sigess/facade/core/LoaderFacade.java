@@ -41,6 +41,7 @@ public class LoaderFacade {
     private String PlantillaMailNotificacionNueva;
     private String PlantillaMailObservacionDenegada;
     private String PlantillaMailRiesgosCriticos;
+    private String PlantillaMailTareaSemanal;
 
     private ApiVersion apiVersion;
     private Properties smsProp;
@@ -163,6 +164,22 @@ public class LoaderFacade {
             }
         }
         return PlantillaMailRiesgosCriticos;
+    }
+    
+    public String getPlantillaMailTareaSemanal(){
+        if (this.PlantillaMailTareaSemanal == null) {
+            try {
+                String ruta = getClass().getResource(Recursos.PLANTILLA_MAIL_TAREA_SEMANAL.getRuta()).getPath();
+                int y = ruta.length(); 
+               String x  = isWindows(ruta,y);
+                System.out.println(x + "SEMANATAREA");
+                this.PlantillaMailTareaSemanal = new String(Files.readAllBytes(Paths.get(x)));               
+            } catch (IOException ex) {
+                Logger.getLogger(LoaderFacade.class.getName()).log(Level.SEVERE, null, ex);
+                throw new IllegalArgumentException("No se ha podido inicializar correctamente la plantilla PLANTILLA_MAIL_TAREA_SEMANAL");
+            }
+        }
+        return PlantillaMailTareaSemanal;
     }
 
     public ApiVersion getApiVersion() {

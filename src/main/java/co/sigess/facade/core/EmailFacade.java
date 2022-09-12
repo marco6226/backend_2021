@@ -43,6 +43,12 @@ public class EmailFacade {
     public static final String PARAM_ECONOMICO = "P{economico}";
     public static final String PARAM_UBICACION = "P{ubicacion}";
     
+    public static final String PARAM_COUNT = "P{count}";
+    public static final String PARAM_NOMBRE = "P{nombre}";
+    public static final String PARAM_ABIERTO = "P{abierto}";
+    public static final String PARAM_SEGUIMIENTO = "P{seguimiento}";
+    public static final String PARAM_VENCIDA = "P{vencida}";
+    
 
     @EJB
     private LoaderFacade loaderFacade;
@@ -77,6 +83,9 @@ public class EmailFacade {
                 case RIESGOS_CRITICOS:
                     plantilla = loaderFacade.getPlantillaMailRiesgosCriticos();
                     break;
+                case TAREA_SEMANAL:
+                    plantilla = loaderFacade.getPlantillaMailTareaSemanal();
+                    break;
             }
             plantilla = replaceParameters(parametros, plantilla);
             contenido = contenido.replace(PARAM_PLANT_PRINCIPAL, plantilla);
@@ -86,7 +95,6 @@ public class EmailFacade {
             Logger.getLogger(EmailFacade.class.getName()).log(Level.SEVERE, "", me);
         }
     }
-
     public void sendEmail(String msg, String asunto, String destinatario) {
         try {
             Message message = new MimeMessage(mailSession);

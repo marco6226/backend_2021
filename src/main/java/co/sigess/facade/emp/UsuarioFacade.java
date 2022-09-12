@@ -149,7 +149,7 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
                     TipoMensaje.warn
             );
         }
-        //System.out.println("SALIENDO");
+        System.out.println("SALIENDO");
         String passwd = UtilSecurity.generatePassword();
         usuario.setPassword(UtilSecurity.createEmailPasswordHash(usuario.getEmail(), UtilSecurity.toSHA256(passwd)));
         usuario.setEstado(EstadoUsuario.CAMBIO_PASSWD);
@@ -349,6 +349,24 @@ public Usuario enviarCorreo(String email,Empleado responsable,String nombre, Int
             emailFacade.sendEmail(parametros, TipoMail.NOTIFICACION_NUEVA, "Tarea", email);
         }
         return user;
+    }
+
+public void enviarCorreoSemanal(String contTotal,String email,String pNombre,String abierto,String seguimiento,String vencida){
+    
+        //Usuario user = this.findByEmail(email);
+        //System.out.println(user)
+        //if (user != null) {                          
+            
+            Map<String, String> parametros = new HashMap<>();
+            
+            parametros.put(EmailFacade.PARAM_COUNT, contTotal);
+            parametros.put(EmailFacade.PARAM_NOMBRE, pNombre);
+            parametros.put(EmailFacade.PARAM_ABIERTO, abierto);
+            parametros.put(EmailFacade.PARAM_SEGUIMIENTO, seguimiento);
+            parametros.put(EmailFacade.PARAM_VENCIDA, vencida);
+            emailFacade.sendEmail(parametros, TipoMail.TAREA_SEMANAL, "Tareas", email);
+       // }
+        //return user;
     }
     public Usuario cambiarPasswd(Integer idUsuario, String newPasswd, String newPasswdConfirm, String oldPasswd) throws Exception {
         Usuario user = super.find(idUsuario);
