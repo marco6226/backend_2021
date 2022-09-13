@@ -14,7 +14,7 @@ import co.sigess.entities.emp.Empleado;
 import co.sigess.entities.emp.TokenActivo;
 import co.sigess.entities.emp.Usuario;
 import co.sigess.entities.inp.ElementoInspeccion;
-+++import co.sigess.entities.sec.CorreoEstados;
+import co.sigess.entities.sec.CorreoEstados;
 import co.sigess.exceptions.UserMessageException;
 import co.sigess.facade.core.LoaderFacade;
 import co.sigess.facade.emp.TokenFacade;
@@ -64,6 +64,8 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 
 import javax.ws.rs.core.*;
 
+import java.util.Timer;
+import java.util.TimerTask;
 /**
  * REST Web Service
  *
@@ -365,10 +367,25 @@ public class AuthenticationREST {
     protected EntityManager getEntityManager() {
         return em;
     }
-
-        @GET
+    
+    @GET
     @Path("enviarCorreoSemanal")
-public void correoLunes(){
+    public void correoQuincenal () 
+    {
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                correoPeriodico();
+                System.out.println("Running: " + new java.util.Date());
+                
+            }
+       }, 0, 60000);
+       //}, 0, 1209600000);
+    }
+
+
+    public void correoPeriodico(){
         Query q1 = this.em.createNativeQuery("SELECT sec.paso1_limpiartabla()");
         q1.getResultList();
         Query q2 = this.em.createNativeQuery("SELECT sec.paso2_llenartabla()");
@@ -377,23 +394,21 @@ public void correoLunes(){
         q3.getResultList();
         Query q4 = this.em.createNativeQuery("SELECT sec.paso4_llenarestados()");
         q4.getResultList();
-        
+
         List<CorreoEstados> list = this.correoEstadosFacade.findAll();
         for (int i=0;i<list.size();i++) {
         //int i =1;
-                  String email="juanbernalasd@lerprevencion.com";
-                  //String email=list.get(i).getEmail();
-                  //System.out.println(email2);
-                  String pNombre=list.get(i).getPrimerNombre()+" "+list.get(i).getPrimerApellido();
-                  //String pApellido=list.get(i).getPrimerApellido();
-                  String contTotal= Long.toString(list.get(i).getCount());
-                  String abierto= Integer.toString(list.get(i).getAbierto());
-                  String seguimiento=Integer.toString(list.get(i).getSeguimiento());
-                  String vencida=Integer.toString(list.get(i).getVencida());
-                  usuarioFacade.enviarCorreoSemanal(contTotal,email,pNombre,abierto,seguimiento,vencida);
-                  //System.out.println("paso");
+            //String email="juanbernalasd@lerprevencion.com";
+            String email=list.get(i).getEmail();
+            String pNombre=list.get(i).getPrimerNombre()+" "+list.get(i).getPrimerApellido();
+            //String pApellido=list.get(i).getPrimerApellido();
+            String contTotal= Long.toString(list.get(i).getCount());
+            String abierto= Integer.toString(list.get(i).getAbierto());
+            String seguimiento=Integer.toString(list.get(i).getSeguimiento());
+            String vencida=Integer.toString(list.get(i).getVencida());
+            usuarioFacade.enviarCorreoSemanal(contTotal,email,pNombre,abierto,seguimiento,vencida);
        }
-}    
+    }    
 
     @POST
     @Path("enviarCorreoDenegada/{email}")
