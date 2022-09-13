@@ -14,7 +14,7 @@ import co.sigess.entities.emp.Empleado;
 import co.sigess.entities.emp.TokenActivo;
 import co.sigess.entities.emp.Usuario;
 import co.sigess.entities.inp.ElementoInspeccion;
-+++import co.sigess.entities.sec.CorreoEstados;
+import co.sigess.entities.sec.CorreoEstados;
 import co.sigess.exceptions.UserMessageException;
 import co.sigess.facade.core.LoaderFacade;
 import co.sigess.facade.emp.TokenFacade;
