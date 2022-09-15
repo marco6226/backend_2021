@@ -143,6 +143,7 @@ public class TareaDesviacionFacade extends AbstractFacade<TareaDesviacion> {
                 + "'fecha_reporte', vd.fecha_reporte,\n"
                 + "'regional',  regional.nombre,\n"
                 + "'area',  area.nombre,\n"
+                + "'division',  area.padre_nombre,\n"
                 + "'hash_id',  vd.hash_id,\n"
                 + "'concepto',  vd.concepto,\n"
                 + "'aspecto_causante',  vd.aspecto_causante,\n"
