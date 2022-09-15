@@ -312,7 +312,18 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
         }
         return user;
     }
-public Usuario enviarCorreo(String email,Empleado responsable,String nombre, Integer id,  Date fechaproyectada) throws Exception {
+public Usuario enviarCorreo(String email,Empleado responsable,String nombre, Integer id,  Date fechaproyectada, String host) throws Exception {
+    
+        String host1;
+        String host2;
+        
+        if(host=="Produccion"){
+            host1="https://sigess.app/app/sec/tarea/";
+            host2="https://sigess.app";
+        }else{
+            host1="https://demo.sigess.app/app/sec/tarea/";
+            host2="https://demo.sigess.app";
+        }
     
         Usuario user = this.findByEmail(email);
         if (user != null) {                 
@@ -346,17 +357,27 @@ public Usuario enviarCorreo(String email,Empleado responsable,String nombre, Int
             parametros.put(EmailFacade.PARAM_ID, id.toString());
             }
             parametros.put(EmailFacade.PARAM_FECHA_PROY, output);
+            parametros.put(EmailFacade.PARAM_HOST1, host1);
+            parametros.put(EmailFacade.PARAM_HOST2, host2);
             emailFacade.sendEmail(parametros, TipoMail.NOTIFICACION_NUEVA, "Tarea", email);
         }
         return user;
     }
 
-public void enviarCorreoSemanal(String contTotal,String email,String pNombre,String abierto,String seguimiento,String vencida){
-    
-        //Usuario user = this.findByEmail(email);
-        //System.out.println(user)
-        //if (user != null) {                          
-            
+public void enviarCorreoSemanal(String contTotal,String email,String pNombre,String abierto,String seguimiento,String vencida,String host){
+        
+        String host1;
+        String host2;
+        
+        if(host=="Produccion"){
+            host1="https://sigess.app/app/sec/misTareas";
+            host2="https://sigess.app";
+        }else{
+            host1="https://demo.sigess.app/app/sec/misTareas";
+            host2="https://demo.sigess.app";
+        }
+        
+        
             Map<String, String> parametros = new HashMap<>();
             
             parametros.put(EmailFacade.PARAM_COUNT, contTotal);
@@ -364,6 +385,8 @@ public void enviarCorreoSemanal(String contTotal,String email,String pNombre,Str
             parametros.put(EmailFacade.PARAM_ABIERTO, abierto);
             parametros.put(EmailFacade.PARAM_SEGUIMIENTO, seguimiento);
             parametros.put(EmailFacade.PARAM_VENCIDA, vencida);
+            parametros.put(EmailFacade.PARAM_HOST1, host1);
+            parametros.put(EmailFacade.PARAM_HOST2, host2);
             emailFacade.sendEmail(parametros, TipoMail.TAREA_SEMANAL, "Tareas", email);
        // }
         //return user;

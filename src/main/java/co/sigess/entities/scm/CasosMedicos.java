@@ -144,7 +144,7 @@ public class CasosMedicos implements Serializable {
     @Column(name = "fecha_concept_rehabilitaciontwo")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaConceptRehabilitacionTwo;
-    
+        
     @JoinColumn(name = "fk_empresa_id", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Empresa empresa;
@@ -178,6 +178,9 @@ public class CasosMedicos implements Serializable {
     @ManyToOne(optional = false)
     private Empleado pkUser;
 
+    @Column(name = "tipo_reporte")
+    private String tipoReporte;
+        
     public CasosMedicos() {
     }
 
@@ -648,5 +651,13 @@ public class CasosMedicos implements Serializable {
     }
 
     
-    
+
+    public String getTipoReporte() {
+        return tipoReporte;
+    }
+
+
+    public void setTipoReporte(String tipoReporte) {
+        this.tipoReporte = tipoReporte;
+    }
 }

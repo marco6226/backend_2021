@@ -51,6 +51,9 @@ import java.util.List;
 import java.util.Properties;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.ws.rs.BeanParam;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -75,6 +78,9 @@ import kong.unirest.UnirestException;
 @Path("casomedico")
 public class CasoMedicoREST extends ServiceREST {
 
+    @PersistenceContext(unitName = "SIGESS_PU")
+    private EntityManager em;
+    
     public final static String EMAIL_AON = "email_aon";
     public final static String PASS_AON = "pass_aon";
     @EJB
@@ -112,6 +118,7 @@ public class CasoMedicoREST extends ServiceREST {
 
     @EJB
     private ReintegroFacade reintegroFacade;
+    
 
     public CasoMedicoREST() {
         super(CasosMedicosFacade.class);
@@ -169,6 +176,8 @@ public class CasoMedicoREST extends ServiceREST {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Override
     public Response findWithFilter(@BeanParam FilterQuery filterQuery) {
+        Query q1 = this.em.createNativeQuery("SELECT scm.tiporetorno_cm()");
+        q1.getResultList();
         try {
             boolean filtradoEmpresa = false;
 
@@ -187,7 +196,7 @@ public class CasoMedicoREST extends ServiceREST {
                 empFilt.setValue1(super.getEmpresaIdRequestContext().toString());
                 filterQuery.getFilterList().add(empFilt);
             }
-
+            
             long numRows = filterQuery.isCount() ? casosmedicosFacade.countWithFilter(filterQuery) : -1;
 
             List list = casosmedicosFacade.findWithFilter(filterQuery);

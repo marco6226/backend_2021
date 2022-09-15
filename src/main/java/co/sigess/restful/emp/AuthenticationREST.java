@@ -341,6 +341,7 @@ public class AuthenticationREST {
 
         try {
             Boolean correo = tarea.getEnvioCorreo();
+            System.out.println("correo"+correo);
             if(correo==null){
                correo=false;}
             if(!correo){
@@ -351,8 +352,8 @@ public class AuthenticationREST {
                     Integer id = tarea.getId();
                     Date  FechaProyectada= tarea.getFechaProyectada();
                     Empleado responsable = tarea.getEmpResponsable();
-
-                    Usuario usuario = usuarioFacade.enviarCorreo(email.trim().toLowerCase(),responsable,nombre,id,FechaProyectada);
+                    String host=findByHost();
+                    Usuario usuario = usuarioFacade.enviarCorreo(email.trim().toLowerCase(),responsable,nombre,id,FechaProyectada, host);
                 }
                 return Response.ok(new Mensaje("Tarea", "Se le ha enviado un correo al responsable", TipoMensaje.success)).build();
             }else{
@@ -367,25 +368,47 @@ public class AuthenticationREST {
     protected EntityManager getEntityManager() {
         return em;
     }
-    
+      
     @GET
     @Path("enviarCorreoSemanal")
     public void correoQuincenal () 
     {
         Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
+            timer.schedule(new TimerTask() {
+            //int cont=0; 
             @Override
             public void run() {
-                correoPeriodico();
-                System.out.println("Running: " + new java.util.Date());
-                
+                /*if(cont<3){
+                    cont=cont+1;
+                    System.out.println(cont);*/
+                    correoPeriodico();
+                    //System.out.println("Running: " + new java.util.Date());
+                /*}else{
+                    timer.cancel();  // Terminates this timer, discarding any currently scheduled tasks.
+                    timer.purge();   // Removes all cancelled tasks from this timer"s task queue.
+                }*/
             }
-       }, 0, 60000);
-       //}, 0, 1209600000);
+       //}, 0, 60000);
+       }, 0, 1209600000);  
+    }
+    
+
+    public String findByHost() {
+        Query query = em.createNativeQuery("SELECT h from com.host h where h.host ='Produccion'");
+        try {
+            List hostin =query.getResultList();
+            if(hostin.size()==0){
+                return "Demo";
+            }else{
+                return "Produccion";
+            }
+        } catch (Exception ejbExc) {
+            return "Demo";
+        }
     }
 
-
     public void correoPeriodico(){
+        //String miStorage = window.localStorage;
         Query q1 = this.em.createNativeQuery("SELECT sec.paso1_limpiartabla()");
         q1.getResultList();
         Query q2 = this.em.createNativeQuery("SELECT sec.paso2_llenartabla()");
@@ -406,7 +429,8 @@ public class AuthenticationREST {
             String abierto= Integer.toString(list.get(i).getAbierto());
             String seguimiento=Integer.toString(list.get(i).getSeguimiento());
             String vencida=Integer.toString(list.get(i).getVencida());
-            usuarioFacade.enviarCorreoSemanal(contTotal,email,pNombre,abierto,seguimiento,vencida);
+            String host=findByHost();
+            usuarioFacade.enviarCorreoSemanal(contTotal,email,pNombre,abierto,seguimiento,vencida,host);
        }
     }    
 

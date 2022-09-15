@@ -48,6 +48,8 @@ public class EmailFacade {
     public static final String PARAM_ABIERTO = "P{abierto}";
     public static final String PARAM_SEGUIMIENTO = "P{seguimiento}";
     public static final String PARAM_VENCIDA = "P{vencida}";
+    public static final String PARAM_HOST1 = "P{host1}";
+    public static final String PARAM_HOST2 = "P{host2}";
     
 
     @EJB
