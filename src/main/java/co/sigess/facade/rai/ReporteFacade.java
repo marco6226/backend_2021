@@ -127,8 +127,8 @@ public class ReporteFacade extends AbstractFacade<Reporte> {
 
         Empleado empleadoReporta = this.empleadoFacade.findByUsuario(usuarioId);
         if (empleadoReporta != null) {
-            reporte.setNombresResponsable(empleadoReporta.getPrimerNombre() + " " + empleadoReporta.getSegundoNombre());
-            reporte.setApellidosResponsable(empleadoReporta.getPrimerApellido() + " " + empleadoReporta.getSegundoApellido());
+            reporte.setNombresResponsable(empleadoReporta.getPrimerNombre() + " " + ((empleadoReporta.getSegundoNombre()!=null)?empleadoReporta.getSegundoNombre():""));
+            reporte.setApellidosResponsable(empleadoReporta.getPrimerApellido() + " " + ((empleadoReporta.getSegundoApellido()!=null)?empleadoReporta.getSegundoApellido():""));
             reporte.setCargoResponsable(empleadoReporta.getCargo().getNombre());
             reporte.setTipoIdentificacionResponsable(empleadoReporta.getTipoIdentificacion().name());
             reporte.setNumeroIdentificacionResponsable(empleadoReporta.getNumeroIdentificacion());
