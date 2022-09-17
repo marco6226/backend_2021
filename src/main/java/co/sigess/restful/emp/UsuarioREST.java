@@ -167,6 +167,19 @@ public class UsuarioREST extends ServiceREST {
         }
     }
 
+    @POST
+    @Path("aliado/{idEmpresaAliada}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response createUsuarioAliado(Usuario usuario, @PathParam("idEmpresaAliada") Integer idEmpresaAliada) {
+        try {
+            usuarioFacade.create(usuario, idEmpresaAliada,true);
+//            emailFacade.(usuario.getEmail());
+            return Response.ok(usuario).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, UsuarioREST.class);
+        }
+    }
+
     @PUT
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Auditable

@@ -6,6 +6,7 @@
 package co.sigess.restful.emp;
 
 import co.sigess.entities.emp.Empresa;
+import co.sigess.entities.emp.SST;
 import co.sigess.facade.emp.EmpresaFacade;
 import co.sigess.restful.CriteriaFilter;
 import co.sigess.restful.Filter;
@@ -90,6 +91,7 @@ public class EmpresaREST extends ServiceREST {
     public Response edit(Empresa empresa) {
         try {
             empresa = empresaFacade.edit(empresa);
+            System.out.println("ok empresa");
             return Response.ok(empresa).build();
         } catch (Exception ex) {
             return Util.manageException(ex, EmpresaREST.class);
@@ -138,5 +140,19 @@ public class EmpresaREST extends ServiceREST {
       Empresa  empresa = empresaFacade.find(super.getEmpresaIdRequestContext());
         return Response.ok(empresa).build();
     }
+
+    @POST
+    @Secured(validarPermiso = false)
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Path("createEquipoSST")
+    public Response createEquipoSST(SST sst) {
+        try {
+            sst = empresaFacade.adicionarSST(sst);
+            return Response.ok(sst).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, EmpresaREST.class);
+        }
+    }
+
 
 }
