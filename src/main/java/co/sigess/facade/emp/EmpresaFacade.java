@@ -10,7 +10,7 @@ import co.sigess.entities.emp.Empresa;
 import co.sigess.entities.emp.Perfil;
 import co.sigess.entities.emp.Permiso;
 import co.sigess.entities.emp.Recurso;
-import co.sigess.entities.emp.SST;
+import co.sigess.entities.emp.Sst;
 import co.sigess.entities.emp.UsuarioEmpresa;
 import co.sigess.entities.emp.UsuarioEmpresaPK;
 import java.util.List;
@@ -149,13 +149,6 @@ public class EmpresaFacade extends AbstractFacade<Empresa> {
         }
         super.edit(empresa);
         return vinculado;
-    }
-
-    public SST adicionarSST(SST sst) throws Exception {
-
-        sst = super.create(sst);
-
-        return sst;
     }
 
 }

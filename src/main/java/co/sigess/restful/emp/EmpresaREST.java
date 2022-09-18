@@ -5,9 +5,13 @@
  */
 package co.sigess.restful.emp;
 
+import co.sigess.entities.emp.AliadoInformacion;
 import co.sigess.entities.emp.Empresa;
-import co.sigess.entities.emp.SST;
+import co.sigess.entities.emp.Sst;
+import co.sigess.entities.emp.AliadoInformacion;
 import co.sigess.facade.emp.EmpresaFacade;
+import co.sigess.facade.emp.SstFacade;
+import co.sigess.facade.emp.AliadoInformacionFacade;
 import co.sigess.restful.CriteriaFilter;
 import co.sigess.restful.Filter;
 import co.sigess.restful.FilterQuery;
@@ -19,6 +23,7 @@ import co.sigess.util.Util;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ws.rs.BeanParam;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -38,6 +43,12 @@ public class EmpresaREST extends ServiceREST {
 
     @EJB
     private EmpresaFacade empresaFacade;
+    
+    @EJB
+    private SstFacade SstFacade;
+    
+    @EJB
+    private AliadoInformacionFacade AliadoInformacionFacade;
 
     public EmpresaREST() {
 
@@ -145,14 +156,81 @@ public class EmpresaREST extends ServiceREST {
     @Secured(validarPermiso = false)
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("createEquipoSST")
-    public Response createEquipoSST(SST sst) {
+    public Response createEquipoSST(Sst sst) {
         try {
-            sst = empresaFacade.adicionarSST(sst);
+            sst = SstFacade.adicionarSST(sst);
             return Response.ok(sst).build();
         } catch (Exception ex) {
             return Util.manageException(ex, EmpresaREST.class);
         }
     }
+    
+    @PUT
+    @Secured(validarPermiso = false)
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Path("updateEquipoSST")
+    public Response updateEquipoSST(Sst sst) {
+        try {
+            sst = SstFacade.updateSST(sst);
+            return Response.ok(sst).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, EmpresaREST.class);
+        }
+    }
+  
+    
+    @GET
+    @Secured(requiereEmpresaId = false)
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Path("getEquipoSST/{aliadoId}")
+    public Response findByAliadoId(@PathParam("aliadoId") Integer aliadoId) {
+        List<Sst> sst = SstFacade.findByAliadoId(aliadoId);
+        return Response.ok(sst).build();
+    }
 
+    @DELETE
+    @Secured(validarPermiso = false)
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Path("deleteEquipoSST")
+    public Response deleteEquipoSST(Sst sst) {
+        try {
+            SstFacade.deleteByAliadoId(sst);
+            return Response.ok().build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, EmpresaREST.class);
+        }
+    }
+    
+    @PUT
+    @Secured(validarPermiso = false)
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Path("saveAliadoInformacion")
+    public Response saveAliadoInformacion(AliadoInformacion aliadoInformacion) {
+        try {
+            
+            List<AliadoInformacion> data = AliadoInformacionFacade.findByAliadoId(aliadoInformacion.getId_empresa());
+
+            if(data.size()>0){
+                aliadoInformacion = AliadoInformacionFacade.updateAliadoInformacion(aliadoInformacion);
+                return Response.ok(aliadoInformacion).build();
+            }
+            else{
+                aliadoInformacion = AliadoInformacionFacade.adicionarAliadoInformacion(aliadoInformacion);
+                return Response.ok(aliadoInformacion).build();
+            }
+
+        } catch (Exception ex) {
+            return Util.manageException(ex, EmpresaREST.class);
+        }
+    }
+    
+    @GET
+    @Secured(requiereEmpresaId = false)
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Path("getAliadoInformacion/{aliadoId}")
+    public Response findByInformacionAliadoId(@PathParam("aliadoId") Integer aliadoId) {
+        List<AliadoInformacion> aliadoInformacion = AliadoInformacionFacade.findByAliadoId(aliadoId);
+        return Response.ok(aliadoInformacion).build();
+    }
 
 }

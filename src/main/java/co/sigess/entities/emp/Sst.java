@@ -24,16 +24,15 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author John Rueda
  */
 @Entity
-@JsonIgnoreProperties(ignoreUnknown = true)
 @Table(name = "sst", schema = "emp")
 @XmlRootElement
-public class SST implements Serializable{
+public class Sst implements Serializable{
     
     @Id
     @Basic(optional = false)
     @NotNull
-    @SequenceGenerator(name = "usuario_id_seq", schema = "emp", sequenceName = "usuario_id_seq", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "usuario_id_seq")
+    @SequenceGenerator(name = "sst_id_seq", schema = "emp", sequenceName = "sst_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sst_id_seq")
     @Column(name = "id")
     private Integer id;
 
@@ -59,13 +58,16 @@ public class SST implements Serializable{
     private String documento;
 
     @Column(name = "division")
-    private String[] division;
+    private String division;
 
     @Column(name = "localidad")
-    private String[] localidad;
+    private String localidad;
 
     @Column(name = "cargo")
     private String cargo;
+    
+    @Column(name = "encargado")
+    private Boolean encargado;
 
     public Integer getId() {
         return id;
@@ -131,19 +133,19 @@ public class SST implements Serializable{
         this.documento = documento;
     }
 
-    public String[] getDivision() {
+    public String getDivision() {
         return division;
     }
 
-    public void setDivision(String[] division) {
+    public void setDivision(String division) {
         this.division = division;
     }
 
-    public String[] getLocalidad() {
+    public String getLocalidad() {
         return localidad;
     }
 
-    public void setLocalidad(String[] localidad) {
+    public void setLocalidad(String localidad) {
         this.localidad = localidad;
     }
 
@@ -155,5 +157,14 @@ public class SST implements Serializable{
         this.cargo = cargo;
     }
 
+    public Boolean getEncargado() {
+        return encargado;
+    }
+
+    public void setEncargado(Boolean encargado) {
+        this.encargado = encargado;
+    }
+
+    
 
 }

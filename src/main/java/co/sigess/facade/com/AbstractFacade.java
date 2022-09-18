@@ -7,7 +7,6 @@ package co.sigess.facade.com;
 
 import co.sigess.entities.ado.Modulo;
 import co.sigess.entities.emp.Empresa;
-import co.sigess.entities.emp.SST;
 import co.sigess.entities.sec.EvidencesFiles;
 import co.sigess.restful.CriteriaFilter;
 import co.sigess.restful.Filter;
@@ -376,7 +375,4 @@ public abstract class AbstractFacade<T> {
         return entityClass;
     }
 
-    public SST create(SST sst) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
 }
