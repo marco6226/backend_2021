@@ -432,6 +432,18 @@ public class DirectorioREST extends ServiceREST {
             return Util.manageException(ex, DirectorioREST.class);
         }
     }
+    
+    @GET
+    @Path("buscarDocumentosById/{ID}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response buscarById(@PathParam("ID") int Id) {
+        try {
+            List<Directorio> list = directorioFacade.buscarDocumentosById(Id);
+            return Response.ok(list).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, DirectorioREST.class);
+        }
+    }
 
     @DELETE
     @Path("{directorioId}")

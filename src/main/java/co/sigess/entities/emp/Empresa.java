@@ -124,6 +124,9 @@ public class Empresa implements Serializable {
     @Column(name = "id_empresa_aliada")
     private Integer idEmpresaAliada;   
 
+    @Column(name = "correoAliadoCreador")
+    private String correoAliadoCreador;   
+    
     @JoinColumn(name = "fk_arl_id", referencedColumnName = "id")
     @ManyToOne
     private Arl arl;
@@ -402,8 +405,13 @@ public String getTipo_persona() {
         this.idEmpresaAliada = idEmpresaAliada;
     }
 
+    public String getCorreoAliadoCreador() {
+        return correoAliadoCreador;
+    }
 
-
+    public void setCorreoAliadoCreador(String correoAliadoCreador) {
+        this.correoAliadoCreador = correoAliadoCreador;
+    }
 
     @Override
     public int hashCode() {

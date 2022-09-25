@@ -88,6 +88,12 @@ public class EmailFacade {
                 case TAREA_SEMANAL:
                     plantilla = loaderFacade.getPlantillaMailTareaSemanal();
                     break;
+                case ALIADO_NUEVO:
+                    plantilla = loaderFacade.getPlantillaAliadoNuevo();
+                    break;
+                case ALIADO_ACTUALIZADO:
+                    plantilla = loaderFacade.getPlantillaAliadoActualizado();
+                    break;
             }
             plantilla = replaceParameters(parametros, plantilla);
             contenido = contenido.replace(PARAM_PLANT_PRINCIPAL, plantilla);

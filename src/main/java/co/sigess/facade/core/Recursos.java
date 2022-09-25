@@ -19,7 +19,9 @@ public enum Recursos {
     PLANTILLA_MAIL_OBSERVACION_DENEGADA("/mail/templates/PlantillaObservacionDenegada.html"),
     PLANTILLA_MAIL_RIESGOS_CRITICOS("/mail/templates/PlantillaNocumplecriticos.html"),
     PLANTILLA_MAIL_TAREA_SEMANAL("/mail/templates/PlantillaMailTareaSemanal.html"),
-    
+    PLANTILLA_MAIL_ALIADO_NUEVO("/mail/templates/PlantillaAliadoNuevo.html"),
+    PLANTILLA_MAIL_ALIADO_ACTUALIZADO("/mail/templates/PlantillaAliadoActualizado.html"),
+
     SMS_INTEGRACION_PROPERTIES("/sms/integracion.properties");
     
     private final String ruta;

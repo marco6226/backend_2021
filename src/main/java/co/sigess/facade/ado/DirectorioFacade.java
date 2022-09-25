@@ -267,6 +267,13 @@ public class DirectorioFacade extends AbstractFacade<Directorio> {
         List<Directorio> list = (List<Directorio>) q.getResultList();
         return list;
     }
+    
+    public List<Directorio> buscarDocumentosById(Integer Id) {
+        Query q = this.em.createQuery("SELECT dir FROM Directorio dir WHERE dir.id = ?1");
+        q.setParameter(1, Id);
+        List<Directorio> list = (List<Directorio>) q.getResultList();
+        return list;
+    }
 
     public void eliminarDocumentos(String modulo, String modParam) throws Exception {
         switch (Modulo.valueOf(modulo)) {

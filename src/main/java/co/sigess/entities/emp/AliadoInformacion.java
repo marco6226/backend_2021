@@ -51,6 +51,9 @@ public class AliadoInformacion implements Serializable{
     
     @Column(name = "colider")
     private String colider;
+    
+    @Column(name = "documentos")
+    private String documentos;
 
     public Integer getId() {
         return id;
@@ -106,6 +109,14 @@ public class AliadoInformacion implements Serializable{
 
     public void setColider(String colider) {
         this.colider = colider;
+    }
+
+    public String getDocumentos() {
+        return documentos;
+    }
+
+    public void setDocumentos(String documentos) {
+        this.documentos = documentos;
     }
 
   

@@ -17,5 +17,7 @@ public enum TipoMail {
     OBSERVACION_DENEGADA,
     RIESGOS_CRITICOS,
     TAREA_SEMANAL,
-    
+    ALIADO_NUEVO,
+    ALIADO_ACTUALIZADO
+
 }

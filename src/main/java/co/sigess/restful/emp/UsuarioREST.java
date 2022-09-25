@@ -10,6 +10,8 @@ import co.sigess.entities.com.TipoMensaje;
 import co.sigess.entities.emp.EventoLog;
 import co.sigess.entities.emp.Usuario;
 import co.sigess.exceptions.UserMessageException;
+import co.sigess.facade.core.EmailFacade;
+import co.sigess.facade.core.TipoMail;
 import co.sigess.facade.emp.EventoLogFacade;
 import co.sigess.facade.emp.UsuarioFacade;
 import co.sigess.restful.CriteriaFilter;
@@ -53,6 +55,9 @@ public class UsuarioREST extends ServiceREST {
     @EJB
     private UsuarioFacade usuarioFacade;
 
+    @EJB
+    private EmailFacade emailFacade;
+    
     @EJB
     private EventoLogFacade eventoLogFacade;
 
@@ -173,8 +178,41 @@ public class UsuarioREST extends ServiceREST {
     public Response createUsuarioAliado(Usuario usuario, @PathParam("idEmpresaAliada") Integer idEmpresaAliada) {
         try {
             usuarioFacade.create(usuario, idEmpresaAliada,true);
-//            emailFacade.(usuario.getEmail());
+            Map<String, String> parametros = new HashMap<>();
+            
+            parametros.put(EmailFacade.PARAM_ID,idEmpresaAliada.toString());
+        
+            emailFacade.sendEmail(parametros, TipoMail.ALIADO_NUEVO, "Aliado Nuevo", usuario.getEmail());
+            
             return Response.ok(usuario).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, UsuarioREST.class);
+        }
+    }
+    
+    @PUT
+    @Path("aliadoActualizar/{idEmpresaAliada}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response actualziarAliado(String email, @PathParam("idEmpresaAliada") Integer idEmpresaAliada) {
+        try {          
+            Map<String, String> parametros = new HashMap<>();
+            parametros.put(EmailFacade.PARAM_ID,idEmpresaAliada.toString());
+            emailFacade.sendEmail(parametros, TipoMail.ALIADO_NUEVO, "Aliado Actualizar Información", email);
+            return Response.ok().build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, UsuarioREST.class);
+        }
+    }
+    
+    @PUT
+    @Path("emailAliadoActualizado/{idEmpresaAliada}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response aliadoActualizado(String email, @PathParam("idEmpresaAliada") Integer idEmpresaAliada) {
+        try {          
+            Map<String, String> parametros = new HashMap<>();
+            parametros.put(EmailFacade.PARAM_ID,idEmpresaAliada.toString());
+            emailFacade.sendEmail(parametros, TipoMail.ALIADO_ACTUALIZADO, "el Aliado Actualizo la Información", email);
+            return Response.ok().build();
         } catch (Exception ex) {
             return Util.manageException(ex, UsuarioREST.class);
         }

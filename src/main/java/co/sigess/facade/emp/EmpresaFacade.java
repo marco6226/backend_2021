@@ -115,7 +115,7 @@ public class EmpresaFacade extends AbstractFacade<Empresa> {
         empresaDB.setVigencia(emp.getVigencia());
         empresaDB.setIdEmpresaAliada(emp.getIdEmpresaAliada());
         empresaDB.setActivo(emp.getActivo());
-
+        empresaDB.setCorreoAliadoCreador(emp.getCorreoAliadoCreador());
 
 
         if (emp.getArl() != null && emp.getArl().getId() == null) {

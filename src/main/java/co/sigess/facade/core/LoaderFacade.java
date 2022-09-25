@@ -42,6 +42,8 @@ public class LoaderFacade {
     private String PlantillaMailObservacionDenegada;
     private String PlantillaMailRiesgosCriticos;
     private String PlantillaMailTareaSemanal;
+    private String PlantillaAliadoNuevo;
+    private String PlantillaAliadoActualizado;
 
     private ApiVersion apiVersion;
     private Properties smsProp;
@@ -164,6 +166,38 @@ public class LoaderFacade {
             }
         }
         return PlantillaMailRiesgosCriticos;
+    }
+    
+    public String getPlantillaAliadoNuevo(){
+        if (this.PlantillaAliadoNuevo == null) {
+            try {
+                String ruta = getClass().getResource(Recursos.PLANTILLA_MAIL_ALIADO_NUEVO.getRuta()).getPath();
+                int y = ruta.length(); 
+               String x  = isWindows(ruta,y);
+                System.out.println(x + "riesgos");
+                this.PlantillaAliadoNuevo = new String(Files.readAllBytes(Paths.get(x)));               
+            } catch (IOException ex) {
+                Logger.getLogger(LoaderFacade.class.getName()).log(Level.SEVERE, null, ex);
+                throw new IllegalArgumentException("No se ha podido inicializar correctamente la plantilla PLANTILLA_MAIL_ALIADO_NUEVO");
+            }
+        }
+        return PlantillaAliadoNuevo;
+    }
+    
+    public String getPlantillaAliadoActualizado(){
+        if (this.PlantillaAliadoActualizado == null) {
+            try {
+                String ruta = getClass().getResource(Recursos.PLANTILLA_MAIL_ALIADO_ACTUALIZADO.getRuta()).getPath();
+                int y = ruta.length(); 
+               String x  = isWindows(ruta,y);
+                System.out.println(x + "riesgos");
+                this.PlantillaAliadoActualizado = new String(Files.readAllBytes(Paths.get(x)));               
+            } catch (IOException ex) {
+                Logger.getLogger(LoaderFacade.class.getName()).log(Level.SEVERE, null, ex);
+                throw new IllegalArgumentException("No se ha podido inicializar correctamente la plantilla PLANTILLA_MAIL_ALIADO_ACTUALIZADO");
+            }
+        }
+        return PlantillaAliadoActualizado;
     }
     
     public String getPlantillaMailTareaSemanal(){
