@@ -140,13 +140,13 @@ public class ReporteFacade extends AbstractFacade<Reporte> {
     public Reporte create(Reporte reporte) throws Exception {
         
         if( reporte.getEmpresa().getId() ==3){
-        Reporte num_furat = this.findByfurat(reporte.getNumero_furat());
+        Reporte num_furat = this.findByfurat(reporte.getNumerofurat());
         if (num_furat != null) {
             //System.out.println("INGRESANDO SI SEÑOR");
             throw new UserMessageException(
                     "REPORTE YA REGISTRADO",
                     "el numero de  FURAT "
-                    + reporte.getNumero_furat()
+                    + reporte.getNumerofurat()
                     + " ya se encuentra registrado, corrija los datos e intente cargar nuevamente el archivo",
                     TipoMensaje.warn
             );

@@ -290,7 +290,7 @@ public class Reporte implements Serializable {
     private String descripcion;
     
     @Column(name = "numero_furat")
-    private String numero_furat;
+    private String numerofurat;
     
     @Size(max = 100, message = "Máximo 100 caracteres para el campo sitio")
     @Column(name = "sitio")
@@ -1240,17 +1240,17 @@ public class Reporte implements Serializable {
     }
 
     /**
-     * @return the numero_furat
+     * @return the numerofurat
      */
-    public String getNumero_furat() {
-        return numero_furat;
+    public String getNumerofurat() {
+        return numerofurat;
     }
 
     /**
-     * @param numero_furat the numero_furat to set
+     * @param numerofurat the numerofurat to set
      */
-    public void setNumero_furat(String numero_furat) {
-        this.numero_furat = numero_furat;
+    public void setNumerofurat(String numerofurat) {
+        this.numerofurat = numerofurat;
     }
 
 }
