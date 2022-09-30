@@ -1240,14 +1240,14 @@ public class Reporte implements Serializable {
     }
 
     /**
-     * @return the numero_furat
+     * @return the numerofurat
      */
     public String getNumerofurat() {
         return numerofurat;
     }
 
     /**
-     * @param numerofurat the numero_furat to set
+     * @param numerofurat the numerofurat to set
      */
     public void setNumerofurat(String numerofurat) {
         this.numerofurat = numerofurat;
