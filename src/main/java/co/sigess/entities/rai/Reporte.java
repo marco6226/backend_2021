@@ -289,7 +289,7 @@ public class Reporte implements Serializable {
     @Column(name = "descripcion")
     private String descripcion;
     
-    @Column(name = "numero_furat")
+    @Column(name = "numerofurat")
     private String numerofurat;
     
     @Size(max = 100, message = "Máximo 100 caracteres para el campo sitio")
