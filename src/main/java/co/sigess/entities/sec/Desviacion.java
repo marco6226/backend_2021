@@ -8,12 +8,15 @@ package co.sigess.entities.sec;
 import co.sigess.entities.emp.Area;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -39,7 +42,8 @@ public class Desviacion implements Serializable {
     private String concepto;
     
     @Column(name = "fecha_reporte")
-    private String fechaReporte;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaReporte;
     
     @Column(name = "aspecto_causante")
     private String aspectoCausante;
@@ -158,14 +162,14 @@ public class Desviacion implements Serializable {
     /**
      * @return the fechaReporte
      */
-    public String getFechaReporte() {
+    public Date getFechaReporte() {
         return fechaReporte;
     }
 
     /**
-     * @param fechareporte the fechareporte to set
+     * @param fechaReporte the fechareporte to set
      */
-    public void setFechaReporte(String fechaReporte) {
+    public void setFechaReporte(Date fechaReporte) {
         this.fechaReporte = fechaReporte;
     }
 
