@@ -42,7 +42,7 @@ public class Desviacion implements Serializable {
     private String concepto;
     
     @Column(name = "fecha_reporte")
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date fechaReporte;
     
     @Column(name = "aspecto_causante")
