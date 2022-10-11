@@ -12,14 +12,17 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.core.Context;
 
 /**
  *
  * @author fmoreno
  */
-@Stateless
+//@Stateless
+@javax.ejb.Stateless
 public class HhtFacade extends AbstractFacade<Hht> {
-
+    
     @PersistenceContext(unitName = "SIGESS_PU")
     private EntityManager em;
 
@@ -36,6 +39,9 @@ public class HhtFacade extends AbstractFacade<Hht> {
     public Hht edit(Hht entity) throws Exception {
         Hht hhtDB = this.find(entity.getId());
         hhtDB.setValor(entity.getValor());
+        hhtDB.setAnio(entity.getAnio());
+        hhtDB.setMes(entity.getMes());
+        hhtDB.setEmpresaSelect(entity.getEmpresaSelect());
         return super.edit(hhtDB);
     }
 
