@@ -51,7 +51,7 @@ public class Campo implements Serializable {
 
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 50)
+    @Size(min = 1, max = 255)
     @Column(name = "nombre")
     private String nombre;
 

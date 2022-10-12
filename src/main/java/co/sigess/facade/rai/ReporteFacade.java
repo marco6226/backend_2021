@@ -303,7 +303,7 @@ public class ReporteFacade extends AbstractFacade<Reporte> {
     }
     
     public Reporte findByfurat(String furat) {
-        Query query = em.createQuery("SELECT u from Reporte u where u.numero_furat = :furat");
+        Query query = em.createQuery("SELECT u from Reporte u where u.numerofurat = :furat");
         query.setParameter("furat", furat);
         try {
             Reporte reporte = (Reporte) query.getSingleResult();
