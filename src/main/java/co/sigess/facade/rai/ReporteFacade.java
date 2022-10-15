@@ -229,7 +229,7 @@ public class ReporteFacade extends AbstractFacade<Reporte> {
                 Cell cell = currentRow.getCell(esquema.getPosicionColumna());
                 Object valor = null;
 
-                switch (cell.getCellTypeEnum()) {
+                switch (cell.getCellType()) {
                     case STRING:
                         valor = cell.getStringCellValue().trim();
                         break;
@@ -248,7 +248,7 @@ public class ReporteFacade extends AbstractFacade<Reporte> {
 
                 switch (esquema.getTipoDatoLeido()) {
                     case "string":
-                        if (cell.getCellTypeEnum().equals(CellType.STRING)) {
+                        if (cell.getCellType().equals(CellType.STRING)) {
                             campo.set(reporte, valor);
                         } else {
                             campo.set(reporte, String.format("%.0f", valor));
@@ -256,10 +256,10 @@ public class ReporteFacade extends AbstractFacade<Reporte> {
                         break;
                     case "date":
                     case "time":
-                        if (cell.getCellTypeEnum().equals(CellType.STRING)) {
+                        if (cell.getCellType().equals(CellType.STRING)) {
                             SimpleDateFormat sdf = new SimpleDateFormat(esquema.getFormatoCampoLeido());
                             campo.set(reporte, sdf.parse((String) valor));
-                        } else if (cell.getCellTypeEnum().equals(CellType.NUMERIC)) {
+                        } else if (cell.getCellType().equals(CellType.NUMERIC)) {
                             campo.set(reporte, DateUtil.getJavaDate((double) valor));
                         } else {
                             // Adicionar mensaje de error
@@ -267,9 +267,9 @@ public class ReporteFacade extends AbstractFacade<Reporte> {
                         }
                         break;
                     case "integer":
-                        if (cell.getCellTypeEnum().equals(CellType.STRING)) {
+                        if (cell.getCellType().equals(CellType.STRING)) {
                             campo.set(reporte, Integer.parseInt((String) valor));
-                        } else if (cell.getCellTypeEnum().equals(CellType.NUMERIC)) {
+                        } else if (cell.getCellType().equals(CellType.NUMERIC)) {
                             campo.set(reporte, ((Double) valor).intValue());
                         } else {
                             Integer val = ((boolean) valor) ? 1 : 0;
@@ -295,7 +295,7 @@ public class ReporteFacade extends AbstractFacade<Reporte> {
         }
         for (int cellNum = row.getFirstCellNum(); cellNum < row.getLastCellNum(); cellNum++) {
             Cell cell = row.getCell(cellNum);
-            if (cell != null && cell.getCellTypeEnum() != CellType.BLANK) {
+            if (cell != null && cell.getCellType() != CellType.BLANK) {
                 return false;
             }
         }
