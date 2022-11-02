@@ -54,6 +54,15 @@ public class AliadoInformacion implements Serializable{
     
     @Column(name = "documentos")
     private String documentos;
+    
+    @Column(name = "representante_legal")
+    private String representante_legal;
+    
+    @Column(name = "numero_trabajadores")
+    private Integer numero_trabajadores;
+    
+    @Column(name = "numero_trabajadores_asignados")
+    private Integer numero_trabajadores_asignados;
 
     public Integer getId() {
         return id;
@@ -117,6 +126,30 @@ public class AliadoInformacion implements Serializable{
 
     public void setDocumentos(String documentos) {
         this.documentos = documentos;
+    }
+
+    public String getRepresentante_legal() {
+        return representante_legal;
+    }
+
+    public void setRepresentante_legal(String representante_legal) {
+        this.representante_legal = representante_legal;
+    }
+
+    public Integer getNumero_trabajadores() {
+        return numero_trabajadores;
+    }
+
+    public void setNumero_trabajadores(Integer numero_trabajadores) {
+        this.numero_trabajadores = numero_trabajadores;
+    }
+
+    public Integer getNumero_trabajadores_asignados() {
+        return numero_trabajadores_asignados;
+    }
+
+    public void setNumero_trabajadores_asignados(Integer numero_trabajadores_asignados) {
+        this.numero_trabajadores_asignados = numero_trabajadores_asignados;
     }
 
   
