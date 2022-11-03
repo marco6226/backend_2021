@@ -380,6 +380,14 @@ public class TareaDesviacionFacade extends AbstractFacade<TareaDesviacion> {
                 + "on vd.hash_id=dad.pk_desviacion_hash_id\n";
                         
             switch(modulo){
+                
+                case "RAI":
+                    sql+= "left join auc.documento_observacion as dc\n"
+                    + "on dc.fk_observacion_id=vd.id\n"
+                    + "left join ado.documento as ado\n"
+                    + "on dc.fk_documento_id=ado.id\n"
+                    + "where td.id= ?1 and ruta is not null";
+                     break;
                 case "OBS":
                     sql+= "left join auc.documento_observacion as dc\n"
                     + "on dc.fk_observacion_id=vd.id\n"
