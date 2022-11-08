@@ -6,6 +6,7 @@
 package co.sigess.entities.emp;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -63,6 +64,12 @@ public class AliadoInformacion implements Serializable{
     
     @Column(name = "numero_trabajadores_asignados")
     private Integer numero_trabajadores_asignados;
+    
+    @Column(name = "fecha_vencimiento_arl")
+    private Date fecha_vencimiento_arl;
+    
+    @Column(name = "fecha_vencimiento_sst")
+    private Date fecha_vencimiento_sst;
 
     public Integer getId() {
         return id;
@@ -152,6 +159,19 @@ public class AliadoInformacion implements Serializable{
         this.numero_trabajadores_asignados = numero_trabajadores_asignados;
     }
 
-  
-    
+    public Date getFecha_vencimiento_arl() {
+        return fecha_vencimiento_arl;
+    }
+
+    public void setFecha_vencimiento_arl(Date fecha_vencimiento_arl) {
+        this.fecha_vencimiento_arl = fecha_vencimiento_arl;
+    }
+
+    public Date getFecha_vencimiento_sst() {
+        return fecha_vencimiento_sst;
+    }
+
+    public void setFecha_vencimiento_sst(Date fecha_vencimiento_sst) {
+        this.fecha_vencimiento_sst = fecha_vencimiento_sst;
+    }
 }
