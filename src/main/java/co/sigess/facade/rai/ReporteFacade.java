@@ -138,19 +138,18 @@ public class ReporteFacade extends AbstractFacade<Reporte> {
 
     @Override
     public Reporte create(Reporte reporte) throws Exception {
-        
         if( reporte.getEmpresa().getId() ==3){
-        Reporte num_furat = this.findByfurat(reporte.getNumerofurat());
-        if (num_furat != null) {
-            //System.out.println("INGRESANDO SI SEÑOR");
-            throw new UserMessageException(
-                    "REPORTE YA REGISTRADO",
-                    "el numero de  FURAT "
-                    + reporte.getNumerofurat()
-                    + " ya se encuentra registrado, corrija los datos e intente cargar nuevamente el archivo",
-                    TipoMensaje.warn
-            );
-        }
+            Reporte num_furat = this.findByfurat(reporte.getNumerofurat());
+            if (num_furat != null) {
+                //System.out.println("INGRESANDO SI SEÑOR");
+                throw new UserMessageException(
+                        "REPORTE YA REGISTRADO",
+                        "el numero de  FURAT "
+                        + reporte.getNumerofurat()
+                        + " ya se encuentra registrado, corrija los datos e intente cargar nuevamente el archivo",
+                        TipoMensaje.warn
+                );
+            }
         }
         if (reporte.getTipo() == null) {
             throw new IllegalArgumentException("Debe establecer el tipo de reporte");
@@ -229,7 +228,7 @@ public class ReporteFacade extends AbstractFacade<Reporte> {
                 Cell cell = currentRow.getCell(esquema.getPosicionColumna());
                 Object valor = null;
 
-                switch (cell.getCellTypeEnum()) {
+                switch (cell.getCellType()) {
                     case STRING:
                         valor = cell.getStringCellValue().trim();
                         break;
@@ -248,7 +247,7 @@ public class ReporteFacade extends AbstractFacade<Reporte> {
 
                 switch (esquema.getTipoDatoLeido()) {
                     case "string":
-                        if (cell.getCellTypeEnum().equals(CellType.STRING)) {
+                        if (cell.getCellType().equals(CellType.STRING)) {
                             campo.set(reporte, valor);
                         } else {
                             campo.set(reporte, String.format("%.0f", valor));
@@ -256,10 +255,10 @@ public class ReporteFacade extends AbstractFacade<Reporte> {
                         break;
                     case "date":
                     case "time":
-                        if (cell.getCellTypeEnum().equals(CellType.STRING)) {
+                        if (cell.getCellType().equals(CellType.STRING)) {
                             SimpleDateFormat sdf = new SimpleDateFormat(esquema.getFormatoCampoLeido());
                             campo.set(reporte, sdf.parse((String) valor));
-                        } else if (cell.getCellTypeEnum().equals(CellType.NUMERIC)) {
+                        } else if (cell.getCellType().equals(CellType.NUMERIC)) {
                             campo.set(reporte, DateUtil.getJavaDate((double) valor));
                         } else {
                             // Adicionar mensaje de error
@@ -267,9 +266,9 @@ public class ReporteFacade extends AbstractFacade<Reporte> {
                         }
                         break;
                     case "integer":
-                        if (cell.getCellTypeEnum().equals(CellType.STRING)) {
+                        if (cell.getCellType().equals(CellType.STRING)) {
                             campo.set(reporte, Integer.parseInt((String) valor));
-                        } else if (cell.getCellTypeEnum().equals(CellType.NUMERIC)) {
+                        } else if (cell.getCellType().equals(CellType.NUMERIC)) {
                             campo.set(reporte, ((Double) valor).intValue());
                         } else {
                             Integer val = ((boolean) valor) ? 1 : 0;
@@ -295,7 +294,7 @@ public class ReporteFacade extends AbstractFacade<Reporte> {
         }
         for (int cellNum = row.getFirstCellNum(); cellNum < row.getLastCellNum(); cellNum++) {
             Cell cell = row.getCell(cellNum);
-            if (cell != null && cell.getCellTypeEnum() != CellType.BLANK) {
+            if (cell != null && cell.getCellType() != CellType.BLANK) {
                 return false;
             }
         }
@@ -303,7 +302,7 @@ public class ReporteFacade extends AbstractFacade<Reporte> {
     }
     
     public Reporte findByfurat(String furat) {
-        Query query = em.createQuery("SELECT u from Reporte u where u.numero_furat = :furat");
+        Query query = em.createQuery("SELECT u from Reporte u where u.numerofurat = :furat");
         query.setParameter("furat", furat);
         try {
             Reporte reporte = (Reporte) query.getSingleResult();

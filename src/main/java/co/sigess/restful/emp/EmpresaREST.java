@@ -5,13 +5,17 @@
  */
 package co.sigess.restful.emp;
 
+import co.sigess.entities.emp.ActividadesContratadas;
 import co.sigess.entities.emp.AliadoInformacion;
+import co.sigess.entities.emp.Localidades;
 import co.sigess.entities.emp.Empresa;
 import co.sigess.entities.emp.Sst;
 import co.sigess.entities.emp.AliadoInformacion;
+import co.sigess.facade.emp.ActividadesContratadasFacade;
 import co.sigess.facade.emp.EmpresaFacade;
 import co.sigess.facade.emp.SstFacade;
 import co.sigess.facade.emp.AliadoInformacionFacade;
+import co.sigess.facade.emp.LocalidadesFacade;
 import co.sigess.restful.CriteriaFilter;
 import co.sigess.restful.Filter;
 import co.sigess.restful.FilterQuery;
@@ -50,6 +54,12 @@ public class EmpresaREST extends ServiceREST {
     @EJB
     private AliadoInformacionFacade AliadoInformacionFacade;
 
+    @EJB
+    private ActividadesContratadasFacade ActividadesContratadasFacade;
+    
+    @EJB
+    private LocalidadesFacade LocalidadesFacade;
+    
     public EmpresaREST() {
 
     }
@@ -232,5 +242,22 @@ public class EmpresaREST extends ServiceREST {
         List<AliadoInformacion> aliadoInformacion = AliadoInformacionFacade.findByAliadoId(aliadoId);
         return Response.ok(aliadoInformacion).build();
     }
+    
+    @GET
+    @Secured(requiereEmpresaId = false)
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Path("getActividadesContratadas/{EmpresaId}")
+    public Response findByActividadesContratadasId(@PathParam("EmpresaId") Integer empresaId) {
+        List<ActividadesContratadas> act = ActividadesContratadasFacade.findByActividadContratadaId(empresaId);
+        return Response.ok(act).build();
+    }
 
+    @GET
+    @Secured(requiereEmpresaId = false)
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Path("getActividadesContratadas")
+    public Response findByLocalidadId(@PathParam("EmpresaId") Integer empresaId) {
+        List<Localidades> act = LocalidadesFacade.findByAllLocalidades();
+        return Response.ok(act).build();
+    }
 }

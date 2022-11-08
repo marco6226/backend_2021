@@ -83,6 +83,7 @@ public class ReporteREST extends ServiceREST {
     @Auditable
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response create(Reporte reporte) {
+        System.out.println("resporte");
         try {
             reporte.setUsuarioReporta(super.getUsuarioRequestContext());
             reporte.setEmpresa(new Empresa(super.getEmpresaIdRequestContext()));

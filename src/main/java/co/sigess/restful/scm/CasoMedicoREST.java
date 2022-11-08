@@ -339,6 +339,8 @@ public class CasoMedicoREST extends ServiceREST {
             this.logScm("Creacion de Diagnostico", json, diagnosticos.getPkCase(), diagnosticos.getClass().toString());
             diagnosticos = this.diagnosticoFacade.create(diagnosticos);
 
+            Query q1 = this.em.createNativeQuery("SELECT scm.diagnostico_cm()");
+            q1.getResultList();
             return Response.ok(diagnosticos.getId()).build();
         } catch (Exception ex) {
             return Util.manageException(ex, ReporteREST.class);
@@ -355,6 +357,9 @@ public class CasoMedicoREST extends ServiceREST {
 
             this.logScm("Se edito un diagnostico", json, diagnosticos.getPkCase().toString(), diagnosticos.getClass().toString());
             diagnosticos = this.diagnosticoFacade.update(diagnosticos);
+            
+            Query q1 = this.em.createNativeQuery("SELECT scm.diagnostico_cm()");
+            q1.getResultList();
             return Response.ok(diagnosticos).build();
         } catch (Exception ex) {
             return Util.manageException(ex, ReporteREST.class);

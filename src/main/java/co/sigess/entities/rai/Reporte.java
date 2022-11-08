@@ -420,6 +420,9 @@ public class Reporte implements Serializable {
         
     @Column(name = "migrado")
     private boolean migrado;
+    
+    @Column(name = "temporal")
+    private String temporal;
 
     public Reporte() {
     }
@@ -1253,4 +1256,12 @@ public class Reporte implements Serializable {
         this.numerofurat = numerofurat;
     }
 
+    
+    public String getTemporal() {
+        return temporal;
+    }
+
+    public void setTemporal(String temporal) {
+        this.temporal = temporal;
+    }
 }
