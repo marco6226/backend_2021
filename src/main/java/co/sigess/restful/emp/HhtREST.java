@@ -21,6 +21,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import co.sigess.restful.FilterQuery;
 
 /**
  *
@@ -32,11 +33,21 @@ public class HhtREST extends ServiceREST{
 
     @EJB
     private HhtFacade hhtFacade;
+    
+    public HhtREST() {
+        super(HhtFacade.class);
+    }
+
+    @Override
+    public Response findWithFilter(FilterQuery filterQuery) {
+        return super.findWithFilter(filterQuery);
+    }
 
     @POST
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response create(Hht hht) {
         try {
+            System.out.println("post");
             hht.setEmpresa(new Empresa(super.getEmpresaIdRequestContext()));
             hht = this.hhtFacade.create(hht);
             return Response.ok(hht).build();
@@ -49,6 +60,8 @@ public class HhtREST extends ServiceREST{
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response edit(Hht hht) {
         try {
+            System.out.println("put");
+            hht.setEmpresa(new Empresa(super.getEmpresaIdRequestContext()));
             hht = this.hhtFacade.edit(hht);
             return Response.ok(hht).build();
         } catch (Exception ex) {

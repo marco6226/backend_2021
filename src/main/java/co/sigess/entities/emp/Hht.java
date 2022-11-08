@@ -43,17 +43,20 @@ public class Hht implements Serializable {
     private Integer id;
     
     @Column(name = "anio")
-    private Short anio;
+    private Integer anio;
     
     @Column(name = "mes")
-    private Short mes;
+    private String mes;
     
     @Column(name = "valor")
-    private Integer valor;
+    private String valor;
         
     @JoinColumn(name = "fk_empresa_id", referencedColumnName = "id")
     private Empresa empresa;
 
+    @Column(name = "empresaselect")
+    private String empresaSelect;
+        
     public Hht() {
     }
 
@@ -69,27 +72,27 @@ public class Hht implements Serializable {
         this.id = id;
     }
 
-    public Short getAnio() {
+    public Integer getAnio() {
         return anio;
     }
 
-    public void setAnio(Short anio) {
+    public void setAnio(Integer anio) {
         this.anio = anio;
     }
 
-    public Short getMes() {
+    public String getMes() {
         return mes;
     }
 
-    public void setMes(Short mes) {
+    public void setMes(String mes) {
         this.mes = mes;
     }
 
-    public Integer getValor() {
+    public String getValor() {
         return valor;
     }
 
-    public void setValor(Integer valor) {
+    public void setValor(String valor) {
         this.valor = valor;
     }
 
@@ -101,6 +104,15 @@ public class Hht implements Serializable {
     @JsonProperty("empresa")
     public void setEmpresa(Empresa empresa) {
         this.empresa = empresa;
+    }
+    
+        
+    public String getEmpresaSelect() {
+        return empresaSelect;
+    }
+
+    public void setEmpresaSelect(String empresaSelect) {
+        this.empresaSelect = empresaSelect;
     }
 
     @Override
