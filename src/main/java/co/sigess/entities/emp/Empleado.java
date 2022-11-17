@@ -16,6 +16,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -193,7 +194,11 @@ public class Empleado implements Serializable {
     @JoinColumn(name = "fk_usuario_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Usuario usuario;
-
+    
+    @JoinColumn(name = "fk_usuario_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    protected UsuarioBasic usuarioBasic;
+    
     @JoinColumn(name = "fk_ciudad_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Ciudad ciudad;
@@ -638,4 +643,8 @@ public class Empleado implements Serializable {
         this.nit = nit;
     }
 
-}
+    public UsuarioBasic getUsuarioBasic() {
+        return usuarioBasic;
+    }
+
+    }
