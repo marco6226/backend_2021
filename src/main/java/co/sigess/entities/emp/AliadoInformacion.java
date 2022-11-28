@@ -73,6 +73,9 @@ public class AliadoInformacion implements Serializable{
     
     @Column(name = "fecha_vencimiento_cert_ext")
     private Date fecha_vencimiento_cert_ext;
+    
+    @Column(name = "control_riesgo")
+    private String control_riesgo;
 
     public Integer getId() {
         return id;
@@ -184,5 +187,13 @@ public class AliadoInformacion implements Serializable{
 
     public void setFecha_vencimiento_cert_ext(Date fecha_vencimiento_cert_ext) {
         this.fecha_vencimiento_cert_ext = fecha_vencimiento_cert_ext;
+    }
+
+    public String getControl_riesgo() {
+        return control_riesgo;
+    }
+
+    public void setControl_riesgo(String control_riesgo) {
+        this.control_riesgo = control_riesgo;
     }
 }
