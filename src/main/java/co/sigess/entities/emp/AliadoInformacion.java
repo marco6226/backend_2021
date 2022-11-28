@@ -70,6 +70,9 @@ public class AliadoInformacion implements Serializable{
     
     @Column(name = "fecha_vencimiento_sst")
     private Date fecha_vencimiento_sst;
+    
+    @Column(name = "fecha_vencimiento_cert_ext")
+    private Date fecha_vencimiento_cert_ext;
 
     public Integer getId() {
         return id;
@@ -173,5 +176,13 @@ public class AliadoInformacion implements Serializable{
 
     public void setFecha_vencimiento_sst(Date fecha_vencimiento_sst) {
         this.fecha_vencimiento_sst = fecha_vencimiento_sst;
+    }
+
+    public Date getFecha_vencimiento_cert_ext() {
+        return fecha_vencimiento_cert_ext;
+    }
+
+    public void setFecha_vencimiento_cert_ext(Date fecha_vencimiento_cert_ext) {
+        this.fecha_vencimiento_cert_ext = fecha_vencimiento_cert_ext;
     }
 }
