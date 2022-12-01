@@ -11,11 +11,13 @@ import co.sigess.entities.emp.Localidades;
 import co.sigess.entities.emp.Empresa;
 import co.sigess.entities.emp.Sst;
 import co.sigess.entities.emp.AliadoInformacion;
+import co.sigess.entities.emp.Subcontratista;
 import co.sigess.facade.emp.ActividadesContratadasFacade;
 import co.sigess.facade.emp.EmpresaFacade;
 import co.sigess.facade.emp.SstFacade;
 import co.sigess.facade.emp.AliadoInformacionFacade;
 import co.sigess.facade.emp.LocalidadesFacade;
+import co.sigess.facade.emp.SubcontratistaFacade;
 import co.sigess.restful.CriteriaFilter;
 import co.sigess.restful.Filter;
 import co.sigess.restful.FilterQuery;
@@ -59,6 +61,9 @@ public class EmpresaREST extends ServiceREST {
     
     @EJB
     private LocalidadesFacade LocalidadesFacade;
+    
+    @EJB
+    private SubcontratistaFacade subcontratistaFacade;
     
     public EmpresaREST() {
 
@@ -260,4 +265,41 @@ public class EmpresaREST extends ServiceREST {
         List<Localidades> act = LocalidadesFacade.findByAllLocalidades();
         return Response.ok(act).build();
     }
+    
+    @POST
+    @Secured(requiereEmpresaId = false)
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Path("saveSubcontratista")
+    public Response postSubcontratista(Subcontratista subcontratista){
+        try {
+            subcontratista = subcontratistaFacade.crearSubcontratista(subcontratista);
+            return Response.ok(subcontratista).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, EmpresaREST.class);
+        }
+    }
+    
+    @PUT
+    @Secured(requiereEmpresaId = false)
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Path("updateSubcontratista")
+    public Response updateSubcontratista(Subcontratista subcontratista){
+        try {
+            subcontratista = subcontratistaFacade.actualizarSubcontratista(subcontratista);
+            return Response.ok(subcontratista).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, EmpresaREST.class);
+        }
+    }
+    
+    
+    @GET
+    @Secured(requiereEmpresaId = false)
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Path("getSubcontratistas/{aliadoId}")
+    public Response getSubcontratistas(@PathParam("aliadoId") Integer aliadoId) {
+        List<Subcontratista> listaSubcontratista = subcontratistaFacade.findByAliadoCreador(aliadoId);
+        return Response.ok(listaSubcontratista).build();
+    }
+    
 }
