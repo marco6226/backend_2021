@@ -76,6 +76,30 @@ public class AliadoInformacion implements Serializable{
     
     @Column(name = "control_riesgo")
     private String control_riesgo;
+    
+    @Column(name = "email_comercial")
+    private String email_comercial;
+    
+    @Column(name = "telefono_contacto")
+    private String telefono_contacto;
+    
+    @Column(name = "arl")
+    private String arl;
+    
+    @Column(name = "puntaje_arl")
+    private Integer puntaje_arl;
+    
+    @Column(name = "calificacion_aliado")
+    private Integer calificacion_aliado;
+    
+    @Column(name = "fecha_calificacion_aliado")
+    private Date fecha_calificacion_aliado;
+    
+    @Column(name = "nombre_calificador")
+    private String nombre_calificador;
+    
+    @Column(name = "subcontratacion")
+    private Boolean autoriza_subcontratacion;
 
     public Integer getId() {
         return id;
@@ -195,5 +219,69 @@ public class AliadoInformacion implements Serializable{
 
     public void setControl_riesgo(String control_riesgo) {
         this.control_riesgo = control_riesgo;
+    }
+
+    public String getEmail_comercial() {
+        return email_comercial;
+    }
+
+    public void setEmail_comercial(String email_comercial) {
+        this.email_comercial = email_comercial;
+    }
+
+    public String getTelefono_contacto() {
+        return telefono_contacto;
+    }
+
+    public void setTelefono_contacto(String telefono_contacto) {
+        this.telefono_contacto = telefono_contacto;
+    }
+
+    public String getArl() {
+        return arl;
+    }
+
+    public void setArl(String arl) {
+        this.arl = arl;
+    }
+
+    public Integer getPuntaje_arl() {
+        return puntaje_arl;
+    }
+
+    public void setPuntaje_arl(Integer puntaje_arl) {
+        this.puntaje_arl = puntaje_arl;
+    }
+
+    public Integer getCalificacion_aliado() {
+        return calificacion_aliado;
+    }
+
+    public void setCalificacion_aliado(Integer calificacion_aliado) {
+        this.calificacion_aliado = calificacion_aliado;
+    }
+
+    public Date getFecha_calificacion_aliado() {
+        return fecha_calificacion_aliado;
+    }
+
+    public void setFecha_calificacion_aliado(Date fecha_calificacion_aliado) {
+        this.fecha_calificacion_aliado = fecha_calificacion_aliado;
+    }
+
+    public String getNombre_calificador() {
+        return nombre_calificador;
+    }
+
+    public void setNombre_calificador(String nombre_calificador) {
+        this.nombre_calificador = nombre_calificador;
+    }
+
+    public Boolean getAutoriza_subcontratacion() {
+        return autoriza_subcontratacion;
+    }
+
+    public void setAutoriza_subcontratacion(Boolean autoriza_subcontratacion) {
+        this.autoriza_subcontratacion = autoriza_subcontratacion;
     }
 }
