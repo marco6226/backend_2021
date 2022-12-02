@@ -5,6 +5,7 @@
  */
 package co.sigess.restful.emp;
 
+import co.sigess.entities.com.TipoMensaje;
 import co.sigess.entities.emp.ActividadesContratadas;
 import co.sigess.entities.emp.AliadoInformacion;
 import co.sigess.entities.emp.Localidades;
@@ -12,12 +13,14 @@ import co.sigess.entities.emp.Empresa;
 import co.sigess.entities.emp.Sst;
 import co.sigess.entities.emp.AliadoInformacion;
 import co.sigess.entities.emp.Subcontratista;
+import co.sigess.exceptions.UserMessageException;
 import co.sigess.facade.emp.ActividadesContratadasFacade;
 import co.sigess.facade.emp.EmpresaFacade;
 import co.sigess.facade.emp.SstFacade;
 import co.sigess.facade.emp.AliadoInformacionFacade;
 import co.sigess.facade.emp.LocalidadesFacade;
 import co.sigess.facade.emp.SubcontratistaFacade;
+import co.sigess.facade.emp.UsuarioFacade;
 import co.sigess.restful.CriteriaFilter;
 import co.sigess.restful.Filter;
 import co.sigess.restful.FilterQuery;
@@ -64,6 +67,9 @@ public class EmpresaREST extends ServiceREST {
     
     @EJB
     private SubcontratistaFacade subcontratistaFacade;
+    
+    @EJB
+    private UsuarioFacade usuarioFacade;
     
     public EmpresaREST() {
 
@@ -120,6 +126,24 @@ public class EmpresaREST extends ServiceREST {
             System.out.println("ok empresa");
             return Response.ok(empresa).build();
         } catch (Exception ex) {
+            return Util.manageException(ex, EmpresaREST.class);
+        }
+    }
+    
+    
+    
+    @POST
+    @Secured(validarPermiso = false)
+    @Path("createEmpresaAliada")
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    public Response createEmpresaAliada(Empresa empresa){
+        try{
+            if(usuarioFacade.findByEmail(empresa.getEmail()) == null){
+                empresa = empresaFacade.adicionar(empresa, super.getUsuarioRequestContext().getId());
+                return Response.ok(empresa).build();
+            }
+            throw new UserMessageException("Error", "El correo del contratista ya se encuentra asociado a un usuario del sistema", TipoMensaje.error);
+        }catch(Exception ex){
             return Util.manageException(ex, EmpresaREST.class);
         }
     }
