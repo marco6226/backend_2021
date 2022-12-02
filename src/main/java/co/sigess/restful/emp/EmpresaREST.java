@@ -142,7 +142,7 @@ public class EmpresaREST extends ServiceREST {
                 empresa = empresaFacade.adicionar(empresa, super.getUsuarioRequestContext().getId());
                 return Response.ok(empresa).build();
             }
-            throw new UserMessageException("Error", "El correo del contratista está asociado a un usuario del sistema", TipoMensaje.error);
+            throw new UserMessageException("Error", "El correo del contratista ya se encuentra asociado a un usuario del sistema", TipoMensaje.error);
         }catch(Exception ex){
             return Util.manageException(ex, EmpresaREST.class);
         }
