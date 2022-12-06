@@ -81,18 +81,25 @@ public class EmpresaREST extends ServiceREST {
     public Response findWithFilter(@BeanParam FilterQuery filterQuery) {
         try {
             boolean filtradoEmpresa = false;
+            boolean isFindAliado = false;
             for (Filter filter : filterQuery.getFilterList()) {
                 if (filter.getField().equals("usuarioEmpresaList.usuario.id")) {
                     filtradoEmpresa = true;
                 }
+                
+                if(filter.getField().compareToIgnoreCase("idempresaaliada") == 0){
+                    isFindAliado = true;
+                }
             }
 
-            if (!filtradoEmpresa) {
-                Filter empFilt = new Filter();
-                empFilt.setCriteriaEnum(CriteriaFilter.EQUALS);
-                empFilt.setField("usuarioEmpresaList.usuario.id");
-                empFilt.setValue1(String.valueOf(getUsuarioRequestContext().getId()));
-                filterQuery.getFilterList().add(empFilt);
+            if(!isFindAliado){
+                if (!filtradoEmpresa) {
+                    Filter empFilt = new Filter();
+                    empFilt.setCriteriaEnum(CriteriaFilter.EQUALS);
+                    empFilt.setField("usuarioEmpresaList.usuario.id");
+                    empFilt.setValue1(String.valueOf(getUsuarioRequestContext().getId()));
+                    filterQuery.getFilterList().add(empFilt);
+                }
             }
 
             long numRows = filterQuery.isCount() ? empresaFacade.countWithFilter(filterQuery) : -1;
