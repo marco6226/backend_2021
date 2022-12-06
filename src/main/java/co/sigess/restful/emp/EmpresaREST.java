@@ -82,24 +82,36 @@ public class EmpresaREST extends ServiceREST {
         try {
             boolean filtradoEmpresa = false;
             boolean isFindAliado = false;
+            boolean isFindEmpresa = false;
             for (Filter filter : filterQuery.getFilterList()) {
                 if (filter.getField().equals("usuarioEmpresaList.usuario.id")) {
                     filtradoEmpresa = true;
-                }
-                
-                if(filter.getField().compareToIgnoreCase("idempresaaliada") == 0){
+                }else if(filter.getField().compareToIgnoreCase("idempresaaliada") == 0){
                     isFindAliado = true;
+                }else if(filter.getField().compareToIgnoreCase("id") == 0){
+                    isFindEmpresa = true;
                 }
             }
 
-            if(!isFindAliado){
-                if (!filtradoEmpresa) {
-                    Filter empFilt = new Filter();
-                    empFilt.setCriteriaEnum(CriteriaFilter.EQUALS);
-                    empFilt.setField("usuarioEmpresaList.usuario.id");
-                    empFilt.setValue1(String.valueOf(getUsuarioRequestContext().getId()));
-                    filterQuery.getFilterList().add(empFilt);
-                }
+            if(isFindAliado){
+                System.out.println("isfindaliado");
+                long numRows = filterQuery.isCount() ? empresaFacade.countWithFilter(filterQuery) : -1;
+                List list = empresaFacade.findWithFilter(filterQuery);
+
+                FilterResponse filterResponse = new FilterResponse();
+                filterResponse.setData(list);
+                filterResponse.setCount(numRows);
+                System.out.println("return >>>");
+                return Response.ok(filterResponse).build();
+            }
+            
+            if (!filtradoEmpresa && !isFindEmpresa) {
+                System.out.println("add filtradoempresa >>>");
+                Filter empFilt = new Filter();
+                empFilt.setCriteriaEnum(CriteriaFilter.EQUALS);
+                empFilt.setField("usuarioEmpresaList.usuario.id");
+                empFilt.setValue1(String.valueOf(getUsuarioRequestContext().getId()));
+                filterQuery.getFilterList().add(empFilt);
             }
 
             long numRows = filterQuery.isCount() ? empresaFacade.countWithFilter(filterQuery) : -1;
@@ -108,6 +120,7 @@ public class EmpresaREST extends ServiceREST {
             FilterResponse filterResponse = new FilterResponse();
             filterResponse.setData(list);
             filterResponse.setCount(numRows);
+            System.out.println("return default: "+isFindAliado+", "+filtradoEmpresa);
             return Response.ok(filterResponse).build();
         } catch (Exception ex) {
             return Util.manageException(ex, ReporteREST.class);
