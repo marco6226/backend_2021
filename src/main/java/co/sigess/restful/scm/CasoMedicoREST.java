@@ -448,9 +448,9 @@ public class CasoMedicoREST extends ServiceREST {
     public Response deleteSeg(@PathParam("id") String id) {
         try {
             System.out.print(id);
-
-            this.logScm("Se Elimino un seguimiento", null, id, "Seguimiento");
-
+            String pk_case = seguimientoFacade.findById(id).get(0).getPkCase();
+            this.logScm("Se Elimino un seguimiento", null, pk_case, "Seguimiento");
+            
             int seg = this.seguimientoFacade.eliminar(Long.parseLong(id));
             return Response.ok(seg).build();
         } catch (Exception ex) {
@@ -589,7 +589,8 @@ public class CasoMedicoREST extends ServiceREST {
         try {
             pcl.setEliminado(false);
             pcl = this.pclFacade.create(pcl);
-            this.logScm("Creacion de pcl", null, pcl.getId().toString(), pcl.getClass().toString());
+            String pk_case = diagnosticoFacade.findById(pcl.getDiag()).getPkCase();
+            this.logScm("Creacion de pcl", null, pk_case, pcl.getClass().toString());
             return Response.ok(pcl.getId()).build();
         } catch (Exception ex) {
             return Util.manageException(ex, CasoMedicoREST.class);
@@ -617,8 +618,9 @@ public class CasoMedicoREST extends ServiceREST {
 
             ObjectMapper mapper = new ObjectMapper();
             String json = mapper.writeValueAsString(pcl);
+            String pk_case = diagnosticoFacade.findById(pcl.getDiag()).getPkCase();
 
-            this.logScm("Se edito un pcl", json, pcl.getDiag(), pcl.getClass().toString());
+            this.logScm("Se edito un pcl", json, pk_case, pcl.getClass().toString());
             pcl = this.pclFacade.edit(pcl);
 
             return Response.ok(pcl).build();
@@ -633,7 +635,8 @@ public class CasoMedicoREST extends ServiceREST {
     public Response deletePcl(Pcl pcl) {
         try {
             this.pclFacade.eliminar(pcl.getId());
-            this.logScm("Se Elimino un seguimiento", null, pcl.getId().toString(), "Seguimiento");
+            String pk_case = diagnosticoFacade.findById(pcl.getDiag()).getPkCase();
+            this.logScm("Se Elimino una pcl", null, pk_case, "Pcl");
             return Response.ok(pcl.getId().toString()).build();
         } catch (Exception ex) {
             return Util.manageException(ex, CasoMedicoREST.class);

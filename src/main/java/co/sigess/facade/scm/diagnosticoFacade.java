@@ -45,6 +45,14 @@ public class diagnosticoFacade extends AbstractFacade<Diagnosticos> {
         List<Diagnosticos> list = (List<Diagnosticos>) query.getResultList();
         return list;
     }
+    
+    public Diagnosticos findById(String id){
+        Query query = this.em.createQuery("SELECT DISTINCT DIAG FROM Diagnosticos diag where DIAG.id = :id");
+        Integer id_aux = new Integer(id);
+        query.setParameter("id", id_aux);
+        List<Diagnosticos> list = (List<Diagnosticos>) query.getResultList();
+        return list.get(0);
+    }
 
       public Diagnosticos update(Diagnosticos diagnosticos) throws Exception {
 

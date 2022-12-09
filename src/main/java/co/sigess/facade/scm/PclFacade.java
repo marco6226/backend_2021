@@ -55,6 +55,13 @@ public class PclFacade extends AbstractFacade<Pcl> {
         List<Pcl> list = (List<Pcl>) query.getResultList();
         return list; 
     }
+    
+    public Pcl findById(Long id){
+        Query query = this.em.createQuery("SELECT DISTINCT pc FROM Pcl pc WHERE PC.id = :id ORDER BY PC.id DESC");
+        query.setParameter("id", id);
+        List<Pcl> list = (List<Pcl>) query.getResultList();
+        return list.get(0);
+    }
 
     public Pcl update(Pcl pcl) throws Exception {
 
