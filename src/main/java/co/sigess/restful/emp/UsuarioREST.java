@@ -9,6 +9,7 @@ import co.sigess.entities.com.Mensaje;
 import co.sigess.entities.com.TipoMensaje;
 import co.sigess.entities.emp.EventoLog;
 import co.sigess.entities.emp.Usuario;
+import co.sigess.entities.emp.Empresa;
 import co.sigess.exceptions.UserMessageException;
 import co.sigess.facade.core.EmailFacade;
 import co.sigess.facade.core.TipoMail;
@@ -41,6 +42,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import java.io.ByteArrayOutputStream;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 
@@ -51,6 +55,9 @@ import javax.ws.rs.core.Response;
 @Secured
 @Path("usuario")
 public class UsuarioREST extends ServiceREST {
+    
+    @PersistenceContext(unitName = "SIGESS_PU")
+    private EntityManager em;
 
     @EJB
     private UsuarioFacade usuarioFacade;
@@ -194,9 +201,19 @@ public class UsuarioREST extends ServiceREST {
     @Path("aliadoActualizar/{idEmpresaAliada}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response actualziarAliado(String email, @PathParam("idEmpresaAliada") Integer idEmpresaAliada) {
-        try {          
+        try {     
+            Query q = this.em.createNativeQuery("SELECT * FROM emp.empresa  WHERE id = ?1 ",Empresa.class);
+            q.setParameter(1,Integer.parseInt(idEmpresaAliada.toString()));
+            System.out.println(q);
+            List<Empresa> list = (List<Empresa>) q.getResultList();
+            
+            String nit = list.get(0).getNit();
+            String razonSocial = list.get(0).getRazonSocial();
+            
             Map<String, String> parametros = new HashMap<>();
             parametros.put(EmailFacade.PARAM_ID,idEmpresaAliada.toString());
+            parametros.put(EmailFacade.PARAM_NOMBRE,razonSocial);
+            parametros.put(EmailFacade.PARAM_NIT,nit);
             emailFacade.sendEmail(parametros, TipoMail.ALIADO_NUEVO, "Aliado Actualizar Información", email);
             return Response.ok().build();
         } catch (Exception ex) {
@@ -208,9 +225,19 @@ public class UsuarioREST extends ServiceREST {
     @Path("emailAliadoActualizado/{idEmpresaAliada}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response aliadoActualizado(String email, @PathParam("idEmpresaAliada") Integer idEmpresaAliada) {
-        try {          
+        try {    
+            Query q = this.em.createNativeQuery("SELECT * FROM emp.empresa  WHERE id = ?1 ",Empresa.class);
+            q.setParameter(1,Integer.parseInt(idEmpresaAliada.toString()));
+            System.out.println(q);
+            List<Empresa> list = (List<Empresa>) q.getResultList();
+            
+            String nit = list.get(0).getNit();
+            String razonSocial = list.get(0).getRazonSocial();
+
             Map<String, String> parametros = new HashMap<>();
             parametros.put(EmailFacade.PARAM_ID,idEmpresaAliada.toString());
+            parametros.put(EmailFacade.PARAM_NOMBRE,razonSocial);
+            parametros.put(EmailFacade.PARAM_NIT,nit);
             emailFacade.sendEmail(parametros, TipoMail.ALIADO_ACTUALIZADO, "el Aliado Actualizo la Información", email);
             return Response.ok().build();
         } catch (Exception ex) {

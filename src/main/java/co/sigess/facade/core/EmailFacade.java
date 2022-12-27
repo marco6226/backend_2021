@@ -45,6 +45,7 @@ public class EmailFacade {
     
     public static final String PARAM_COUNT = "P{count}";
     public static final String PARAM_NOMBRE = "P{nombre}";
+    public static final String PARAM_NIT = "P{nit}";
     public static final String PARAM_ABIERTO = "P{abierto}";
     public static final String PARAM_SEGUIMIENTO = "P{seguimiento}";
     public static final String PARAM_VENCIDA = "P{vencida}";
