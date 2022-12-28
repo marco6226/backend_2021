@@ -47,6 +47,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
+import java.util.concurrent.TimeUnit;
 
 /**
  *
@@ -185,10 +186,19 @@ public class UsuarioREST extends ServiceREST {
     public Response createUsuarioAliado(Usuario usuario, @PathParam("idEmpresaAliada") Integer idEmpresaAliada) {
         try {
             usuarioFacade.create(usuario, idEmpresaAliada,true);
+            TimeUnit.SECONDS.sleep(5);
+            Query q = this.em.createNativeQuery("SELECT * FROM emp.empresa  WHERE id = ?1 ",Empresa.class);
+            q.setParameter(1,Integer.parseInt(idEmpresaAliada.toString()));
+            List<Empresa> list = (List<Empresa>) q.getResultList();
+            
+            String nit = list.get(0).getNit();
+            String razonSocial = list.get(0).getRazonSocial();
+            
             Map<String, String> parametros = new HashMap<>();
             
             parametros.put(EmailFacade.PARAM_ID,idEmpresaAliada.toString());
-        
+            parametros.put(EmailFacade.PARAM_NOMBRE,razonSocial);
+            parametros.put(EmailFacade.PARAM_NIT,nit);
             emailFacade.sendEmail(parametros, TipoMail.ALIADO_NUEVO, "Aliado Nuevo", usuario.getEmail());
             
             return Response.ok(usuario).build();
@@ -202,9 +212,9 @@ public class UsuarioREST extends ServiceREST {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response actualziarAliado(String email, @PathParam("idEmpresaAliada") Integer idEmpresaAliada) {
         try {     
+            TimeUnit.SECONDS.sleep(5);
             Query q = this.em.createNativeQuery("SELECT * FROM emp.empresa  WHERE id = ?1 ",Empresa.class);
             q.setParameter(1,Integer.parseInt(idEmpresaAliada.toString()));
-            System.out.println(q);
             List<Empresa> list = (List<Empresa>) q.getResultList();
             
             String nit = list.get(0).getNit();
