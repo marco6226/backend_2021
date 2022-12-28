@@ -186,7 +186,7 @@ public class UsuarioREST extends ServiceREST {
     public Response createUsuarioAliado(Usuario usuario, @PathParam("idEmpresaAliada") Integer idEmpresaAliada) {
         try {
             usuarioFacade.create(usuario, idEmpresaAliada,true);
-            TimeUnit.SECONDS.sleep(5);
+            //TimeUnit.SECONDS.sleep(5);
             Query q = this.em.createNativeQuery("SELECT * FROM emp.empresa  WHERE id = ?1 ",Empresa.class);
             q.setParameter(1,Integer.parseInt(idEmpresaAliada.toString()));
             List<Empresa> list = (List<Empresa>) q.getResultList();
@@ -212,7 +212,7 @@ public class UsuarioREST extends ServiceREST {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response actualziarAliado(String email, @PathParam("idEmpresaAliada") Integer idEmpresaAliada) {
         try {     
-            TimeUnit.SECONDS.sleep(5);
+            //TimeUnit.SECONDS.sleep(5);
             Query q = this.em.createNativeQuery("SELECT * FROM emp.empresa  WHERE id = ?1 ",Empresa.class);
             q.setParameter(1,Integer.parseInt(idEmpresaAliada.toString()));
             List<Empresa> list = (List<Empresa>) q.getResultList();
