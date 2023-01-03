@@ -12,6 +12,7 @@ import co.sigess.entities.emp.Localidades;
 import co.sigess.entities.emp.Empresa;
 import co.sigess.entities.emp.Sst;
 import co.sigess.entities.emp.AliadoInformacion;
+import co.sigess.entities.emp.AliadosDivisiones;
 import co.sigess.entities.emp.Subcontratista;
 import co.sigess.exceptions.UserMessageException;
 import co.sigess.facade.emp.ActividadesContratadasFacade;
@@ -29,7 +30,10 @@ import co.sigess.restful.ServiceREST;
 import co.sigess.restful.rai.ReporteREST;
 import co.sigess.restful.security.Secured;
 import co.sigess.util.Util;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.ejb.EJB;
 import javax.ws.rs.BeanParam;
 import javax.ws.rs.DELETE;
@@ -290,6 +294,15 @@ public class EmpresaREST extends ServiceREST {
     public Response findByInformacionAliadoId(@PathParam("aliadoId") Integer aliadoId) {
         List<AliadoInformacion> aliadoInformacion = AliadoInformacionFacade.findByAliadoId(aliadoId);
         return Response.ok(aliadoInformacion).build();
+    }
+    
+    @GET
+    @Secured(requiereEmpresaId = false)
+    @Path("getAliadoDivision/{empresaId}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response getAliadosDivision(@PathParam("empresaId") Integer empresaId){
+        List<AliadosDivisiones> aliadosDivisionesList = AliadoInformacionFacade.getAliadosDivision(empresaId);
+        return Response.ok(aliadosDivisionesList).build();
     }
     
     @GET

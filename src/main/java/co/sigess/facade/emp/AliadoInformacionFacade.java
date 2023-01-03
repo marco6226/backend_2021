@@ -2,6 +2,7 @@ package co.sigess.facade.emp;
 
 
 import co.sigess.entities.emp.AliadoInformacion;
+import co.sigess.entities.emp.AliadosDivisiones;
 import co.sigess.facade.com.AbstractFacade;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -54,5 +55,12 @@ public class AliadoInformacionFacade extends AbstractFacade<AliadoInformacion>  
     
     public void deleteAliadoInformacion(AliadoInformacion aliadoInformacion)throws Exception {
         super.remove(aliadoInformacion);      
+    }
+    
+    public List<AliadosDivisiones> getAliadosDivision(Integer empresaId){
+        Query query = this.em.createQuery("SELECT ad from AliadosDivisiones ad WHERE ad.id_empresa_aliada = :empresaId");
+        query.setParameter("empresaId", empresaId);
+        List<AliadosDivisiones> aliadosDivisionesList = (List<AliadosDivisiones>) query.getResultList();
+        return aliadosDivisionesList;
     }
 }

@@ -41,6 +41,9 @@ public class Subcontratista implements Serializable{
     @Column(name = "actividades_riesgo")
     private String actividades_riesgo;
     
+    @Column(name = "tipo_persona")
+    private String tipo_persona;
+    
     @Column(name = "porcentaje_arl")
     private String porcentaje_arl;
     
@@ -83,6 +86,14 @@ public class Subcontratista implements Serializable{
 
     public void setActividades_riesgo(String actividades_riesgo) {
         this.actividades_riesgo = actividades_riesgo;
+    }
+
+    public String getTipo_persona() {
+        return tipo_persona;
+    }
+
+    public void setTipo_persona(String tipo_persona) {
+        this.tipo_persona = tipo_persona;
     }
 
     public String getPorcentaje_arl() {
