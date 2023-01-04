@@ -264,6 +264,18 @@ public class EmpresaREST extends ServiceREST {
         }
     }
     
+    @DELETE
+    @Secured(validarPermiso = false)
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Path("deleteMiembroSst/{miembroId}")
+    public Response deleteMiembroSst(@PathParam("miembroId") Integer miembroId){
+        try{
+            return Response.ok(SstFacade.deleteById(miembroId)).build();
+        }catch(Exception ex){
+            return Util.manageException(ex, EmpresaREST.class);
+        }
+    }
+    
     @PUT
     @Secured(validarPermiso = false)
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})

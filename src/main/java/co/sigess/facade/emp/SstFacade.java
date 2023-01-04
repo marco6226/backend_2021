@@ -54,4 +54,12 @@ public class SstFacade extends AbstractFacade<Sst> {
         super.remove(sst);      
     }
     
+    public boolean deleteById(Integer miembroId) throws Exception {
+        Query query = this.em.createQuery("DELETE FROM Sst st WHERE st.id = :miembroId");
+        query.setParameter("miembroId", miembroId);
+        int result = query.executeUpdate();
+        if(result > 0) return true;
+        return false;
+    }
+    
 }
