@@ -58,5 +58,13 @@ public class CasosMedicosFacade  extends AbstractFacade<CasosMedicos>{
         List<CasosMedicos> list = (List<CasosMedicos>) q.getResultList();
         return list;
     }
+     
+    public CasosMedicos findById(Integer id){
+        Query q = this.em.createNativeQuery("SELECT * FROM scm.casos_medicos WHERE id = ?1", CasosMedicos.class);
+        
+        q.setParameter(1, id);
+        CasosMedicos casosMedicos = (CasosMedicos) q.getSingleResult();
+        return casosMedicos;
+    }
       
 }

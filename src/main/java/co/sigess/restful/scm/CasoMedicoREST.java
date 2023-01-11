@@ -7,6 +7,7 @@ package co.sigess.restful.scm;
 
 import co.sigess.entities.aus.ReporteAusentismo;
 import co.sigess.entities.com.Mensaje;
+import co.sigess.entities.com.TipoMensaje;
 import co.sigess.entities.emp.Empresa;
 import co.sigess.entities.scm.CasosMedicos;
 import co.sigess.entities.scm.Recomendaciones;
@@ -18,6 +19,7 @@ import co.sigess.entities.scm.SeguimientoCaso;
 import co.sigess.entities.scm.SistemaAfectado;
 import co.sigess.entities.scm.Sve;
 import co.sigess.entities.scm.Tratamientos;
+import co.sigess.exceptions.UserMessageException;
 import co.sigess.facade.aus.ReporteAusentismoFacade;
 import co.sigess.facade.core.LoaderFacade;
 import co.sigess.facade.core.SMSFacade;
@@ -705,6 +707,28 @@ public class CasoMedicoREST extends ServiceREST {
             return Response.ok(reintegro).build();
         } catch (Exception ex) {
             return Util.manageException(ex, ReporteREST.class);
+        }
+    }
+    
+    @PUT
+    @Path("cambiarEstado/{id}")
+    @Secured(validarPermiso = false)
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response changeEstadoById(@PathParam("id") Integer id, String fecha){
+        try {
+            CasosMedicos casosMedicos = this.casosmedicosFacade.findById(id);
+            if(casosMedicos.getStatusCaso().compareTo("0") == 0){
+                casosMedicos.setFechaFinal(null);
+                casosMedicos.setStatusCaso("1");
+                return Response.ok(casosmedicosFacade.update(casosMedicos)).build();
+            }else if(casosMedicos.getStatusCaso().compareTo("1") == 0){
+                casosMedicos.setFechaFinal(null);
+                casosMedicos.setStatusCaso("0");
+                return Response.ok(casosmedicosFacade.update(casosMedicos)).build();
+            }
+            throw new UserMessageException("Error", "No se ha podido cambiar el estado del caso.", TipoMensaje.error);
+        }catch(Exception e){
+            return Util.manageException(e, CasoMedicoREST.class);
         }
     }
 }
