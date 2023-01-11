@@ -81,6 +81,9 @@ public class Desviacion implements Serializable {
      
        @Column(name = "furat")
     private String furat;
+       
+    @Column(name = "emptemporal")
+    private String emptemporal;
      
      
 
@@ -255,6 +258,14 @@ public class Desviacion implements Serializable {
      */
     public void setFurat(String furat) {
         this.furat = furat;
+    }
+    
+    public String getEmptemporal() {
+        return emptemporal;
+    }
+
+    public void setEmptemporal(String emptemporal) {
+        this.emptemporal = emptemporal;
     }
     
 }
