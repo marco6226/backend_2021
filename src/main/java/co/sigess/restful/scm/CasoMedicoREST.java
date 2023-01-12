@@ -714,15 +714,13 @@ public class CasoMedicoREST extends ServiceREST {
     @Path("cambiarEstado/{id}")
     @Secured(validarPermiso = false)
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response changeEstadoById(@PathParam("id") Integer id, String fecha){
+    public Response changeEstadoById(@PathParam("id") Integer id, String body){
         try {
             CasosMedicos casosMedicos = this.casosmedicosFacade.findById(id);
             if(casosMedicos.getStatusCaso().compareTo("0") == 0){
-                casosMedicos.setFechaFinal(null);
                 casosMedicos.setStatusCaso("1");
                 return Response.ok(casosmedicosFacade.update(casosMedicos)).build();
             }else if(casosMedicos.getStatusCaso().compareTo("1") == 0){
-                casosMedicos.setFechaFinal(null);
                 casosMedicos.setStatusCaso("0");
                 return Response.ok(casosmedicosFacade.update(casosMedicos)).build();
             }
