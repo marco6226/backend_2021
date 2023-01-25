@@ -48,6 +48,7 @@ import javax.persistence.Query;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 import java.util.concurrent.TimeUnit;
+import co.sigess.restful.emp.AuthenticationREST;
 
 /**
  *
@@ -185,6 +186,17 @@ public class UsuarioREST extends ServiceREST {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response createUsuarioAliado(Usuario usuario, @PathParam("idEmpresaAliada") Integer idEmpresaAliada) {
         try {
+            
+            String host1;
+            Query q1 = em.createNativeQuery("SELECT h from com.host h where h.host ='Produccion'");
+            List hostin =q1.getResultList();
+
+            if(hostin.size()==0){
+                host1="https://demo.sigess.app";
+            }else{
+                host1="https://sigess.app";
+            }
+            
             usuarioFacade.create(usuario, idEmpresaAliada,true);
             //TimeUnit.SECONDS.sleep(5);
             Query q = this.em.createNativeQuery("SELECT * FROM emp.empresa  WHERE id = ?1 ",Empresa.class);
@@ -199,6 +211,7 @@ public class UsuarioREST extends ServiceREST {
             parametros.put(EmailFacade.PARAM_ID,idEmpresaAliada.toString());
             parametros.put(EmailFacade.PARAM_NOMBRE,razonSocial);
             parametros.put(EmailFacade.PARAM_NIT,nit);
+            parametros.put(EmailFacade.PARAM_HOST1,host1);
             emailFacade.sendEmail(parametros, TipoMail.ALIADO_NUEVO, "Aliado Nuevo", usuario.getEmail());
             
             return Response.ok(usuario).build();
@@ -212,6 +225,16 @@ public class UsuarioREST extends ServiceREST {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response actualziarAliado(String email, @PathParam("idEmpresaAliada") Integer idEmpresaAliada) {
         try {     
+            
+            String host1;
+            Query q1 = em.createNativeQuery("SELECT h from com.host h where h.host ='Produccion'");
+            List hostin =q1.getResultList();
+
+            if(hostin.size()==0){
+                host1="https://demo.sigess.app";
+            }else{
+                host1="https://sigess.app";
+            }
             //TimeUnit.SECONDS.sleep(5);
             Query q = this.em.createNativeQuery("SELECT * FROM emp.empresa  WHERE id = ?1 ",Empresa.class);
             q.setParameter(1,Integer.parseInt(idEmpresaAliada.toString()));
@@ -224,6 +247,7 @@ public class UsuarioREST extends ServiceREST {
             parametros.put(EmailFacade.PARAM_ID,idEmpresaAliada.toString());
             parametros.put(EmailFacade.PARAM_NOMBRE,razonSocial);
             parametros.put(EmailFacade.PARAM_NIT,nit);
+            parametros.put(EmailFacade.PARAM_HOST1,host1);
             emailFacade.sendEmail(parametros, TipoMail.ALIADO_NUEVO, "Aliado Actualizar Información", email);
             return Response.ok().build();
         } catch (Exception ex) {
@@ -236,6 +260,16 @@ public class UsuarioREST extends ServiceREST {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response aliadoActualizado(String email, @PathParam("idEmpresaAliada") Integer idEmpresaAliada) {
         try {    
+            String host1;
+            Query q1 = em.createNativeQuery("SELECT h from com.host h where h.host ='Produccion'");
+            List hostin =q1.getResultList();
+
+            if(hostin.size()==0){
+                host1="https://demo.sigess.app";
+            }else{
+                host1="https://sigess.app";
+            }
+            
             Query q = this.em.createNativeQuery("SELECT * FROM emp.empresa  WHERE id = ?1 ",Empresa.class);
             q.setParameter(1,Integer.parseInt(idEmpresaAliada.toString()));
             System.out.println(q);
@@ -248,6 +282,7 @@ public class UsuarioREST extends ServiceREST {
             parametros.put(EmailFacade.PARAM_ID,idEmpresaAliada.toString());
             parametros.put(EmailFacade.PARAM_NOMBRE,razonSocial);
             parametros.put(EmailFacade.PARAM_NIT,nit);
+            parametros.put(EmailFacade.PARAM_HOST1,host1);
             emailFacade.sendEmail(parametros, TipoMail.ALIADO_ACTUALIZADO, "el Aliado Actualizo la Información", email);
             return Response.ok().build();
         } catch (Exception ex) {

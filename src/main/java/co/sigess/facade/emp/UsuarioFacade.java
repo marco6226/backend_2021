@@ -135,6 +135,17 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
     }
 
     public Usuario create(Usuario usuario, Integer empresaId,boolean sendEmail) throws Exception {
+        
+            String host1;
+            Query q1 = em.createNativeQuery("SELECT h from com.host h where h.host ='Produccion'");
+            List hostin =q1.getResultList();
+
+            if(hostin.size()==0){
+                host1="https://demo.sigess.app";
+            }else{
+                host1="https://sigess.app";
+            }
+            
         if (usuario.getUsuarioEmpresaList() == null || usuario.getUsuarioEmpresaList().isEmpty()) {
             throw new IllegalArgumentException("Debe establecer un perfil para el usuario a crear");
         }
@@ -164,6 +175,7 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
         Map<String, String> parametros = new HashMap<>();
         parametros.put("P{passwd}", passwd);
         parametros.put("P{email}", usuario.getEmail());
+        parametros.put("P{host1}", host1);
         
         if (sendEmail) {
               emailFacade.sendEmail(parametros, TipoMail.CREACION_USUARIO, "Creación de cuenta", usuario.getEmail());
