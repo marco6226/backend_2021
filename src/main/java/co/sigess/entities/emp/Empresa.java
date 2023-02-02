@@ -56,23 +56,23 @@ public class Empresa implements Serializable {
     @Column(name = "id")
     private Integer id;
 
-    @Size(max = 45)
+    @Size(max = 100)
     @Column(name = "nit")
     private String nit;
     
-     @Size(max = 45)
+     @Size(max = 100)
     @Column(name = "direccion")
     private String direccion;
      
-      @Size(max = 45)
+      @Size(max = 100)
     @Column(name = "telefono")
     private String telefono;
       
-       @Size(max = 45)
+       @Size(max = 100)
     @Column(name = "email")
     private String email;
        
-    @Size(max = 45)
+    @Size(max = 100)
     @Column(name = "web")
     private String web;
     
