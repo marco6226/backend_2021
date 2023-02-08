@@ -61,6 +61,9 @@ public class ReporteATView implements Serializable{
     @Column(name = "empresa")
     private String empresa;
     
+    @Column(name = "temporal")
+    private String temporal;
+    
     public ReporteATView() {
     }
     
@@ -121,5 +124,13 @@ public class ReporteATView implements Serializable{
      */
     public void setEmpresa(String empresa) {
         this.empresa = empresa;
+    }
+
+    public String getTemporal() {
+        return temporal;
+    }
+
+    public void setTemporal(String temporal) {
+        this.temporal = temporal;
     }
 }
