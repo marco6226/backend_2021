@@ -5,6 +5,7 @@
  */
 package co.sigess.entities.emp;
 
+import co.sigess.entities.ado.Documento;
 import co.sigess.entities.com.Arl;
 import co.sigess.entities.com.Ciiu;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -148,6 +149,13 @@ public class Empresa implements Serializable {
     @JoinColumn(name = "fk_ciiu_id", referencedColumnName = "id")
     @ManyToOne
     private Ciiu ciiu;
+    
+    @JoinTable(name = "documento_empresa", schema = "emp", joinColumns = {
+        @JoinColumn(name = "fk_empresa_id", referencedColumnName = "id")}, inverseJoinColumns = {
+        @JoinColumn(name = "fk_documento_id", referencedColumnName = "id")})
+    @ManyToMany
+    private List<Documento> documentosList;
+        
 
 
     /**
@@ -455,6 +463,14 @@ public String getTipo_persona() {
 //    public void setPerfilList(List<Perfil> perfilList) {
 //        this.perfilList = perfilList;
 //    }
+
+    public List<Documento> getDocumentosList() {
+        return documentosList;
+    }
+
+    public void setDocumentosList(List<Documento> documentosList) {
+        this.documentosList = documentosList;
+    }
 
 
     

@@ -5,6 +5,7 @@
  */
 package co.sigess.facade.emp;
 
+import co.sigess.entities.ado.Documento;
 import co.sigess.facade.com.AbstractFacade;
 import co.sigess.entities.emp.Empresa;
 import co.sigess.entities.emp.Perfil;
@@ -155,6 +156,12 @@ public class EmpresaFacade extends AbstractFacade<Empresa> {
         }
         super.edit(empresa);
         return vinculado;
+    }
+    
+    public void relacionarDocumento(Documento documento, Integer empresaId) throws Exception{
+        Empresa emp = this.find(empresaId);
+        emp.getDocumentosList().add(documento);
+        super.edit(emp);
     }
 
 }

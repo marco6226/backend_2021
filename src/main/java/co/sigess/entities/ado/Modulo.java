@@ -21,7 +21,8 @@ public enum Modulo {
     SEC("Seguimiento y control"),
     SGE("Sistema de gestión"),
     COP("COPASST"),
-    LISTA("Lista Inspeccion");
+    LISTA("Lista Inspeccion"),
+    EMPRESA("Empresa");
     
     private String nombre;
 

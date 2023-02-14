@@ -15,6 +15,7 @@ import co.sigess.facade.auc.ObservacionFacade;
 import co.sigess.facade.com.AbstractFacade;
 import co.sigess.facade.cop.ActaFacade;
 import co.sigess.facade.emp.EmpleadoFacade;
+import co.sigess.facade.emp.EmpresaFacade;
 import co.sigess.facade.inp.CalificacionFacade;
 import co.sigess.facade.sec.AnalisisDesviacionFacade;
 import co.sigess.facade.inp.ListaInspeccionFacade;
@@ -61,6 +62,9 @@ public class DirectorioFacade extends AbstractFacade<Directorio> {
     
     @EJB
     private ListaInspeccionFacade ListaInspeccionFacade;
+    
+    @EJB
+    private EmpresaFacade empresaFacade;
 
     @Override
     protected EntityManager getEntityManager() {
@@ -162,6 +166,10 @@ public class DirectorioFacade extends AbstractFacade<Directorio> {
                 case COP:
                     Long actaId = Long.valueOf(modParam);
                     this.actaFacade.relacionarDocumento(documento, actaId);
+                    break;
+                case EMPRESA:
+                    Integer empresaId = Integer.valueOf(modParam);
+                    this.empresaFacade.relacionarDocumento(documento, empresaId);
                     break;
                 default:
                     break;
