@@ -64,6 +64,9 @@ public class ReporteATView implements Serializable{
     @Column(name = "temporal")
     private String temporal;
     
+    @Column(name = "causo_muerte")
+    private boolean causoMuerte;
+    
     public ReporteATView() {
     }
     
@@ -132,5 +135,13 @@ public class ReporteATView implements Serializable{
 
     public void setTemporal(String temporal) {
         this.temporal = temporal;
+    }
+
+    public boolean isCausoMuerte() {
+        return causoMuerte;
+    }
+
+    public void setCausoMuerte(boolean causoMuerte) {
+        this.causoMuerte = causoMuerte;
     }
 }

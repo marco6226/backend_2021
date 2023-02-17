@@ -85,7 +85,8 @@ public class Desviacion implements Serializable {
     @Column(name = "emptemporal")
     private String emptemporal;
      
-     
+    @Column(name = "causo_muerte")
+    private boolean causoMuerte;
 
     public String getCriticidad() {
         return criticidad;
@@ -266,6 +267,14 @@ public class Desviacion implements Serializable {
 
     public void setEmptemporal(String emptemporal) {
         this.emptemporal = emptemporal;
+    }
+
+    public boolean isCausoMuerte() {
+        return causoMuerte;
+    }
+
+    public void setCausoMuerte(boolean causoMuerte) {
+        this.causoMuerte = causoMuerte;
     }
     
 }
