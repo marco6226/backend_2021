@@ -46,7 +46,7 @@ public class Documento implements Serializable {
     @Column(name = "version")
     private Short version;
     
-    @Size(max = 100)
+    @Size(max = 150)
     @Column(name = "nombre")
     private String nombre;
     
