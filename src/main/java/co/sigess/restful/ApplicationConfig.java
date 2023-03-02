@@ -69,6 +69,7 @@ public class ApplicationConfig extends Application {
         resources.add(co.sigess.restful.emp.HorasExtraREST.class);
         resources.add(co.sigess.restful.emp.PerfilREST.class);
         resources.add(co.sigess.restful.emp.PermisoREST.class);
+        resources.add(co.sigess.restful.emp.PlantasREST.class);
         resources.add(co.sigess.restful.emp.RecursoREST.class);
         resources.add(co.sigess.restful.emp.TipoAreaREST.class);
         resources.add(co.sigess.restful.emp.UsuarioREST.class);
