@@ -6,6 +6,8 @@
 package co.sigess.restful.emp;
 
 import co.sigess.entities.emp.Area;
+import co.sigess.entities.emp.Empresa;
+import co.sigess.entities.emp.TipoArea;
 import co.sigess.facade.emp.AreaFacade;
 import co.sigess.restful.CriteriaFilter;
 import co.sigess.restful.Filter;
@@ -19,6 +21,9 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
 import javax.ejb.EJB;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -43,7 +48,9 @@ public class AreaREST extends ServiceREST{
     public AreaREST() {
         super(AreaFacade.class);
     }
-
+    
+    @PersistenceContext(unitName = "SIGESS_PU")
+    private EntityManager em;
 //    @GET
 //    @Path("empresa/{empresaId}")
 //    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -59,6 +66,10 @@ public class AreaREST extends ServiceREST{
     @Override
     public Response findWithFilter(FilterQuery filterQuery) {
         try {
+            Query q1 = em.createNativeQuery("SELECT e.id_empresa_aliada from emp.empresa e where e.id = ?1");
+            q1.setParameter(1, getEmpresaIdRequestContext());
+            List list1 = q1.getResultList();;
+        
             boolean filtradoEmpresa = false;
             for (Filter filter : filterQuery.getFilterList()) {
                 if (filter.getField().equals("tipoArea.empresa.id")) {
@@ -70,7 +81,11 @@ public class AreaREST extends ServiceREST{
                 Filter empFilt = new Filter();
                 empFilt.setCriteriaEnum(CriteriaFilter.EQUALS);
                 empFilt.setField("tipoArea.empresa.id");
-                empFilt.setValue1(getEmpresaIdRequestContext().toString());
+                if(list1.get(0) != null){
+                    empFilt.setValue1(list1.get(0).toString());
+                }else{
+                    empFilt.setValue1(getEmpresaIdRequestContext().toString());
+                }
                 filterQuery.getFilterList().add(empFilt);
             }
             
@@ -80,6 +95,7 @@ public class AreaREST extends ServiceREST{
             FilterResponse filterResponse = new FilterResponse();
             filterResponse.setData(list);
             filterResponse.setCount(numRows);
+            System.out.println(filterResponse);
             return Response.ok(filterResponse).build();
         } catch (IOException | NoSuchFieldException | ParseException ex) {
             return Util.manageException(ex, ReporteREST.class);

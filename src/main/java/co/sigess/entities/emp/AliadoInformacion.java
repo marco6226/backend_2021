@@ -101,6 +101,17 @@ public class AliadoInformacion implements Serializable{
     @Column(name = "subcontratacion")
     private Boolean autoriza_subcontratacion;
 
+    @Column(name = "istemporal")
+    private Boolean istemporal;
+
+    public Boolean getIstemporal() {
+        return istemporal;
+    }
+
+    public void setIstemporal(Boolean istemporal) {
+        this.istemporal = istemporal;
+    }
+    
     public Integer getId() {
         return id;
     }
