@@ -68,7 +68,7 @@ public class AreaREST extends ServiceREST{
         try {
             Query q1 = em.createNativeQuery("SELECT e.id_empresa_aliada from emp.empresa e where e.id = ?1");
             q1.setParameter(1, getEmpresaIdRequestContext());
-            List list1 = q1.getResultList();;
+            List list1 = q1.getResultList();
         
             boolean filtradoEmpresa = false;
             for (Filter filter : filterQuery.getFilterList()) {
@@ -95,7 +95,6 @@ public class AreaREST extends ServiceREST{
             FilterResponse filterResponse = new FilterResponse();
             filterResponse.setData(list);
             filterResponse.setCount(numRows);
-            System.out.println(filterResponse);
             return Response.ok(filterResponse).build();
         } catch (IOException | NoSuchFieldException | ParseException ex) {
             return Util.manageException(ex, ReporteREST.class);
