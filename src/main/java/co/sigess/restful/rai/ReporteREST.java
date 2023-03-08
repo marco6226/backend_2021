@@ -8,9 +8,11 @@ package co.sigess.restful.rai;
 import co.sigess.entities.com.Mensaje;
 import co.sigess.entities.com.TipoMensaje;
 import co.sigess.entities.emp.Empresa;
+import co.sigess.entities.ipr.TipoPeligro;
 import co.sigess.entities.rai.Reporte;
 import co.sigess.facade.rai.ReporteFacade;
 import co.sigess.restful.ServiceREST;
+import co.sigess.restful.ipr.TipoPeligroREST;
 import co.sigess.restful.security.Auditable;
 import co.sigess.restful.security.AuthorizationFacade;
 import co.sigess.restful.security.Secured;
@@ -48,6 +50,30 @@ public class ReporteREST extends ServiceREST {
         super(ReporteFacade.class);
     }
 
+    @GET
+    @Path("empresaId")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response findEmpresaTemporal() {
+        try {            
+            List<Reporte> reporte = reporteFacade.findForEmpTemporal(getEmpresaIdRequestContext());
+            return Response.ok(reporte).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, ReporteREST.class);
+        }
+    }
+    
+    @GET
+    @Path("{reporteId}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response findReporteAlido(@PathParam("reporteId") Integer reporteId) {
+        try {            
+            List<Reporte> reporte = reporteFacade.findReporteAlido(reporteId);
+            return Response.ok(reporte).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, ReporteREST.class);
+        }
+    }
+    
     @GET
     @Path("inicializarReporte/{empleadoId}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})

@@ -90,5 +90,17 @@ public class AnalisisDesviacionREST extends ServiceREST {
             return Util.manageException(ex, AnalisisDesviacionREST.class);
         }
     }
+    
+    @GET
+    @Path("idanalisis/{idAnalisis}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response findReporteAlido(@PathParam("idAnalisis") Integer idAnalisis) {
+        try {            
+            List<AnalisisDesviacion> list = ((AnalisisDesviacionFacade) beanInstance).findReporteAlido(idAnalisis);
+            return Response.ok(list).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, AnalisisDesviacionREST.class);
+        }
+    }
 
 }

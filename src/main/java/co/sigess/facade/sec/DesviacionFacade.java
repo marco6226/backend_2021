@@ -64,5 +64,12 @@ public class DesviacionFacade extends AbstractFacade<Desviacion> {
         }
         return bOutput;
     }
+    
+    public List<Desviacion> findDesviacionAlido(int idDesviacion){
+        Query q = this.em.createQuery("SELECT d FROM Desviacion d WHERE d.hashId = ?1");
+        q.setParameter(1,"RAI-"+idDesviacion);
+        List<Desviacion> list = (List<Desviacion>) q.getResultList();
+        return list;
+    }
 
 }

@@ -36,12 +36,9 @@ public class caracterizacionviewREST extends ServiceREST{
     @Path("all")
     public Response findByAll(){
         try{
-            System.out.println("Entre");
             List<caracterizacionview> list = this.caracterizacionviewFACADE.findByalll();
-            System.out.println(list);
             return Response.ok(list).build();
         } catch(Exception ex){
-            System.out.println("catch");
             return Util.manageException(ex, caracterizacionviewREST.class);
         }
     }

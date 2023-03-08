@@ -205,5 +205,12 @@ public class AnalisisDesviacionFacade extends AbstractFacade<AnalisisDesviacion>
         analisis.getDocumentosList().remove(documento);
         super.edit(analisis);
     }
+    
+    public List<AnalisisDesviacion> findReporteAlido(Integer idAnalisis){
+        Query q = this.em.createQuery("SELECT a FROM AnalisisDesviacion a WHERE a.id = ?1");
+        q.setParameter(1,idAnalisis);
+        List<AnalisisDesviacion> list = (List<AnalisisDesviacion>) q.getResultList();
+        return list;
+    }
 
 }

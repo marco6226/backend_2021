@@ -5,6 +5,7 @@
  */
 package co.sigess.restful.sec;
 
+import co.sigess.entities.sec.Desviacion;
 import co.sigess.facade.sec.DesviacionFacade;
 import co.sigess.facade.sec.DesviacionInspeccionFacade;
 import co.sigess.restful.Filter;
@@ -22,6 +23,7 @@ import javax.ejb.EJB;
 import javax.ws.rs.BeanParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
@@ -102,5 +104,18 @@ public class DesviacionREST extends ServiceREST {
             return Util.manageException(ex, DesviacionREST.class);
         }
     }
+    
+    @GET
+    @Path("desviacionId/{desviacionId}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response findReporteAlido(@PathParam("desviacionId") int desviacionId) {
+        try {            
+            List<Desviacion> list = ((DesviacionFacade) super.beanInstance).findDesviacionAlido(desviacionId);
+            return Response.ok(list).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, DesviacionREST.class);
+        }
+    }
+
 
 }

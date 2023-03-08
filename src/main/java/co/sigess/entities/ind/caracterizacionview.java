@@ -501,8 +501,5 @@ public class caracterizacionview implements Serializable{
 
     public void setLugaraccidente(String lugaraccidente) {
         this.lugaraccidente = lugaraccidente;
-    }
-    
-    
-    
+    }  
 }
