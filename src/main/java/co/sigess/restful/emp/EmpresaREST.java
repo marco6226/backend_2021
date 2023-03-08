@@ -370,5 +370,21 @@ public class EmpresaREST extends ServiceREST {
         List<Subcontratista> listaSubcontratista = subcontratistaFacade.findByAliadoCreador(aliadoId);
         return Response.ok(listaSubcontratista).build();
     }
+
+    @GET
+    @Secured(requiereEmpresaId = false)
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Path("temporales/{empresaId}")
+    public Response getTemporales(@PathParam("empresaId") Integer empresaId){
+        try{
+            List<AliadoInformacion> listaTemporales = AliadoInformacionFacade.findTemporalesByEmpresaId(empresaId);
+            // System.out.println(listaTemporales.size());
+            // Response re = Response.ok(listaTemporales).build();
+            // System.out.println(re.toString() + re.getMetadata().toString());
+            return Response.ok(listaTemporales).build();
+        } catch(Exception e){
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
+    }
     
 }

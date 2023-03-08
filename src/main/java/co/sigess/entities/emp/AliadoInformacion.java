@@ -13,6 +13,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -35,7 +36,7 @@ public class AliadoInformacion implements Serializable{
     @Column(name = "id")
     private Integer id;
     
-    @Column(name = "id_empresa")
+    @JoinColumn(table = "emp.empresa", referencedColumnName = "id", name = "id_empresa")
     private Integer id_empresa;
     
     @Column(name = "actividad_contratada")
