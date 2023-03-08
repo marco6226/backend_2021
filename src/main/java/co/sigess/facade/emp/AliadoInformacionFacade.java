@@ -63,4 +63,12 @@ public class AliadoInformacionFacade extends AbstractFacade<AliadoInformacion>  
         List<AliadosDivisiones> aliadosDivisionesList = (List<AliadosDivisiones>) query.getResultList();
         return aliadosDivisionesList;
     }
+
+    public List findTemporalesByEmpresaId(Integer empresaId) throws Exception{
+        Query query = this.em.createQuery("SELECT em FROM AliadoInformacion ai JOIN Empresa em ON em.id = ai.id_empresa WHERE ai.istemporal = TRUE AND em.idEmpresaAliada = ?1");
+        query.setParameter("1", empresaId);
+        List<AliadoInformacion> listaTemporales = (List<AliadoInformacion>) query.getResultList();
+        // System.out.println(listaTemporales.get(0));
+        return listaTemporales;
+    }
 }
