@@ -16,6 +16,7 @@ import co.sigess.util.Util;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.persistence.PersistenceException;
+import javax.persistence.Query;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -51,7 +52,19 @@ public class TipoPeligroREST extends ServiceREST {
 //            return Util.manageException(ex, TipoPeligroREST.class);
 //        }
 //    }
-
+   
+    @GET
+    @Path("empresaId")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response findEmpresa(@PathParam("empresaId") Integer empresaId) {
+        try {            
+            List<TipoPeligro> list = tipoPeligroFacade.findForEmp(getEmpresaIdRequestContext());
+            return Response.ok(list).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, TipoPeligroREST.class);
+        }
+    }
+    
     @GET
     @Path("{tipoPeligroId}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
