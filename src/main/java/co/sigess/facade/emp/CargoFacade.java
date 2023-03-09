@@ -60,6 +60,14 @@ public class CargoFacade extends AbstractFacade<Cargo> {
     }
 
     public List<Cargo> findByEmpresa(Integer empresaId) {
+        Query q1 = em.createNativeQuery("SELECT e.id_empresa_aliada from emp.empresa e where e.id = ?1");
+        q1.setParameter(1, empresaId);
+        List list1 = q1.getResultList();
+
+        if(list1.get(0) != null){
+            empresaId=Integer.parseInt(list1.get(0).toString());
+        }
+      
         Query query = this.em.createQuery("SELECT c from Cargo c where c.empresa.id = :empresaId ORDER BY c.nombre ASC");
         query.setParameter("empresaId", empresaId);
         List<Cargo> list = (List<Cargo>) query.getResultList();

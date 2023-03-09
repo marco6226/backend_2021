@@ -38,16 +38,17 @@ public class CargoREST extends ServiceREST{
         super(CargoFacade.class);
     }
 
-//    @GET
-//    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-//    public Response findByEmpresa() {
-//        try {
-//            List<Cargo> list = cargoFacade.findByEmpresa(super.getEmpresaIdRequestContext());
-//            return Response.ok(list).build();
-//        } catch (Exception ex) {
-//            return Util.manageException(ex, CargoREST.class);
-//        }
-//    }
+    @GET
+    @Path("empresa")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response findByEmpresa() {
+        try {
+            List<Cargo> list = cargoFacade.findByEmpresa(super.getEmpresaIdRequestContext());
+            return Response.ok(list).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, CargoREST.class);
+        }
+    }
 
     @POST
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
