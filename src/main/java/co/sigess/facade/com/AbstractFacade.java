@@ -248,7 +248,7 @@ public abstract class AbstractFacade<T> {
                 case BETWEEN:
                     if (type == Date.class) {
                         Date value1 = Util.SIMPLE_DATE_FORMAT.parse(filter.getValue1());
-                        Date value2 = filter.getValue2() == null ? null : new Date(Util.SIMPLE_DATE_FORMAT.parse(filter.getValue2()).getTime() + (1000 * 60 * 60 * 24));
+                        Date value2 = filter.getValue2() == null ? null : new Date(Util.SIMPLE_DATE_FORMAT.parse(filter.getValue2()).getTime());// + (1000 * 60 * 60 * 24
                         predicate = cb.between(expression, value1, value2);
                     } else if (type == Integer.class) {
                         predicate = cb.between(expression, Integer.parseInt(filter.getValue1()), Integer.parseInt(filter.getValue2()));
