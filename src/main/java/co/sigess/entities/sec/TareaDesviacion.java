@@ -137,7 +137,7 @@ public class TareaDesviacion implements Serializable {
     
     @JoinColumn(name = "fk_usuario_cierre", referencedColumnName = "id")
     @ManyToOne
-    private Usuario usuarioCierre;
+    private Empleado usuarioCierre;
     
     
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER,orphanRemoval = true)
@@ -424,14 +424,14 @@ public class TareaDesviacion implements Serializable {
     /**
      * @return the usuarioCierre
      */
-    public Usuario getUsuarioCierre() {
+    public Empleado getUsuarioCierre() {
         return usuarioCierre;
     }
 
     /**
      * @param usuarioCierre the usuarioCierre to set
      */
-    public void setUsuarioCierre(Usuario usuarioCierre) {
+    public void setUsuarioCierre(Empleado usuarioCierre) {
         this.usuarioCierre = usuarioCierre;
     }
 
