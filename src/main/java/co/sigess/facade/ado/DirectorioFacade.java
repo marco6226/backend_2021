@@ -337,4 +337,8 @@ public class DirectorioFacade extends AbstractFacade<Directorio> {
         }
 
     }
+    public void actualizarModuloDir(){
+        Query q = this.em.createNativeQuery("SELECT ado.actualizarmodulodirectorio()");
+        q.getResultList();
+    }
 }

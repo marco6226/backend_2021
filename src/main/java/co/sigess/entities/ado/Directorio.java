@@ -16,6 +16,8 @@ import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -101,6 +103,18 @@ public class Directorio implements Serializable {
 
     @Column(name = "eliminado")
     private Boolean eliminado;
+    
+    @Enumerated(value = EnumType.STRING)
+    @Column(name = "modulo")
+    private Modulo modulo;
+
+    public Modulo getModulo() {
+        return modulo;
+    }
+
+    public void setModulo(Modulo modulo) {
+        this.modulo = modulo;
+    }
 
     public Directorio() {
     }

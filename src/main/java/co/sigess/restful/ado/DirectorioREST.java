@@ -115,7 +115,7 @@ public class DirectorioREST extends ServiceREST {
 
                 ObjectMapper mapper = new ObjectMapper();
                 String json = mapper.writeValueAsString(relativePath);
-
+                directorioFacade.actualizarModuloDir();
                 return Response.ok(json).build();
             }
         } catch (Exception ex) {
@@ -236,6 +236,7 @@ public class DirectorioREST extends ServiceREST {
             if (caseId != null) {
                 this.logScm("Guardado de ausentismo", json, dir.getId().toString(), directorioFacade.getClass().toString());
             }
+            directorioFacade.actualizarModuloDir();
             return Response.ok(dir).build();
         } catch (Exception ex) {
             return Util.manageException(ex, DirectorioREST.class);
@@ -297,6 +298,7 @@ public class DirectorioREST extends ServiceREST {
             if (caseId != null) {
                 this.logScm("Guardado de ausentismo", json, dir.getId().toString(), directorioFacade.getClass().toString());
             }
+            directorioFacade.actualizarModuloDir();
             return Response.ok(dir).build();
         } catch (Exception ex) {
             return Util.manageException(ex, DirectorioREST.class);
@@ -315,7 +317,7 @@ public class DirectorioREST extends ServiceREST {
         try {
             
             directorioFacade.create(documentoId, paramId, modulo);
-            
+            directorioFacade.actualizarModuloDir();
             return Response.ok().build();
         } catch (Exception ex) {
             return Util.manageException(ex, DirectorioREST.class);
@@ -334,7 +336,7 @@ public class DirectorioREST extends ServiceREST {
         try {
             
                 directorioFacade.create(documentoId, listaId, version);
-            
+            directorioFacade.actualizarModuloDir();
             return Response.ok().build();
         } catch (Exception ex) {
             return Util.manageException(ex, DirectorioREST.class);
@@ -353,7 +355,7 @@ public class DirectorioREST extends ServiceREST {
         try {
             
                 directorioFacade.update(documentoId, listaId, version);
-            
+            directorioFacade.actualizarModuloDir();
             return Response.ok().build();
         } catch (Exception ex) {
             return Util.manageException(ex, DirectorioREST.class);
@@ -509,7 +511,9 @@ public class DirectorioREST extends ServiceREST {
             @FormDataParam("modParam") String modParam,
             @FormDataParam("docMetaData") String docMetaData
     ) throws Exception {
-        return this.uploadFile(fileInputStream, fileMetaData,null, null, Modulo.SEC.name(), modParam, docMetaData, null, "PUBLICO");
+        Response resp=this.uploadFile(fileInputStream, fileMetaData,null, null, Modulo.SEC.name(), modParam, docMetaData, null, "PUBLICO");
+        directorioFacade.actualizarModuloDir();
+        return resp;
     }
 
     @GET
@@ -575,7 +579,9 @@ public class DirectorioREST extends ServiceREST {
             @FormDataParam("file") FormDataContentDisposition fileMetaData,
             @FormDataParam("modParam") String modParam
     ) throws Exception {
-        return this.uploadFile(fileInputStream, fileMetaData,null, null, Modulo.COP.name(), modParam, null, null, "PUBLICO");
+        Response resp=this.uploadFile(fileInputStream, fileMetaData,null, null, Modulo.COP.name(), modParam, null, null, "PUBLICO");
+        directorioFacade.actualizarModuloDir();
+        return resp;
     }
 
     @GET
