@@ -67,8 +67,7 @@ public class CargoFacade extends AbstractFacade<Cargo> {
         if(list1.get(0) != null){
             empresaId=Integer.parseInt(list1.get(0).toString());
         }
-      
-        Query query = this.em.createQuery("SELECT c from Cargo c where c.empresa.id = :empresaId ORDER BY c.nombre ASC");
+        Query query = this.em.createQuery("SELECT c.nombre from Cargo c where c.empresa.id = :empresaId ORDER BY c.nombre ASC");
         query.setParameter("empresaId", empresaId);
         List<Cargo> list = (List<Cargo>) query.getResultList();
         return list;
