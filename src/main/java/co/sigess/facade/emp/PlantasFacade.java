@@ -32,7 +32,7 @@ public class PlantasFacade extends AbstractFacade<Plantas>{
     }
 
     public List<Plantas> findPlantasByEmpresa(long idEmpresa){
-        Query q = this.em.createQuery("SELECT P FROM Plantas p WHERE p.id_empresa=:idEmpresa ORDER BY p.id");
+        Query q = this.em.createQuery("SELECT P FROM Plantas p WHERE p.id_empresa=:idEmpresa ORDER BY p.pais, p.nombre");
         q.setParameter("idEmpresa", idEmpresa);
         List<Plantas> plantas = (List<Plantas>)  q.getResultList();
         return plantas;

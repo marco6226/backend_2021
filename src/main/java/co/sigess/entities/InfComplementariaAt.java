@@ -6,10 +6,7 @@
 package co.sigess.entities;
 
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-import com.google.gson.annotations.JsonAdapter;
-import com.sun.istack.internal.Nullable;
 
 /**
  * Esta clase es para poder manejar el json de "complementaria" en la tabla ReporteAtView
