@@ -67,6 +67,9 @@ public class ReporteATView implements Serializable{
     @Column(name = "causo_muerte")
     private boolean causoMuerte;
     
+    @Column(name = "complementaria")
+    private String complementaria;
+    
     public ReporteATView() {
     }
     
@@ -143,5 +146,13 @@ public class ReporteATView implements Serializable{
 
     public void setCausoMuerte(boolean causoMuerte) {
         this.causoMuerte = causoMuerte;
+    }
+
+    public String getComplementaria() {
+        return complementaria;
+    }
+
+    public void setComplementaria(String complementaria) {
+        this.complementaria = complementaria;
     }
 }
