@@ -5,7 +5,6 @@
  */
 package co.sigess.restful.ind;
 
-import co.sigess.entities.InfComplementariaAt;
 import co.sigess.entities.ind.ReporteATView;
 import co.sigess.restful.FilterQuery;
 import co.sigess.restful.ServiceREST;
@@ -17,10 +16,9 @@ import co.sigess.facade.ind.ReporteATViewFacade;
 import java.util.LinkedList;
 import java.util.List;
 import javax.ws.rs.GET;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 /**
  *
@@ -57,12 +55,20 @@ public class ReporteATViewREST extends ServiceREST{
             List<ReporteATView> list;
             list = reporteATViewFacade.findAll();
             List<ReporteATView> listAux = new LinkedList<>();
+            JsonParser parser = new JsonParser();
+            
             for(ReporteATView reporte : list){
-                if(reporte.getComplementaria() != null && !reporte.getComplementaria().isEmpty()){
-                    InfComplementariaAt data = new Gson().fromJson(reporte.getComplementaria(), InfComplementariaAt.class);
-                    if("objetado".equalsIgnoreCase(data.getEventoARL())){
-                        continue;
+                if(reporte.getComplementaria() != null){
+                    JsonObject complementaria = parser.parse(reporte.getComplementaria()).getAsJsonObject();
+                    JsonElement eventoArl = complementaria.get("EnventoARL");
+                    if(eventoArl.isJsonNull()){
+                        listAux.add(reporte);
+                    }else{
+                        String eventoArlStr = eventoArl.getAsString();
+                        if("objetado".equalsIgnoreCase(eventoArlStr)) continue;
+                        listAux.add(reporte);
                     }
+                }else{
                     listAux.add(reporte);
                 }
             }
