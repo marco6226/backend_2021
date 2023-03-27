@@ -11,6 +11,7 @@ import co.sigess.entities.com.TipoMensaje;
 import co.sigess.exceptions.UserMessageException;
 import co.sigess.facade.com.AbstractFacade;
 import co.sigess.facade.emp.EmpleadoFacade;
+import co.sigess.facade.emp.EmpresaFacade;
 import co.sigess.facade.inp.CalificacionFacade;
 import co.sigess.facade.sec.AnalisisDesviacionFacade;
 import co.sigess.util.FileUtil;
@@ -42,6 +43,9 @@ public class DocumentoFacade extends AbstractFacade<Documento> {
     
     @EJB
     private AnalisisDesviacionFacade anDesvFacade;
+    
+    @EJB
+    private EmpresaFacade empresaFacade;
 
     @Override
     protected EntityManager getEntityManager() {
@@ -114,6 +118,13 @@ public class DocumentoFacade extends AbstractFacade<Documento> {
                     this.anDesvFacade.retirarDocumento(documento);
                 } catch (Exception ex) {
                     throw new UserMessageException("Operación no realizada", "No fue posible desligar el documento de la calificación de la inspección", TipoMensaje.error);
+                }
+                break;
+            case EMPRESA:
+                try{
+                    this.empresaFacade.eliminarDocumento(documento);
+                } catch (Exception ex) {
+                    throw new UserMessageException("Operación no realizada", "No fue posible eliminar el soporte", TipoMensaje.error);
                 }
                 break;
             default:
