@@ -443,5 +443,18 @@ public class TareaDesviacionFacade extends AbstractFacade<TareaDesviacion> {
         tareaDB = super.edit(tareaDB);
         return tareaDB;
     }
+    
+    public Object obtenerSeguimientoTarea(Integer id) throws Exception {
+        String q = "SELECT td.id, td.fecha_cierre, td.fecha_proyectada, count(st.fk_tarea_id)\n" +
+                    "FROM sec.tarea_desviacion AS td\n" +
+                    "LEFT JOIN sec.seguimiento_tarea AS st\n" +
+                    "ON td.id = st.fk_tarea_id\n" +
+                    "GROUP BY td.id\n" +
+                    "HAVING td.id = ?1";
+        Query query = this.em.createNativeQuery(q);
+        query.setParameter(1, id);
+        Object object = query.getSingleResult();
+        return object;
+    }
 
 }
