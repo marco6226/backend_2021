@@ -54,6 +54,28 @@ public class vwscmcorporativo implements Serializable {
     
     @Column(name = "diagnostico")
     private String diagnostico;
+        
+    @Column(name = "iddiagnostico")
+    private Integer iddiagnostico;
+    
+    @Column(name = "origen")
+    private String origen;
+
+    public Integer getIddiagnostico() {
+        return iddiagnostico;
+    }
+
+    public void setIddiagnostico(Integer iddiagnostico) {
+        this.iddiagnostico = iddiagnostico;
+    }
+
+    public String getOrigen() {
+        return origen;
+    }
+
+    public void setOrigen(String origen) {
+        this.origen = origen;
+    }
     
     @Column(name = "prioridad_caso")
     private String prioridadCaso;
