@@ -15,6 +15,7 @@ import co.sigess.restful.security.ValidadorArea;
 import co.sigess.util.Util;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.ejb.EJB;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -241,4 +242,18 @@ public class TareaDesviacionREST extends ServiceREST {
         }
     }
 
+    @GET
+    @Path("seguimiento/{id}")
+    @Secured(validarPermiso = false)
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response seguimientoTarea(@PathParam("id") String idTarea) {
+        try{
+            Integer id = new Integer(idTarea);
+            Object object = tareaDesviacionFacade.obtenerSeguimientoTarea(id);
+            return Response.ok(object).build();
+        }catch(Exception ex){
+            System.out.println(ex.toString());
+            return Util.manageException(ex, TareaDesviacionREST.class);
+        }
+    }
 }

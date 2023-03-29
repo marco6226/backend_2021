@@ -163,5 +163,19 @@ public class EmpresaFacade extends AbstractFacade<Empresa> {
         emp.getDocumentosList().add(documento);
         super.edit(emp);
     }
+    
+    public boolean eliminarDocumento(Documento documento) throws Exception{
+        boolean eliminado = false;
+        try{
+            Query q = this.em.createQuery("SELECT e FROM Empresa e INNER JOIN e.documentosList d WHERE d.id = ?1");
+            q.setParameter(1, documento.getId());
+            Empresa emp = (Empresa) q.getSingleResult();
+            eliminado = emp.getDocumentosList().remove(documento);
+            super.edit(emp);
+        } catch(Exception ex){
+            throw ex;
+        }
+        return eliminado;
+    }
 
 }
