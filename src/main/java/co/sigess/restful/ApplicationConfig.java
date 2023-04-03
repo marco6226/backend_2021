@@ -87,6 +87,7 @@ public class ApplicationConfig extends Application {
         resources.add(co.sigess.restful.ind.TableroREST.class);
         resources.add(co.sigess.restful.ind.caracterizacionviewREST.class);
         resources.add(co.sigess.restful.ind.vwscmcorporativoREST.class);
+        resources.add(co.sigess.restful.ind.vwscmgestionREST.class);
         resources.add(co.sigess.restful.inp.InspeccionREST.class);
         resources.add(co.sigess.restful.inp.ListaInspeccionREST.class);
         resources.add(co.sigess.restful.inp.ProgramacionREST.class);
