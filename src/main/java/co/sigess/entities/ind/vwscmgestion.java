@@ -51,6 +51,10 @@ public class vwscmgestion implements Serializable{
     @Column(name = "fecha_final")
     private String fechaFinal;
     
+    @Column(name = "fecha_diagnostico")
+    @Temporal(TemporalType.DATE)
+    private Date fechaDiagnostico;
+        
     @Column(name = "pcl")
     private String pcl;
            
@@ -83,6 +87,50 @@ public class vwscmgestion implements Serializable{
     
     @Column(name = "fk_empresa_id")
     private Integer empresaId;
+    
+    @Column(name = "recomendacion")
+    private Integer recomendacion;
+        
+    @Column(name = "seguimiento")
+    private Integer seguimiento;
+            
+    @Column(name = "documento")
+    private Integer documento;
+                
+    @Column(name = "plan_accion")
+    private Integer planAccion;
+
+    public Integer getRecomendacion() {
+        return recomendacion;
+    }
+
+    public void setRecomendacion(Integer recomendacion) {
+        this.recomendacion = recomendacion;
+    }
+
+    public Integer getSeguimiento() {
+        return seguimiento;
+    }
+
+    public void setSeguimiento(Integer seguimiento) {
+        this.seguimiento = seguimiento;
+    }
+
+    public Integer getDocumento() {
+        return documento;
+    }
+
+    public void setDocumento(Integer documento) {
+        this.documento = documento;
+    }
+
+    public Integer getPlanAccion() {
+        return planAccion;
+    }
+
+    public void setPlanAccion(Integer planAccion) {
+        this.planAccion = planAccion;
+    }
 
     public Integer getId() {
         return id;
@@ -140,6 +188,14 @@ public class vwscmgestion implements Serializable{
         this.fechaFinal = fechaFinal;
     }
 
+    public Date getFechaDiagnostico() {
+        return fechaDiagnostico;
+    }
+
+    public void setFechaDiagnostico(Date fechaDiagnostico) {
+        this.fechaDiagnostico = fechaDiagnostico;
+    }
+    
     public String getPcl() {
         return pcl;
     }
