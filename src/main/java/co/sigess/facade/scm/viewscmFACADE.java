@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package co.sigess.facade.ind;
+package co.sigess.facade.scm;
 
-import co.sigess.entities.ind.vwscmgestion;
+import co.sigess.entities.scm.viewscm;
 import co.sigess.facade.com.AbstractFacade;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -18,23 +18,23 @@ import javax.persistence.Query;
  * @author Usuario
  */
 @Stateless
-public class vwscmgestionFACADE extends AbstractFacade<vwscmgestion>{
+public class viewscmFACADE extends AbstractFacade<viewscm>{
     @PersistenceContext(unitName = "SIGESS_PU")
     private EntityManager em;
     
-        @Override
+    @Override
     protected EntityManager getEntityManager() {
         return em;
     }
     
-    public vwscmgestionFACADE(){
-        super(vwscmgestion.class);
+    public viewscmFACADE(){
+        super(viewscm.class);
     }
-
-    public List<vwscmgestion>findByEmpresaId(Integer empresaId){
-        Query q = this.em.createQuery("SELECT vwsgest FROM vwscmgestion vwsgest WHERE vwsgest.empresaId = ?1 ");
+    
+    public List<viewscm>findByEmpresaId(Integer empresaId){
+        Query q = this.em.createQuery("SELECT vwscm FROM viewscm vwscm WHERE vwscm.empresaId = ?1 ");
         q.setParameter(1, empresaId);
-        List<vwscmgestion> list = (List<vwscmgestion>) q.getResultList();
+        List<viewscm> list = (List<viewscm>) q.getResultList();
         return list;
     }
 }
