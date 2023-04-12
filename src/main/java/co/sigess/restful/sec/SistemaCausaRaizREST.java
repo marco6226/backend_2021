@@ -15,6 +15,7 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -51,6 +52,19 @@ public class SistemaCausaRaizREST extends ServiceREST {
             return Response.ok(scr).build();
         } catch (Exception ex) {
             return Util.manageException(ex, SistemaCausaRaizREST.class);
+        }
+    }
+    
+    @GET
+    @Path("seleccionado2/{idEmpresa}")
+    @Secured(requiereEmpresaId = false, validarPermiso = false)
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    public Response findDefault2(@PathParam("idEmpresa") Integer idEmpresa){
+        try {
+            SistemaCausaRaiz scr = sistemaCausaRaizFacade.findDefault(idEmpresa);
+            return Response.ok(scr).build();
+        } catch (Exception e) {
+            return Util.manageException(e, SistemaCausaRaizREST.class);
         }
     }
 

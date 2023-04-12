@@ -47,5 +47,12 @@ public class SistemaCausaInmediataFacade extends AbstractFacade<SistemaCausaInme
         SistemaCausaInmediata scr = query.getResultList().isEmpty() ? new SistemaCausaInmediata() : (SistemaCausaInmediata) query.getResultList().get(0);
         return scr;
     }
+    
+    public SistemaCausaInmediata findDefault2(){
+        Query query = this.em.createQuery("SELECT s FROM SistemaCausaInmediata s WHERE s.empresaId=2");
+        query.setMaxResults(1);
+        SistemaCausaInmediata sci = query.getResultList().isEmpty() ? new SistemaCausaInmediata() : (SistemaCausaInmediata) query.getResultList().get(0);
+        return sci;
+    }
 
 }

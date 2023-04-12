@@ -14,6 +14,7 @@ import co.sigess.util.Util;
 import javax.ejb.EJB;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -42,4 +43,16 @@ public class SistemaCausaInmediataREST extends ServiceREST {
         }
     }
 
+    @GET
+    @Path("seleccionado2/{idEmpresa}")
+    @Secured(validarPermiso = false, requiereEmpresaId = false)
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    public Response findDefault2(@PathParam("idEmpresa") Integer idEmpresa){
+        try{
+            SistemaCausaInmediata scr = sistemaInmediataFacade.findDefault(idEmpresa);
+            return Response.ok(scr).build();
+        }catch(Exception ex){
+            return Util.manageException(ex, SistemaCausaInmediataREST.class);
+        }
+    }
 }
