@@ -177,5 +177,12 @@ public class EmpresaFacade extends AbstractFacade<Empresa> {
         }
         return eliminado;
     }
+    
+    public Empresa findEmpresaById(Integer empresaId) throws Exception{
+        Query q = this.em.createQuery("SELECT e FROM Empresa e WHERE e.id = ?1");
+        q.setParameter(1, empresaId);
+        Empresa empresa = (Empresa)q.getSingleResult();
+        return empresa;
+    }
 
 }

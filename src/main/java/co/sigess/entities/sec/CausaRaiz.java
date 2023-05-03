@@ -39,7 +39,7 @@ public class CausaRaiz implements Serializable {
     @Column(name = "id")
     private Integer id;
     
-    @Size(max = 100)
+    @Size(max = 255)
     @Column(name = "nombre")
     private String nombre;
         

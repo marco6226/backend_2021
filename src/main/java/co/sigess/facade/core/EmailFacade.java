@@ -5,6 +5,7 @@
  */
 package co.sigess.facade.core;
 
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -113,6 +114,36 @@ public class EmailFacade {
             Transport.send(message);
         } catch (MessagingException me) {
             Logger.getLogger(EmailFacade.class.getName()).log(Level.SEVERE, "", me);
+        }
+    }
+    
+    public void sendEmail(String destinatarios, TipoMail tipoMail, String asunto, Map<String, String> parametros) throws MessagingException{
+        try {
+            String contenido = loaderFacade.getPlantillaMail();
+            String plantilla = null;
+            
+            switch(tipoMail){
+                case REPORTE_ALIADOS:
+                    plantilla = loaderFacade.getPlantillaReporteAliado();
+                    break;
+                case REPORTE_ALIADO_APROBADO:
+                    plantilla = loaderFacade.getPlantillaReporteAliadoAprobado();
+                    break;
+                case REPORTE_ALIADO_RECHAZADO:
+                    plantilla = loaderFacade.getPlantillaReporteAliadoRechazado();
+                    break;
+            }
+            Message message = new MimeMessage(mailSession);
+            message.setSubject("SIGESS - " + asunto);
+            message.addRecipients(Message.RecipientType.BCC, InternetAddress.parse("soporte@sigess.app"));
+            message.addRecipients(Message.RecipientType.TO, InternetAddress.parse(destinatarios));
+            plantilla = replaceParameters(parametros, plantilla);
+            contenido = contenido.replace(PARAM_PLANT_PRINCIPAL, plantilla);
+            message.setContent(contenido, "text/html; charset=utf-8");
+            Transport.send(message);
+        } catch (MessagingException e) {
+            Logger.getLogger(EmailFacade.class.getName()).log(Level.SEVERE, "", e);
+            throw e;
         }
     }
     

@@ -5,15 +5,34 @@
  */
 package co.sigess.restful.sec;
 
+import co.sigess.entities.emp.AliadoInformacion;
 import co.sigess.entities.emp.Empresa;
 import co.sigess.entities.sec.AnalisisDesviacion;
+import co.sigess.entities.sec.DesviacionAliados;
+import co.sigess.facade.core.EmailFacade;
+import co.sigess.facade.core.TipoMail;
+import co.sigess.facade.emp.AliadoInformacionFacade;
+import co.sigess.facade.emp.EmpresaFacade;
 import co.sigess.facade.sec.AnalisisDesviacionFacade;
+import co.sigess.facade.sec.DesviacionAliadosFacade;
 import co.sigess.restful.FilterQuery;
 import co.sigess.restful.ServiceREST;
 import co.sigess.restful.security.Secured;
 import co.sigess.util.Util;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import javax.ejb.EJB;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -30,6 +49,24 @@ import javax.ws.rs.core.Response;
 @Secured
 @Path("analisisDesviacion")
 public class AnalisisDesviacionREST extends ServiceREST {
+    
+    @PersistenceContext(unitName = "SIGESS_PU")
+    private EntityManager em;
+    
+    @EJB
+    private AliadoInformacionFacade aliadoInformacionFacade;
+    
+    @EJB
+    private AnalisisDesviacionFacade analisisDesviacionFacade;
+    
+    @EJB
+    private EmailFacade emailFacade;
+    
+    @EJB
+    private EmpresaFacade empresaFacade;
+    
+    @EJB
+    private DesviacionAliadosFacade desviacionAliadosFacade;
 
     public AnalisisDesviacionREST() {
         super(AnalisisDesviacionFacade.class);
@@ -103,4 +140,101 @@ public class AnalisisDesviacionREST extends ServiceREST {
         }
     }
 
+    @POST
+    @Path("emailGestores/{idReporte}")
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Secured(requiereEmpresaId = false)
+    public Response sendEmail(@PathParam("idReporte") Integer reporteID, String requestBody){
+        try {
+            Gson gson = new Gson();
+            JsonObject body = gson.fromJson(requestBody, JsonObject.class);
+            Integer aliadoID = body.get("aliadoID").getAsInt();
+            Integer analisisID = body.get("analisisID").getAsInt();
+            
+            Query q = em.createNativeQuery("SELECT h from com.host h where h.host ='Produccion'");
+            List hosts = q.getResultList();
+            String host = "https://sigess.app";
+            if(hosts.size() == 0){
+                host = "https://demo.sigess.app";
+            }
+
+            AliadoInformacion aliadoInformacion = aliadoInformacionFacade.findByAliadoId(aliadoID).get(0);
+            Empresa empresa = empresaFacade.findEmpresaById(aliadoInformacion.getId_empresa());
+            AnalisisDesviacion analisisDesviacion = analisisDesviacionFacade.findReporteAlido(analisisID).get(0);
+            
+            JsonArray coliderList = gson.fromJson(aliadoInformacion.getColider(), JsonArray.class);
+            JsonObject gestor = gson.fromJson(analisisDesviacion.getGestor(), JsonObject.class);
+            
+            List<String> correosColider = new ArrayList<String>();
+            for(JsonElement colider : coliderList){
+                JsonObject coliderObject = colider.getAsJsonObject();
+                JsonObject gestorColider = coliderObject.get("gestor").getAsJsonObject();
+                JsonObject usuarioBasic = gestorColider.get("usuarioBasic").getAsJsonObject();
+                correosColider.add(usuarioBasic.get("email").getAsString());
+            }
+            
+            JsonObject usuarioBasic = gestor.get("usuarioBasic").getAsJsonObject();
+            String correoGestor = usuarioBasic.get("email").getAsString();
+            correosColider.add(correoGestor);
+            
+            Map<String, String> parametros = new HashMap<>();
+            parametros.put(EmailFacade.PARAM_NIT, empresa.getNit());
+            parametros.put(EmailFacade.PARAM_NOMBRE, empresa.getRazonSocial());
+            parametros.put(EmailFacade.PARAM_HOST1, host);
+            parametros.put(EmailFacade.PARAM_ID, reporteID.toString());
+            String listaCorreos = String.join(",", correosColider);
+            System.out.println(listaCorreos);
+            emailFacade.sendEmail(
+                    listaCorreos,
+                    TipoMail.REPORTE_ALIADOS,
+                    "Se creó reporte de AT de aliado",
+                    parametros);
+            
+            return Response.ok(true).build();
+        } catch (Exception e) {
+            return Util.manageException(e, AnalisisDesviacionREST.class);
+        }
+    }
+    
+    @POST
+    @Path("updateSeguimiento/{idAnalisisDesviacion}")
+    @Secured(requiereEmpresaId = false)
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    public Response updateSeguimiento(@PathParam("idAnalisisDesviacion") Integer idAnalisisDesviacion, String json){
+        try {
+            AnalisisDesviacion ad = analisisDesviacionFacade.find(new Integer(idAnalisisDesviacion));
+            
+            Gson gson = new Gson();
+            JsonObject data = gson.fromJson(json, JsonObject.class);
+            String seguimiento = data.get("seguimiento").getAsString();
+            String observacion = data.get("observaciones").getAsString();
+            ad.setSeguimiento(seguimiento);
+            ad.setObservacion(observacion);
+            
+            DesviacionAliados da = desviacionAliadosFacade.findByIdAnalisisDesviacion(idAnalisisDesviacion);
+            
+            Map<String, String> parametros = new HashMap<>();
+            parametros.put(EmailFacade.PARAM_ID, da.getId().toString());
+            
+            String emailAliado = empresaFacade.find(da.getAliadoId()).getEmail();
+            TipoMail tipoEmail = null;
+            JsonObject seguimientoObject = gson.fromJson(seguimiento, JsonObject.class);
+            String estado = seguimientoObject.get("estado").toString();
+            estado = estado.substring(1, estado.length() - 1);
+            System.out.println(estado);
+            if("Aprobado".equalsIgnoreCase(estado)){
+                tipoEmail = TipoMail.REPORTE_ALIADO_APROBADO;
+            }else if("Rechazado".equalsIgnoreCase(estado)){
+                tipoEmail = TipoMail.REPORTE_ALIADO_RECHAZADO;
+            }else {
+                throw new IllegalArgumentException();
+            }
+            String asunto = estado.equalsIgnoreCase("Aprobado") ? "Reporte AT Corona Aprobado" : "Reporte AT Corona Rechazado";
+            emailFacade.sendEmail(emailAliado, tipoEmail, asunto, parametros);
+            ad = ((AnalisisDesviacionFacade) beanInstance).edit(ad);
+            return Response.ok(ad).build();
+        } catch (Exception e) {
+            return Util.manageException(e, AnalisisDesviacionREST.class);
+        }
+    }
 }

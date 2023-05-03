@@ -313,7 +313,7 @@ public class ReporteFacade extends AbstractFacade<Reporte> {
     }
 
     public List<Reporte> findForEmpTemporal(int empresaId){
-        Query q = this.em.createQuery("SELECT r.empresa empresa, r.fechaAccidente fechaAccidente, r.fechaReporte fechaReporte, r.id id,r.numeroIdentificacionEmpleado numeroIdentificacionEmpleado, r.numerofurat numerofurat, r.primerApellidoEmpleado primerApellidoEmpleado, r.primerNombreEmpleado primerNombreEmpleado, r.temporal temporal, r.tipo tipo, r.areaAccidente FROM Reporte r LEFT JOIN r.empresa ee WHERE ee.idEmpresaAliada = ?1");
+        Query q = this.em.createQuery("SELECT r.empresa empresa, r.fechaAccidente fechaAccidente, r.fechaReporte fechaReporte, r.id id,r.numeroIdentificacionEmpleado numeroIdentificacionEmpleado, r.numerofurat numerofurat, r.primerApellidoEmpleado primerApellidoEmpleado, r.primerNombreEmpleado primerNombreEmpleado, r.temporal temporal, r.tipo tipo, r.areaAccidente FROM Reporte r LEFT JOIN r.empresa ee LEFT JOIN AliadoInformacion AS ai ON ee.id = ai.id_empresa WHERE ee.idEmpresaAliada = ?1 AND ai.istemporal = true");
         q.setParameter(1,empresaId);
         List<Reporte> reporte = (List<Reporte>) q.getResultList();
         return reporte;

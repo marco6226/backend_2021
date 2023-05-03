@@ -123,6 +123,15 @@ public class AnalisisDesviacion implements Serializable {
     
     @Column(name = "fk_usuario_modifica_id")
     private Integer usuarioModificaId;
+    
+    @Column(name = "gestor")
+    private String gestor;
+    
+    @Column(name = "seguimiento")
+    private String seguimiento;
+    
+    @Column(name = "observacion_causas")
+    private String observacion_causas;
 
     public AnalisisDesviacion() {
     }
@@ -366,5 +375,29 @@ public class AnalisisDesviacion implements Serializable {
 
     public void setMiembros_equipo(String miembros_equipo) {
         this.miembros_equipo = miembros_equipo;
+    }
+
+    public String getGestor() {
+        return gestor;
+    }
+
+    public void setGestor(String gestor) {
+        this.gestor = gestor;
+    }
+
+    public String getSeguimiento() {
+        return seguimiento;
+    }
+
+    public void setSeguimiento(String seguimiento) {
+        this.seguimiento = seguimiento;
+    }
+
+    public String getObservacion_causas() {
+        return observacion_causas;
+    }
+
+    public void setObservacion_causas(String observacion_causas) {
+        this.observacion_causas = observacion_causas;
     }
 }

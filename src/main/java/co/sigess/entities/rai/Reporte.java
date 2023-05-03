@@ -423,7 +423,7 @@ public class Reporte implements Serializable {
     
     @Column(name = "temporal")
     private String temporal;
-
+    
     public Reporte() {
     }
 

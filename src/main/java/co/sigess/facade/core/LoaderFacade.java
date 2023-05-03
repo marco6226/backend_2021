@@ -44,6 +44,9 @@ public class LoaderFacade {
     private String PlantillaMailTareaSemanal;
     private String PlantillaAliadoNuevo;
     private String PlantillaAliadoActualizado;
+    private String PlantillaReporteATAliado;
+    private String PlantillaReporteAliadoAprobado;
+    private String PlantillaReporteAliadoRechazado;
 
     private ApiVersion apiVersion;
     private Properties smsProp;
@@ -214,6 +217,54 @@ public class LoaderFacade {
             }
         }
         return PlantillaMailTareaSemanal;
+    }
+    
+    public String getPlantillaReporteAliado(){
+        if(this.PlantillaReporteATAliado == null){
+            try {
+                String ruta = getClass().getResource(Recursos.PLANTILLA_REPORTE_AT_ALIADO.getRuta()).getPath();
+                int y = ruta.length();
+                String x = isWindows(ruta, y);
+                System.out.println(x + "REPORTE ALIADO");
+                this.PlantillaReporteATAliado = new String(Files.readAllBytes(Paths.get(x)));
+            } catch (Exception e) {
+                Logger.getLogger(LoaderFacade.class.getName()).log(Level.SEVERE, null, e);
+                throw new IllegalArgumentException("No se ha podido inicializar correctamente la plantilla PLANTILLA_REPORTE_AT_ALIADO");
+            }
+        }
+        return PlantillaReporteATAliado;
+    }
+    
+    public String getPlantillaReporteAliadoAprobado(){
+        if(this.PlantillaReporteAliadoAprobado == null){
+            try {
+                String ruta = getClass().getResource(Recursos.PLANTILLA_REPORTE_ALIADO_APROBADO.getRuta()).getPath();
+                int y = ruta.length();
+                String x = isWindows(ruta, y);
+                System.out.println(x +"REPORTE ALIADO APROBADO");
+                this.PlantillaReporteAliadoAprobado = new String(Files.readAllBytes(Paths.get(x)));
+            } catch (Exception e) {
+                Logger.getLogger(LoaderFacade.class.getName()).log(Level.SEVERE, null, e);
+                throw new IllegalArgumentException("No se ha podido inicializar correctamente la plantilla PLANTILLA_REPORTE_ALIADO_APROBADO");
+            }
+        }
+        return PlantillaReporteAliadoAprobado;
+    }
+    
+    public String getPlantillaReporteAliadoRechazado(){
+        if(this.PlantillaReporteAliadoRechazado == null){
+            try {
+                String ruta = getClass().getResource(Recursos.PLANTILLA_REPORTE_ALIADO_RECHAZADO.getRuta()).getPath();
+                int y = ruta.length();
+                String x = isWindows(ruta, y);
+                System.out.println(x +"REPORTE ALIADO RECHAZADO");
+                this.PlantillaReporteAliadoRechazado = new String(Files.readAllBytes(Paths.get(x)));
+            } catch (Exception e) {
+                Logger.getLogger(LoaderFacade.class.getName()).log(Level.SEVERE, null, e);
+                throw new IllegalArgumentException("No se ha podido inicializar correctamente la plantilla PLANTILLA_REPORTE_ALIADO_RECHAZADO");
+            }
+        }
+        return PlantillaReporteAliadoRechazado;
     }
 
     public ApiVersion getApiVersion() {
