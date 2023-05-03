@@ -104,6 +104,9 @@ public class AliadoInformacion implements Serializable{
 
     @Column(name = "istemporal")
     private Boolean istemporal;
+    
+    @Column(name = "permitir_reportes")
+    private Boolean permitirReportes;
 
     public Boolean getIstemporal() {
         return istemporal;
@@ -295,5 +298,13 @@ public class AliadoInformacion implements Serializable{
 
     public void setAutoriza_subcontratacion(Boolean autoriza_subcontratacion) {
         this.autoriza_subcontratacion = autoriza_subcontratacion;
+    }
+
+    public Boolean getPermitirReportes() {
+        return permitirReportes;
+    }
+
+    public void setPermitirReportes(Boolean permitirReportes) {
+        this.permitirReportes = permitirReportes;
     }
 }
