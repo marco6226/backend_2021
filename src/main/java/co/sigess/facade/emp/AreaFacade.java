@@ -70,8 +70,12 @@ public class AreaFacade extends AbstractFacade<Area> {
         }
         a=super.create(area);
 
-        Query q = this.em.createNativeQuery("SELECT emp.campo_padre_areas()");
-        q.getResultList();
+        Query q1 = this.em.createNativeQuery("SELECT emp.campo_padre_areas()");
+        q1.getResultList();
+        
+        Query q2 = this.em.createNativeQuery("SELECT emp.calcular_area_padre_telefonica()");
+        q2.getResultList();
+        
         return a;
     }
 
