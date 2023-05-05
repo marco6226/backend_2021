@@ -132,6 +132,9 @@ public class EmailFacade {
                 case REPORTE_ALIADO_RECHAZADO:
                     plantilla = loaderFacade.getPlantillaReporteAliadoRechazado();
                     break;
+                case REPORTE_ALIADO_MODIFICADO:
+                    plantilla = loaderFacade.getPlantillaReporteAliadoModificado();
+                    break;
             }
             Message message = new MimeMessage(mailSession);
             message.setSubject("SIGESS - " + asunto);

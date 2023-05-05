@@ -47,6 +47,7 @@ public class LoaderFacade {
     private String PlantillaReporteATAliado;
     private String PlantillaReporteAliadoAprobado;
     private String PlantillaReporteAliadoRechazado;
+    private String PlantillaReporteAliadoModificado; 
 
     private ApiVersion apiVersion;
     private Properties smsProp;
@@ -265,6 +266,22 @@ public class LoaderFacade {
             }
         }
         return PlantillaReporteAliadoRechazado;
+    }
+    
+    public String getPlantillaReporteAliadoModificado(){
+        if(this.PlantillaReporteAliadoModificado == null){
+            try {
+                String ruta = getClass().getResource(Recursos.PLANTILLA_REPORTE_ALIADO_MODIFICADO.getRuta()).getPath();
+                int y = ruta.length();
+                String x = isWindows(ruta, y);
+                System.out.println(x +"REPORTE ALIADO MODIFICADO");
+                this.PlantillaReporteAliadoModificado = new String(Files.readAllBytes(Paths.get(x)));
+            } catch (Exception e) {
+                Logger.getLogger(LoaderFacade.class.getName()).log(Level.SEVERE, null, e);
+                throw new IllegalArgumentException("No se ha podido inicializar correctamente la plantilla PLANTILLA_REPORTE_ALIADO_MODIFICADO");
+            }
+        }
+        return PlantillaReporteAliadoModificado;
     }
 
     public ApiVersion getApiVersion() {

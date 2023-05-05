@@ -150,6 +150,7 @@ public class AnalisisDesviacionREST extends ServiceREST {
             JsonObject body = gson.fromJson(requestBody, JsonObject.class);
             Integer aliadoID = body.get("aliadoID").getAsInt();
             Integer analisisID = body.get("analisisID").getAsInt();
+            boolean esNuevo = body.get("esNuevo").getAsBoolean();
             
             Query q = em.createNativeQuery("SELECT h from com.host h where h.host ='Produccion'");
             List hosts = q.getResultList();
@@ -186,8 +187,8 @@ public class AnalisisDesviacionREST extends ServiceREST {
             System.out.println(listaCorreos);
             emailFacade.sendEmail(
                     listaCorreos,
-                    TipoMail.REPORTE_ALIADOS,
-                    "Se creó reporte de AT de aliado",
+                    esNuevo ? TipoMail.REPORTE_ALIADOS : TipoMail.REPORTE_ALIADO_MODIFICADO,
+                    esNuevo ? "Se creó reporte de AT de aliado" : "Modificación de reporte AT de aliado",
                     parametros);
             
             return Response.ok(true).build();

@@ -22,6 +22,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import co.sigess.restful.FilterQuery;
+import co.sigess.restful.FilterResponse;
 
 /**
  *
@@ -39,8 +40,19 @@ public class HhtREST extends ServiceREST{
     }
 
     @Override
+    @Secured(requiereEmpresaId = false)
     public Response findWithFilter(FilterQuery filterQuery) {
-        return super.findWithFilter(filterQuery);
+        //return super.findWithFilter(filterQuery);
+        try {
+            long numRows = filterQuery.isCount() ? beanInstance.countWithFilter(filterQuery) : -1;
+            List list = beanInstance.findWithFilter(filterQuery);
+            FilterResponse filterResponse = new FilterResponse();
+            filterResponse.setData(list);
+            filterResponse.setCount(numRows);
+            return Response.ok(filterResponse).build();
+        } catch (Exception e){
+            return Util.manageException(e, HhtREST.class);
+        }
     }
 
     @POST
