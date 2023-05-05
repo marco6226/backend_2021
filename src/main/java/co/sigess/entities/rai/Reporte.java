@@ -424,6 +424,17 @@ public class Reporte implements Serializable {
     @Column(name = "temporal")
     private String temporal;
     
+    @Column(name = "istemporal")
+    private boolean istemporal;
+
+    public boolean isIstemporal() {
+        return istemporal;
+    }
+
+    public void setIstemporal(boolean istemporal) {
+        this.istemporal = istemporal;
+    }
+        
     public Reporte() {
     }
 

@@ -11,6 +11,8 @@ import co.sigess.entities.emp.Empresa;
 import co.sigess.entities.ipr.TipoPeligro;
 import co.sigess.entities.rai.Reporte;
 import co.sigess.facade.rai.ReporteFacade;
+import co.sigess.restful.FilterQuery;
+import co.sigess.restful.FilterResponse;
 import co.sigess.restful.ServiceREST;
 import co.sigess.restful.ipr.TipoPeligroREST;
 import co.sigess.restful.security.Auditable;
@@ -24,6 +26,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
+import javax.ws.rs.BeanParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -59,6 +62,27 @@ public class ReporteREST extends ServiceREST {
             return Response.ok(reporte).build();
         } catch (Exception ex) {
             return Util.manageException(ex, ReporteREST.class);
+        }
+    }
+    
+    @GET
+    @Path("reportesTemporal")
+    @Secured(requiereEmpresaId = false)
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    public Response findRepWithFilter(@BeanParam FilterQuery filterQuery){
+        try {
+            if(filterQuery == null){
+                filterQuery = new FilterQuery();
+            }
+            long numRows = filterQuery.isCount() ? reporteFacade.countWithFilter(filterQuery) : -1;
+            List list = reporteFacade.findWithFilter(filterQuery);
+            
+            FilterResponse filterResponse = new FilterResponse();
+            filterResponse.setData(list);
+            filterResponse.setCount(numRows);
+            return Response.ok(filterResponse).build();
+        } catch (Exception e) {
+            return Util.manageException(e, ReporteREST.class);
         }
     }
     
