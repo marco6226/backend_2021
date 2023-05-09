@@ -192,7 +192,10 @@ public class AnalisisDesviacionREST extends ServiceREST {
                     parametros);
             
             return Response.ok(true).build();
-        } catch (Exception e) {
+        }catch(NullPointerException npe){
+            String mensage = "No se pudo enviar correo a gestores.";
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(mensage).build();
+        }catch (Exception e) {
             return Util.manageException(e, AnalisisDesviacionREST.class);
         }
     }
