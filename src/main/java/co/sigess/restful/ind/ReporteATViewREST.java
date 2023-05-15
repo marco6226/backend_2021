@@ -60,12 +60,27 @@ public class ReporteATViewREST extends ServiceREST{
             for(ReporteATView reporte : list){
                 if(reporte.getComplementaria() != null){
                     JsonObject complementaria = parser.parse(reporte.getComplementaria()).getAsJsonObject();
+                    // System.out.println("rep "+ reporte.getId() + "co" + complementaria.toString());
                     JsonElement eventoArl = complementaria.get("EnventoARL");
-                    if(eventoArl.isJsonNull()){
-                        listAux.add(reporte);
-                    }else{
-                        String eventoArlStr = eventoArl.getAsString();
-                        if("objetado".equalsIgnoreCase(eventoArlStr)) continue;
+                    JsonElement eventoArl2 = complementaria.get("EventoArl");
+                    // System.out.println("ev " + eventoArl + "ev2 " + eventoArl2);
+                    if(eventoArl != null){
+                        if(eventoArl.isJsonNull()){
+                            listAux.add(reporte);
+                        }else{
+                            String eventoArlStr = eventoArl.getAsString();
+                            if("objetado".equalsIgnoreCase(eventoArlStr)) continue;
+                            listAux.add(reporte);
+                        }
+                    }else if(eventoArl2 != null){
+                        if(eventoArl2.isJsonNull()){
+                            listAux.add(reporte);
+                        }else{
+                            String eventoArlStr = eventoArl2.getAsString();
+                            if("objetado".equalsIgnoreCase(eventoArlStr)) continue;
+                            listAux.add(reporte);
+                        }
+                    } else{
                         listAux.add(reporte);
                     }
                 }else{
