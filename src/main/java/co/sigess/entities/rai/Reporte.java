@@ -8,6 +8,7 @@ package co.sigess.entities.rai;
 import co.sigess.entities.com.Ciudad;
 import co.sigess.entities.emp.Area;
 import co.sigess.entities.emp.Empresa;
+import co.sigess.entities.emp.Subcontratista;
 import co.sigess.entities.emp.Usuario;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
@@ -426,6 +427,10 @@ public class Reporte implements Serializable {
     
     @Column(name = "istemporal")
     private boolean istemporal;
+    
+    @JoinColumn(name = "fk_subcontratista_id", referencedColumnName = "id")
+    @ManyToOne
+    private Subcontratista subcontratista;
 
     public boolean isIstemporal() {
         return istemporal;
@@ -1274,5 +1279,13 @@ public class Reporte implements Serializable {
 
     public void setTemporal(String temporal) {
         this.temporal = temporal;
+    }
+
+    public Subcontratista getSubcontratista() {
+        return subcontratista;
+    }
+
+    public void setSubcontratista(Subcontratista subcontratista) {
+        this.subcontratista = subcontratista;
     }
 }
