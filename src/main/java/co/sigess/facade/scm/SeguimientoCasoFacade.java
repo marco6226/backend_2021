@@ -55,7 +55,7 @@ public class SeguimientoCasoFacade extends AbstractFacade<SeguimientoCaso> {
     }
     
     public List<SeguimientoCaso> findById(String id){
-        Query q = this.em.createNativeQuery("SELECT * FROM scm.seguimiento_caso WHERE id = ?1 and eliminado != true and generico!= true order by fecha_seg desc", SeguimientoCaso.class);
+        Query q = this.em.createNativeQuery("SELECT * FROM scm.seguimiento_caso WHERE id = ?1 and eliminado != true order by fecha_seg desc", SeguimientoCaso.class);
         Integer id_aux = new Integer(id);
         q.setParameter(1, id_aux);
         List<SeguimientoCaso> seguimientoList = (List<SeguimientoCaso>) q.getResultList();
