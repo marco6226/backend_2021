@@ -426,6 +426,20 @@ public class CasoMedicoREST extends ServiceREST {
             return Util.manageException(ex, ReporteREST.class);
         }
     }
+    
+    
+    @GET
+    @Path("seguimiento/generico/{parametro}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response getSeguimientogenerico(@PathParam("parametro") String parametro) {
+        try {
+
+            List<SeguimientoCaso> list = this.seguimientoFacade.buscargenerico(parametro);
+            return Response.ok(list).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, ReporteREST.class);
+        }
+    }
 
     @PUT
     @Path("seguimiento")

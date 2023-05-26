@@ -88,6 +88,9 @@ public class SeguimientoCaso implements Serializable {
     @Column(name = "eliminado")
     private Boolean eliminado;
     
+     @Column(name = "generico")
+    private Boolean generico;
+    
     public SeguimientoCaso() {
     }
 
@@ -202,6 +205,20 @@ public class SeguimientoCaso implements Serializable {
     @Override
     public String toString() {
         return "co.sigess.entities.scm.SeguimientoCaso[ id=" + id + " ]";
+    }
+
+    /**
+     * @return the generico
+     */
+    public Boolean getGenerico() {
+        return generico;
+    }
+
+    /**
+     * @param generico the generico to set
+     */
+    public void setGenerico(Boolean generico) {
+        this.generico = generico;
     }
     
 }
