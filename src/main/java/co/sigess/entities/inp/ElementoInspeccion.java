@@ -69,6 +69,9 @@ public class ElementoInspeccion implements Serializable {
     @Column(name = "calificable")
     private boolean calificable;
     
+    @Column(name = "peso")
+    private Integer peso;
+    
     @OrderBy("id")
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "elementoInspeccionPadre")
     private List<ElementoInspeccion> elementoInspeccionList;
@@ -179,6 +182,14 @@ public class ElementoInspeccion implements Serializable {
 
     public void setTipoHallazgoList(List<TipoHallazgo> tipoHallazgoList) {
         this.tipoHallazgoList = tipoHallazgoList;
+    }
+
+    public Integer getPeso() {
+        return peso;
+    }
+
+    public void setPeso(Integer peso) {
+        this.peso = peso;
     }
 
     @Override
