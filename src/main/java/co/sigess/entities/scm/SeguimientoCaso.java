@@ -90,6 +90,18 @@ public class SeguimientoCaso implements Serializable {
     
      @Column(name = "generico")
     private Boolean generico;
+     
+    @Column(name = "proximafecha_seg")
+    @Temporal(TemporalType.DATE)
+    private Date proxfechaSeg;
+
+    public Date getProxfechaSeg() {
+        return proxfechaSeg;
+    }
+
+    public void setProxfechaSeg(Date proxfechaSeg) {
+        this.proxfechaSeg = proxfechaSeg;
+    }
     
     public SeguimientoCaso() {
     }
