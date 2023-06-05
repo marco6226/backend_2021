@@ -45,6 +45,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.math.BigInteger;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -479,8 +480,9 @@ public class CasoMedicoREST extends ServiceREST {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response editDiag(@PathParam("id") String id) {
         try {
-
-            this.logScm("Se borro un diagnostico ", null, id, "Reomendacion");
+            
+            String pk_case = diagnosticoFacade.findById(id).getPkCase();
+            this.logScm("Se borro un diagnostico ", null, pk_case, "diagnostico");
             int diag = this.diagnosticoFacade.eliminar(Long.parseLong(id));
             return Response.ok(diag).build();
         } catch (Exception ex) {
@@ -494,7 +496,8 @@ public class CasoMedicoREST extends ServiceREST {
     public Response deleteReco(@PathParam("id") String id) {
         try {
 
-            this.logScm("Se Elimino una recomendacion", null, id, "Reomendacion");
+            String pk_case = String.valueOf(recomendacionesFacade.findById(id).getPkCase());
+            this.logScm("Se Elimino una recomendacion", null, pk_case, "Reomendacion");
 
             int seg = this.recomendacionesFacade.eliminar(Long.parseLong(id));
             return Response.ok(seg).build();

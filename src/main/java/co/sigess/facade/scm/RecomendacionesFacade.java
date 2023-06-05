@@ -67,5 +67,15 @@ public class RecomendacionesFacade extends AbstractFacade<Recomendaciones> {
         int deleted = q.executeUpdate();
         return deleted;
     }
+    
+    public Recomendaciones findById(String id){
+        Query query = this.em.createQuery("SELECT DISTINCT RECO FROM Recomendaciones reco where RECO.id = :id");
+        Integer id_aux = new Integer(id);
+        query.setParameter("id", id_aux);
+        
+        List<Recomendaciones> list = (List<Recomendaciones>) query.getResultList();
+
+        return list.get(0);
+    }
 
 }
