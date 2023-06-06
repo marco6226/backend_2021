@@ -408,7 +408,10 @@ public class CasoMedicoREST extends ServiceREST {
             seguimientoCaso = this.seguimientoFacade.create(seguimientoCaso);
             String json = mapper.writeValueAsString(seguimientoCaso);
             this.logScm("Creacion de Seguimiento", json, seguimientoCaso.getPkCase(), seguimientoCaso.getClass().toString());
-
+            
+            Query q1 = this.em.createNativeQuery("SELECT scm.seguimiento_cm()");
+            q1.getResultList();
+            
             return Response.ok(seguimientoCaso).build();
         } catch (Exception ex) {
             return Util.manageException(ex, ReporteREST.class);
@@ -453,6 +456,10 @@ public class CasoMedicoREST extends ServiceREST {
 
             this.logScm("Se edito un seguimiento", json, seguimientoCaso.getPkCase(), seguimientoCaso.getClass().toString());
             seguimientoCaso = this.seguimientoFacade.update(seguimientoCaso);
+            
+            Query q1 = this.em.createNativeQuery("SELECT scm.seguimiento_cm()");
+            q1.getResultList();
+            
             return Response.ok(seguimientoCaso).build();
         } catch (Exception ex) {
             return Util.manageException(ex, ReporteREST.class);
@@ -464,7 +471,6 @@ public class CasoMedicoREST extends ServiceREST {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response deleteSeg(@PathParam("id") String id) {
         try {
-            System.out.print(id);
             String pk_case = seguimientoFacade.findById(id).get(0).getPkCase();
             this.logScm("Se Elimino un seguimiento", null, pk_case, "Seguimiento");
             
