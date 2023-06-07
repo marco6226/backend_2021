@@ -92,6 +92,10 @@ public class CasosMedicos implements Serializable {
     
     @Column(name = "diagnostico")
     private String diagnostico;
+    
+    @Column(name = "proximo_seguimiento")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date proximoseguimiento;
    
     @Column(name = "descripcion_completa_caso")
     private String descripcionCompletaCaso;
@@ -267,6 +271,7 @@ public class CasosMedicos implements Serializable {
         return diagnostico;
     }
 
+    
     /**
      * @return the descripcionCargo
      */
@@ -285,6 +290,14 @@ public class CasosMedicos implements Serializable {
         this.diagnostico = diagnostico;
     }
 
+    public Date getProximoseguimiento() {
+        return proximoseguimiento;
+    }
+
+    public void setProximoseguimiento(Date proximoseguimiento) {
+        this.proximoseguimiento = proximoseguimiento;
+    }
+    
     public String getDescripcionCompletaCaso() {
         return descripcionCompletaCaso;
     }
