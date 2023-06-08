@@ -202,7 +202,11 @@ public class Empleado implements Serializable {
     @JoinColumn(name = "fk_ciudad_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Ciudad ciudad;
-
+    
+     @Column(name = "enviacorreo")
+    private boolean enviacorreo;
+    
+      
     @JoinColumn(name = "fk_ccf_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Ccf ccf;
@@ -250,6 +254,16 @@ public class Empleado implements Serializable {
 
     public String getZonaResidencia() {
         return zonaResidencia;
+    }
+    
+    public Boolean getenviacorreo() {
+        return enviacorreo;
+    }
+    
+    
+
+    public void setenviacorreo(Boolean enviacorreo) {
+        this.enviacorreo = enviacorreo;
     }
 
     public void setZonaResidencia(String zonaResidencia) {
