@@ -5,6 +5,7 @@
  */
 package co.sigess.entities.emp;
 
+import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -12,10 +13,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
@@ -23,11 +27,15 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "firmas", schema = "emp")
-public class firma {
+@XmlRootElement
+//@NamedQueries({
+    //@NamedQuery(name = "firma.findAll", query = "SELECT f FROM firma f"),
+    //@NamedQuery(name = "firma.findById", query = "SELECT f FROM firma f WHERE f.id = :id")})
+public class firma implements Serializable  {
     private static final long serialVersionUID = 1L;
     @Id
     @SequenceGenerator(name = "firmas_id_seq", schema = "emp", sequenceName = "firmas_id_seq", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "anexos_id_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "firmas_id_seq")
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
@@ -45,8 +53,8 @@ public class firma {
     @Column(name = "email")
     private String email;
     
-    @Column(name = "fk_usuaio_id")
-    private Integer idusuarion;
+    @Column(name = "fk_usuario_id")
+    private Integer idusuario;
     
     @Column(name = "terminos_condiciones")
     private Boolean terminoscondiciones;
@@ -94,12 +102,12 @@ public class firma {
         this.email = email;
     }
 
-    public Integer getIdusuarion() {
-        return idusuarion;
+    public Integer getIdusuario() {
+        return idusuario;
     }
 
-    public void setIdusuarion(Integer idusuarion) {
-        this.idusuarion = idusuarion;
+    public void setIdusuario(Integer idusuario) {
+        this.idusuario = idusuario;
     }
 
     public Boolean getTerminoscondiciones() {
