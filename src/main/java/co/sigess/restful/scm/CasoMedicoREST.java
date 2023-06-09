@@ -503,7 +503,7 @@ public class CasoMedicoREST extends ServiceREST {
         try {
 
             String pk_case = String.valueOf(recomendacionesFacade.findById(id).getPkCase());
-            this.logScm("Se Elimino una recomendacion", null, pk_case, "Reomendacion");
+            this.logScm("Se Elimino una recomendacion", null, pk_case, "Recomendacion");
 
             int seg = this.recomendacionesFacade.eliminar(Long.parseLong(id));
             return Response.ok(seg).build();
