@@ -5,61 +5,46 @@
  */
 package co.sigess.restful.emp;
 
-import co.sigess.entities.com.Eps;
-import co.sigess.entities.scm.Anexos;
+import co.sigess.entities.emp.firma;
 import co.sigess.facade.emp.firmaFacade;
-import co.sigess.restful.ServiceREST;
-import co.sigess.restful.scm.AnexosREST;
 import co.sigess.restful.security.Auditable;
 import co.sigess.restful.security.Secured;
 import co.sigess.util.Util;
+import java.util.List;
 import javax.ejb.EJB;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import co.sigess.entities.emp.firma;
-import java.util.List;
-import javax.ws.rs.GET;
-import javax.ws.rs.PUT;
-import javax.ws.rs.PathParam;
 
 /**
  *
  * @author Usuario
  */
+@Secured
 @Path("firm")
-public class firmaREST{
+public class sfirmaREST {
     @EJB
     private firmaFacade firmaFacade;
     
-    @GET
-    @Path("{id}")
+    @POST
+    @Auditable
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response find(@PathParam("id") Long id) {
+    public Response create(firma firma) {
         try {
-            firma firm = firmaFacade.findById(id);
-            if(firm.getFirma() != null){
-                firm.setFirma("firmado");
-            }
-            
-            return Response.ok(firm).build();
+            firma = firmaFacade.create(firma);
+            return Response.ok(firma).build();
         } catch (Exception ex) {
             return Util.manageException(ex, firmaREST.class);
         }
     }
     
-    @PUT
+    @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response edit(firma firma) {
-        try {
-
-
-            firma = firmaFacade.edit(firma);
-            return Response.ok(firma).build();
-        } catch (Exception ex) {
-            return Util.manageException(ex, Anexos.class);
-        }
+    public Response findAll() {
+        List<firma> list = firmaFacade.findAll();
+        return Response.ok(list).build();
     }
 }

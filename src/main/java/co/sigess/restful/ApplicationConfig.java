@@ -75,6 +75,7 @@ public class ApplicationConfig extends Application {
         resources.add(co.sigess.restful.emp.UsuarioREST.class);
         resources.add(co.sigess.restful.emp.UtilsREST.class);
         resources.add(co.sigess.restful.emp.firmaREST.class);
+        resources.add(co.sigess.restful.emp.sfirmaREST.class);
         resources.add(co.sigess.restful.exceptions.InternalServerErrorMapper.class);
         resources.add(co.sigess.restful.exceptions.NotFoundExceptionMapper.class);
         resources.add(co.sigess.restful.ind.IndicadorAusentismoREST.class);

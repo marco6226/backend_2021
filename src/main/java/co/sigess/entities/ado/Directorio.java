@@ -107,6 +107,17 @@ public class Directorio implements Serializable {
     @Enumerated(value = EnumType.STRING)
     @Column(name = "modulo")
     private Modulo modulo;
+    
+    @Column(name = "perfilid")
+    private String perfilId;
+
+    public String getPerfilId() {
+        return perfilId;
+    }
+
+    public void setPerfilId(String perfilId) {
+        this.perfilId = perfilId;
+    }
 
     public Modulo getModulo() {
         return modulo;

@@ -195,7 +195,8 @@ public class DirectorioREST extends ServiceREST {
             @FormDataParam("modParam") String modParam,
             @FormDataParam("docMetaData") String docMetaData,
             @FormDataParam("caseId") Long caseId,
-            @FormDataParam("nivelAcceso") String nivelAcceso
+            @FormDataParam("nivelAcceso") String nivelAcceso,
+            @FormDataParam("perfilId") String perfilId
     ) throws Exception {
         try {
             directorioFacade.validarParametrosUpload(modulo, modParam);
@@ -215,6 +216,7 @@ public class DirectorioREST extends ServiceREST {
                 dir.setEmpresa(new Empresa(super.getEmpresaIdRequestContext()));
                 dir.setUsuario(super.getUsuarioRequestContext());
                 dir.setDocumento(new Documento());
+                dir.setPerfilId(perfilId);
                 dir.getDocumento().setRuta(relativePath);
                 dir.getDocumento().setNombre(fileName);
                 dir.getDocumento().setDescripcion(descripcion);
@@ -256,7 +258,8 @@ public class DirectorioREST extends ServiceREST {
             @FormDataParam("docMetaData") String docMetaData,
             @FormDataParam("caseId") Long caseId,
             @FormDataParam("nivelAcceso") String nivelAcceso,
-            @FormDataParam("tipoEvidencias") String tipoEvidencias
+            @FormDataParam("tipoEvidencias") String tipoEvidencias,
+            @FormDataParam("perfilId") String perfilId
     ) throws Exception {
         try {
             directorioFacade.validarParametrosUpload(modulo, modParam);
@@ -511,7 +514,7 @@ public class DirectorioREST extends ServiceREST {
             @FormDataParam("modParam") String modParam,
             @FormDataParam("docMetaData") String docMetaData
     ) throws Exception {
-        Response resp=this.uploadFile(fileInputStream, fileMetaData,null, null, Modulo.SEC.name(), modParam, docMetaData, null, "PUBLICO");
+        Response resp=this.uploadFile(fileInputStream, fileMetaData,null, null, Modulo.SEC.name(), modParam, docMetaData, null, "PUBLICO",null);
         directorioFacade.actualizarModuloDir();
         return resp;
     }
@@ -579,7 +582,7 @@ public class DirectorioREST extends ServiceREST {
             @FormDataParam("file") FormDataContentDisposition fileMetaData,
             @FormDataParam("modParam") String modParam
     ) throws Exception {
-        Response resp=this.uploadFile(fileInputStream, fileMetaData,null, null, Modulo.COP.name(), modParam, null, null, "PUBLICO");
+        Response resp=this.uploadFile(fileInputStream, fileMetaData,null, null, Modulo.COP.name(), modParam, null, null, "PUBLICO",null);
         directorioFacade.actualizarModuloDir();
         return resp;
     }
