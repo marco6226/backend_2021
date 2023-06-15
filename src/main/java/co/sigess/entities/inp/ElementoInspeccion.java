@@ -72,6 +72,12 @@ public class ElementoInspeccion implements Serializable {
     @Column(name = "peso")
     private Integer peso;
     
+    @Column(name = "tiene_etiqueta")
+    private boolean tieneEtiqueta;
+    
+    @Column(name = "etiqueta")
+    private String etiqueta;
+    
     @OrderBy("id")
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "elementoInspeccionPadre")
     private List<ElementoInspeccion> elementoInspeccionList;
@@ -190,6 +196,22 @@ public class ElementoInspeccion implements Serializable {
 
     public void setPeso(Integer peso) {
         this.peso = peso;
+    }
+
+    public boolean isTieneEtiqueta() {
+        return tieneEtiqueta;
+    }
+
+    public void setTieneEtiqueta(boolean tieneEtiqueta) {
+        this.tieneEtiqueta = tieneEtiqueta;
+    }
+
+    public String getEtiqueta() {
+        return etiqueta;
+    }
+
+    public void setEtiqueta(String etiqueta) {
+        this.etiqueta = etiqueta;
     }
 
     @Override
