@@ -62,6 +62,18 @@ public class firma implements Serializable  {
     @Column(name = "firma")
     private String firma;
 
+    @Column(name = "firma_terminos_condiciones")
+    @Temporal(TemporalType.DATE)
+    private Date fechaterminos;
+
+    public Date getFechaterminos() {
+        return fechaterminos;
+    }
+
+    public void setFechaterminos(Date fechaterminos) {
+        this.fechaterminos = fechaterminos;
+    }
+        
     public Integer getId() {
         return id;
     }

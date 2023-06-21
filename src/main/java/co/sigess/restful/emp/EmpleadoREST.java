@@ -98,7 +98,7 @@ public class EmpleadoREST extends ServiceREST {
             return Util.manageException(ex, EmpleadoREST.class);
         }
     }
-
+    
     @POST
     @Auditable
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})

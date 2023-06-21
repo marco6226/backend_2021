@@ -52,6 +52,17 @@ public class Anexos implements Serializable{
     
     @Column(name = "idempresa")
     private Integer idempresa;
+    
+    @Column(name = "firmas")
+    private String firmas;
+
+    public String getFirmas() {
+        return firmas;
+    }
+
+    public void setFirmas(String firmas) {
+        this.firmas = firmas;
+    }
 
     public Integer getIdempresa() {
         return idempresa;

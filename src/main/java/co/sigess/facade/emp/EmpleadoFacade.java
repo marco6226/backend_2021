@@ -110,7 +110,7 @@ public class EmpleadoFacade extends AbstractFacade<Empleado> {
             return null;
         }
     }
-
+    
     public List<Empleado> buscar(String parametro, Integer empresaId) {
         Query q = this.em.createQuery("SELECT e FROM Empleado AS e WHERE e.cargo.empresa.id = ?2 AND (LOWER(e.usuario.email) LIKE ?1 OR LOWER(e.numeroIdentificacion) LIKE ?1 OR LOWER(e.primerApellido) LIKE ?1 OR LOWER(e.primerNombre) LIKE ?1 OR LOWER(e.segundoApellido) LIKE ?1 OR LOWER(e.segundoNombre) LIKE ?1)");
         q.setParameter(1, "%" + parametro.toLowerCase() + "%");
