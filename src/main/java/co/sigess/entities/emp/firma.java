@@ -44,7 +44,7 @@ public class firma implements Serializable  {
     private Integer idempresa;
     
     @Column(name = "fecha_creacion")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date fechacreacion;
     
     @Column(name = "fk_relacionado_id")
@@ -63,8 +63,31 @@ public class firma implements Serializable  {
     private String firma;
 
     @Column(name = "firma_terminos_condiciones")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date fechaterminos;
+    
+    @Column(name = "fecha_renovacion")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fecharenovacion;
+    
+    @Column(name = "nombre")
+    private String nombre;
+
+    public Date getFecharenovacion() {
+        return fecharenovacion;
+    }
+
+    public void setFecharenovacion(Date fecharenovacion) {
+        this.fecharenovacion = fecharenovacion;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
 
     public Date getFechaterminos() {
         return fechaterminos;
