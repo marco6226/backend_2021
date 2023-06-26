@@ -125,7 +125,7 @@ public class InspeccionFacade extends AbstractFacade<Inspeccion> {
         }
         ListaInspeccion listaInp = progDB.getListaInspeccion();
 
-        if (inspeccion.getCalificacionList().size() != listaInp.getNumeroPreguntas()) {
+        if (inspeccion.getCalificacionList().size() != listaInp.getNumeroPreguntas() && !"Ciclo corto".equalsIgnoreCase(listaInp.getTipoLista())) {
             throw new IllegalArgumentException("El número de preguntas no coincide con el número de respuestas");
         }
 
@@ -173,7 +173,12 @@ public class InspeccionFacade extends AbstractFacade<Inspeccion> {
 
         for (Calificacion calificacion : inspeccion.getCalificacionList()) {
             if (calificacion.getId() == null) {
-                throw new IllegalArgumentException("No se ha establecido el id de una de las calificaciones de la inspección");
+                if(calificacion.getOpcionCalificacion() != null){
+                    calificacion.setInspeccion(inspeccion);
+                    calificacion = calificacionFacade.create(calificacion);
+                }else{
+                    throw new IllegalArgumentException("No se ha establecido el id de una de las calificaciones de la inspección");
+                }
             }
             if (calificacion.getNivelRiesgo() != null && calificacion.getNivelRiesgo().getId() == null) {
                 calificacion.setNivelRiesgo(null);
@@ -211,6 +216,7 @@ public class InspeccionFacade extends AbstractFacade<Inspeccion> {
                     calificacion.setOpcionCalificacion(calfMod.getOpcionCalificacion());
                     calificacion.setRecomendacion(calfMod.getRecomendacion());
                     calificacion.setTipoHallazgo(calfMod.getTipoHallazgo() == null ? null : (calfMod.getTipoHallazgo().getId() == null ? null : calfMod.getTipoHallazgo()));
+                    calificacion.setCalcularCumplimiento(calfMod.isCalcularCumplimiento());
                     break;
                 }
             }

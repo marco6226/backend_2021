@@ -138,7 +138,7 @@ public class EmailFacade {
             }
             Message message = new MimeMessage(mailSession);
             message.setSubject("SIGESS - " + asunto);
-            message.addRecipients(Message.RecipientType.BCC, InternetAddress.parse("soporte@sigess.app"));
+            message.addRecipients(Message.RecipientType.BCC, InternetAddress.parse("sistema@sigess.app"));
             message.addRecipients(Message.RecipientType.TO, InternetAddress.parse(destinatarios));
             plantilla = replaceParameters(parametros, plantilla);
             contenido = contenido.replace(PARAM_PLANT_PRINCIPAL, plantilla);

@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -77,8 +78,11 @@ public class Calificacion implements Serializable {
     
     
     @JoinColumn(name = "fk_tipo_hallazgo_id", referencedColumnName = "id")
-    @ManyToOne()
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private TipoHallazgo tipoHallazgo;
+    
+    @Column(name = "calcular_cumplimiento")
+    private boolean calcularCumplimiento;
 
     public Calificacion() {
     }
@@ -151,6 +155,14 @@ public class Calificacion implements Serializable {
 
     public void setTipoHallazgo(TipoHallazgo tipoHallazgo) {
         this.tipoHallazgo = tipoHallazgo;
+    }
+
+    public boolean isCalcularCumplimiento() {
+        return calcularCumplimiento;
+    }
+
+    public void setCalcularCumplimiento(boolean calcularCumplimiento) {
+        this.calcularCumplimiento = calcularCumplimiento;
     }
     
     @Override
