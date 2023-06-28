@@ -132,6 +132,17 @@ public class AnalisisDesviacion implements Serializable {
     
     @Column(name = "observacion_causas")
     private String observacion_causas;
+    
+    @Column(name = "id_causas_select")
+    private String idCausasSelect;
+
+    public String getIdCausasSelect() {
+        return idCausasSelect;
+    }
+
+    public void setIdCausasSelect(String idCausasSelect) {
+        this.idCausasSelect = idCausasSelect;
+    }
 
     public AnalisisDesviacion() {
     }

@@ -250,6 +250,7 @@ public class DirectorioFacade extends AbstractFacade<Directorio> {
         dirDB.setNombre(directorio.getNombre());
         dirDB.setDirectorioPadre(directorio.getDirectorioPadre());
         dirDB.setNivelAcceso(directorio.getNivelAcceso());
+        dirDB.setPerfilId(directorio.getPerfilId());
         return dirDB;
     }
 
