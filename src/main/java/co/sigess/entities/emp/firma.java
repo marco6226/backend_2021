@@ -72,6 +72,17 @@ public class firma implements Serializable  {
     
     @Column(name = "nombre")
     private String nombre;
+    
+    @Column(name = "cedula")
+    private Long cedula;
+
+    public Long getCedula() {
+        return cedula;
+    }
+
+    public void setCedula(Long cedula) {
+        this.cedula = cedula;
+    }
 
     public Date getFecharenovacion() {
         return fecharenovacion;
