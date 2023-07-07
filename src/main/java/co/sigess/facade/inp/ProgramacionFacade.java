@@ -59,6 +59,17 @@ public class ProgramacionFacade extends AbstractFacade<Programacion> {
         }
         return super.edit(prog); //To change body of generated methods, choose Tools | Templates.
     }
+    
+    public Programacion modificarAuditoría(Programacion prog) throws Exception{
+        if (prog.getId() == null) throw new IllegalArgumentException("No se ha establecido el id de la programación");
+        if (prog.getEmpresa() == null) throw new IllegalArgumentException("No se ha establecido la empresa que se va a auditar");
+        if (prog.getLocalidad() == null) throw new IllegalArgumentException("No se ha establecido la localidad de la Auditoría");
+        if (prog.getListaInspeccion() == null) throw new IllegalArgumentException("La programación debe estar asociada a una auditoría");
+        
+        Programacion progDB = this.find(prog.getId());
+        if (progDB == null) throw new IllegalArgumentException("id de programación inválido");
+        return super.edit(prog);
+    }
 
     @Override
     public Programacion create(Programacion prog) throws Exception {
@@ -69,6 +80,13 @@ public class ProgramacionFacade extends AbstractFacade<Programacion> {
             throw new IllegalArgumentException("La programación debe tener una lista de inspección asignada");
         }
         return super.create(prog); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    public Programacion createAuditoria(Programacion prog) throws Exception {
+        if (prog.getLocalidad() == null) throw new IllegalArgumentException("La programación debe tener una localidad");
+        if (prog.getEmpresa() == null) throw new IllegalArgumentException("La programación debe tener una empresa asociada");
+        if (prog.getListaInspeccion() == null) throw new IllegalArgumentException("La programación debe tener una lista de inspección asignada");
+        return super.create(prog);
     }
 
     public List<Programacion> findAllByMes(Integer empresaId, LocalDate fechaMes) {
