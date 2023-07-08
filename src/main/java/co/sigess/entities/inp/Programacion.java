@@ -6,6 +6,8 @@
 package co.sigess.entities.inp;
 
 import co.sigess.entities.emp.Area;
+import co.sigess.entities.emp.Empresa;
+import co.sigess.entities.emp.Localidades;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
@@ -68,10 +70,17 @@ public class Programacion implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date fecha;
     
-    @NotNull
-    @JoinColumn(name = "fk_area_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
+    @JoinColumn(name = "fk_area_id", referencedColumnName = "id", nullable = true)
+    @ManyToOne
     private Area area;
+    
+    @JoinColumn(name = "fk_localidad_id", referencedColumnName = "id", nullable = true)
+    @ManyToOne
+    private Localidades localidad;
+    
+    @JoinColumn(name = "fk_empresa_aliada_id", referencedColumnName = "id", nullable = true)
+    @ManyToOne
+    private Empresa empresa;
     
     @OneToMany(mappedBy = "programacion")
     private List<Inspeccion> inspeccionList;
@@ -119,6 +128,22 @@ public class Programacion implements Serializable {
 
     public void setArea(Area area) {
         this.area = area;
+    }
+
+    public Localidades getLocalidad() {
+        return localidad;
+    }
+
+    public void setLocalidad(Localidades localidad) {
+        this.localidad = localidad;
+    }
+
+    public Empresa getEmpresa() {
+        return empresa;
+    }
+
+    public void setEmpresa(Empresa empresa) {
+        this.empresa = empresa;
     }
 
     @XmlTransient

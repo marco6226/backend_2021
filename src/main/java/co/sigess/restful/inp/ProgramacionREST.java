@@ -85,6 +85,40 @@ public class ProgramacionREST extends ServiceREST {
             return Util.manageException(ex, ProgramacionREST.class);
         }
     }
+    
+    @GET
+    @Path("/auditoria")
+    @Secured(requiereEmpresaId = false, validarPermiso = true)
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    public Response findAuditoriaWithFilter(@BeanParam FilterQuery filterQuery){
+        try {
+            boolean tieneFiltradoEmpresa = false;
+            for (Filter filter : filterQuery.getFilterList()) {
+                if ("listaInspeccion.empresa.id".equalsIgnoreCase(filter.getField())) {
+                    tieneFiltradoEmpresa = true;
+                    break;
+                }
+            }
+                
+            if (!tieneFiltradoEmpresa) {
+                Filter empFilter = new Filter();
+                empFilter.setCriteria("eq");
+                empFilter.setField("listaInspeccion.empresa.id");
+                empFilter.setValue1(super.getEmpresaIdRequestContext().toString());
+                filterQuery.getFilterList().add(empFilter);
+            }
+
+            long numRows = filterQuery.isCount() ? programacionFacade.countWithFilter(filterQuery) : -1;
+            List list = programacionFacade.findWithFilter(filterQuery);
+
+            FilterResponse filterResponse = new FilterResponse();
+            filterResponse.setData(list);
+            filterResponse.setCount(numRows);
+            return Response.ok(filterResponse).build();
+        } catch (Exception e) {
+            return Util.manageException(e, ProgramacionREST.class);
+        }
+    }
 
     @POST
     @Produces({MediaType.APPLICATION_JSON})
@@ -96,12 +130,38 @@ public class ProgramacionREST extends ServiceREST {
             return Util.manageException(ex, ProgramacionREST.class);
         }
     }
+    
+    @POST
+    @Path("/auditoria")
+    @Secured(validarPermiso = true, requiereEmpresaId = false)
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response createAuditoria(Programacion programacion){
+        try {
+            programacion = programacionFacade.createAuditoria(programacion);
+            return Response.ok(programacion).build();
+        } catch (Exception e) {
+            return Util.manageException(e, ProgramacionREST.class);
+        }
+    }
 
     @PUT
     @Produces({MediaType.APPLICATION_JSON})
     public Response edit(Programacion programacion) {
         try {
             programacion = programacionFacade.modificar(programacion);
+            return Response.ok(programacion).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, ProgramacionREST.class);
+        }
+    }
+    
+    @PUT
+    @Path("/auditoria")
+    @Secured(requiereEmpresaId = false, validarPermiso = true)
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response editAuditoria(Programacion programacion){
+        try {
+            programacion = programacionFacade.modificarAuditoría(programacion);
             return Response.ok(programacion).build();
         } catch (Exception ex) {
             return Util.manageException(ex, ProgramacionREST.class);
