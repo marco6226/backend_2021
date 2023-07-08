@@ -33,6 +33,7 @@ public class sfirmaREST {
     @EJB
     private firmaFacade firmaFacade;
     
+    @Secured(validarPermiso = false)    
     @POST
     @Auditable
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -45,6 +46,7 @@ public class sfirmaREST {
         }
     }
     
+    @Secured(validarPermiso = false)  
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response findAll() {
@@ -52,6 +54,7 @@ public class sfirmaREST {
         return Response.ok(list).build();
     }
     
+
     @GET
     @Path("firmaFilter")
     @Secured(requiereEmpresaId = false)
