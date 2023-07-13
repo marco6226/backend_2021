@@ -151,8 +151,14 @@ public class ReporteREST extends ServiceREST {
         Mensaje msg = new Mensaje("USUARIO BLOQUEADO", "El usuario "  + " ha sido bloqueado", TipoMensaje.error, Mensaje.COD_USUARIO_BLOQUEADO);
         Logger.getLogger(AuthorizationFacade.class.getName()).log(Level.INFO, msg.toString());
         try {
-            reporte.setUsuarioReporta(super.getUsuarioRequestContext());
-            reporte.setEmpresa(new Empresa(super.getEmpresaIdRequestContext()));
+            Reporte reporteAux = reporteFacade.find(reporte.getId());
+            if(reporteAux.getEmpresa().getId() == super.getEmpresaIdRequestContext()){
+                reporte.setUsuarioReporta(super.getUsuarioRequestContext());
+                reporte.setEmpresa(new Empresa(super.getEmpresaIdRequestContext()));
+            } else {
+                reporte.setEmpresa(reporteAux.getEmpresa());
+                reporte.setUsuarioReporta(reporteAux.getUsuarioReporta());
+            }
             reporte = reporteFacade.edit(reporte);
             return Response.ok(reporte).build();
         } catch (Exception ex) {
