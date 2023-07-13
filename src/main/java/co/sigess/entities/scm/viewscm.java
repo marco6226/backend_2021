@@ -68,6 +68,28 @@ public class viewscm implements Serializable{
     
     @Column(name = "fk_empresa_id")
     private Integer empresaId;
+    
+    @Column(name = "recomendaciones")
+    private Integer recomendaciones;
+        
+    @Column(name = "plan_accion")
+    private Integer planAccion;
+
+    public Integer getRecomendaciones() {
+        return recomendaciones;
+    }
+
+    public void setRecomendaciones(Integer recomendaciones) {
+        this.recomendaciones = recomendaciones;
+    }
+
+    public Integer getPlanAccion() {
+        return planAccion;
+    }
+
+    public void setPlanAccion(Integer planAccion) {
+        this.planAccion = planAccion;
+    }
 
     public Integer getId() {
         return id;
