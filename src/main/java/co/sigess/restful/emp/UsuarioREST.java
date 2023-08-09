@@ -10,6 +10,7 @@ import co.sigess.entities.com.TipoMensaje;
 import co.sigess.entities.emp.EventoLog;
 import co.sigess.entities.emp.Usuario;
 import co.sigess.entities.emp.Empresa;
+import co.sigess.entities.inp.ViewInspeccionesCtr;
 import co.sigess.exceptions.UserMessageException;
 import co.sigess.facade.core.EmailFacade;
 import co.sigess.facade.core.TipoMail;
@@ -284,6 +285,45 @@ public class UsuarioREST extends ServiceREST {
             parametros.put(EmailFacade.PARAM_NIT,nit);
             parametros.put(EmailFacade.PARAM_HOST1,host1);
             emailFacade.sendEmail(parametros, TipoMail.ALIADO_ACTUALIZADO, "el Aliado Actualizo la Información", email);
+            return Response.ok().build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, UsuarioREST.class);
+        }
+    }
+    
+    @Secured(validarPermiso = false)
+    @PUT
+    @Path("emailAliadoCicloCorto/{id}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response aliadoCicloCorto(String email, @PathParam("id") String idInspeccionCicloCorto) {
+        try {    
+            System.out.println(email);
+            
+            String host1;
+            Query q1 = em.createNativeQuery("SELECT h from com.host h where h.host ='Produccion'");
+            List hostin =q1.getResultList();
+
+            if(hostin.size()==0){
+                host1="https://demo.sigess.app";
+            }else{
+                host1="https://sigess.app";
+            }
+            
+            Query q = this.em.createNativeQuery("SELECT * FROM inp.vw_inspeccion_ctr  WHERE id = ?1 ",ViewInspeccionesCtr.class);
+            q.setParameter(1,idInspeccionCicloCorto);
+            //System.out.println(q);
+            List<ViewInspeccionesCtr> list = (List<ViewInspeccionesCtr>) q.getResultList();
+            
+            String razonsocial = list.get(0).getEmpresaAliada().getRazonSocial();
+            //String razonSocial = list.get(0).getRazonSocial();
+
+            Map<String, String> parametros = new HashMap<>();
+            
+            parametros.put(EmailFacade.PARAM_HOST1,host1);
+            parametros.put(EmailFacade.PARAM_INSP,idInspeccionCicloCorto);
+            parametros.put(EmailFacade.PARAM_RAZONSOCIAL,razonsocial);
+            
+            emailFacade.sendEmail(parametros, TipoMail.ALIADO_ACTUALIZADO_CICLOCORTO, "Correo ciclo corto", email);
             return Response.ok().build();
         } catch (Exception ex) {
             return Util.manageException(ex, UsuarioREST.class);

@@ -25,6 +25,7 @@ public enum Recursos {
     PLANTILLA_REPORTE_ALIADO_APROBADO("/mail/templates/PlantillaReporteAliadoAprobado.html"),
     PLANTILLA_REPORTE_ALIADO_RECHAZADO("/mail/templates/PlantillaReporteAliadoRechazado.html"),
     PLANTILLA_REPORTE_ALIADO_MODIFICADO("/mail/templates/PlantillaReporteAliadoModificado.html"),
+    PLANTILLA_MAIL_ALIADO_CICLOCORTO("/mail/templates/PlantillaAliadoCicloCorto.html"),
 
     SMS_INTEGRACION_PROPERTIES("/sms/integracion.properties");
     

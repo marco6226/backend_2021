@@ -52,7 +52,8 @@ public class EmailFacade {
     public static final String PARAM_VENCIDA = "P{vencida}";
     public static final String PARAM_HOST1 = "P{host1}";
     public static final String PARAM_HOST2 = "P{host2}";
-    
+    public static final String PARAM_INSP = "P{insp}";
+    public static final String PARAM_RAZONSOCIAL =  "P{razonsocial}";
 
     @EJB
     private LoaderFacade loaderFacade;
@@ -95,6 +96,9 @@ public class EmailFacade {
                     break;
                 case ALIADO_ACTUALIZADO:
                     plantilla = loaderFacade.getPlantillaAliadoActualizado();
+                    break;
+                case ALIADO_ACTUALIZADO_CICLOCORTO:
+                    plantilla = loaderFacade.getPlantillaAliadoCicloCorto();
                     break;
             }
             plantilla = replaceParameters(parametros, plantilla);

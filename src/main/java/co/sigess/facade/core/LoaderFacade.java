@@ -48,6 +48,7 @@ public class LoaderFacade {
     private String PlantillaReporteAliadoAprobado;
     private String PlantillaReporteAliadoRechazado;
     private String PlantillaReporteAliadoModificado; 
+    private String PlantillaReporteAliadoCicloCorto; 
 
     private ApiVersion apiVersion;
     private Properties smsProp;
@@ -202,6 +203,21 @@ public class LoaderFacade {
             }
         }
         return PlantillaAliadoActualizado;
+    }
+    
+    public String getPlantillaAliadoCicloCorto(){
+        if (this.PlantillaReporteAliadoCicloCorto == null) {
+            try {
+                String ruta = getClass().getResource(Recursos.PLANTILLA_MAIL_ALIADO_CICLOCORTO.getRuta()).getPath();
+                int y = ruta.length(); 
+               String x  = isWindows(ruta,y);
+                this.PlantillaReporteAliadoCicloCorto = new String(Files.readAllBytes(Paths.get(x)));               
+            } catch (IOException ex) {
+                Logger.getLogger(LoaderFacade.class.getName()).log(Level.SEVERE, null, ex);
+                throw new IllegalArgumentException("No se ha podido inicializar correctamente la plantilla PLANTILLA_MAIL_ALIADO_CICLOCORTO");
+            }
+        }
+        return PlantillaReporteAliadoCicloCorto;
     }
     
     public String getPlantillaMailTareaSemanal(){
