@@ -10,7 +10,10 @@ import co.sigess.entities.inp.Bitacora;
 import co.sigess.entities.inp.Inspeccion;
 import co.sigess.entities.inp.NumeroEconomico;
 import co.sigess.facade.inp.InspeccionFacade;
+import co.sigess.restful.CriteriaFilter;
+import co.sigess.restful.Filter;
 import co.sigess.restful.FilterQuery;
+import co.sigess.restful.FilterResponse;
 import co.sigess.restful.ServiceREST;
 import co.sigess.restful.security.Compress;
 import co.sigess.restful.security.Secured;
@@ -19,6 +22,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
+import javax.ws.rs.BeanParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -39,6 +43,8 @@ public class InspeccionREST extends ServiceREST {
 
     @EJB
     private InspeccionFacade inspeccionFacade;
+    
+    private String empresaField = "empresa.id";
 
     public InspeccionREST() {
         super(InspeccionFacade.class);
@@ -48,6 +54,45 @@ public class InspeccionREST extends ServiceREST {
     @Override
     public Response findWithFilter(FilterQuery filterQuery) {
         return super.findWithFilter(filterQuery); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    @GET
+    @Path("inspeccionAliado")
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Secured(requiereEmpresaId = false, validarPermiso = true)
+    public Response findWithFilterInpAliado(@BeanParam FilterQuery filterQuery){
+        try {
+            int paramEmpFilt = -1;
+            for (int i = 0; i < filterQuery.getFilterList().size(); i++) {
+                Filter filter = filterQuery.getFilterList().get(i);
+                if (filter.getField().equals(this.empresaField)) {
+                    paramEmpFilt = Integer.parseInt(filter.getValue1());
+                    break;
+                }
+            }
+
+            if (paramEmpFilt <= 0) {
+                throw new IllegalArgumentException("No se recibió parametro de empresa");
+            }
+
+            if (paramEmpFilt < 0) {
+                Filter empFilt = new Filter();
+                empFilt.setCriteriaEnum(CriteriaFilter.EQUALS);
+                empFilt.setField(this.empresaField);
+                empFilt.setValue1(getEmpresaIdRequestContext().toString());
+                filterQuery.getFilterList().add(empFilt);
+            }
+
+            long numRows = filterQuery.isCount() ? beanInstance.countWithFilter(filterQuery) : -1;
+            List list = beanInstance.findWithFilter(filterQuery);
+
+            FilterResponse filterResponse = new FilterResponse();
+            filterResponse.setData(list);
+            filterResponse.setCount(numRows);
+            return Response.ok(filterResponse).build();
+        } catch (Exception e) {
+            return Util.manageException(e, InspeccionREST.class);
+        }
     }
 
     @GET
