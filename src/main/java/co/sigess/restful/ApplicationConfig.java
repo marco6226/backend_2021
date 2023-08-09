@@ -90,10 +90,13 @@ public class ApplicationConfig extends Application {
         resources.add(co.sigess.restful.ind.caracterizacionviewREST.class);
         resources.add(co.sigess.restful.ind.vwscmcorporativoREST.class);
         resources.add(co.sigess.restful.ind.vwscmgestionREST.class);
+        resources.add(co.sigess.restful.inp.CumplimientoREST.class);
         resources.add(co.sigess.restful.inp.InspeccionREST.class);
         resources.add(co.sigess.restful.inp.ListaInspeccionREST.class);
         resources.add(co.sigess.restful.inp.ProgramacionREST.class);
         resources.add(co.sigess.restful.inp.TipoHallazgoREST.class);
+        resources.add(co.sigess.restful.inp.ViewInspeccionCtrREST.class);
+        resources.add(co.sigess.restful.inp.ViewResumenAliadosREST.class);
         resources.add(co.sigess.restful.ipr.ControlREST.class);
         resources.add(co.sigess.restful.ipr.EfectoREST.class);
         resources.add(co.sigess.restful.ipr.FuenteREST.class);

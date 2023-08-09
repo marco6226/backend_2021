@@ -1,4 +1,4 @@
-/*
+        /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -104,6 +104,20 @@ public class InspeccionREST extends ServiceREST {
         }
     }
 
+    @POST
+    @Path("inspeccionAliado")
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Secured(requiereEmpresaId = false)
+    public Response createInspeccionAliado(Inspeccion inspeccion) {
+        try {
+            inspeccion.setEmpresa(new Empresa(super.getEmpresaIdRequestContext()));
+            inspeccion.setUsuarioRegistra(super.getUsuarioRequestContext());
+            inspeccion = inspeccionFacade.createInspeccionAliado(inspeccion);
+            return Response.ok(inspeccion).build();
+        } catch (Exception e) {
+            return Util.manageException(e, InspeccionREST.class);
+        }
+    }
 
 
     @PUT
@@ -115,6 +129,20 @@ public class InspeccionREST extends ServiceREST {
             return Response.ok(inspeccion).build();
         } catch (Exception ex) {
             return Util.manageException(ex, InspeccionREST.class);
+        }
+    }
+    
+    @PUT
+    @Path("inspeccionAliado")
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Secured(requiereEmpresaId = false)
+    public Response editInspeccionAliado(Inspeccion inspeccion){
+        try {
+            inspeccion.setUsuarioModifica(super.getUsuarioRequestContext());
+            inspeccion = inspeccionFacade.editInspeccionAliado(inspeccion);
+            return Response.ok(inspeccion).build();
+        } catch (Exception e) {
+            return Util.manageException(e, InspeccionREST.class);
         }
     }
 

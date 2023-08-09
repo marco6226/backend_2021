@@ -62,7 +62,7 @@ public class ProgramacionFacade extends AbstractFacade<Programacion> {
     
     public Programacion modificarAuditoría(Programacion prog) throws Exception{
         if (prog.getId() == null) throw new IllegalArgumentException("No se ha establecido el id de la programación");
-        if (prog.getEmpresa() == null) throw new IllegalArgumentException("No se ha establecido la empresa que se va a auditar");
+        if (prog.getEmpresaAliada()== null) throw new IllegalArgumentException("No se ha establecido la empresa que se va a auditar");
         if (prog.getLocalidad() == null) throw new IllegalArgumentException("No se ha establecido la localidad de la Auditoría");
         if (prog.getListaInspeccion() == null) throw new IllegalArgumentException("La programación debe estar asociada a una auditoría");
         
@@ -83,8 +83,8 @@ public class ProgramacionFacade extends AbstractFacade<Programacion> {
     }
     
     public Programacion createAuditoria(Programacion prog) throws Exception {
-        if (prog.getLocalidad() == null) throw new IllegalArgumentException("La programación debe tener una localidad");
-        if (prog.getEmpresa() == null) throw new IllegalArgumentException("La programación debe tener una empresa asociada");
+        if (prog.getLocalidad() == null) throw new IllegalArgumentException("La programación debe tener una localidad asociada");
+        if (prog.getEmpresaAliada()== null) throw new IllegalArgumentException("La programación debe tener una empresa asociada");
         if (prog.getListaInspeccion() == null) throw new IllegalArgumentException("La programación debe tener una lista de inspección asignada");
         return super.create(prog);
     }

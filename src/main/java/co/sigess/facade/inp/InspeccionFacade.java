@@ -83,6 +83,17 @@ public class InspeccionFacade extends AbstractFacade<Inspeccion> {
         }
 
     }
+    
+    public Inspeccion createInspeccionAliado(Inspeccion inspeccion) throws Exception {
+        if(inspeccion.getCalificacionList() == null || inspeccion.getCalificacionList().isEmpty()) {
+            throw new IllegalArgumentException("La inspección especificada no contiene la lista de calificaciones");
+        }
+        if(inspeccion.getProgramacion() == null) {
+            throw new IllegalArgumentException("No está habilitada la opción de crear inspecciones no programadas");
+        } else {
+            return crearInspeccionProgramadaAliado(inspeccion);
+        }
+    }
 
     private Inspeccion crearInspeccionNoProgramada(Inspeccion inspeccion) throws Exception {
         if (inspeccion.getListaInspeccion() == null
@@ -124,8 +135,17 @@ public class InspeccionFacade extends AbstractFacade<Inspeccion> {
             throw new UserMessageException(msg);
         }
         ListaInspeccion listaInp = progDB.getListaInspeccion();
+        
+        if(listaInp.getListaInspeccionPK() == null){
+            Mensaje msg = new Mensaje(
+                    "ERROR",
+                    "La inspección no tiene una lista asignada.",
+                    TipoMensaje.error
+            );
+            throw new UserMessageException(msg);
+        }
 
-        if (inspeccion.getCalificacionList().size() != listaInp.getNumeroPreguntas() && !"Ciclo corto".equalsIgnoreCase(listaInp.getTipoLista())) {
+        if (inspeccion.getCalificacionList().size() != listaInp.getNumeroPreguntas()) {
             throw new IllegalArgumentException("El número de preguntas no coincide con el número de respuestas");
         }
 
@@ -147,6 +167,40 @@ public class InspeccionFacade extends AbstractFacade<Inspeccion> {
             calificacion.setInspeccion(inspeccion);
             calificacionFacade.create(calificacion);
         }
+        return inspeccion;
+    }
+    
+    private Inspeccion crearInspeccionProgramadaAliado(Inspeccion inspeccion) throws Exception {
+        
+        Programacion progDB = programacionFacade.find(inspeccion.getProgramacion().getId());
+        if(progDB == null){
+            throw new IllegalArgumentException("No se ha establecido la programación a la que pertenece la inspección");
+        }
+        
+        if(progDB.getNumeroInspecciones() == progDB.getNumeroRealizadas()) {
+            Mensaje msg = new Mensaje("Error", "La inspección no tiene una lista asignada", TipoMensaje.error);
+            throw new UserMessageException(msg);
+        }
+        
+        if(!this.validarCalificaciones(inspeccion)) {
+            throw new IllegalArgumentException("Error en la calificación recibida: no contiene un elemento de inspección o una opción seleccionada");
+        }
+        
+        for(RespuestaCampo rc: inspeccion.getRespuestasCampoList()) {
+            respuestaCampoFacade.create(rc);
+        }
+        
+        progDB.setNumeroRealizadas((short) (progDB.getNumeroRealizadas() + 1));
+        programacionFacade.edit(progDB);
+        
+        inspeccion.setFechaRealizada(new Date());
+        super.create(inspeccion);
+        
+        for(Calificacion calificacion : inspeccion.getCalificacionList()){
+            calificacion.setInspeccion(inspeccion);
+            calificacionFacade.create(calificacion);
+        }
+        
         return inspeccion;
     }
 
@@ -224,6 +278,61 @@ public class InspeccionFacade extends AbstractFacade<Inspeccion> {
         }
  // List<String> lines =  inspDB.getCalificacionList());
         return super.edit(inspDB); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    public Inspeccion editInspeccionAliado(Inspeccion inspeccion) throws Exception {
+        if (inspeccion.getId() == null) {
+            throw new IllegalArgumentException("No se ha establecido el id de la inspección a modificar");
+        }
+        
+        if(!this.validarCalificaciones(inspeccion)) {
+            throw new IllegalArgumentException("Error en la calificación recibida: no contiene un elemento de inspección o una opción seleccionada");
+        }
+        
+        for(Calificacion calificacion : inspeccion.getCalificacionList()){
+            if(calificacion.getOpcionCalificacion() == null) throw new IllegalArgumentException("No se ha establecido el id de una de las calificaciones de la inspección");
+            if(calificacion.getElementoInspeccion() == null) throw new IllegalArgumentException("No se ha establecido el id del elemento de una de las calificaciones de la inspección");
+            if(calificacion.getId() == null){
+                calificacion.setInspeccion(inspeccion); 
+                calificacion = this.calificacionFacade.create(calificacion);
+            }else {
+                Calificacion calificacionDB = this.calificacionFacade.find(calificacion.getId());
+                if(calificacionDB == null) continue;
+                calificacionDB.setNivelRiesgo(calificacion.getNivelRiesgo());
+                calificacionDB.setOpcionCalificacion(calificacion.getOpcionCalificacion());
+                calificacionDB.setRecomendacion(calificacion.getRecomendacion());
+                calificacionDB.setTipoHallazgo(calificacion.getTipoHallazgo());
+                calificacionDB.setCalcularCumplimiento(calificacion.isCalcularCumplimiento());
+                this.calificacionFacade.edit(calificacionDB);
+            }
+        }
+        
+        Inspeccion inspDB = this.find(inspeccion.getId());
+        inspDB.setConceptohse(inspeccion.getConceptohse());
+        inspDB.setConceptoing(inspeccion.getConceptoing());
+        inspDB.setFechavistohse(inspeccion.getFechavistohse());
+        inspDB.setFechavistoing(inspeccion.getFechavistoing());
+        inspDB.setEmpleadohse(inspeccion.getEmpleadohse());
+        inspDB.setEmpleadoing(inspeccion.getEmpleadoing());
+        inspDB.setUsuarioModifica(inspeccion.getUsuarioModifica());
+        inspDB.setFechaModificacion(new Date());
+        inspDB.setDescripcion(inspeccion.getDescripcion());
+        inspDB.setEquipo(inspeccion.getEquipo());
+        inspDB.setLugar(inspeccion.getLugar());
+        inspDB.setMarca(inspeccion.getMarca());
+        inspDB.setModelo(inspeccion.getModelo());
+        inspDB.setObservacion(inspeccion.getObservacion());
+        inspDB.setSerial(inspeccion.getSerial());
+        inspDB.setRespuestasCampoList(inspeccion.getRespuestasCampoList());
+        for (RespuestaCampo rc : inspDB.getRespuestasCampoList()) {
+            if (rc.getId() == null) {
+                this.respuestaCampoFacade.create(rc);
+            } else {
+                this.respuestaCampoFacade.edit(rc);
+            }
+        }
+        
+        return super.edit(inspDB);
     }
 
     @Override

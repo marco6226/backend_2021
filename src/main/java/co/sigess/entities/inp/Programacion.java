@@ -80,7 +80,10 @@ public class Programacion implements Serializable {
     
     @JoinColumn(name = "fk_empresa_aliada_id", referencedColumnName = "id", nullable = true)
     @ManyToOne
-    private Empresa empresa;
+    private Empresa empresaAliada;
+    
+    @Column(name = "empleado_basic")
+    private String empleadoBasic;
     
     @OneToMany(mappedBy = "programacion")
     private List<Inspeccion> inspeccionList;
@@ -138,12 +141,20 @@ public class Programacion implements Serializable {
         this.localidad = localidad;
     }
 
-    public Empresa getEmpresa() {
-        return empresa;
+    public Empresa getEmpresaAliada() {
+        return empresaAliada;
     }
 
-    public void setEmpresa(Empresa empresa) {
-        this.empresa = empresa;
+    public void setEmpresaAliada(Empresa empresa) {
+        this.empresaAliada = empresa;
+    }
+
+    public String getEmpleadoBasic() {
+        return empleadoBasic;
+    }
+
+    public void setEmpleadoBasic(String empleadoBasic) {
+        this.empleadoBasic = empleadoBasic;
     }
 
     @XmlTransient
