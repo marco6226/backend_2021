@@ -137,6 +137,8 @@ public class ListaInspeccionREST extends ServiceREST {
             else if
                     (actualizarVersion == null || actualizarVersion.equals(Boolean.FALSE)) {
                     if(listaInspeccion.getEstado().equals("inactivo")){
+                        ListaInspeccion listaInspeccionDB = listaInspeccionFacade.find(listaInspeccion.getListaInspeccionPK());
+                        listaInspeccion.setNumeroPreguntas(listaInspeccionDB.getNumeroPreguntas());
                         listaInspeccion = listaInspeccionFacade.editarForzado(listaInspeccion);
                     }else{
                         listaInspeccion = listaInspeccionFacade.edit(listaInspeccion);
