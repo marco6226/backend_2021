@@ -60,6 +60,9 @@ public class ViewInspeccionesCtr implements Serializable {
     @ManyToOne
     private Empresa empresa;
     
+    @Column(name = "estado")
+    private String estado;
+    
     @JoinColumn(name = "id_empresa_aliada", referencedColumnName = "id")
     @ManyToOne
     private Empresa empresaAliada;
