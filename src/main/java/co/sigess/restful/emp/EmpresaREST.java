@@ -162,11 +162,16 @@ public class EmpresaREST extends ServiceREST {
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response createEmpresaAliada(Empresa empresa){
         try{
-            if(usuarioFacade.findByEmail(empresa.getEmail()) == null){
-                empresa = empresaFacade.adicionar(empresa, super.getUsuarioRequestContext().getId());
-                return Response.ok(empresa).build();
+            if(usuarioFacade.findByEmail(empresa.getEmail()) != null){
+                throw new UserMessageException("Error", "El correo del contratista se encuentra asociado a un usuario del sistema.", TipoMensaje.error);
             }
-            throw new UserMessageException("Error", "El correo del contratista ya se encuentra asociado a un usuario del sistema", TipoMensaje.error);
+            
+            if(empresaFacade.findEmpresaByNit(empresa.getNit()) != null) {
+                throw new UserMessageException("Error", "El NIT digitado se encuentra asociado a un contratista en el sistema.", TipoMensaje.error);
+            }
+            
+            empresa = empresaFacade.adicionar(empresa, super.getUsuarioRequestContext().getId());
+            return Response.ok(empresa).build();
         }catch(Exception ex){
             return Util.manageException(ex, EmpresaREST.class);
         }

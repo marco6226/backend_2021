@@ -184,5 +184,12 @@ public class EmpresaFacade extends AbstractFacade<Empresa> {
         Empresa empresa = (Empresa)q.getSingleResult();
         return empresa;
     }
+    
+    public Empresa findEmpresaByNit(String nit) throws Exception {
+        Query q = this.em.createQuery("SELECT e FROM Empresa e WHERE e.nit = ?1");
+        q.setParameter(1, nit);
+        Empresa empresa = (Empresa) q.getSingleResult();
+        return empresa;
+    }
 
 }

@@ -8,6 +8,7 @@ package co.sigess.entities.rai;
 import co.sigess.entities.com.Ciudad;
 import co.sigess.entities.emp.Area;
 import co.sigess.entities.emp.Empresa;
+import co.sigess.entities.emp.Localidades;
 import co.sigess.entities.emp.Subcontratista;
 import co.sigess.entities.emp.Usuario;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -431,6 +432,10 @@ public class Reporte implements Serializable {
     @JoinColumn(name = "fk_subcontratista_id", referencedColumnName = "id")
     @ManyToOne
     private Subcontratista subcontratista;
+    
+    @JoinColumn(name = "fk_localidad_id", referencedColumnName = "id")
+    @ManyToOne
+    private Localidades localidad;
 
     public boolean isIstemporal() {
         return istemporal;
@@ -1287,5 +1292,13 @@ public class Reporte implements Serializable {
 
     public void setSubcontratista(Subcontratista subcontratista) {
         this.subcontratista = subcontratista;
+    }
+
+    public Localidades getLocalidad() {
+        return localidad;
+    }
+
+    public void setLocalidad(Localidades localidad) {
+        this.localidad = localidad;
     }
 }
