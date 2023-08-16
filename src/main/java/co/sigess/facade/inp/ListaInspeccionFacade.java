@@ -331,4 +331,10 @@ public class ListaInspeccionFacade extends AbstractFacade<ListaInspeccion> {
         query.executeUpdate();
     }
      
+    public ListaInspeccion findByIdAndVersion(Integer id, Integer version){
+        Query q = this.em.createQuery("SELECT l FROM ListaInspeccion l WHERE l.listaInspeccionPK.id =?1 AND l.listaInspeccionPK.version =?2");
+        q.setParameter(1, id);
+        q.setParameter(2, version);
+        return (ListaInspeccion) q.getSingleResult();
+    }
 }
