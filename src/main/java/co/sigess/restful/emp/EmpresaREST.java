@@ -166,7 +166,8 @@ public class EmpresaREST extends ServiceREST {
                 throw new UserMessageException("Error", "El correo del contratista se encuentra asociado a un usuario del sistema.", TipoMensaje.error);
             }
             
-            if(empresaFacade.findEmpresaByNit(empresa.getNit()) != null) {
+            List<Empresa> empresas = empresaFacade.findEmpresaByNit(empresa.getNit());
+            if(empresas != null && empresas.size() > 0) {
                 throw new UserMessageException("Error", "El NIT digitado se encuentra asociado a un contratista en el sistema.", TipoMensaje.error);
             }
             

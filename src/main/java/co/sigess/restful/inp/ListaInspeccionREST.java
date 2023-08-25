@@ -18,6 +18,7 @@ import co.sigess.util.Util;
 import java.util.HashMap;
 import java.util.List;
 import javax.ejb.EJB;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -152,6 +153,19 @@ public class ListaInspeccionREST extends ServiceREST {
             return Response.ok(listaInspeccion).build();
         } catch (Exception ex) {
             return Util.manageException(ex, ListaInspeccionREST.class);
+        }
+    }
+    
+    @DELETE
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    public Response delete(@QueryParam("id") Integer id, @QueryParam("version") Integer version){
+        try {
+            ListaInspeccion listaInspeccionDB = listaInspeccionFacade.findByIdAndVersion(id, version);
+            listaInspeccionDB.setFkPerfilId(null);
+            listaInspeccionFacade.edit(listaInspeccionDB);
+            return Response.ok(true).build();
+        } catch (Exception e) {
+            return Util.manageException(e, ListaInspeccionREST.class);
         }
     }
 
