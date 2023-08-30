@@ -97,6 +97,7 @@ public class ApplicationConfig extends Application {
         resources.add(co.sigess.restful.inp.TipoHallazgoREST.class);
         resources.add(co.sigess.restful.inp.ViewInspeccionCtrREST.class);
         resources.add(co.sigess.restful.inp.ViewResumenAliadosREST.class);
+        resources.add(co.sigess.restful.ipr.AreaMatrizREST.class);
         resources.add(co.sigess.restful.ipr.ControlREST.class);
         resources.add(co.sigess.restful.ipr.EfectoREST.class);
         resources.add(co.sigess.restful.ipr.FuenteREST.class);
@@ -104,6 +105,8 @@ public class ApplicationConfig extends Application {
         resources.add(co.sigess.restful.ipr.ParticipanteIpecrREST.class);
         resources.add(co.sigess.restful.ipr.PeligroIpecrREST.class);
         resources.add(co.sigess.restful.ipr.PeligroREST.class);
+        resources.add(co.sigess.restful.ipr.ProcesoMatrizREST.class);
+        resources.add(co.sigess.restful.ipr.SubprocesoMatrizREST.class);
         resources.add(co.sigess.restful.ipr.TipoControlREST.class);
         resources.add(co.sigess.restful.ipr.TipoPeligroREST.class);
         resources.add(co.sigess.restful.rai.ReporteREST.class);

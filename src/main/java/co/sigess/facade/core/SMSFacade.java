@@ -56,6 +56,9 @@ public class SMSFacade {
         con.setRequestProperty("Authorization", "App " + prop.getProperty(PROPKEY_PUBLIC_API_KEY));
         con.setRequestProperty("Content-Type", "application/json");
         con.setRequestProperty("Accept", "application/json");
+        System.setProperty("javax.net.ssl.trustStore","clientTrustStore.key");
+
+        System.setProperty("javax.net.ssl.trustStorePassword","qwerty");
         con.setConnectTimeout(10000);
         con.setDoOutput(true);
         OutputStream os = con.getOutputStream();

@@ -614,7 +614,10 @@ public class CasoMedicoREST extends ServiceREST {
         try {
             pcl.setEliminado(false);
             pcl = this.pclFacade.create(pcl);
-            String pk_case = diagnosticoFacade.findById(pcl.getDiag()).getPkCase();
+            String pk_case = "";
+            if(pcl.getDiag() != null){
+                pk_case = diagnosticoFacade.findById(pcl.getDiag()).getPkCase();
+            }
             this.logScm("Creacion de pcl", null, pk_case, pcl.getClass().toString());
             return Response.ok(pcl.getId()).build();
         } catch (Exception ex) {
