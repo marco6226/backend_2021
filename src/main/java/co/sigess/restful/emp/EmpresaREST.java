@@ -393,4 +393,18 @@ public class EmpresaREST extends ServiceREST {
         }
     }
     
+    @GET
+    @Secured(validarPermiso = false)
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Path("empresaId/{id}")
+    public Response findBySelected(@PathParam("id") Integer empresaId) {
+        try{
+            Empresa  empresa = empresaFacade.findEmpresaById(empresaId);
+            return Response.ok(empresa).build();
+        } catch(Exception e){
+         return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        
+    }
+    
 }
