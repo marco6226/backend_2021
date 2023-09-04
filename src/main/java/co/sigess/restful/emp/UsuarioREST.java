@@ -315,6 +315,7 @@ public class UsuarioREST extends ServiceREST {
             List<ViewInspeccionesCtr> list = (List<ViewInspeccionesCtr>) q.getResultList();
             
             String razonsocial = list.get(0).getEmpresaAliada().getRazonSocial();
+            String localidad = list.get(0).getProgramacion().getLocalidad().getLocalidad();
             //String razonSocial = list.get(0).getRazonSocial();
 
             Map<String, String> parametros = new HashMap<>();
@@ -322,6 +323,7 @@ public class UsuarioREST extends ServiceREST {
             parametros.put(EmailFacade.PARAM_HOST1,host1);
             parametros.put(EmailFacade.PARAM_INSP,idInspeccionCicloCorto);
             parametros.put(EmailFacade.PARAM_RAZONSOCIAL,razonsocial);
+            parametros.put(EmailFacade.PARAM_UBICACION, localidad);
             
             emailFacade.sendEmail(parametros, TipoMail.ALIADO_ACTUALIZADO_CICLOCORTO, "Correo ciclo corto", email);
             return Response.ok().build();
