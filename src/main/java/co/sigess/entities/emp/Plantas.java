@@ -45,6 +45,17 @@ public class Plantas implements Serializable{
 
     @Column(name = "id_empresa")
     private long id_empresa;
+    
+    @Column(name = "tipo")
+    private String tipo;
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
 
     public Plantas() {
     }
