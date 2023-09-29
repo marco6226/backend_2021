@@ -74,7 +74,7 @@ public class Inspeccion implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaModificacion;
 
-    @Size(max = 1024)
+    @Size(max = 2500)
     @Column(name = "observacion")
     private String observacion;
 
