@@ -34,6 +34,8 @@ public class ApplicationConfig extends Application {
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
         resources.add(co.sigess.restful.ContactoREST.class);
+        resources.add(co.sigess.restful.MatrizPeligrosLogREST.class);
+        resources.add(co.sigess.restful.MatrizPeligrosREST.class);
         resources.add(co.sigess.restful.ado.DirectorioREST.class);
         resources.add(co.sigess.restful.auc.ObservacionREST.class);
         resources.add(co.sigess.restful.auc.TarjetaREST.class);

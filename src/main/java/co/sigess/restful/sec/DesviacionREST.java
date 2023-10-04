@@ -44,9 +44,8 @@ public class DesviacionREST extends ServiceREST {
         super(DesviacionFacade.class, "empresaId");
     }
 
-    
-    //@ValidadorArea("area.id")
     @Override
+    @ValidadorArea("area.id")
     public Response findWithFilter(FilterQuery filterQuery) {
         return super.findWithFilter(filterQuery);
     }

@@ -52,6 +52,17 @@ public class ProcesoMatriz implements Serializable{
     
     @Column(name = "estado")
     private String estado;
+    
+    @Column(name = "eliminado")
+    private Boolean eliminado;
+
+    public Boolean getEliminado() {
+        return eliminado;
+    }
+
+    public void setEliminado(Boolean eliminado) {
+        this.eliminado = eliminado;
+    }
 
     public String getEstado() {
         return estado;
