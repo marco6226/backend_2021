@@ -111,6 +111,7 @@ public class TareaDesviacionFacade extends AbstractFacade<TareaDesviacion> {
             tareaDB.setDescripcionCierre(entity.getDescripcionCierre());
             tareaDB.setUsuarioCierre(entity.getUsuarioCierre());
             tareaDB.setEvidences(entity.getEvidences());
+            tareaDB.setResponsableAliado(entity.getResponsableAliado());
         }
 
         return super.edit(tareaDB); //To change body of generated methods, choose Tools | Templates.
@@ -165,7 +166,10 @@ public class TareaDesviacionFacade extends AbstractFacade<TareaDesviacion> {
                 + "'estado',  td.estado,\n"
                 + "'fecha_verificacion',  td.fecha_verificacion,\n"
                 + "'observaciones_verificacion',  td.observaciones_verificacion,\n"
-                + "'fk_usuario_verifica_id',  td.fk_usuario_verifica_id\n"
+                + "'fk_usuario_verifica_id',  td.fk_usuario_verifica_id,\n"
+                + "'responsableAliado', td.responsable_aliado,\n"
+                + "'division', vd.division,\n"
+                + "'localidad', vd.localidad\n"
                 + "				 )\n"
                 + "	 \n"
                 + " \n"

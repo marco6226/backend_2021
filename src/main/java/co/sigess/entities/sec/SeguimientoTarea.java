@@ -73,6 +73,9 @@ public class SeguimientoTarea implements Serializable {
     @ManyToOne(optional = false)
     private Empleado pkUser;
     
+    @Column(name = "nombre_completo")
+    private String nombreCompleto;
+    
     public SeguimientoTarea() {
     }
 
@@ -112,6 +115,14 @@ public class SeguimientoTarea implements Serializable {
 
     public void setTareaId(Integer tareaId) {
         this.tareaId = tareaId;
+    }
+
+    public String getNombreCompleto() {
+        return nombreCompleto;
+    }
+
+    public void setNombreCompleto(String nombreCompleto) {
+        this.nombreCompleto = nombreCompleto;
     }
     
     @Override

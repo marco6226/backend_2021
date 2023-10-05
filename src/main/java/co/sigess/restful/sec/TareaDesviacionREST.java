@@ -7,6 +7,7 @@ package co.sigess.restful.sec;
 
 import co.sigess.entities.emp.Empresa;
 import co.sigess.entities.sec.TareaDesviacion;
+import co.sigess.facade.emp.EmpresaFacade;
 import co.sigess.facade.sec.TareaDesviacionFacade;
 import co.sigess.restful.FilterQuery;
 import co.sigess.restful.ServiceREST;
@@ -37,6 +38,9 @@ public class TareaDesviacionREST extends ServiceREST {
 
     @EJB
     private TareaDesviacionFacade tareaDesviacionFacade;
+    
+    @EJB
+    private EmpresaFacade empresaFacade;
 
     public TareaDesviacionREST() {
         super(TareaDesviacionFacade.class);
@@ -79,7 +83,12 @@ public class TareaDesviacionREST extends ServiceREST {
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_JSON})
     public Response closeTask(TareaDesviacion tarea) {
         try {
-            tarea.setEmpresa(new Empresa(super.getEmpresaIdRequestContext()));
+            Empresa empresaUsuario = empresaFacade.find(super.getEmpresaIdRequestContext());
+            if(empresaUsuario.getIdEmpresaAliada() == null){
+                tarea.setEmpresa(new Empresa(empresaUsuario.getId()));
+            } else {
+                tarea.setEmpresa(new Empresa(empresaUsuario.getIdEmpresaAliada()));
+            }
             tarea = tareaDesviacionFacade.closeTask(tarea);
             return Response.ok(tarea).build();
         } catch (Exception ex) {
@@ -191,8 +200,13 @@ public class TareaDesviacionREST extends ServiceREST {
                 
             }
             Empresa emp;
-            emp = new Empresa (super.getEmpresaIdRequestContext());
-            String json = tareaDesviacionFacade.findWithDetails(emp.getId(),arrString);
+            emp = empresaFacade.findEmpresaById(super.getEmpresaIdRequestContext());
+            String json = null;
+            if(emp.getIdEmpresaAliada() == null){
+                json = tareaDesviacionFacade.findWithDetails(emp.getId(),arrString);
+            } else {
+                json = tareaDesviacionFacade.findWithDetails(emp.getIdEmpresaAliada(), arrString);
+            }
             return Response.ok(json).build();
         } catch (Exception ex) {
             return Util.manageException(ex, TareaDesviacionREST.class);
@@ -207,7 +221,12 @@ public class TareaDesviacionREST extends ServiceREST {
         try {
             Empresa emp;
             emp = new Empresa (super.getEmpresaIdRequestContext());
-            String json = tareaDesviacionFacade.findWithDetailsByEmpleado(emp.getId(),id);
+            String json = null;
+            if(emp.getIdEmpresaAliada() == null) {
+                json = tareaDesviacionFacade.findWithDetailsByEmpleado(emp.getId(), id);
+            } else {
+                json = tareaDesviacionFacade.findWithDetailsByEmpleado(emp.getIdEmpresaAliada(), id);
+            }
             return Response.ok(json).build();
         } catch (Exception ex) {
             return Util.manageException(ex, TareaDesviacionREST.class);

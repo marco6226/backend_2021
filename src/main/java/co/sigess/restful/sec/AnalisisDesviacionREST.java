@@ -114,6 +114,23 @@ public class AnalisisDesviacionREST extends ServiceREST {
             return Util.manageException(ex, AnalisisDesviacionREST.class);
         }
     }
+    
+    @POST
+    @Path("analisisDesviacionAliado")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Secured(validarPermiso = false, requiereEmpresaId = false)
+    public Response createAnalisisDesviacionAliado(AnalisisDesviacion analisisDesviacion){
+        try {
+            Empresa empresaUsuario = empresaFacade.find(super.getEmpresaIdRequestContext());
+            analisisDesviacion.setEmpresa(new Empresa(empresaUsuario.getIdEmpresaAliada()));
+            analisisDesviacion.setFechaElaboracion(new Date());
+            analisisDesviacion.setUsuarioElaboraId(super.getUsuarioRequestContext().getId());
+            analisisDesviacion = ((AnalisisDesviacionFacade) beanInstance).create(analisisDesviacion);
+            return Response.ok(analisisDesviacion).build();
+        } catch (Exception e) {
+            return Util.manageException(e, AnalisisDesviacionREST.class);
+        }
+    }
 
     @PUT
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -125,6 +142,22 @@ public class AnalisisDesviacionREST extends ServiceREST {
             return Response.ok(analisisDesviacion).build();
         } catch (Exception ex) {
             return Util.manageException(ex, AnalisisDesviacionREST.class);
+        }
+    }
+    
+    @PUT
+    @Path("analisisDesviacionAliado")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Secured(requiereEmpresaId = false, validarPermiso = false)
+    public Response editAnalisisDesviacionAliado(AnalisisDesviacion analisisDesviacion){
+        try {
+            Empresa empresaUsuario = empresaFacade.find(super.getEmpresaIdRequestContext());
+            analisisDesviacion.setEmpresa(new Empresa(empresaUsuario.getIdEmpresaAliada()));
+            analisisDesviacion.setUsuarioModificaId(super.getUsuarioRequestContext().getId());
+            analisisDesviacion = ((AnalisisDesviacionFacade) beanInstance).edit(analisisDesviacion);
+            return Response.ok(analisisDesviacion).build();
+        } catch (Exception e) {
+            return Util.manageException(e, AnalisisDesviacionREST.class);
         }
     }
     

@@ -5,12 +5,15 @@
  */
 package co.sigess.restful;
 
+import co.sigess.entities.emp.Empresa;
 import co.sigess.facade.com.AbstractFacade;
+import co.sigess.facade.emp.EmpresaFacade;
 import co.sigess.restful.rai.ReporteREST;
 import co.sigess.util.Util;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.ejb.EJB;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.ws.rs.BeanParam;
@@ -28,6 +31,9 @@ public abstract class ServiceREST<T extends AbstractFacade> extends Request {
 
     protected AbstractFacade<T> beanInstance;
     private String empresaField = "empresa.id";
+    
+    @EJB
+    private EmpresaFacade empresaFacade;
 
     public ServiceREST() {
     }
@@ -59,7 +65,10 @@ public abstract class ServiceREST<T extends AbstractFacade> extends Request {
             }
 
             if (paramEmpFilt >= 0 && paramEmpFilt != getEmpresaIdRequestContext()) {
-                throw new IllegalArgumentException("Parametro de empresa no coincide");
+                Empresa emp = empresaFacade.find(getEmpresaIdRequestContext());
+                if(emp.getIdEmpresaAliada() == null || paramEmpFilt != emp.getIdEmpresaAliada()){
+                    throw new IllegalArgumentException("Parametro de empresa no coincide");
+                }
             }
 
             if (paramEmpFilt < 0) {

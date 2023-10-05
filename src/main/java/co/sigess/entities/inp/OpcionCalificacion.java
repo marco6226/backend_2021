@@ -79,6 +79,9 @@ public class OpcionCalificacion implements Serializable {
     @JsonIgnore
     @OneToMany(mappedBy = "opcionCalificacion")
     private List<Calificacion> calificacionList;
+    
+    @Column(name = "requerir_desc")
+    private Boolean requerirDesc;
 
     public OpcionCalificacion() {
     }
@@ -155,6 +158,14 @@ public class OpcionCalificacion implements Serializable {
 
     public void setRequerirDoc(Boolean requerirDoc) {
         this.requerirDoc = requerirDoc;
+    }
+
+    public Boolean getRequerirDesc() {
+        return requerirDesc;
+    }
+
+    public void setRequerirDesc(Boolean requerirDesc) {
+        this.requerirDesc = requerirDesc;
     }
 
     @Override

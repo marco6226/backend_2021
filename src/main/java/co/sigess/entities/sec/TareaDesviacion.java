@@ -171,6 +171,9 @@ public class TareaDesviacion implements Serializable {
     @JoinColumn(name = "fk_empresa_id", referencedColumnName = "id")
     @ManyToOne
     private Empresa empresa;
+    
+    @Column(name = "responsable_aliado")
+    private String responsableAliado;
 
     public TareaDesviacion() {
     }
@@ -461,5 +464,13 @@ public class TareaDesviacion implements Serializable {
      */
     public void setEvidencesV(List<EvidencesFiles> evidencesV) {
         this.evidencesV = evidencesV;
+    }
+
+    public String getResponsableAliado() {
+        return responsableAliado;
+    }
+
+    public void setResponsableAliado(String responsableAliado) {
+        this.responsableAliado = responsableAliado;
     }
 }

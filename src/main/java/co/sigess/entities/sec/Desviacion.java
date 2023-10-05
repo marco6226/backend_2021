@@ -90,6 +90,15 @@ public class Desviacion implements Serializable {
     
     @Column(name = "email")
     private String email;
+    
+    @Column(name = "localidad")
+    private String localidad;
+    
+    @Column(name = "division")
+    private String division;
+    
+    @Column(name = "aliado")
+    private String aliado;
 
     public String getEmail() {
         return email;
@@ -288,5 +297,28 @@ public class Desviacion implements Serializable {
     public void setCausoMuerte(boolean causoMuerte) {
         this.causoMuerte = causoMuerte;
     }
-    
+
+    public String getLocalidad() {
+        return localidad;
+    }
+
+    public void setLocalidad(String localidad) {
+        this.localidad = localidad;
+    }
+
+    public String getDivision() {
+        return division;
+    }
+
+    public void setDivision(String division) {
+        this.division = division;
+    }
+
+    public String getAliado() {
+        return aliado;
+    }
+
+    public void setAliado(String aliado) {
+        this.aliado = aliado;
+    }
 }
