@@ -5,17 +5,21 @@
  */
 package co.sigess.entities.inp;
 
+import co.sigess.entities.conf.RespuestaCampo;
 import co.sigess.entities.emp.Empresa;
 import co.sigess.entities.emp.Usuario;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.util.Date;
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -29,18 +33,24 @@ import javax.xml.bind.annotation.XmlRootElement;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Table(name = "vw_inspeccion_ctr", schema = "inp")
 @XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "ViewInspeccionesCtr.findAll", query = "SELECT victr FROM ViewInspeccionesCtr victr")
+})
 public class ViewInspeccionesCtr implements Serializable {
+    
+    private static final long serialVersionUID = 1L;
 
     @Column(name = "id")
     @Id
-    private String id;
+    @Basic(optional = false)
+    private Long id;
     
     @JoinColumn(name = "fk_programacion_id", referencedColumnName = "id")
     @ManyToOne
     private Programacion programacion;
     
     @Column(name = "fecha_realizada")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date fecha;
     
     @JoinColumns({
@@ -75,6 +85,9 @@ public class ViewInspeccionesCtr implements Serializable {
     
     @Column(name = "calificacion")
     private double calificacion;
+    
+    @Column(name = "division")
+    private String division;
 
     public Programacion getProgramacion() {
         return programacion;
@@ -132,11 +145,11 @@ public class ViewInspeccionesCtr implements Serializable {
         this.empresaAliada = empresaAliada;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -163,4 +176,47 @@ public class ViewInspeccionesCtr implements Serializable {
     public void setCalificacion(double calificacion) {
         this.calificacion = calificacion;
     }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public String getDivision() {
+        return division;
+    }
+
+    public void setDivision(String division) {
+        this.division = division;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(!(obj instanceof ViewInspeccionesCtr)) {
+            return false;
+        }
+        
+        ViewInspeccionesCtr other = (ViewInspeccionesCtr) obj;
+        if((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public String toString() {
+        return "co.sigess.entities.inp.ViewInspeccionesCtr [ id=" + id + " ]";
+    }
+    
+    
 }
