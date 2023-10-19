@@ -59,7 +59,7 @@ public class InspeccionREST extends ServiceREST {
     @GET
     @Path("inspeccionAliado")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @Secured(requiereEmpresaId = false, validarPermiso = true)
+    @Secured
     public Response findWithFilterInpAliado(@BeanParam FilterQuery filterQuery){
         try {
             int paramEmpFilt = -1;
@@ -151,8 +151,8 @@ public class InspeccionREST extends ServiceREST {
 
     @POST
     @Path("inspeccionAliado")
+    @Secured
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @Secured(requiereEmpresaId = false)
     public Response createInspeccionAliado(Inspeccion inspeccion) {
         try {
             inspeccion.setEmpresa(new Empresa(super.getEmpresaIdRequestContext()));
@@ -178,9 +178,9 @@ public class InspeccionREST extends ServiceREST {
     }
     
     @PUT
-    @Path("inspeccionAliado")
+    @Secured
+    @Path("inspeccionAliado") 
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @Secured(requiereEmpresaId = false)
     public Response editInspeccionAliado(Inspeccion inspeccion){
         try {
             inspeccion.setUsuarioModifica(super.getUsuarioRequestContext());

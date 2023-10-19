@@ -88,7 +88,7 @@ public class ProgramacionREST extends ServiceREST {
     
     @GET
     @Path("/auditoria")
-    @Secured(requiereEmpresaId = false, validarPermiso = true)
+    @Secured
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response findAuditoriaWithFilter(@BeanParam FilterQuery filterQuery){
         try {
@@ -133,7 +133,7 @@ public class ProgramacionREST extends ServiceREST {
     
     @POST
     @Path("/auditoria")
-    @Secured(validarPermiso = true, requiereEmpresaId = false)
+    @Secured
     @Produces({MediaType.APPLICATION_JSON})
     public Response createAuditoria(Programacion programacion){
         try {
@@ -157,7 +157,7 @@ public class ProgramacionREST extends ServiceREST {
     
     @PUT
     @Path("/auditoria")
-    @Secured(requiereEmpresaId = false, validarPermiso = true)
+    @Secured
     @Produces({MediaType.APPLICATION_JSON})
     public Response editAuditoria(Programacion programacion){
         try {

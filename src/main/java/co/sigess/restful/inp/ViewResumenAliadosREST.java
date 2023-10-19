@@ -24,7 +24,7 @@ import javax.ws.rs.core.Response;
  *
  * @author JULIO
  */
-@Secured(validarPermiso = false)
+@Secured
 @Path("viewResumenAliados")
 public class ViewResumenAliadosREST extends ServiceREST {
     
@@ -32,7 +32,7 @@ public class ViewResumenAliadosREST extends ServiceREST {
     private ViewResumenAliadosFACADE viewResumenAliadosFACADE;
 
     @GET
-    @Secured(requiereEmpresaId = false)
+    @Secured
     @Produces({MediaType.APPLICATION_JSON})
     @Override
     public Response findWithFilter(@BeanParam FilterQuery filterQuery) {

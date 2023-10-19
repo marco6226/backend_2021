@@ -39,7 +39,6 @@ public class CumplimientoREST extends ServiceREST{
     
     @Compress
     @Override
-    @Secured(requiereEmpresaId = false)
     public Response findWithFilter(FilterQuery filterQuery) {
         try {
             long numRows = filterQuery.isCount() ? cumplimientoFacade.countWithFilter(filterQuery) : -1;
@@ -54,7 +53,6 @@ public class CumplimientoREST extends ServiceREST{
     }
     
     @POST
-    @Secured(requiereEmpresaId = false)
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response createCumplimiento(List<Cumplimiento> cumplimientoList){
         try {
@@ -68,7 +66,6 @@ public class CumplimientoREST extends ServiceREST{
     }
     
     @PUT
-    @Secured(requiereEmpresaId = false)
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response editCumplimiento(List<Cumplimiento> cumplimientoList){
         try {
