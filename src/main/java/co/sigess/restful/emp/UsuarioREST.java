@@ -310,7 +310,8 @@ public class UsuarioREST extends ServiceREST {
             }
             
             Query q = this.em.createNativeQuery("SELECT * FROM inp.vw_inspeccion_ctr  WHERE id = ?1 ",ViewInspeccionesCtr.class);
-            q.setParameter(1,idInspeccionCicloCorto);
+            Integer idInp = Integer.parseInt(idInspeccionCicloCorto);
+            q.setParameter(1,idInp);
             //System.out.println(q);
             List<ViewInspeccionesCtr> list = (List<ViewInspeccionesCtr>) q.getResultList();
             
