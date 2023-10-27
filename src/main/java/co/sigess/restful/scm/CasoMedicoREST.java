@@ -8,6 +8,7 @@ package co.sigess.restful.scm;
 import co.sigess.entities.aus.ReporteAusentismo;
 import co.sigess.entities.com.Mensaje;
 import co.sigess.entities.com.TipoMensaje;
+import co.sigess.entities.emp.Area;
 import co.sigess.entities.emp.Empresa;
 import co.sigess.entities.scm.CasosMedicos;
 import co.sigess.entities.scm.Recomendaciones;
@@ -166,7 +167,7 @@ public class CasoMedicoREST extends ServiceREST {
             ObjectMapper mapper = new ObjectMapper();
             String json = mapper.writeValueAsString(casosmedicos);
             casosmedicos.setEmpresa(new Empresa(super.getEmpresaIdRequestContext()));
-
+            casosmedicos.setStatusCaso("1");
             this.logScm("Edicion de caso medico", json, casosmedicos.getId().toString(), casosmedicos.getClass().toString());
             casosmedicos = this.casosmedicosFacade.update(casosmedicos);
             return Response.ok(casosmedicos.getId()).build();
@@ -295,7 +296,13 @@ public class CasoMedicoREST extends ServiceREST {
         try {
 
             List<CasosMedicos> list = casosmedicosFacade.buscar(parametro);
-
+            for(CasosMedicos casoMedico : list){
+                casoMedico.getPkUser().getArea().setAreaList(null);
+                casoMedico.getPkUser().setUsuario(null);
+                try {
+                    casoMedico.getEmpresa().setLogo(null);
+                } catch (Exception e) { }
+            }
             return Response.ok(list).build();
 
         } catch (Exception ex) {
@@ -745,6 +752,8 @@ public class CasoMedicoREST extends ServiceREST {
             CasosMedicos casosMedicos = this.casosmedicosFacade.findById(id);
             if(casosMedicos.getStatusCaso().compareTo("0") == 0){
                 casosMedicos.setStatusCaso("1");
+                casosMedicos.setFechaFinal(null);
+                //casosMedicos.setObservaciones(null);
                 return Response.ok(casosmedicosFacade.update(casosMedicos)).build();
             }else if(casosMedicos.getStatusCaso().compareTo("1") == 0){
                 casosMedicos.setStatusCaso("0");
