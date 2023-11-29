@@ -113,6 +113,7 @@ public class AuthenticationREST {
             @QueryParam("pin") String mfacod,
             String loginRequest) {
         try {
+            Thread.sleep(300);
             String[] array = loginRequest.split(":");
             String email = array[0].trim().toLowerCase();
             String passw = array[1];
