@@ -4,16 +4,22 @@
  */
 package co.sigess.entities.emp;
 
+import co.sigess.entities.ado.Directorio;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -48,7 +54,116 @@ public class Plantas implements Serializable{
     
     @Column(name = "tipo")
     private String tipo;
+    
+    @Column(name = "id_doc_consolidado")
+    private String idDocConsolidado;
+        
+    @Column(name = "id_doc_historico")
+    private String idDocHistorico;
 
+    @Column(name = "fecha_consolidado")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaConsolidado;
+        
+    @Column(name = "fecha_historico")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaHistorico;
+    
+    @Column(name = "fecha_consolidado_start")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaConsolidadoStart;
+        
+    @Column(name = "fecha_historico_start")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaHistoricoStart;
+    
+    //@Column(name = "usuario_consolidado")
+    //private long usuarioConsolidado;
+        
+    //@Column(name = "usuario_historico")
+    //private long usuarioHistorico;
+    
+    @JoinColumn(name = "usuario_consolidado", referencedColumnName = "id")
+    @ManyToOne
+    private Usuario usuarioConsolidado;
+    
+    @JoinColumn(name = "usuario_historico", referencedColumnName = "id")
+    @ManyToOne
+    private Usuario usuarioHistorico;
+            
+    @Column(name = "descarga_consolidado")
+    private Boolean descargaConsolidado;
+        
+    @Column(name = "descarga_historico")
+    private Boolean descargaHistorico;
+
+    public Usuario getUsuarioConsolidado() {
+        return usuarioConsolidado;
+    }
+
+    public void setUsuarioConsolidado(Usuario usuarioConsolidado) {
+        this.usuarioConsolidado = usuarioConsolidado;
+    }
+
+    public Usuario getUsuarioHistorico() {
+        return usuarioHistorico;
+    }
+
+    public void setUsuarioHistorico(Usuario usuarioHistorico) {
+        this.usuarioHistorico = usuarioHistorico;
+    }
+    //public long getUsuarioConsolidado() {
+     //   return usuarioConsolidado;
+    //}
+
+    //public void setUsuarioConsolidado(long usuarioConsolidado) {
+    //    this.usuarioConsolidado = usuarioConsolidado;
+    //}
+
+    //public long getUsuarioHistorico() {
+    //    return usuarioHistorico;
+   // }
+
+    //public void setUsuarioHistorico(long usuarioHistorico) {
+    //    this.usuarioHistorico = usuarioHistorico;
+    //}
+
+    public Boolean getDescargaConsolidado() {
+        return descargaConsolidado;
+    }
+
+    public void setDescargaConsolidado(Boolean descargaConsolidado) {
+        this.descargaConsolidado = descargaConsolidado;
+    }
+
+    public Boolean getDescargaHistorico() {
+        return descargaHistorico;
+    }
+
+    public void setDescargaHistorico(Boolean descargaHistorico) {
+        this.descargaHistorico = descargaHistorico;
+    }
+    
+    
+    
+    public String getIdDocConsolidado() {
+        return idDocConsolidado;
+    }
+
+    public void setIdDocConsolidado(String idDocConsolidado) {
+        this.idDocConsolidado = idDocConsolidado;
+    }
+
+    public String getIdDocHistorico() {
+        return idDocHistorico;
+    }
+
+    public void setIdDocHistorico(String idDocHistorico) {
+        this.idDocHistorico = idDocHistorico;
+    }
+
+    
+    
     public String getTipo() {
         return tipo;
     }
@@ -103,4 +218,39 @@ public class Plantas implements Serializable{
     public void setId_empresa(long id_empresa) {
         this.id_empresa = id_empresa;
     }
+
+    public Date getFechaConsolidado() {
+        return fechaConsolidado;
+    }
+
+    public void setFechaConsolidado(Date fechaConsolidado) {
+        this.fechaConsolidado = fechaConsolidado;
+    }
+
+    public Date getFechaHistorico() {
+        return fechaHistorico;
+    }
+
+    public void setFechaHistorico(Date fechaHistorico) {
+        this.fechaHistorico = fechaHistorico;
+    }
+
+    public Date getFechaConsolidadoStart() {
+        return fechaConsolidadoStart;
+    }
+
+    public void setFechaConsolidadoStart(Date fechaConsolidadoStart) {
+        this.fechaConsolidadoStart = fechaConsolidadoStart;
+    }
+
+    public Date getFechaHistoricoStart() {
+        return fechaHistoricoStart;
+    }
+
+    public void setFechaHistoricoStart(Date fechaHistoricoStart) {
+        this.fechaHistoricoStart = fechaHistoricoStart;
+    }
+    
+    
+    
 }

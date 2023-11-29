@@ -27,7 +27,9 @@ public enum Recursos {
     PLANTILLA_REPORTE_ALIADO_MODIFICADO("/mail/templates/PlantillaReporteAliadoModificado.html"),
     PLANTILLA_MAIL_ALIADO_CICLOCORTO("/mail/templates/PlantillaAliadoCicloCorto.html"),
 
-    SMS_INTEGRACION_PROPERTIES("/sms/integracion.properties");
+    SMS_INTEGRACION_PROPERTIES("/sms/integracion.properties"),
+    
+    EXCEL_CONSOLIDADO_CORONA("/Excel/historicoexcelcorona.xlsx");
     
     private final String ruta;
 

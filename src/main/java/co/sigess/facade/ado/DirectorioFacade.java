@@ -19,6 +19,7 @@ import co.sigess.facade.emp.EmpresaFacade;
 import co.sigess.facade.inp.CalificacionFacade;
 import co.sigess.facade.sec.AnalisisDesviacionFacade;
 import co.sigess.facade.inp.ListaInspeccionFacade;
+import co.sigess.facade.ipr.MatrizPeligrosFacade;
 import co.sigess.util.FileUtil;
 import java.io.File;
 import java.io.OutputStream;
@@ -53,6 +54,9 @@ public class DirectorioFacade extends AbstractFacade<Directorio> {
 
     @EJB
     private AnalisisDesviacionFacade analisisDesviacionFacade;
+    
+    @EJB
+    private MatrizPeligrosFacade matrizPeligrosFacade;
 
     @EJB
     private ObservacionFacade observacionFacade;
@@ -158,6 +162,10 @@ public class DirectorioFacade extends AbstractFacade<Directorio> {
                 case SEC:
                     Integer analisisId = Integer.valueOf(modParam);                    
                     this.analisisDesviacionFacade.relacionarDocumentoEvidencia(documento, analisisId, tipoEvidencias);
+                    break;
+                case IPR:
+                    Integer matrizId = Integer.valueOf(modParam);                    
+                    this.matrizPeligrosFacade.relacionarDocumentoEvidencia(documento, matrizId);
                     break;
                 case AUC:
                     Long observacionId = Long.valueOf(modParam);

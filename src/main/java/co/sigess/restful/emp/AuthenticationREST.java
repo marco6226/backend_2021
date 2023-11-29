@@ -369,28 +369,18 @@ public class AuthenticationREST {
         return em;
     }
       
-    @GET
-    @Path("enviarCorreoSemanal")
-    public void correoQuincenal () 
-    {
-        Timer timer = new Timer();
-            timer.schedule(new TimerTask() {
-            //int cont=0; 
-            @Override
-            public void run() {
-                /*if(cont<3){
-                    cont=cont+1;
-                    System.out.println(cont);*/
-                    correoPeriodico();
-                    //System.out.println("Running: " + new java.util.Date());
-                /*}else{
-                    timer.cancel();  // Terminates this timer, discarding any currently scheduled tasks.
-                    timer.purge();   // Removes all cancelled tasks from this timer"s task queue.
-                }*/
-            }
-       //}, 0, 60000);
-       }, 0, 1209600000);  
-    }
+    //@GET
+    //@Path("enviarCorreoSemanal")
+    //public void correoQuincenal () 
+    //{
+    //    Timer timer = new Timer();
+    //       timer.schedule(new TimerTask() { 
+     //       @Override
+     //       public void run() {
+     //               correoPeriodico();
+     //       }
+     //  }, 0, 1209600000);  
+    //}
     
 
     public String findByHost() {

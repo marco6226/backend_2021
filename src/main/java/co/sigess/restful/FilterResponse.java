@@ -13,6 +13,7 @@ public class FilterResponse {
 
     private long count;
     private Object data;
+    private Object data2;
 
     public long getCount() {
         return count;
@@ -28,5 +29,13 @@ public class FilterResponse {
 
     public void setData(Object data) {
         this.data = data;
+    }
+    
+    public Object getData2() {
+        return data2;
+    }
+
+    public void setData2(Object data) {
+        this.data2 = data;
     }
 }

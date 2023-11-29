@@ -34,8 +34,6 @@ public class ApplicationConfig extends Application {
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
         resources.add(co.sigess.restful.ContactoREST.class);
-        resources.add(co.sigess.restful.MatrizPeligrosLogREST.class);
-        resources.add(co.sigess.restful.MatrizPeligrosREST.class);
         resources.add(co.sigess.restful.ado.DirectorioREST.class);
         resources.add(co.sigess.restful.auc.ObservacionREST.class);
         resources.add(co.sigess.restful.auc.TarjetaREST.class);
@@ -104,6 +102,8 @@ public class ApplicationConfig extends Application {
         resources.add(co.sigess.restful.ipr.EfectoREST.class);
         resources.add(co.sigess.restful.ipr.FuenteREST.class);
         resources.add(co.sigess.restful.ipr.IpecrREST.class);
+        resources.add(co.sigess.restful.ipr.MatrizPeligrosLogREST.class);
+        resources.add(co.sigess.restful.ipr.MatrizPeligrosREST.class);
         resources.add(co.sigess.restful.ipr.ParticipanteIpecrREST.class);
         resources.add(co.sigess.restful.ipr.PeligroIpecrREST.class);
         resources.add(co.sigess.restful.ipr.PeligroREST.class);
@@ -111,6 +111,8 @@ public class ApplicationConfig extends Application {
         resources.add(co.sigess.restful.ipr.SubprocesoMatrizREST.class);
         resources.add(co.sigess.restful.ipr.TipoControlREST.class);
         resources.add(co.sigess.restful.ipr.TipoPeligroREST.class);
+        resources.add(co.sigess.restful.ipr.ViewMatrizPeligrosLogREST.class);
+        resources.add(co.sigess.restful.ipr.ViewMatrizPeligrosREST.class);
         resources.add(co.sigess.restful.rai.ReporteREST.class);
         resources.add(co.sigess.restful.scm.AnexosREST.class);
         resources.add(co.sigess.restful.scm.CasoMedicoREST.class);

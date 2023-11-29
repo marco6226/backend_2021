@@ -5,12 +5,14 @@
  */
 package co.sigess.entities.ipr;
 
+import co.sigess.entities.ado.Documento;
 import co.sigess.entities.emp.Area;
 import co.sigess.entities.emp.Empresa;
 import co.sigess.entities.emp.Plantas;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,6 +20,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -83,6 +87,10 @@ public class MatrizPeligros implements Serializable{
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaCreacion;
     
+    @Column(name = "fecha_edicion")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaEdicion;
+    
     @Column(name = "eliminado")
     private Boolean eliminado;
     
@@ -91,7 +99,24 @@ public class MatrizPeligros implements Serializable{
     
     @Column(name = "fk_matriz_peligros")
     private Integer fkmatrizpeligros;
+    
+    @Column(name = "efectividad_controles")
+    private String efectividadControles;
+    
+    @JoinTable(name = "documento_matriz_peligro", schema = "ipr", joinColumns = {
+        @JoinColumn(name = "fk_matriz_peligro_id", referencedColumnName = "id")}, inverseJoinColumns = {
+        @JoinColumn(name = "fk_documento_id", referencedColumnName = "id")})   
+    @ManyToMany
+    private List<Documento> documentosList;
 
+    public List<Documento> getDocumentosList() {
+        return documentosList;
+    }
+
+    public void setDocumentosList(List<Documento> documentosList) {
+        this.documentosList = documentosList;
+    }
+    
     public Integer getFkmatrizpeligros() {
         return fkmatrizpeligros;
     }
@@ -221,4 +246,22 @@ public class MatrizPeligros implements Serializable{
     public void setSubProceso(SubprocesoMatriz subProceso) {
         this.subProceso = subProceso;
     }
+
+    public Date getFechaEdicion() {
+        return fechaEdicion;
+    }
+
+    public void setFechaEdicion(Date fechaEdicion) {
+        this.fechaEdicion = fechaEdicion;
+    }
+
+    public String getEfectividadControles() {
+        return efectividadControles;
+    }
+
+    public void setEfectividadControles(String efectividadControles) {
+        this.efectividadControles = efectividadControles;
+    }
+    
+    
 }

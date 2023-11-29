@@ -5,8 +5,11 @@
  */
 package co.sigess.facade.ipr;
 
+import co.sigess.entities.ado.Documento;
 import co.sigess.entities.ipr.MatrizPeligros;
+import co.sigess.entities.sec.AnalisisDesviacion;
 import co.sigess.facade.com.AbstractFacade;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -38,5 +41,23 @@ public class MatrizPeligrosFacade extends AbstractFacade<MatrizPeligros>{
         q.setParameter(1,empresaId);
         List<MatrizPeligros> list = (List<MatrizPeligros>) q.getResultList();
         return list;
+    }
+    
+    public void relacionarDocumentoEvidencia(Documento documento, Integer matrizId) throws Exception {
+        MatrizPeligros mp = this.find(matrizId);
+        List<Documento> list = mp.getDocumentosList();
+        if (list == null) {
+            list = new ArrayList<>();
+        }
+        list.add(documento);
+        super.edit(mp);
+    }
+    
+    public void retirarDocumentoEvidencia(Documento documento) throws Exception {
+        Query q = this.em.createQuery("SELECT c FROM MatrizPeligros c JOIN c.documentosList d WHERE d.id = ?1 ");
+        q.setParameter(1, documento.getId());
+        MatrizPeligros matrizP = (MatrizPeligros) q.getSingleResult();
+        matrizP.getDocumentosList().remove(documento);
+        super.edit(matrizP);
     }
 }

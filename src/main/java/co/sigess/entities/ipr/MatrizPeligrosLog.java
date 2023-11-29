@@ -104,6 +104,17 @@ public class MatrizPeligrosLog implements Serializable{
 
     @Column(name = "fk_matriz_peligros")
     private Integer fkmatrizpeligros;
+    
+    @Column(name = "efectividad_controles")
+    private String efectividadControles;
+
+    public String getEfectividadControles() {
+        return efectividadControles;
+    }
+
+    public void setEfectividadControles(String efectividadControles) {
+        this.efectividadControles = efectividadControles;
+    }
 
     public Integer getFkmatrizpeligros() {
         return fkmatrizpeligros;
