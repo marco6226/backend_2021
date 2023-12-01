@@ -90,6 +90,15 @@ public class ViewMatrizPeligros implements Serializable{
     @Column(name = "descripcion_inicial")
     private String descripcionInicial; 
     
+    private Long matrizrexistente; 
+    private String accmayor; 
+    private String realizovaloracion; 
+    
+    @Column(name = "plan_accion_existente")
+    private String planAccionExistente; 
+
+    private Long matrizeriesgo; 
+    
     @Column(name = "plan_accion")
     private String planAccion; 
     
@@ -120,6 +129,8 @@ public class ViewMatrizPeligros implements Serializable{
     @Column(name = "descripcion_residual")
     private String descripcionResidual;
     
+    private Long matrizrresidual; 
+    
     @Column(name = "controles_ejecutados")
     private String controlesEjecutados;
         
@@ -135,6 +146,7 @@ public class ViewMatrizPeligros implements Serializable{
     private String elAsociados;
                         
     private String estado;
+    private Long icr;
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
@@ -256,6 +268,26 @@ public class ViewMatrizPeligros implements Serializable{
         return descripcionInicial;
     }
 
+    public Long getMatrizrexistente() {
+        return matrizrexistente;
+    }
+
+    public String getAccmayor() {
+        return accmayor;
+    }
+
+    public String getRealizovaloracion() {
+        return realizovaloracion;
+    }
+
+    public String getPlanAccionExistente() {
+        return planAccionExistente;
+    }
+
+    public Long getMatrizeriesgo() {
+        return matrizeriesgo;
+    }
+
     public String getPlanAccion() {
         return planAccion;
     }
@@ -296,6 +328,10 @@ public class ViewMatrizPeligros implements Serializable{
         return descripcionResidual;
     }
 
+    public Long getMatrizrresidual() {
+        return matrizrresidual;
+    }
+
     public String getControlesEjecutados() {
         return controlesEjecutados;
     }
@@ -319,7 +355,10 @@ public class ViewMatrizPeligros implements Serializable{
     public String getEstado() {
         return estado;
     }
-    
-    
 
+    public Long getIcr() {
+        return icr;
+    }
+
+    
 }

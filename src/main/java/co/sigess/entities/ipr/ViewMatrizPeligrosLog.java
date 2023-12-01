@@ -88,7 +88,16 @@ public class ViewMatrizPeligrosLog implements Serializable {
     private String cualitativoInicial; 
     
     @Column(name = "descripcion_inicial")
-    private String descripcionInicial; 
+    private String descripcionInicial;
+    
+    private Long matrizrexistente; 
+    private String accmayor; 
+    private String realizovaloracion; 
+    
+    @Column(name = "plan_accion_existente")
+    private String planAccionExistente; 
+
+    private Long matrizeriesgo; 
     
     @Column(name = "plan_accion")
     private String planAccion; 
@@ -120,6 +129,8 @@ public class ViewMatrizPeligrosLog implements Serializable {
     @Column(name = "descripcion_residual")
     private String descripcionResidual;
     
+    private Long matrizrresidual; 
+    
     @Column(name = "controles_ejecutados")
     private String controlesEjecutados;
         
@@ -135,10 +146,14 @@ public class ViewMatrizPeligrosLog implements Serializable {
     private String elAsociados;
                         
     private String estado;
+    private Long icr;
     
     @Column(name = "fecha_edicion")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaEdicion;
+    
+    private String nombre_mes;
+    private Long anio;
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
@@ -263,6 +278,26 @@ public class ViewMatrizPeligrosLog implements Serializable {
     public String getDescripcionInicial() {
         return descripcionInicial;
     }
+    
+    public Long getMatrizrexistente() {
+        return matrizrexistente;
+    }
+
+    public String getAccmayor() {
+        return accmayor;
+    }
+
+    public String getRealizovaloracion() {
+        return realizovaloracion;
+    }
+
+    public String getPlanAccionExistente() {
+        return planAccionExistente;
+    }
+
+    public Long getMatrizeriesgo() {
+        return matrizeriesgo;
+    }
 
     public String getPlanAccion() {
         return planAccion;
@@ -304,6 +339,10 @@ public class ViewMatrizPeligrosLog implements Serializable {
         return descripcionResidual;
     }
 
+    public Long getMatrizrresidual() {
+        return matrizrresidual;
+    }
+    
     public String getControlesEjecutados() {
         return controlesEjecutados;
     }
@@ -328,8 +367,20 @@ public class ViewMatrizPeligrosLog implements Serializable {
         return estado;
     }
 
+    public Long getIcr() {
+        return icr;
+    }
+
     public Date getFechaEdicion() {
         return fechaEdicion;
+    }
+
+    public String getNombre_mes() {
+        return nombre_mes;
+    }
+
+    public Long getAnio() {
+        return anio;
     }
     
     

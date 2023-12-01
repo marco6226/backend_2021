@@ -118,7 +118,6 @@ public class ViewMatrizPeligrosLogREST  extends ServiceREST{
             metodosEnOrden.add(clase.getMethod("getDescripcionPeligro"));
             metodosEnOrden.add(clase.getMethod("getFuenteGeneradora"));
             metodosEnOrden.add(clase.getMethod("getEfectos"));
-            metodosEnOrden.add(clase.getMethod("getEfectos"));
             metodosEnOrden.add(clase.getMethod("getIngenieria"));
             metodosEnOrden.add(clase.getMethod("getAdministrativos"));
             metodosEnOrden.add(clase.getMethod("getElementospro"));
@@ -131,6 +130,11 @@ public class ViewMatrizPeligrosLogREST  extends ServiceREST{
             metodosEnOrden.add(clase.getMethod("getCuantitativoInicial"));
             metodosEnOrden.add(clase.getMethod("getCualitativoInicial"));
             metodosEnOrden.add(clase.getMethod("getDescripcionInicial"));
+            metodosEnOrden.add(clase.getMethod("getMatrizrexistente"));
+            metodosEnOrden.add(clase.getMethod("getAccmayor"));
+            metodosEnOrden.add(clase.getMethod("getRealizovaloracion"));
+            metodosEnOrden.add(clase.getMethod("getPlanAccionExistente"));
+            metodosEnOrden.add(clase.getMethod("getMatrizeriesgo"));
             metodosEnOrden.add(clase.getMethod("getPlanAccion"));
             metodosEnOrden.add(clase.getMethod("getPlanAccion"));
             metodosEnOrden.add(clase.getMethod("getPlanAccion"));
@@ -145,19 +149,25 @@ public class ViewMatrizPeligrosLogREST  extends ServiceREST{
             metodosEnOrden.add(clase.getMethod("getCuantitativoResidual"));
             metodosEnOrden.add(clase.getMethod("getCualitativoResidual"));
             metodosEnOrden.add(clase.getMethod("getDescripcionResidual"));
+            metodosEnOrden.add(clase.getMethod("getMatrizrresidual"));
             metodosEnOrden.add(clase.getMethod("getControlesEjecutados"));
             metodosEnOrden.add(clase.getMethod("getControlesPropuestos"));
             metodosEnOrden.add(clase.getMethod("getCumplimiento"));
             metodosEnOrden.add(clase.getMethod("getAtAsociados"));
             metodosEnOrden.add(clase.getMethod("getElAsociados"));
             metodosEnOrden.add(clase.getMethod("getEstado"));
+            metodosEnOrden.add(clase.getMethod("getIcr"));
             metodosEnOrden.add(clase.getMethod("getFechaEdicion"));
+            metodosEnOrden.add(clase.getMethod("getNombre_mes"));
+            metodosEnOrden.add(clase.getMethod("getAnio"));
         
             if(filterQuery == null){
                 filterQuery = new FilterQuery();
             }
             long numRows = filterQuery.isCount() ? viewMatrizPeligrosLogFacade.countWithFilter(filterQuery) : -1;
             List<ViewMatrizPeligrosLog> list = viewMatrizPeligrosLogFacade.findWithFilter(filterQuery);
+            int size =list.size();
+            int index=0;
             
             FilterResponse filterResponse = new FilterResponse();
             filterResponse.setData(list);
@@ -172,7 +182,7 @@ public class ViewMatrizPeligrosLogREST  extends ServiceREST{
             
             int startRow = 4; // Fila 4 (índice 3)
             int startColumn = 0; // Columna A (índice 0)
-            int endColumn = 46; // Columna AT (índice 45)
+            int endColumn = 55; // Columna AT (índice 45)
             
             Row row1 = sheet.createRow(1);
             Cell cell1 = row1.createCell(2);
@@ -192,20 +202,23 @@ public class ViewMatrizPeligrosLogREST  extends ServiceREST{
                 //System.out.println(rowNum-5);
                 int i=0;
                 for(Method metodo : metodosEnOrden){
-                    
-
                     try {
                         Object resultado = metodo.invoke(element);
+                        Object resultado_past;
+                        Object resultado_next;
+
+                        Cell cell = row.createCell(i);
+                        CellStyle style = workbook.createCellStyle();
                         if(!resultado.toString().isEmpty()){
-                            Cell cell = row.createCell(i);
+                            
                             String texto = resultado.toString();
                            
-                            if((i>=15 && i<=17) || (i>=27 && i<=31)){
-                                if(i==27)jerarquia="Eliminación";
-                                if(i==28)jerarquia="Sustitución";
-                                if(i==29)jerarquia="Control de ingeniería";
-                                if(i==30)jerarquia="Controles administrativos";
-                                if(i==31)jerarquia="Elementos de protección personal";
+                            if((i>=14 && i<=16) || (i>=31 && i<=35)){
+                                if(i==31)jerarquia="Eliminación";
+                                if(i==32)jerarquia="Sustitución";
+                                if(i==33)jerarquia="Control de ingeniería";
+                                if(i==34)jerarquia="Controles administrativos";
+                                if(i==35)jerarquia="Elementos de protección personal";
                                 JsonArray jsonResultado = JsonParser.parseString(resultado.toString()).getAsJsonArray();
 
                                 if (jsonResultado instanceof JsonArray) {
@@ -213,7 +226,7 @@ public class ViewMatrizPeligrosLogREST  extends ServiceREST{
                                     descripcion="";
                                     for(JsonElement planAccion : jsonResultado){
                                         JsonObject pAccion = planAccion.getAsJsonObject();
-                                        if(i>=27 && i<=31){
+                                        if(i>=31 && i<=35){
                                             if(pAccion.get("jerarquia").getAsString().equals(jerarquia)){
                                                 cont++;
                                                 descripcion+=cont+". "+pAccion.get("descripcion").getAsString()+"\n";
@@ -225,7 +238,7 @@ public class ViewMatrizPeligrosLogREST  extends ServiceREST{
                                     }
                                     cell.setCellValue(descripcion);
                                 }                     
-                            }else if(i==26 || i==37){
+                            }else if(i==25 || i==44){
                                                         
                                 Object resultado2 = list.get(rowNum-5).getNrInicial();
                                 long NR = Long.parseLong(resultado2.toString());
@@ -244,13 +257,13 @@ public class ViewMatrizPeligrosLogREST  extends ServiceREST{
                             }
                             
 
-                            CellStyle style = workbook.createCellStyle();
                             
-                            if((i>=15 && i<=17) || (i>=26 && i<=31) || i==40){
+                            
+                            if((i>=14 && i<=16) || (i>=31 && i<=35) || i==44){
                                 style.setWrapText(true);
                                 sheet.setColumnWidth(i, 50 * 256); 
                             }
-                            if(i==24 || i==25 || i==38 || i==39){
+                            if(i==23 || i==24 || i==42 || i==43){
                                 Font font = workbook.createFont();
                                  if(resultado.equals("Bajo") || resultado.equals("IV")){
                                     style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
@@ -278,8 +291,65 @@ public class ViewMatrizPeligrosLogREST  extends ServiceREST{
                             }
                             style.setAlignment(HorizontalAlignment.CENTER);
                             style.setVerticalAlignment(VerticalAlignment.CENTER);
-                            cell.setCellStyle(style);
+                            
                         }
+                        if(index==0 && index <size-1){
+                            if(list.get(index).getIdRiesgo().equals(list.get(index+1).getIdRiesgo())){
+                                resultado_next=metodo.invoke(list.get(index+1));
+                                if((resultado != null && resultado_next == null) || (resultado == null && resultado_next != null)){
+                                    style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+                                    XSSFColor color = new XSSFColor(new byte[]{(byte) 255, (byte) 187, (byte) 0}, null);
+                                    style.setFillForegroundColor(color);
+                                }else
+                                if(!resultado.equals(resultado_next)){
+                                    style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+                                    XSSFColor color = new XSSFColor(new byte[]{(byte) 255, (byte) 187, (byte) 0}, null);
+                                    style.setFillForegroundColor(color);
+                                }
+                            }
+                        }else if(index>0 && index <size-1){
+                            if(list.get(index).getIdRiesgo().equals(list.get(index-1).getIdRiesgo())){
+                                resultado_past=metodo.invoke(list.get(index-1));
+                                if((resultado == null && resultado_past != null) || (resultado != null && resultado_past == null)){
+                                    style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+                                    XSSFColor color = new XSSFColor(new byte[]{(byte) 255, (byte) 187, (byte) 0}, null);
+                                    style.setFillForegroundColor(color);
+                                }else
+                                if(!resultado.equals(resultado_past)){
+                                    style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+                                    XSSFColor color = new XSSFColor(new byte[]{(byte) 255, (byte) 187, (byte) 0}, null);
+                                    style.setFillForegroundColor(color);
+                                }
+                            }
+                            if(list.get(index).getIdRiesgo().equals(list.get(index+1).getIdRiesgo())){
+                                resultado_next=metodo.invoke(list.get(index+1));
+                                if((resultado != null && resultado_next == null) || (resultado == null && resultado_next != null)){
+                                    style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+                                    XSSFColor color = new XSSFColor(new byte[]{(byte) 255, (byte) 187, (byte) 0}, null);
+                                    style.setFillForegroundColor(color);
+                                }else
+                                if(!resultado.equals(resultado_next)){
+                                    style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+                                    XSSFColor color = new XSSFColor(new byte[]{(byte) 255, (byte) 187, (byte) 0}, null);
+                                    style.setFillForegroundColor(color);
+                                }
+                            }
+                        }else if(index == size-1){
+                            if(list.get(index).getIdRiesgo().equals(list.get(index-1).getIdRiesgo())){
+                                resultado_past=metodo.invoke(list.get(index-1));
+                                if((resultado == null && resultado_past != null) || (resultado != null && resultado_past == null)){
+                                    style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+                                    XSSFColor color = new XSSFColor(new byte[]{(byte) 255, (byte) 187, (byte) 0}, null);
+                                    style.setFillForegroundColor(color);
+                                }else
+                                if(!resultado.equals(resultado_past)){
+                                    style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+                                    XSSFColor color = new XSSFColor(new byte[]{(byte) 255, (byte) 187, (byte) 0}, null);
+                                    style.setFillForegroundColor(color);
+                                }
+                            }
+                        }
+                        cell.setCellStyle(style);
                     } catch (Exception e) {
                         e.printStackTrace();
                         System.out.println(e);
@@ -289,6 +359,7 @@ public class ViewMatrizPeligrosLogREST  extends ServiceREST{
 
                 }
                 rowNum++;
+                index++;
             }
 //            System.out.println("fin del for");
             int endRow = rowNum-1;
