@@ -11,11 +11,17 @@ import co.sigess.entities.ado.Modulo;
 import co.sigess.entities.emp.Area;
 import co.sigess.entities.emp.Empresa;
 import co.sigess.entities.emp.Plantas;
+import co.sigess.entities.ipr.AreaMatriz;
 import co.sigess.entities.ipr.MatrizPeligros;
+import co.sigess.entities.ipr.ProcesoMatriz;
+import co.sigess.entities.ipr.SubprocesoMatriz;
 import co.sigess.facade.ado.DirectorioFacade;
 import co.sigess.facade.emp.AreaFacade;
 import co.sigess.facade.emp.PlantasFacade;
+import co.sigess.facade.ipr.AreaMatrizFacade;
 import co.sigess.facade.ipr.MatrizPeligrosFacade;
+import co.sigess.facade.ipr.ProcesoMatrizFacade;
+import co.sigess.facade.ipr.SubprocesoMatrizFacade;
 import co.sigess.restful.FilterQuery;
 import co.sigess.restful.FilterResponse;
 import co.sigess.restful.ServiceREST;
@@ -78,6 +84,15 @@ public class MatrizPeligrosREST extends ServiceREST implements Runnable{
     @EJB
     private  AreaFacade areaFacade;
     
+    @EJB
+    private  AreaMatrizFacade areaMatrizFacade;
+    
+    @EJB
+    private  ProcesoMatrizFacade procesoMatrizFacade;
+    
+    @EJB
+    private  SubprocesoMatrizFacade subprocesoMatrizFacade;
+    
     public MatrizPeligrosREST() {
         super(MatrizPeligrosFacade.class);
     }
@@ -104,6 +119,21 @@ public class MatrizPeligrosREST extends ServiceREST implements Runnable{
         try {
             matrizPeligros.setEmpresa(new Empresa(super.getEmpresaIdRequestContext()));
             matrizPeligros = ((MatrizPeligrosFacade) beanInstance).create(matrizPeligros);
+            subprocesoMatrizFacade.editSubProcesoEstado(matrizPeligros.getSubProceso().getId());
+
+            List<SubprocesoMatriz> listSubProceso = subprocesoMatrizFacade.findForProceso(matrizPeligros.getProceso().getId());
+            if(listSubProceso.isEmpty()){
+                ProcesoMatriz procesoMatriz = procesoMatrizFacade.find(matrizPeligros.getProceso().getId());
+                procesoMatriz.setEstado("Evaluado");
+                procesoMatrizFacade.edit(procesoMatriz);
+                List<ProcesoMatriz> listProceso = procesoMatrizFacade.findForArea(matrizPeligros.getArea().getId());
+                
+                if(listProceso.isEmpty()){
+                    AreaMatriz areaMatriz = areaMatrizFacade.find(matrizPeligros.getArea().getId());
+                    areaMatriz.setEstado("Evaluado");
+                    areaMatrizFacade.edit(areaMatriz);
+                }
+            }
             return Response.ok(matrizPeligros).build();
         } catch (Exception ex) {
             return Util.manageException(ex, MatrizPeligrosREST.class);

@@ -6,8 +6,10 @@
 package co.sigess.restful.ipr;
 
 import co.sigess.entities.emp.Empresa;
+import co.sigess.entities.ipr.AreaMatriz;
 import co.sigess.entities.ipr.ProcesoMatriz;
 import co.sigess.entities.ipr.SubprocesoMatriz;
+import co.sigess.facade.ipr.AreaMatrizFacade;
 import co.sigess.facade.ipr.ProcesoMatrizFacade;
 import co.sigess.facade.ipr.SubprocesoMatrizFacade;
 import co.sigess.restful.FilterQuery;
@@ -39,6 +41,12 @@ public class SubprocesoMatrizREST extends ServiceREST {
     
     @EJB
     private SubprocesoMatrizFacade subprocesoMatrizFacade;
+    
+    @EJB
+    private ProcesoMatrizFacade procesoMatrizFacade;
+    
+    @EJB
+    private AreaMatrizFacade areaMatrizFacade;
     
     public SubprocesoMatrizREST(){
         super(SubprocesoMatrizFacade.class);
@@ -83,8 +91,14 @@ public class SubprocesoMatrizREST extends ServiceREST {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response create(SubprocesoMatriz subprocesoMatriz) {
         try {
-            //subprocesoMatriz.setEmpresa(new Empresa(super.getEmpresaIdRequestContext()));
             subprocesoMatriz = ((SubprocesoMatrizFacade) beanInstance).create(subprocesoMatriz);
+            
+            procesoMatrizFacade.editProcesoEstado(subprocesoMatriz.getProcesoMatriz().getId());
+            
+            ProcesoMatriz procesoMatriz = procesoMatrizFacade.find(subprocesoMatriz.getProcesoMatriz().getId());
+            areaMatrizFacade.editAreaEstado(procesoMatriz.getAreaMatriz().getId());
+
+                        
             return Response.ok(subprocesoMatriz).build();
         } catch (Exception ex) {
             return Util.manageException(ex, SubprocesoMatrizREST.class);
@@ -94,9 +108,28 @@ public class SubprocesoMatrizREST extends ServiceREST {
     @PUT
     @Secured(validarPermiso = false)
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response edit(SubprocesoMatriz subprocesoMatriz) throws Exception {
+    public Response edit(SubprocesoMatriz subprocesoMatrizIn) throws Exception {
         try {
+            SubprocesoMatriz subprocesoMatriz = subprocesoMatrizFacade.find(subprocesoMatrizIn.getId());
+            subprocesoMatriz.setNombre(subprocesoMatrizIn.getNombre());
+            subprocesoMatriz.setEliminado(subprocesoMatrizIn.getEliminado());
             subprocesoMatriz = ((SubprocesoMatrizFacade) beanInstance).edit(subprocesoMatriz);
+            
+            if(subprocesoMatrizIn.getEliminado()){
+            List<SubprocesoMatriz> listSubProceso = subprocesoMatrizFacade.findForProceso(subprocesoMatriz.getProcesoMatriz().getId());
+                if(listSubProceso.isEmpty()){
+                    ProcesoMatriz procesoMatriz = procesoMatrizFacade.find(subprocesoMatriz.getProcesoMatriz().getId());
+                    procesoMatriz.setEstado("Evaluado");
+                    procesoMatrizFacade.edit(procesoMatriz);
+                    
+                    List<ProcesoMatriz> listProceso = procesoMatrizFacade.findForArea(subprocesoMatriz.getProcesoMatriz().getAreaMatriz().getId());
+                    if(listProceso.isEmpty()){
+                        AreaMatriz areaMatriz = areaMatrizFacade.find(subprocesoMatriz.getProcesoMatriz().getAreaMatriz().getId());
+                        areaMatriz.setEstado("Evaluado");
+                        areaMatrizFacade.edit(areaMatriz);
+                    }
+                }
+            }
             return Response.ok(subprocesoMatriz).build();
         } catch (Exception ex) {
             return Util.manageException(ex, SubprocesoMatrizREST.class);

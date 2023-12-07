@@ -8,6 +8,8 @@ package co.sigess.restful.ipr;
 import co.sigess.entities.emp.Empresa;
 import co.sigess.entities.ipr.AreaMatriz;
 import co.sigess.facade.ipr.AreaMatrizFacade;
+import co.sigess.facade.ipr.ProcesoMatrizFacade;
+import co.sigess.facade.ipr.SubprocesoMatrizFacade;
 import co.sigess.restful.ServiceREST;
 import co.sigess.restful.security.Secured;
 import co.sigess.util.Util;
@@ -33,6 +35,12 @@ public class AreaMatrizREST extends ServiceREST{
     
     @EJB
     private  AreaMatrizFacade areaMatrizFacade;
+    
+    @EJB
+    private  ProcesoMatrizFacade procesoMatrizFacade;
+    
+    @EJB
+    private  SubprocesoMatrizFacade subprocesoMatrizFacade;
     
     public AreaMatrizREST() {
         super(AreaMatrizFacade.class);
@@ -68,10 +76,17 @@ public class AreaMatrizREST extends ServiceREST{
     @PUT
     @Secured(validarPermiso = false)
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response edit(AreaMatriz areaMatriz) throws Exception {
+    public Response edit(AreaMatriz areaMatrizin) throws Exception {
         try {
-            areaMatriz.setEmpresa(new Empresa(super.getEmpresaIdRequestContext()));
+            AreaMatriz areaMatriz = areaMatrizFacade.find(areaMatrizin.getId());
+            areaMatriz.setNombre(areaMatrizin.getNombre());
+            areaMatriz.setEliminado(areaMatrizin.getEliminado());
             areaMatriz = ((AreaMatrizFacade) beanInstance).edit(areaMatriz);
+            
+            if(areaMatrizin.getEliminado()){
+                procesoMatrizFacade.editProcesoEliminacion(areaMatriz.getId());
+                subprocesoMatrizFacade.editSubProcesoEliminacionArea(areaMatriz.getId());
+            }
             return Response.ok(areaMatriz).build();
         } catch (Exception ex) {
             return Util.manageException(ex, AreaMatrizREST.class);

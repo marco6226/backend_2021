@@ -40,4 +40,10 @@ public class AreaMatrizFacade extends AbstractFacade<AreaMatriz>{
         return list;
     }
     
+    public void editAreaEstado(Integer areaId){
+        int q = this.em.createQuery("UPDATE AreaMatriz am SET am.estado = 'No evaluada' WHERE am.id = :areaId")
+        .setParameter("areaId", areaId)
+        .executeUpdate();        
+    }
+    
 }

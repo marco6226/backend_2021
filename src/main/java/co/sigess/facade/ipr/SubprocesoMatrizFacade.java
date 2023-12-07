@@ -39,4 +39,29 @@ public class SubprocesoMatrizFacade extends AbstractFacade<SubprocesoMatriz> {
         List<SubprocesoMatriz> list = (List<SubprocesoMatriz>) q.getResultList();
         return list;
     }
+    
+    public List<SubprocesoMatriz> findForProceso(Integer procesoId){
+        Query q = this.em.createQuery("SELECT sm.id, sm.estado FROM SubprocesoMatriz sm WHERE sm.procesoMatriz.id = :procesoId and sm.estado = 'No evaluada' and sm.eliminado = false");
+        q.setParameter("procesoId", procesoId);
+        List<SubprocesoMatriz> list = (List<SubprocesoMatriz>) q.getResultList();
+        return list;
+    }
+    
+    public void editSubProcesoEstado(Integer subprocesoId){
+        int q = this.em.createQuery("UPDATE SubprocesoMatriz sm SET sm.estado = 'Evaluado' WHERE sm.id = :subprocesoId")
+        .setParameter("subprocesoId", subprocesoId)
+        .executeUpdate();        
+    }
+    
+    public void editSubProcesoEliminacion(Integer procesoId){
+        int q = this.em.createQuery("UPDATE SubprocesoMatriz sm SET sm.eliminado = true WHERE sm.procesoMatriz.id = :procesoId")
+        .setParameter("procesoId", procesoId)
+        .executeUpdate();        
+    }
+    
+    public void editSubProcesoEliminacionArea(Integer areaId){
+        int q = this.em.createQuery("UPDATE SubprocesoMatriz sm SET sm.eliminado = true WHERE sm.procesoMatriz.areaMatriz.id = :areaId")
+        .setParameter("areaId", areaId)
+        .executeUpdate();        
+    }
 }
