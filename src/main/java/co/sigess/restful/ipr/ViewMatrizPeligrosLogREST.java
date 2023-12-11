@@ -30,9 +30,11 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.lang.reflect.Method;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import javax.ejb.EJB;
 import javax.ws.rs.BeanParam;
@@ -203,13 +205,16 @@ public class ViewMatrizPeligrosLogREST  extends ServiceREST{
                 int i=0;
                 for(Method metodo : metodosEnOrden){
                     try {
-                        Object resultado = metodo.invoke(element);
-                        Object resultado_past;
-                        Object resultado_next;
+                        Object resultado =null;
+                        Object resultado_past=null;
+                        Object resultado_next=null;
+                        if(metodo.invoke(element) != null){
+                            resultado = metodo.invoke(element);
+                        }else{ System.out.println("error");}
 
                         Cell cell = row.createCell(i);
                         CellStyle style = workbook.createCellStyle();
-                        if(!resultado.toString().isEmpty()){
+                        if(resultado != null){
                             
                             String texto = resultado.toString();
                            
@@ -251,13 +256,21 @@ public class ViewMatrizPeligrosLogREST  extends ServiceREST{
                                 }else if(NR>=600){
                                     cell.setCellValue("1. Suspenda la actividad. \n 2. intervenga de inmediato \n 3.Implemente controles. Intervenir es comunicar la situación a los diferentes responsables y ejecutores de la tarea (requiere reporte y gestión de acto y condiciones) Alto");
                                 }
+                            }else if(i==53){
+                                SimpleDateFormat formatoFecha = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
+                                SimpleDateFormat formatoFecha2 = new SimpleDateFormat("yyyy-MM-dd");
+                                Date fecha = formatoFecha.parse(texto);
+                                String formattedDate = formatoFecha2.format(fecha);
+                                
+                                cell.setCellValue(formattedDate);
                             }
                             else{
                                 cell.setCellValue(texto);
                             }
                             
-
                             
+
+      
                             
                             if((i>=14 && i<=16) || (i>=31 && i<=35) || i==44){
                                 style.setWrapText(true);
@@ -289,13 +302,19 @@ public class ViewMatrizPeligrosLogREST  extends ServiceREST{
                                 font.setBold(true);  // Establecer negrita
                                 style.setFont(font);
                             }
+                            
+                            
+                            
                             style.setAlignment(HorizontalAlignment.CENTER);
                             style.setVerticalAlignment(VerticalAlignment.CENTER);
                             
                         }
                         if(index==0 && index <size-1){
                             if(list.get(index).getIdRiesgo().equals(list.get(index+1).getIdRiesgo())){
-                                resultado_next=metodo.invoke(list.get(index+1));
+//                                resultado_next=metodo.invoke(list.get(index+1));
+                                if(metodo.invoke(list.get(index+1)) != null){
+                                    resultado_next=metodo.invoke(list.get(index+1));
+                                }else{ System.out.println("error");}
                                 if((resultado != null && resultado_next == null) || (resultado == null && resultado_next != null)){
                                     style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
                                     XSSFColor color = new XSSFColor(new byte[]{(byte) 255, (byte) 187, (byte) 0}, null);
@@ -309,8 +328,11 @@ public class ViewMatrizPeligrosLogREST  extends ServiceREST{
                             }
                         }else if(index>0 && index <size-1){
                             if(list.get(index).getIdRiesgo().equals(list.get(index-1).getIdRiesgo())){
-                                resultado_past=metodo.invoke(list.get(index-1));
-                                if((resultado == null && resultado_past != null) || (resultado != null && resultado_past == null)){
+//                                resultado_past=metodo.invoke(list.get(index-1));
+                                if(metodo.invoke(list.get(index-1)) != null){
+                                    resultado_past=metodo.invoke(list.get(index-1));
+                                }else{ System.out.println("error");}
+                                if((resultado == null && resultado_past !=null) || (resultado != null && resultado_past == null)){
                                     style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
                                     XSSFColor color = new XSSFColor(new byte[]{(byte) 255, (byte) 187, (byte) 0}, null);
                                     style.setFillForegroundColor(color);
@@ -322,7 +344,10 @@ public class ViewMatrizPeligrosLogREST  extends ServiceREST{
                                 }
                             }
                             if(list.get(index).getIdRiesgo().equals(list.get(index+1).getIdRiesgo())){
-                                resultado_next=metodo.invoke(list.get(index+1));
+//                                resultado_next=metodo.invoke(list.get(index+1));
+                                if(metodo.invoke(list.get(index+1)) != null){
+                                    resultado_next=metodo.invoke(list.get(index+1));
+                                }else{ System.out.println("error");}
                                 if((resultado != null && resultado_next == null) || (resultado == null && resultado_next != null)){
                                     style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
                                     XSSFColor color = new XSSFColor(new byte[]{(byte) 255, (byte) 187, (byte) 0}, null);
@@ -336,7 +361,10 @@ public class ViewMatrizPeligrosLogREST  extends ServiceREST{
                             }
                         }else if(index == size-1){
                             if(list.get(index).getIdRiesgo().equals(list.get(index-1).getIdRiesgo())){
-                                resultado_past=metodo.invoke(list.get(index-1));
+//                                resultado_past=metodo.invoke(list.get(index-1));
+                                if(metodo.invoke(list.get(index-1)) != null){
+                                    resultado_past=metodo.invoke(list.get(index-1));
+                                }else{ System.out.println("error");}
                                 if((resultado == null && resultado_past != null) || (resultado != null && resultado_past == null)){
                                     style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
                                     XSSFColor color = new XSSFColor(new byte[]{(byte) 255, (byte) 187, (byte) 0}, null);
