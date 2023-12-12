@@ -8,10 +8,8 @@ package co.sigess.restful.ipr;
 import co.sigess.entities.ado.Directorio;
 import co.sigess.entities.ado.Documento;
 import co.sigess.entities.ado.Modulo;
-import co.sigess.entities.emp.Area;
 import co.sigess.entities.emp.Empresa;
 import co.sigess.entities.emp.Plantas;
-import co.sigess.entities.ipr.MatrizPeligros;
 import co.sigess.entities.ipr.ViewMatrizPeligros;
 import co.sigess.facade.ado.DirectorioFacade;
 import co.sigess.facade.emp.AreaFacade;
@@ -24,7 +22,6 @@ import co.sigess.restful.security.Secured;
 import co.sigess.util.FileUtil;
 import static co.sigess.util.FileUtil.ROOT_DIR;
 import co.sigess.util.Util;
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -34,7 +31,9 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
+import java.nio.file.*;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -48,12 +47,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.IndexedColors;
-import org.apache.poi.ss.usermodel.RichTextString;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.util.CellRangeAddress;
@@ -178,9 +175,22 @@ public class ViewMatrizPeligrosREST  extends ServiceREST{
             filterResponse.setData(list);
             filterResponse.setCount(numRows);
             
-            InputStream fis = new FileInputStream(ROOT_DIR + "excel-plantilla" + File.separator + "consolidadoexcelcorona.xlsx");
+            String nombreDoc=list.get(0).getDivision()+"-"+list.get(0).getPlanta();
+            
 
-            XSSFWorkbook workbook = new XSSFWorkbook(fis);
+            String rutaOrigen = ROOT_DIR + "excel-plantilla" + File.separator + "consolidadoexcelcorona.xlsx";
+            String rutaDestino = ROOT_DIR + "excel-plantilla" + File.separator + "consolidadoexcelcorona"+nombreDoc+".xlsx";
+            
+            java.nio.file.Path origenPath = Paths.get(rutaOrigen);
+            java.nio.file.Path destinoPath = Paths.get(rutaDestino);
+
+            // Copiar el archivo
+            Files.copy(origenPath, destinoPath, StandardCopyOption.REPLACE_EXISTING);
+
+            
+            InputStream fis2 = new FileInputStream(ROOT_DIR + "excel-plantilla" + File.separator + "consolidadoexcelcorona"+nombreDoc+".xlsx");
+
+            XSSFWorkbook workbook = new XSSFWorkbook(fis2);
             XSSFSheet sheet = workbook.getSheetAt(0);
 
             int rowNum=5;
@@ -310,16 +320,16 @@ public class ViewMatrizPeligrosREST  extends ServiceREST{
             // Aplica el filtro al rango especificado
             sheet.setAutoFilter(new CellRangeAddress(startRow, endRow, startColumn, endColumn));
 
-            fis.close();
-            FileOutputStream fos = new FileOutputStream(ROOT_DIR + "excel-plantilla" + File.separator + "consolidadoexcelcorona2.xlsx");
-            workbook.write(fos);
-            fos.close();
+            fis2.close();
+            FileOutputStream fos2 = new FileOutputStream(ROOT_DIR + "excel-plantilla" + File.separator + "consolidadoexcelcorona"+nombreDoc+".xlsx");
+            workbook.write(fos2);
+            fos2.close();
             workbook.close();
             
-            InputStream fis2 = new FileInputStream(ROOT_DIR + "excel-plantilla" + File.separator + "consolidadoexcelcorona2.xlsx");
+            InputStream fis3 = new FileInputStream(ROOT_DIR + "excel-plantilla" + File.separator + "consolidadoexcelcorona"+nombreDoc+".xlsx");
 
             String fileName="consolidadoexcelcorona.xlsx";
-            Map<String, Object> map = FileUtil.saveInPathFS(fis2);
+            Map<String, Object> map = FileUtil.saveInPathFS(fis3);
             //fis.close();
             String relativePath = (String) map.get(FileUtil.RELATIVE_PATH);
             Directorio dir = null;
@@ -345,7 +355,8 @@ public class ViewMatrizPeligrosREST  extends ServiceREST{
             plantabd.setFechaConsolidado(new Date());
             plantabd = plantasFacade.edit(plantabd);
             filterResponse.setData2(dir);
-            System.out.println("fin");
+            fis3.close();
+            
             return Response.ok(filterResponse).build();
         } catch (Exception ex) {
             return Util.manageException(ex, ViewMatrizPeligrosREST.class);

@@ -30,6 +30,9 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.lang.reflect.Method;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -175,7 +178,19 @@ public class ViewMatrizPeligrosLogREST  extends ServiceREST{
             filterResponse.setData(list);
             filterResponse.setCount(numRows);
             
-            InputStream fis = new FileInputStream(ROOT_DIR + "excel-plantilla" + File.separator + "historicoexcelcorona.xlsx");
+            String nombreDoc=list.get(0).getDivision()+"-"+list.get(0).getPlanta();
+            
+
+            String rutaOrigen = ROOT_DIR + "excel-plantilla" + File.separator + "historicoexcelcorona.xlsx";
+            String rutaDestino = ROOT_DIR + "excel-plantilla" + File.separator + "historicoexcelcorona"+nombreDoc+".xlsx";
+            
+            java.nio.file.Path origenPath = Paths.get(rutaOrigen);
+            java.nio.file.Path destinoPath = Paths.get(rutaDestino);
+            
+            // Copiar el archivo
+            Files.copy(origenPath, destinoPath, StandardCopyOption.REPLACE_EXISTING);
+            
+            InputStream fis = new FileInputStream(ROOT_DIR + "excel-plantilla" + File.separator + "historicoexcelcorona"+nombreDoc+".xlsx");
 
             XSSFWorkbook workbook = new XSSFWorkbook(fis);
             XSSFSheet sheet = workbook.getSheetAt(0);
@@ -395,12 +410,12 @@ public class ViewMatrizPeligrosLogREST  extends ServiceREST{
             sheet.setAutoFilter(new CellRangeAddress(startRow, endRow, startColumn, endColumn));
 
             fis.close();
-            FileOutputStream fos = new FileOutputStream(ROOT_DIR + "excel-plantilla" + File.separator + "historicoexcelcorona2.xlsx");
+            FileOutputStream fos = new FileOutputStream(ROOT_DIR + "excel-plantilla" + File.separator + "historicoexcelcorona"+nombreDoc+".xlsx");
             workbook.write(fos);
             fos.close();
             workbook.close();
             
-            InputStream fis2 = new FileInputStream(ROOT_DIR + "excel-plantilla" + File.separator + "historicoexcelcorona2.xlsx");
+            InputStream fis2 = new FileInputStream(ROOT_DIR + "excel-plantilla" + File.separator + "historicoexcelcorona"+nombreDoc+".xlsx");
 
             String fileName="consolidadoexcelcorona.xlsx";
             Map<String, Object> map = FileUtil.saveInPathFS(fis2);
@@ -429,6 +444,8 @@ public class ViewMatrizPeligrosLogREST  extends ServiceREST{
             plantabd.setFechaHistorico(new Date());
             plantabd = plantasFacade.edit(plantabd);
             filterResponse.setData2(dir);
+            
+            fis2.close();
             return Response.ok(filterResponse).build();
         } catch (Exception ex) {
             return Util.manageException(ex, ViewMatrizPeligrosLogREST.class);
