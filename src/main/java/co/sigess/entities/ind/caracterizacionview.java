@@ -153,10 +153,11 @@ public class caracterizacionview implements Serializable{
     private String emptemporal;
     
     @Column(name = "hora_accidente")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIME)
     private Date horaaccidente;
     
     @Column(name = "fecha_nacimiento_empleado")
+    @Temporal(TemporalType.DATE)
     private Date fechanacimientoempleado;
 
     public Date getFechanacimientoempleado() {
