@@ -38,6 +38,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Context;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
@@ -100,8 +102,9 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
         Object[] resp = (Object[]) q.getSingleResult();
         int codigo = (Integer) resp[3];
         System.out.print(codigo);
-        switch (codigo) {
-            case Mensaje.COD_IP_NO_PERMITIDA: 
+        try {
+            switch (codigo) {
+            case Mensaje.COD_IP_NO_PERMITIDA:
                 throw new UserMessageException(new Mensaje("ACCESO NO PERMITIDOo", "Su dirección IP no se encuentra autorizada para realizar peticiones. Por favor pongase en contacto con el administrador.", TipoMensaje.warn, Mensaje.COD_IP_NO_PERMITIDA));     
             case Mensaje.COD_USUARIO_NO_VALIDO:
                 throw new UserMessageException(new Mensaje("CREDENCIALES INCORRECTAS", "El usuario o contraseña especificada no son correctas", TipoMensaje.warn, Mensaje.COD_USUARIO_NO_VALIDO));
@@ -131,6 +134,9 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
                     }
                 }
                 return usr;
+            }
+        } catch (Exception e) {
+            throw new Exception(e);
         }
     }
 
