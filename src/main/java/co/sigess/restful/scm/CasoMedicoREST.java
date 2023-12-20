@@ -279,6 +279,10 @@ public class CasoMedicoREST extends ServiceREST {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response buscarCaso(@PathParam("id") String id) {
         try {
+            if("undefined".compareToIgnoreCase(id) == 0) {
+                //return Util.manageException(new IllegalArgumentException("El valor del id es undefined"), EmpleadoREST.class);
+                return Response.status(Response.Status.BAD_REQUEST).build();
+            }
 
             CasosMedicos list = casosmedicosFacade.find(Integer.parseInt(id));
             return Response.ok(list).build();
@@ -286,7 +290,6 @@ public class CasoMedicoREST extends ServiceREST {
         } catch (Exception ex) {
             return Util.manageException(ex, EmpleadoREST.class);
         }
-
     }
 
     @GET
