@@ -74,6 +74,8 @@ public class viewscm implements Serializable{
         
     @Column(name = "plan_accion")
     private Integer planAccion;
+    
+    private String sve;
 
     public Integer getRecomendaciones() {
         return recomendaciones;
@@ -201,6 +203,14 @@ public class viewscm implements Serializable{
 
     public void setEmpresaId(Integer empresaId) {
         this.empresaId = empresaId;
+    }
+
+    public String getSve() {
+        return sve;
+    }
+
+    public void setSve(String sve) {
+        this.sve = sve;
     }
     
 }
