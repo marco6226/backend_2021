@@ -89,7 +89,8 @@ public class InspeccionFacade extends AbstractFacade<Inspeccion> {
             throw new IllegalArgumentException("La inspección especificada no contiene la lista de calificaciones");
         }
         if(inspeccion.getProgramacion() == null) {
-            throw new IllegalArgumentException("No está habilitada la opción de crear inspecciones no programadas");
+            return crearInspeccionNoProgramadaAliado(inspeccion);
+            //throw new IllegalArgumentException("No está habilitada la opción de crear inspecciones no programadas");
         } else {
             return crearInspeccionProgramadaAliado(inspeccion);
         }
@@ -118,6 +119,32 @@ public class InspeccionFacade extends AbstractFacade<Inspeccion> {
             calificacion.setInspeccion(inspeccion);
             calificacionFacade.create(calificacion);
         }
+        return inspeccion;
+    }
+    
+    private Inspeccion crearInspeccionNoProgramadaAliado(Inspeccion inspeccion) throws Exception {
+        if(inspeccion.getListaInspeccion() == null
+            || inspeccion.getListaInspeccion().getListaInspeccionPK() == null
+            || inspeccion.getListaInspeccion().getListaInspeccionPK().getId() == 0
+            || inspeccion.getListaInspeccion().getListaInspeccionPK().getVersion() == 0){
+            throw new IllegalArgumentException("No se ha establecido la lista de inspección");
+        }
+        
+        if(!validarCalificaciones(inspeccion)) {
+            throw new IllegalArgumentException("Error en la calificación recibida: no contiene un elemento de inspección o una opción seleccionada");
+        }
+        
+        for (RespuestaCampo rc : inspeccion.getRespuestasCampoList()) {
+            respuestaCampoFacade.create(rc);
+        }
+        
+        inspeccion.setFechaRealizada(new Date());
+        super.create(inspeccion);
+        for (Calificacion calificacion: inspeccion.getCalificacionList()) {
+            calificacion.setInspeccion(inspeccion);
+            calificacionFacade.create(calificacion);
+        }
+        
         return inspeccion;
     }
 

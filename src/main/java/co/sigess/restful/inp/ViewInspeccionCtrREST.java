@@ -5,6 +5,7 @@
  */
 package co.sigess.restful.inp;
 
+import co.sigess.entities.inp.ViewInspeccionesCtr;
 import co.sigess.facade.inp.ViewInspeccionesCtrFACADE;
 import co.sigess.restful.FilterQuery;
 import co.sigess.restful.FilterResponse;
@@ -44,9 +45,21 @@ public class ViewInspeccionCtrREST extends ServiceREST{
             } else {
                 numRows = -1;
             }
-            List list = viewInspeccionesCtrFACADE.findWithFilter(filterQuery);
+            List <ViewInspeccionesCtr>list = viewInspeccionesCtrFACADE.findWithFilter(filterQuery);
             FilterResponse filterResponse = new FilterResponse();
             filterResponse.setCount(numRows);
+            
+            //Ajuste para mejorar velocidad
+            for(ViewInspeccionesCtr inp : list){
+                if (inp.getEmpresa() != null) {
+                    inp.getEmpresa().setLogo(null);
+                }
+                
+                if (inp.getListaInspeccion() != null) {
+                    inp.getListaInspeccion().setElementoInspeccionList(null);
+                }
+            }
+            
             filterResponse.setData(list);
             return Response.ok(filterResponse).build();
         } catch (Exception e) {
