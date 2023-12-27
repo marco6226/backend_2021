@@ -100,6 +100,12 @@ public class vwscmgestion implements Serializable{
     @Column(name = "plan_accion")
     private Integer planAccion;
 
+    @Column(name = "requiere_intervencion")
+    private String requiereIntervencion;
+    
+    @Column(name = "sve_nombre")
+    private String sveNombre;
+
     public Integer getRecomendacion() {
         return recomendacion;
     }
@@ -283,5 +289,20 @@ public class vwscmgestion implements Serializable{
     public void setEmpresaId(Integer empresaId) {
         this.empresaId = empresaId;
     }
-    
+
+    public String getRequiereIntervencion() {
+        return requiereIntervencion;
+    }
+
+    public void setRequiereIntervencion(String requiereIntervencion) {
+        this.requiereIntervencion = requiereIntervencion;
+    }
+
+    public String getSveNombre() {
+        return sveNombre;
+    }
+
+    public void setSveNombre(String sveNombre) {
+        this.sveNombre = sveNombre;
+    }
 }
