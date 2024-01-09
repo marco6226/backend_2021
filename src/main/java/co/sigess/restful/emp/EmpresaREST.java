@@ -341,6 +341,27 @@ public class EmpresaREST extends ServiceREST {
         return Response.ok(act).build();
     }
     
+    @GET
+    @Path("filterLocalidades")
+    @Secured(requiereEmpresaId = false)
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    public Response localidadesFirmWithFilter(@BeanParam FilterQuery filterQuery){
+        try {
+            if(filterQuery == null){
+                filterQuery = new FilterQuery();
+            }
+            long numRows = filterQuery.isCount() ? LocalidadesFacade.countWithFilter(filterQuery) : -1;
+            List list = LocalidadesFacade.findWithFilter(filterQuery);
+            
+            FilterResponse filterResponse = new FilterResponse();
+            filterResponse.setData(list);
+            filterResponse.setCount(numRows);
+            return Response.ok(filterResponse).build();
+        } catch (Exception e) {
+            return Util.manageException(e, EmpresaREST.class);
+        }
+    }
+    
     @POST
     @Secured(requiereEmpresaId = false)
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})

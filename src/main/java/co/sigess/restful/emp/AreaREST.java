@@ -24,6 +24,7 @@ import javax.ejb.EJB;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.ws.rs.BeanParam;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -98,6 +99,27 @@ public class AreaREST extends ServiceREST{
             return Response.ok(filterResponse).build();
         } catch (IOException | NoSuchFieldException | ParseException ex) {
             return Util.manageException(ex, ReporteREST.class);
+        }
+    }
+    
+    @GET
+    @Path("filterArea")
+    @Secured(requiereEmpresaId = false)
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    public Response localidadesFirmWithFilter(@BeanParam FilterQuery filterQuery){
+        try {
+            if(filterQuery == null){
+                filterQuery = new FilterQuery();
+            }
+            long numRows = filterQuery.isCount() ? areaFacade.countWithFilter(filterQuery) : -1;
+            List list = areaFacade.findWithFilter(filterQuery);
+            
+            FilterResponse filterResponse = new FilterResponse();
+            filterResponse.setData(list);
+            filterResponse.setCount(numRows);
+            return Response.ok(filterResponse).build();
+        } catch (Exception e) {
+            return Util.manageException(e, AreaREST.class);
         }
     }
     

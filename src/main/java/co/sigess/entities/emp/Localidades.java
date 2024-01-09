@@ -11,6 +11,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -38,6 +40,10 @@ public class Localidades implements Serializable{
     
     @Column(name = "localidad")
     private String localidad;
+    
+    @JoinColumn(name = "fk_plantas_id", referencedColumnName = "id", updatable = false)
+    @ManyToOne(optional = false)
+    private Plantas plantas;
 
     public Integer getId() {
         return id;
@@ -62,6 +68,12 @@ public class Localidades implements Serializable{
     public void setLocalidad(String localidad) {
         this.localidad = localidad;
     }
-    
-    
+
+    public Plantas getPlantas() {
+        return plantas;
+    }
+
+    public void setPlantas(Plantas plantas) {
+        this.plantas = plantas;
+    }
 }
