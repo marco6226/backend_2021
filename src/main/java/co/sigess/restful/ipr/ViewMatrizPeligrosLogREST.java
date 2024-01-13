@@ -9,9 +9,12 @@ import co.sigess.entities.ado.Directorio;
 import co.sigess.entities.ado.Documento;
 import co.sigess.entities.ado.Modulo;
 import co.sigess.entities.emp.Empresa;
+import co.sigess.entities.emp.Localidades;
 import co.sigess.entities.emp.Plantas;
 import co.sigess.entities.ipr.ViewMatrizPeligrosLog;
 import co.sigess.facade.ado.DirectorioFacade;
+import co.sigess.facade.emp.EmpresaFacade;
+import co.sigess.facade.emp.LocalidadesFacade;
 import co.sigess.facade.emp.PlantasFacade;
 import co.sigess.facade.ipr.ViewMatrizPeligrosLogFacade;
 import co.sigess.restful.FilterQuery;
@@ -74,6 +77,12 @@ public class ViewMatrizPeligrosLogREST  extends ServiceREST{
     
     @EJB
     private  PlantasFacade plantasFacade;
+    
+    @EJB
+    private EmpresaFacade empresaFacade;
+    
+    @EJB
+    private LocalidadesFacade LocalidadesFacade;
     
     public ViewMatrizPeligrosLogREST() {
         super(ViewMatrizPeligrosLogFacade.class);
@@ -438,11 +447,11 @@ public class ViewMatrizPeligrosLogREST  extends ServiceREST{
              
             directorioFacade.actualizarModuloDir();
             
-            Plantas plantabd = plantasFacade.find(list.get(0).getIdplantas());
+            Localidades localidadbd = LocalidadesFacade.findByLocalidadId2(list.get(0).getIdplantas().intValue()).get(0);
 
-            plantabd.setIdDocHistorico(dir.getId().toString());
-            plantabd.setFechaHistorico(new Date());
-            plantabd = plantasFacade.edit(plantabd);
+            localidadbd.setIdDocHistorico(dir.getId().toString());
+            localidadbd.setFechaHistorico(new Date());
+            localidadbd = LocalidadesFacade.edit(localidadbd);
             filterResponse.setData2(dir);
             
             fis2.close();

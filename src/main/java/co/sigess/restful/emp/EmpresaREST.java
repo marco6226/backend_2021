@@ -362,6 +362,39 @@ public class EmpresaREST extends ServiceREST {
         }
     }
     
+    @PUT
+    @Path("updateLocalidades")
+    @Secured(validarPermiso = false)
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response updateLocalidad(Localidades localidad) {
+        try {
+            Localidades localidadbd = LocalidadesFacade.find(localidad.getId());
+            if(!localidad.getIdDocConsolidado().equals("null")){
+                localidadbd.setIdDocConsolidado(localidad.getIdDocConsolidado());
+                localidadbd.setUsuarioConsolidado(localidad.getUsuarioConsolidado());
+                localidadbd.setDescargaConsolidado(localidad.getDescargaConsolidado());
+                localidadbd.setFechaConsolidadoStart(localidad.getFechaConsolidadoStart());
+                localidadbd.setFechaConsolidado(localidad.getFechaConsolidado());
+            }
+            //plantabd.setIdDocConsolidado(plantas.getIdDocConsolidado());
+            if(!localidad.getIdDocHistorico().equals("null")){
+                localidadbd.setIdDocHistorico(localidad.getIdDocHistorico());
+                localidadbd.setUsuarioHistorico(localidad.getUsuarioHistorico());
+                localidadbd.setDescargaHistorico(localidad.getDescargaHistorico());
+                localidadbd.setFechaHistoricoStart(localidad.getFechaHistoricoStart());
+                localidadbd.setFechaHistorico(localidad.getFechaHistorico());
+            }
+            //plantabd.setIdDocHistorico(plantas.getIdDocHistorico());
+            //if(!plantas.getIdDocHistorico().isEmpty()){plantabd.setIdDocHistorico(plantas.getIdDocHistorico());}
+            
+            localidadbd = LocalidadesFacade.edit(localidadbd);
+
+            return Response.ok(localidadbd).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, PlantasREST.class);
+        }
+    }
+    
     @POST
     @Secured(requiereEmpresaId = false)
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})

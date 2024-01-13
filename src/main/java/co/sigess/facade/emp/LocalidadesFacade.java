@@ -49,6 +49,14 @@ public class LocalidadesFacade extends AbstractFacade<Localidades>{
         return localidades;        
     }
     
+    public List<Localidades> findByLocalidadId2(Integer empresaId) {
+
+        Query query = this.em.createQuery("SELECT al FROM Localidades al WHERE al.id = ?1");
+        query.setParameter(1, empresaId);
+        List<Localidades> localidades = (List<Localidades>) query.getResultList();
+        return localidades;        
+    }
+    
     public List<Localidades> findByAllLocalidades() {
         
         Query query = this.em.createQuery("SELECT al from Localidades al");

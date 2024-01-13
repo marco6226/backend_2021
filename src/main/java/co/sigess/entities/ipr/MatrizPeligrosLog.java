@@ -7,6 +7,7 @@ package co.sigess.entities.ipr;
 
 import co.sigess.entities.emp.Area;
 import co.sigess.entities.emp.Empresa;
+import co.sigess.entities.emp.Localidades;
 import co.sigess.entities.emp.Plantas;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
@@ -71,6 +72,9 @@ public class MatrizPeligrosLog implements Serializable{
         
     @JoinColumn(name = "fk_planta_id", referencedColumnName = "id")
     private Plantas plantas;
+    
+    @JoinColumn(name = "fk_localidad_id", referencedColumnName = "id")
+    private Localidades localidad;
     
     @JsonIgnore
     @JoinColumn(name = "fk_empresa_id", referencedColumnName = "id")
@@ -238,6 +242,14 @@ public class MatrizPeligrosLog implements Serializable{
 
     public void setPlantas(Plantas plantas) {
         this.plantas = plantas;
+    }
+
+    public Localidades getLocalidad() {
+        return localidad;
+    }
+
+    public void setLocalidad(Localidades localidad) {
+        this.localidad = localidad;
     }
 
     public Empresa getEmpresa() {

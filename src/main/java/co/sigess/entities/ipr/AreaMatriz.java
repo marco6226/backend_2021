@@ -8,6 +8,7 @@
 package co.sigess.entities.ipr;
 
 import co.sigess.entities.emp.Empresa;
+import co.sigess.entities.emp.Localidades;
 import co.sigess.entities.emp.Plantas;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
@@ -58,6 +59,9 @@ public class AreaMatriz implements Serializable{
     @ManyToOne(optional = false)
     private Plantas plantas;
     
+    @JoinColumn(name = "fk_localidad_id", referencedColumnName = "id")
+    private Localidades localidad;
+    
     @Column(name = "estado")
     private String estado;
     
@@ -86,6 +90,14 @@ public class AreaMatriz implements Serializable{
 
     public void setPlantas(Plantas plantas) {
         this.plantas = plantas;
+    }
+
+    public Localidades getLocalidad() {
+        return localidad;
+    }
+
+    public void setLocalidad(Localidades localidad) {
+        this.localidad = localidad;
     }
         
     public Integer getId() {

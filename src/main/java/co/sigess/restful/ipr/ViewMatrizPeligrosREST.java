@@ -9,10 +9,12 @@ import co.sigess.entities.ado.Directorio;
 import co.sigess.entities.ado.Documento;
 import co.sigess.entities.ado.Modulo;
 import co.sigess.entities.emp.Empresa;
+import co.sigess.entities.emp.Localidades;
 import co.sigess.entities.emp.Plantas;
 import co.sigess.entities.ipr.ViewMatrizPeligros;
 import co.sigess.facade.ado.DirectorioFacade;
 import co.sigess.facade.emp.AreaFacade;
+import co.sigess.facade.emp.LocalidadesFacade;
 import co.sigess.facade.emp.PlantasFacade;
 import co.sigess.facade.ipr.ViewMatrizPeligrosFacade;
 import co.sigess.restful.FilterQuery;
@@ -76,6 +78,9 @@ public class ViewMatrizPeligrosREST  extends ServiceREST{
     
     @EJB
     private  AreaFacade areaFacade;
+    
+    @EJB
+    private LocalidadesFacade LocalidadesFacade;
     
     public ViewMatrizPeligrosREST() {
         super(ViewMatrizPeligrosFacade.class);
@@ -308,6 +313,7 @@ public class ViewMatrizPeligrosREST  extends ServiceREST{
                     } catch (Exception e) {
                         e.printStackTrace();
                         System.out.println(e);
+                        System.out.println("error 316");
                     }
                     i++;
                     
@@ -349,11 +355,13 @@ public class ViewMatrizPeligrosREST  extends ServiceREST{
              
             directorioFacade.actualizarModuloDir();
             
-            Plantas plantabd = plantasFacade.find(list.get(0).getIdplantas());
+            
+            Localidades localidadbd = LocalidadesFacade.findByLocalidadId2(list.get(0).getIdplantas().intValue()).get(0);
 
-            plantabd.setIdDocConsolidado(dir.getId().toString());
-            plantabd.setFechaConsolidado(new Date());
-            plantabd = plantasFacade.edit(plantabd);
+            localidadbd.setIdDocConsolidado(dir.getId().toString());
+            localidadbd.setFechaConsolidado(new Date());
+            LocalidadesFacade.edit(localidadbd);
+            
             filterResponse.setData2(dir);
             fis3.close();
             
