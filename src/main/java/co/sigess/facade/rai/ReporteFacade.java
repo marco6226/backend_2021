@@ -325,4 +325,12 @@ public class ReporteFacade extends AbstractFacade<Reporte> {
         List<Reporte> reporte = (List<Reporte>) q.getResultList();
         return reporte;
     }
+    
+    public List<Reporte> buscar(String parametro, Integer empresaId) {
+        Query q = this.em.createQuery("SELECT r FROM Reporte AS r WHERE CAST(r.id AS text) like ?1 AND r.empresa.id = ?2");
+        q.setParameter(1, parametro+"%");
+        q.setParameter(2, empresaId);
+        List<Reporte> list = (List<Reporte>) q.getResultList();
+        return list;
+    }
 }

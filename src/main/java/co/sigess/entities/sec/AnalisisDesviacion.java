@@ -135,6 +135,9 @@ public class AnalisisDesviacion implements Serializable {
     
     @Column(name = "id_causas_select")
     private String idCausasSelect;
+    
+    @Column(name = "fk_matriz_peligro_id")
+    private Long matrizPeligro;
 
     public String getIdCausasSelect() {
         return idCausasSelect;
@@ -411,4 +414,14 @@ public class AnalisisDesviacion implements Serializable {
     public void setObservacion_causas(String observacion_causas) {
         this.observacion_causas = observacion_causas;
     }
+
+    public Long getMatrizPeligro() {
+        return matrizPeligro;
+    }
+
+    public void setMatrizPeligro(Long matrizPeligro) {
+        this.matrizPeligro = matrizPeligro;
+    }
+    
+    
 }

@@ -274,4 +274,21 @@ public class AnalisisDesviacionREST extends ServiceREST {
             return Util.manageException(e, AnalisisDesviacionREST.class);
         }
     }
+    
+    @PUT
+    @Path("analisisDesviacionMP")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Secured(requiereEmpresaId = false, validarPermiso = false)
+    public Response editAnalisisDesviacionAliadoMP(AnalisisDesviacion analisisDesviacionNew){
+        try {
+            AnalisisDesviacion analisisDesviacion = analisisDesviacionFacade.find(new Integer(analisisDesviacionNew.getId()));
+            analisisDesviacion.setMatrizPeligro(analisisDesviacionNew.getMatrizPeligro());
+            analisisDesviacion = analisisDesviacionFacade.edit(analisisDesviacion);
+
+            return Response.ok(analisisDesviacion).build();
+        } catch (Exception e) {
+            return Util.manageException(e, AnalisisDesviacionREST.class);
+        }
+    }
+    
 }

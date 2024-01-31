@@ -111,6 +111,7 @@ public class AnalisisDesviacionFacade extends AbstractFacade<AnalisisDesviacion>
         adDB.setSeguimiento(anDesv.getSeguimiento());
         adDB.setGestor(anDesv.getGestor());
         adDB.setIdCausasSelect(anDesv.getIdCausasSelect());
+        adDB.setMatrizPeligro(anDesv.getMatrizPeligro());
         adDB = super.edit(adDB); //To change body of generated methods, choose Tools | Templates.
 
         // Si el listado de tareas es null se inicializa con un array vacio para evitar NullPointerException

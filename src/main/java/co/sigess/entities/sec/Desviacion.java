@@ -6,6 +6,7 @@
 package co.sigess.entities.sec;
 
 import co.sigess.entities.emp.Area;
+import co.sigess.entities.emp.Localidades;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.util.Date;
@@ -99,6 +100,10 @@ public class Desviacion implements Serializable {
     
     @Column(name = "aliado")
     private String aliado;
+    
+    @JoinColumn(name = "railocalidad", referencedColumnName = "id")
+    @ManyToOne
+    private Localidades railocalidad;
 
     public String getEmail() {
         return email;
@@ -320,5 +325,13 @@ public class Desviacion implements Serializable {
 
     public void setAliado(String aliado) {
         this.aliado = aliado;
+    }
+
+    public Localidades getRailocalidad() {
+        return railocalidad;
+    }
+
+    public void setRailocalidad(Localidades railocalidad) {
+        this.railocalidad = railocalidad;
     }
 }

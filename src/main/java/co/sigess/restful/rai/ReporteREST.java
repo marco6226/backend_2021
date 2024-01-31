@@ -7,6 +7,7 @@ package co.sigess.restful.rai;
 
 import co.sigess.entities.com.Mensaje;
 import co.sigess.entities.com.TipoMensaje;
+import co.sigess.entities.emp.Empleado;
 import co.sigess.entities.emp.Empresa;
 import co.sigess.entities.ipr.TipoPeligro;
 import co.sigess.entities.rai.Reporte;
@@ -26,6 +27,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
+import javax.persistence.Query;
 import javax.ws.rs.BeanParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -133,7 +135,6 @@ public class ReporteREST extends ServiceREST {
     @Auditable
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response create(Reporte reporte) {
-        System.out.println("resporte");
         try {
             reporte.setUsuarioReporta(super.getUsuarioRequestContext());
             reporte.setEmpresa(new Empresa(super.getEmpresaIdRequestContext()));
@@ -165,5 +166,20 @@ public class ReporteREST extends ServiceREST {
             return Util.manageException(ex, ReporteREST.class);
         }
     }
+    
+    @GET
+    @Path("buscar/{parametro}")
+    @Secured(validarPermiso = false)
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response buscar(@PathParam("parametro") String parametro) {
+        try {
+            List<Reporte> list = reporteFacade.buscar(parametro, super.getEmpresaIdRequestContext());
+            return Response.ok(list).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, ReporteREST.class);
+        }
+    }
+    
+
 
 }
