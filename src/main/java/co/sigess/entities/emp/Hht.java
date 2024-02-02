@@ -16,6 +16,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
@@ -56,6 +57,16 @@ public class Hht implements Serializable {
 
     @Column(name = "empresaselect")
     private String empresaSelect;
+    
+    @JoinColumn(name = "fk_planta_id", referencedColumnName = "id")
+    @ManyToOne
+    private Plantas planta;
+    
+    @Column(name = "numero_personas")
+    private long numeroPersonas;
+    
+    @Column(name = "hht")
+    private double hht;
         
     public Hht() {
     }
@@ -113,6 +124,30 @@ public class Hht implements Serializable {
 
     public void setEmpresaSelect(String empresaSelect) {
         this.empresaSelect = empresaSelect;
+    }
+
+    public Plantas getPlanta() {
+        return planta;
+    }
+
+    public void setPlanta(Plantas planta) {
+        this.planta = planta;
+    }
+
+    public long getNumeroPersonas() {
+        return numeroPersonas;
+    }
+
+    public void setNumeroPersonas(long numeroPersonas) {
+        this.numeroPersonas = numeroPersonas;
+    }
+
+    public double getHht() {
+        return hht;
+    }
+
+    public void setHht(double hht) {
+        this.hht = hht;
     }
 
     @Override
