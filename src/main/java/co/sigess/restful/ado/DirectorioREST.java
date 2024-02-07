@@ -388,13 +388,12 @@ public class DirectorioREST extends ServiceREST {
         }
     }
     
-    @POST
-    @Path("download")
-    @Consumes({MediaType.MULTIPART_FORM_DATA})
+    @GET
+    @Path("download/{id}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response downloadFile(
             @HeaderParam("Authorization") String authorizationHeader,
-            @FormDataParam("data") String encryptedId) throws Exception {
+            @PathParam("id") String documentoId) throws Exception {
         
         try {
             
@@ -408,7 +407,7 @@ public class DirectorioREST extends ServiceREST {
 
             Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
             cipher.init(Cipher.DECRYPT_MODE, aesKey);
-            byte[] decryptedBytes = cipher.doFinal(Base64.getDecoder().decode(encryptedId));
+            byte[] decryptedBytes = cipher.doFinal(Base64.getDecoder().decode(documentoId));
             String textoDesencriptado = new String(decryptedBytes, StandardCharsets.UTF_8);
 
             System.out.println("Texto Desencriptado: " + textoDesencriptado);
