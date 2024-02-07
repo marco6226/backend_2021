@@ -24,14 +24,19 @@ import co.sigess.util.Util;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import javax.crypto.Cipher;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 import javax.ejb.EJB;
 import javax.ws.rs.BeanParam;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -39,9 +44,27 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.bouncycastle.crypto.BlockCipher;
+import org.bouncycastle.crypto.BufferedBlockCipher;
+import org.bouncycastle.crypto.engines.AESEngine;
+import org.bouncycastle.crypto.modes.PaddedBlockCipher;
+import org.bouncycastle.crypto.params.KeyParameter;
+//import org.bouncycastle.util.encoders.Base64;
+//import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.binary.Hex;
+import org.bouncycastle.crypto.paddings.PKCS7Padding;
+import org.bouncycastle.crypto.paddings.PaddedBufferedBlockCipher;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
-
+//import java.util.Base64;
+import org.bouncycastle.crypto.CipherParameters;
+import org.bouncycastle.crypto.modes.CBCBlockCipher;
+import org.bouncycastle.crypto.params.ParametersWithIV;
+import javax.crypto.Cipher;
+import java.security.MessageDigest;
+import java.util.Arrays;
+import java.util.Base64;
 /**
  *
  * @author fmoreno
@@ -367,18 +390,87 @@ public class DirectorioREST extends ServiceREST {
     
     @GET
     @Path("download/{id}")
-    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_OCTET_STREAM})
-    public Response downloadFile(@PathParam("id") Long documentoId) throws Exception {
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response downloadFile(
+            @HeaderParam("Authorization") String authorizationHeader,
+            @PathParam("id") String documentoId) throws Exception {
+        
         try {
-            ByteArrayOutputStream file = (ByteArrayOutputStream) directorioFacade.findFile(documentoId);
+            
+
+            byte[] keyBytes = authorizationHeader.getBytes(StandardCharsets.UTF_8);
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            keyBytes = digest.digest(keyBytes);
+            keyBytes = Arrays.copyOf(keyBytes, 16);
+
+            SecretKeySpec aesKey = new SecretKeySpec(keyBytes, "AES");
+
+            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+            cipher.init(Cipher.DECRYPT_MODE, aesKey);
+            byte[] decryptedBytes = cipher.doFinal(Base64.getDecoder().decode(documentoId));
+            String textoDesencriptado = new String(decryptedBytes, StandardCharsets.UTF_8);
+
+            System.out.println("Texto Desencriptado: " + textoDesencriptado);
+
+            
+            
+            ByteArrayOutputStream file = (ByteArrayOutputStream) directorioFacade.findFile(Long.parseLong(textoDesencriptado));
             return Response.ok(file.toByteArray(), MediaType.APPLICATION_OCTET_STREAM_TYPE).build();
         } catch (Exception ex) {
+            System.out.println(ex);
             return Util.manageException(ex, DirectorioREST.class);
+
         }
+        
     }
     
+//    @POST
+//    @Path("downloadPost")
+//    @Consumes({MediaType.MULTIPART_FORM_DATA})
+//    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+//    public Response downloadFilePost(
+//            @HeaderParam("Authorization") String authorizationHeader,
+//            @FormDataParam("data") String encryptedId) throws Exception {
+//        
+//        try {
+//            
+//
+//            byte[] keyBytes = authorizationHeader.getBytes(StandardCharsets.UTF_8);
+//            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+//            keyBytes = digest.digest(keyBytes);
+//            keyBytes = Arrays.copyOf(keyBytes, 16); // Truncar a 128 bits
+//
+//            SecretKeySpec aesKey = new SecretKeySpec(keyBytes, "AES");
+//
+//            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+//            cipher.init(Cipher.DECRYPT_MODE, aesKey);
+//            byte[] decryptedBytes = cipher.doFinal(Base64.getDecoder().decode(encryptedId));
+//            String textoDesencriptado = new String(decryptedBytes, StandardCharsets.UTF_8);
+//
+//            System.out.println("Texto Desencriptado: " + textoDesencriptado);
+//
+//            
+//            
+//            ByteArrayOutputStream file = (ByteArrayOutputStream) directorioFacade.findFile(Long.parseLong(textoDesencriptado));
+//            return Response.ok(file.toByteArray(), MediaType.APPLICATION_OCTET_STREAM_TYPE).build();
+//        } catch (Exception ex) {
+//            System.out.println(ex);
+//            return Util.manageException(ex, DirectorioREST.class);
+//
+//        }
+//        
+//    }
+//    
+//    private static byte[] hexStringToByteArray(String s) {
+//        int len = s.length();
+//        byte[] data = new byte[len / 2];
+//        for (int i = 0; i < len; i += 2) {
+//            data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
+//                    + Character.digit(s.charAt(i + 1), 16));
+//        }
+//        return data;
+//    }
    
-
     @GET
     @Path("usuario")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -456,7 +548,7 @@ public class DirectorioREST extends ServiceREST {
     public Response remove(@PathParam("directorioId") Long directorioId) {
         try {
             Directorio dir = directorioFacade.eliminar(directorioId);
-            return Response.ok(dir).build();
+            return Response.ok(dir).build();            
         } catch (Exception ex) {
             return Util.manageException(ex, DirectorioREST.class);
         }
@@ -493,9 +585,27 @@ public class DirectorioREST extends ServiceREST {
     @DELETE
     @Path("documento/{documentoId}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response removeDocumento(@PathParam("documentoId") Long documentoId) throws Exception {
+    public Response removeDocumento(@HeaderParam("Authorization") String authorizationHeader
+            , @PathParam("documentoId") String documentoId) throws Exception {
         try {
-            Documento doc = documentoFacade.find(documentoId);
+            
+            
+            byte[] keyBytes = authorizationHeader.getBytes(StandardCharsets.UTF_8);
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            keyBytes = digest.digest(keyBytes);
+            keyBytes = Arrays.copyOf(keyBytes, 16);
+
+            SecretKeySpec aesKey = new SecretKeySpec(keyBytes, "AES");
+
+            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+            cipher.init(Cipher.DECRYPT_MODE, aesKey);
+            byte[] decryptedBytes = cipher.doFinal(Base64.getDecoder().decode(documentoId));
+            String textoDesencriptado = new String(decryptedBytes, StandardCharsets.UTF_8);
+
+            System.out.println("Texto Desencriptado: " + textoDesencriptado);
+            
+            
+            Documento doc = documentoFacade.find(Long.parseLong(textoDesencriptado));
             documentoFacade.remove(doc);
             return Response.ok(doc).build();
         } catch (Exception ex) {

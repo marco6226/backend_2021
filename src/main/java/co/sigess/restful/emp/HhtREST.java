@@ -7,7 +7,9 @@ package co.sigess.restful.emp;
 
 import co.sigess.entities.emp.Empresa;
 import co.sigess.entities.emp.Hht;
+import co.sigess.entities.emp.HhtIli;
 import co.sigess.facade.emp.HhtFacade;
+import co.sigess.facade.emp.HhtIliFacade;
 import co.sigess.restful.ServiceREST;
 import co.sigess.restful.security.Secured;
 import co.sigess.util.Util;
@@ -23,6 +25,12 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import co.sigess.restful.FilterQuery;
 import co.sigess.restful.FilterResponse;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
+import java.lang.reflect.Type;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -34,6 +42,9 @@ public class HhtREST extends ServiceREST{
 
     @EJB
     private HhtFacade hhtFacade;
+    
+    @EJB
+    private HhtIliFacade hhtIliFacade;
     
     public HhtREST() {
         super(HhtFacade.class);
@@ -57,12 +68,11 @@ public class HhtREST extends ServiceREST{
 
     @POST
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response create(Hht hht) {
+    public Response create(List<Hht> hhtList) {
         try {
             System.out.println("post");
-            hht.setEmpresa(new Empresa(super.getEmpresaIdRequestContext()));
-            hht = this.hhtFacade.create(hht);
-            return Response.ok(hht).build();
+            hhtList = this.hhtFacade.create(hhtList, new Empresa(super.getEmpresaIdRequestContext()));
+            return Response.ok(hhtList).build();
         } catch (Exception ex) {
             return Util.manageException(ex, HhtREST.class);
         }
@@ -70,12 +80,11 @@ public class HhtREST extends ServiceREST{
 
     @PUT
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response edit(Hht hht) {
+    public Response edit(List<Hht> hhtList) {
         try {
             System.out.println("put");
-            hht.setEmpresa(new Empresa(super.getEmpresaIdRequestContext()));
-            hht = this.hhtFacade.edit(hht);
-            return Response.ok(hht).build();
+            hhtList = this.hhtFacade.edit(hhtList, new Empresa(super.getEmpresaIdRequestContext()));
+            return Response.ok(hhtList).build();
         } catch (Exception ex) {
             return Util.manageException(ex, HhtREST.class);
         }
