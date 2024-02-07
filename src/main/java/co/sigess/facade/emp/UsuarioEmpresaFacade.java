@@ -5,11 +5,14 @@
  */
 package co.sigess.facade.emp;
 
+import co.sigess.entities.emp.Usuario;
 import co.sigess.facade.com.AbstractFacade;
 import co.sigess.entities.emp.UsuarioEmpresa;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -28,6 +31,19 @@ public class UsuarioEmpresaFacade extends AbstractFacade<UsuarioEmpresa> {
 
     public UsuarioEmpresaFacade() {
         super(UsuarioEmpresa.class);
+    }
+    
+    public List<UsuarioEmpresa> findUserId(int id){
+    
+    Query query = this.em.createQuery("SELECT u FROM UsuarioEmpresa u WHERE u.usuario.id = ?1");
+    query.setParameter("1", id);
+    try {
+        List<UsuarioEmpresa> list = (List<UsuarioEmpresa>) query.getResultList();
+        return list;
+    } catch (Exception ejbExc) {
+        return null;
+    }
+    
     }
     
 }

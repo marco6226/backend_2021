@@ -288,7 +288,6 @@ public class ListaInspeccionFacade extends AbstractFacade<ListaInspeccion> {
         query.setParameter(2, id_version);
         
         List<String> dtoList = query.setMaxResults(3).getResultList();
-        System.out.print(dtoList.size());
         HashMap<String, List<String>> files = new HashMap<String, List<String>>();
         List<String> List = null;
         List<String> file = new ArrayList<String>();

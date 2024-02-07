@@ -6,18 +6,26 @@
 package co.sigess.restful.inp;
 
 import co.sigess.entities.emp.Empresa;
+import co.sigess.entities.emp.UsuarioEmpresa;
 import co.sigess.entities.inp.ListaInspeccion;
 import co.sigess.entities.inp.ListaInspeccionPK;
+import co.sigess.facade.emp.UsuarioEmpresaFacade;
 import co.sigess.facade.inp.ListaInspeccionFacade;
 import co.sigess.restful.FilterQuery;
+import co.sigess.restful.FilterResponse;
 import co.sigess.restful.ServiceREST;
+import co.sigess.restful.ipr.ViewMatrizPeligrosREST;
 import co.sigess.restful.sec.AnalisisDesviacionREST;
 import co.sigess.restful.security.Compress;
 import co.sigess.restful.security.Secured;
 import co.sigess.util.Util;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.ejb.EJB;
+import javax.ws.rs.BeanParam;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -40,6 +48,9 @@ public class ListaInspeccionREST extends ServiceREST {
 
     @EJB
     private ListaInspeccionFacade listaInspeccionFacade;
+    
+    @EJB
+    private UsuarioEmpresaFacade usuarioEmpresaFacade;
 
     public ListaInspeccionREST() {
         super(ListaInspeccionFacade.class);
@@ -200,4 +211,84 @@ public class ListaInspeccionREST extends ServiceREST {
         }
     }
     
+    
+    @GET
+    @Path("filterListInspeccion")
+    @Secured(requiereEmpresaId = false)
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    public Response getFilterListInspeccion(@BeanParam FilterQuery filterQuery){
+        try {
+            if(filterQuery == null){
+                filterQuery = new FilterQuery();
+            }
+            long numRows = filterQuery.isCount() ? listaInspeccionFacade.countWithFilter(filterQuery) : -1;
+//            List<ListaInspeccion> listInpeccion = listaInspeccionFacade.findWithFilter(filterQuery);
+            List<ListaInspeccion> listInpeccion = listaInspeccionFacade.findAll();
+            List<UsuarioEmpresa> perfiles = (List<UsuarioEmpresa>) usuarioEmpresaFacade.findUserId(super.getUsuarioRequestContext().getId());
+            
+            List listOut = new ArrayList();
+            System.out.println(listInpeccion.getClass().getSimpleName());
+            Class<?> clase = ListaInspeccion.class;
+            Method metodo = clase.getMethod("getFkPerfilId");
+
+            for (Object item : listInpeccion) {
+                System.out.println(item.getClass().getSimpleName());
+                System.out.println(item);
+                
+
+            }
+            if(!listInpeccion.isEmpty()){
+                for (Object listIns : listInpeccion) {
+                    if (listIns instanceof HashMap) {
+                        Map mapItem = (Map) listIns;
+                        Object list = mapItem.get("fkPerfilId");
+                        System.out.println(list);
+                        if(list != null){
+                            String str = (String) list;
+                            str = str.substring(1, str.length() - 1);
+                            String[] stringNumbers = str.split(",");
+                            if(stringNumbers.length>0){
+                                for (String perfilUser : stringNumbers) {
+                                    for (UsuarioEmpresa perfilList : perfiles) {
+                                        if( perfilUser.equals(perfilList.getPerfil().getId().toString())){
+                                            if(!listOut.stream().anyMatch(o -> o.equals(listIns))){
+                                                listOut.add(listIns);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    } 
+                }
+            }
+//            if(!listInpeccion.isEmpty()){
+//                for (ListaInspeccion listIns : listInpeccion) {
+//                    System.out.println(listIns.getFkPerfilId());
+//                    String str = listIns.getFkPerfilId();
+//                    str = str.substring(1, str.length() - 1);
+//                    String[] stringNumbers = str.split(",");
+//                    if(stringNumbers.length>0){
+//                        for (String perfilUser : stringNumbers) {
+//                            for (UsuarioEmpresa perfilList : perfiles) {
+//                                if( perfilUser.equals(perfilList.getPerfil().getId().toString())){
+//                                    if(!listOut.stream().anyMatch(o -> o.equals(listIns))){
+//                                        listOut.add(listIns);
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    }
+//                } 
+//            }
+//            long numRows = !listOut.isEmpty()? listOut.size():-1;
+            
+            FilterResponse filterResponse = new FilterResponse();
+            filterResponse.setData(listOut);
+            filterResponse.setCount(numRows);
+            return Response.ok(filterResponse).build();
+        } catch (Exception e) {
+            return Util.manageException(e, ListaInspeccionREST.class);
+        }
+    }
 }
