@@ -30,6 +30,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import org.apache.commons.lang3.StringEscapeUtils;
 
 /**
  *
@@ -162,8 +163,8 @@ public class ObservacionFacade extends AbstractFacade<Observacion> {
 
             LocalDate ld = zdt.toLocalDate();
             DateTimeFormatter fLocalDate = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            String output = ld.format(fLocalDate);
-            String motivo = observacion.getMotivo();
+            String output = StringEscapeUtils.escapeHtml4(ld.format(fLocalDate));
+            String motivo = StringEscapeUtils.escapeHtml4(observacion.getMotivo());
 
             Map<String, String> parametros = new HashMap<>();
             parametros.put(EmailFacade.PARAM_MENSAJE, "OBSERVACION DENEGADA");

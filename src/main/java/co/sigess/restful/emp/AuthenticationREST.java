@@ -60,7 +60,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import jdk.nashorn.internal.runtime.JSONFunctions;
 import org.glassfish.jersey.media.multipart.FormDataParam;
-        import javax.ws.rs.*;
+import javax.ws.rs.*;
+import org.apache.commons.lang3.StringEscapeUtils;
+
 
 import javax.ws.rs.core.*;
 
@@ -431,8 +433,8 @@ public class AuthenticationREST {
         try {
             if (email != null) {
                 Long id = observacion.getId();
-                String nombre = observacion.getTipoObservacion();
-                String motivo = observacion.getMotivo();
+                String nombre = StringEscapeUtils.escapeHtml4(observacion.getTipoObservacion());
+                String motivo = StringEscapeUtils.escapeHtml4(observacion.getMotivo());
                 Date  fechaRechazo = observacion.getFechaObservacion();
                 Integer idResponsable = observacion.getUsuarioReporta().getId();
                 

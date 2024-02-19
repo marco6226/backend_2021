@@ -45,6 +45,7 @@ import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
+import org.apache.commons.lang3.StringEscapeUtils;
 
 /**
  *
@@ -435,7 +436,7 @@ public void enviarCorreoSemanal(String contTotal,String email,String pNombre,Str
         this.edit(user);
 
         Map<String, String> parametros = new HashMap<>();
-        parametros.put("P{email_usuario}", user.getEmail());
+        parametros.put("P{email_usuario}", StringEscapeUtils.escapeHtml4(user.getEmail()));
         parametros.put("P{direccion_ip}", httpRequest.getRemoteAddr());
         parametros.put("P{fecha_hora}", Util.SIMPLE_DATE_FORMAT_ISO.format(new Date()));
         parametros.put("P{cliente}", httpRequest.getHeader("user-agent"));

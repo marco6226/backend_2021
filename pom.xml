@@ -150,6 +150,11 @@
             <version>1.70</version> <!-- Verifica la versión más reciente en el repositorio de Maven -->
         </dependency>
         
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.12.0</version> <!-- La versión puede variar, verifica la última versión disponible -->
+        </dependency>
     </dependencies>
 
     <build>
