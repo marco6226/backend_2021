@@ -268,7 +268,8 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
         ByteArrayOutputStream bOutput = new ByteArrayOutputStream(2_000 + (lines.size() * 400));
 
         for (String line : lines) {
-            bOutput.write(line.getBytes());
+            String escapedLine = StringEscapeUtils.escapeHtml4(line);
+            bOutput.write(escapedLine.getBytes());
             bOutput.write("\n".getBytes());
         }
         return bOutput;
