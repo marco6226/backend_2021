@@ -13,6 +13,7 @@ import co.sigess.facade.emp.TipoAreaFacade;
 import co.sigess.restful.ServiceREST;
 import co.sigess.restful.security.Secured;
 import co.sigess.util.Util;
+import java.util.logging.Level;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -21,6 +22,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.logging.Logger;
+import co.sigess.entities.com.Mensaje;
 
 /**
  *
@@ -54,7 +57,12 @@ public class TipoAreaREST extends ServiceREST {
             super.beanInstance.edit(tipoArea);
             return Response.ok(tipoArea).build();
         } catch (Exception ex) {
-            return Util.manageException(ex, TipoAreaREST.class);
+//            return Util.manageException(ex, TipoAreaREST.class);
+            Logger.getLogger(TipoAreaREST.class.getName()).log(Level.SEVERE, "Error en la creación de TipoArea", ex);
+            // Respuesta de error genérica
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                .entity(new Mensaje("Error en la creación de TipoArea", "Hubo un problema al procesar la solicitud"))
+                .build();
         }
     }
 
