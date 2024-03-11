@@ -103,7 +103,7 @@ public class Util {
             return Response.status(Response.Status.BAD_REQUEST).entity(msg).build();
         } else {
             msg.setMensaje("ERROR ID: " + getFechaId());
-            msg.setDetalle("La solicitud presenta inconsistencias y no puede ser resuelta" + ex);
+            msg.setDetalle("La solicitud presenta inconsistencias y no puede ser resuelta");
             Logger.getLogger(restClass.getName()).log(Level.SEVERE, msg.toString(), ex);
             return Response.status(Response.Status.BAD_REQUEST).entity(msg).build();
         }
