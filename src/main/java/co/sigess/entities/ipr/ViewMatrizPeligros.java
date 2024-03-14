@@ -7,6 +7,7 @@ package co.sigess.entities.ipr;
 
 import co.sigess.entities.emp.Plantas;
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,6 +19,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -147,6 +150,10 @@ public class ViewMatrizPeligros implements Serializable{
                         
     private String estado;
     private Long icr;
+    
+    @Column(name = "fecha_edicion")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaEdicion;
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
@@ -358,6 +365,10 @@ public class ViewMatrizPeligros implements Serializable{
 
     public Long getIcr() {
         return icr;
+    }
+
+    public Date getFechaEdicion() {
+        return fechaEdicion;
     }
 
     
