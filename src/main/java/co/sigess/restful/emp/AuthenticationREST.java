@@ -205,25 +205,34 @@ public class AuthenticationREST {
         } catch (Exception ex) {
             if (ex.getCause() instanceof UserMessageException) {
                 UserMessageException ume = (UserMessageException) ex.getCause();
-                if (null == ume.getCodigo()) {
-                    return Response.status(Response.Status.FORBIDDEN).entity(new Mensaje()).build();
+//                if (null == ume.getCodigo()) {
+//                    return Response.status(Response.Status.FORBIDDEN).entity(new Mensaje()).build();
+//                } else {
+//                  //  System.out.print(ume.getClass());
+//                    switch (ume.getCodigo()) {
+//                        case Mensaje.COD_USUARIO_LOGIN_PREVIO:
+//                        case Mensaje.COD_IP_NO_PERMITIDA:
+//                        case Mensaje.COD_PIN_INCORRECTO:
+//                        case Mensaje.COD_MAX_INTENTOS_LOGIN:
+//                        case Mensaje.COD_USR_SIN_NUM_MOVIL:
+//                        case Mensaje.COD_MOVIL_NO_VALIDO:
+//                        case Mensaje.COD_ERROR_ENVIO_SMS:
+//                            return Response.status(Response.Status.UNAUTHORIZED).entity(ume.getObjetoMensaje()).build();
+//                        default:
+//                            return Response.status(Response.Status.FORBIDDEN).entity(new Mensaje()).build();
+//                    }
+//                }
+                if (ume != null && ume.getCodigo() != null) {
+                    // Manejar mensajes específicos de usuario
+                    return Response.status(Response.Status.UNAUTHORIZED).entity(ume.getObjetoMensaje()).build();
                 } else {
-                  //  System.out.print(ume.getClass());
-                    switch (ume.getCodigo()) {
-                        case Mensaje.COD_USUARIO_LOGIN_PREVIO:
-                        case Mensaje.COD_IP_NO_PERMITIDA:
-                        case Mensaje.COD_PIN_INCORRECTO:
-                        case Mensaje.COD_MAX_INTENTOS_LOGIN:
-                        case Mensaje.COD_USR_SIN_NUM_MOVIL:
-                        case Mensaje.COD_MOVIL_NO_VALIDO:
-                        case Mensaje.COD_ERROR_ENVIO_SMS:
-                            return Response.status(Response.Status.UNAUTHORIZED).entity(ume.getObjetoMensaje()).build();
-                        default:
-                            return Response.status(Response.Status.FORBIDDEN).entity(new Mensaje()).build();
-                    }
+                    // Mensaje genérico en caso de excepción no manejada
+                    return Response.status(Response.Status.FORBIDDEN).entity(new Mensaje("Error de autenticación", "Hubo un problema al procesar la solicitud")).build();
                 }
             } else {
-                return Util.manageException(ex, AuthenticationREST.class);
+//                return Util.manageException(ex, AuthenticationREST.class);
+                Logger.getLogger(AuthenticationREST.class.getName()).log(Level.SEVERE, "Error genérico en autenticación", ex);
+                return Response.status(Response.Status.FORBIDDEN).entity(new Mensaje("Error de autenticación", "Hubo un problema al procesar la solicitud")).build();
             }
         }
         

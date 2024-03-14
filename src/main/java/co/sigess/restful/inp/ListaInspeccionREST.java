@@ -212,11 +212,11 @@ public class ListaInspeccionREST extends ServiceREST {
     }
     
     
-    @GET
+    @POST
     @Path("filterListInspeccion")
     @Secured(requiereEmpresaId = false)
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public Response getFilterListInspeccion(@BeanParam FilterQuery filterQuery){
+    public Response getFilterListInspeccion(FilterQuery filterQuery){
         try {
             if(filterQuery == null){
                 filterQuery = new FilterQuery();
