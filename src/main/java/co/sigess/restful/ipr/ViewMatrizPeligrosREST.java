@@ -36,6 +36,7 @@ import java.lang.reflect.Method;
 import java.nio.file.*;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -169,6 +170,8 @@ public class ViewMatrizPeligrosREST  extends ServiceREST{
             metodosEnOrden.add(clase.getMethod("getElAsociados"));
             metodosEnOrden.add(clase.getMethod("getEstado"));
             metodosEnOrden.add(clase.getMethod("getIcr"));
+            metodosEnOrden.add(clase.getMethod("getFechaEdicion"));
+            
         
             if(filterQuery == null){
                 filterQuery = new FilterQuery();
@@ -217,15 +220,33 @@ public class ViewMatrizPeligrosREST  extends ServiceREST{
             Integer cont=0;
             String descripcion="";
             String jerarquia="";
+            Date fecha=null;
+            Date fecha2=null;
+            String fechaFormateada="";
+
+                    
             for (ViewMatrizPeligros element : list) {
                 Row row = sheet.createRow(rowNum);
                 //System.out.println(rowNum-5);
                 int i=0;
                 for(Method metodo : metodosEnOrden){
-                    
+
 
                     try {
                         Object resultado = metodo.invoke(element);
+
+                        if(metodo.getName().equals("getFechaEdicion")){
+                            fecha2=(Date) resultado;
+                            if(fecha == null){
+                                fecha= new Date(fecha2.getTime());
+                            }else if(fecha.compareTo(fecha2) < 0){
+                                fecha= new Date(fecha2.getTime());
+                            }
+                            SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+                            fechaFormateada = formato.format(fecha);
+
+                            continue;
+                        }
                         if(!resultado.toString().isEmpty()){
                             Cell cell = row.createCell(i);
                             String texto = resultado.toString();
@@ -321,6 +342,12 @@ public class ViewMatrizPeligrosREST  extends ServiceREST{
                 }
                 rowNum++;
             }
+            
+            cell1 = row1.createCell(8);
+            cell1.setCellValue("Última edición:");
+            cell1 = row1.createCell(9);
+            cell1.setCellValue(fechaFormateada);
+            
 //            System.out.println("fin del for");
             int endRow = rowNum-1;
             // Aplica el filtro al rango especificado
