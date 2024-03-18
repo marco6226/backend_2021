@@ -6,7 +6,6 @@
 package co.sigess.facade.ipr;
 
 import co.sigess.entities.ipr.ProcesoMatriz;
-import co.sigess.entities.ipr.AreaMatriz;
 
 import co.sigess.facade.com.AbstractFacade;
 import java.util.List;
@@ -59,6 +58,14 @@ public class ProcesoMatrizFacade extends AbstractFacade<ProcesoMatriz> {
         int q = this.em.createQuery("UPDATE ProcesoMatriz pm SET pm.eliminado = true WHERE pm.areaMatriz.id = :areaId")
         .setParameter("areaId", areaId)
         .executeUpdate();        
+    }
+    
+    public List findToArea(Integer areaId, String nombre){
+        Query q = this.em.createQuery("SELECT pm FROM ProcesoMatriz pm WHERE pm.eliminado = FALSE AND pm.areaMatriz.id = ?1 AND pm.nombre = ?2");
+        q.setParameter(1, areaId);
+        q.setParameter(2, nombre);
+        List<ProcesoMatriz> list = (List<ProcesoMatriz>) q.getResultList();
+        return list;        
     }
     
 }

@@ -91,6 +91,11 @@ public class SubprocesoMatrizREST extends ServiceREST {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response create(SubprocesoMatriz subprocesoMatriz) {
         try {
+            List<SubprocesoMatriz> list= (List<SubprocesoMatriz>) subprocesoMatrizFacade.findToProceso(subprocesoMatriz.getProcesoMatriz().getId() ,subprocesoMatriz.getNombre());
+            if(!list.isEmpty()){
+                return Response.ok(null).build();
+            }
+            
             subprocesoMatriz = ((SubprocesoMatrizFacade) beanInstance).create(subprocesoMatriz);
             
             procesoMatrizFacade.editProcesoEstado(subprocesoMatriz.getProcesoMatriz().getId());

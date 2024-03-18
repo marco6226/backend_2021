@@ -65,6 +65,10 @@ public class ProcesoMatrizREST extends ServiceREST{
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response create(ProcesoMatriz procesoMatriz) {
         try {
+            List<ProcesoMatriz> list= (List<ProcesoMatriz>) procesoMatrizFacade.findToArea(procesoMatriz.getAreaMatriz().getId(),procesoMatriz.getNombre());
+            if(!list.isEmpty()){
+                return Response.ok(null).build();
+            }
             procesoMatriz.setEmpresa(new Empresa(super.getEmpresaIdRequestContext()));
             procesoMatriz = ((ProcesoMatrizFacade) beanInstance).create(procesoMatriz);
             

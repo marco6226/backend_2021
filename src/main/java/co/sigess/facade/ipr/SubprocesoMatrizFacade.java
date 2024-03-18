@@ -64,4 +64,12 @@ public class SubprocesoMatrizFacade extends AbstractFacade<SubprocesoMatriz> {
         .setParameter("areaId", areaId)
         .executeUpdate();        
     }
+    
+    public List findToProceso(Integer procesoId, String nombre){
+        Query q = this.em.createQuery("SELECT sm FROM SubprocesoMatriz sm WHERE sm.eliminado = FALSE AND sm.procesoMatriz.id=?1 AND sm.nombre=?2");
+        q.setParameter(1, procesoId);
+        q.setParameter(2, nombre);
+        List<SubprocesoMatriz> list = (List<SubprocesoMatriz>) q.getResultList();
+        return list;        
+    }
 }

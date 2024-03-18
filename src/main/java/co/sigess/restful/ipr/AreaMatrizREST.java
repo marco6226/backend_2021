@@ -65,6 +65,10 @@ public class AreaMatrizREST extends ServiceREST{
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response create(AreaMatriz areaMatriz) {
         try {
+            List<AreaMatriz> list= (List<AreaMatriz>) areaMatrizFacade.findToPlanta(areaMatriz.getLocalidad().getId(),areaMatriz.getNombre());
+            if(!list.isEmpty()){
+                return Response.ok(null).build();
+            }
             areaMatriz.setEmpresa(new Empresa(super.getEmpresaIdRequestContext()));
             areaMatriz = ((AreaMatrizFacade) beanInstance).create(areaMatriz);
             return Response.ok(areaMatriz).build();

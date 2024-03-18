@@ -46,4 +46,12 @@ public class AreaMatrizFacade extends AbstractFacade<AreaMatriz>{
         .executeUpdate();        
     }
     
+    public List findToPlanta(Integer localidadId, String nombre){
+        Query q = this.em.createQuery("SELECT am FROM AreaMatriz am WHERE am.localidad.id = ?1 AND am.nombre = ?2 AND am.eliminado = FALSE");
+        q.setParameter(1, localidadId);
+        q.setParameter(2, nombre);
+        List<AreaMatriz> list = (List<AreaMatriz>) q.getResultList();
+        return list;        
+    }
+    
 }
