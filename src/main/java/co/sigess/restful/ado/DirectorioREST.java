@@ -696,7 +696,36 @@ public class DirectorioREST extends ServiceREST {
         directorioFacade.actualizarModuloDir();
         return resp;
     }
+    
+    @POST
+    @Path("cop/download")
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_OCTET_STREAM})
+    public Response descargarActaPost(
+            @HeaderParam("Authorization") String authorizationHeader,
+            @FormDataParam("data") String encryptedId) throws Exception {
+        try {
+            
+            byte[] keyBytes = authorizationHeader.getBytes(StandardCharsets.UTF_8);
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            keyBytes = digest.digest(keyBytes);
+            keyBytes = Arrays.copyOf(keyBytes, 16);
 
+            SecretKeySpec aesKey = new SecretKeySpec(keyBytes, "AES");
+
+            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+            cipher.init(Cipher.DECRYPT_MODE, aesKey);
+            byte[] decryptedBytes = cipher.doFinal(Base64.getDecoder().decode(encryptedId));
+            String textoDesencriptado = new String(decryptedBytes, StandardCharsets.UTF_8);
+            
+            ByteArrayOutputStream file = (ByteArrayOutputStream) directorioFacade.findFile(Long.parseLong(textoDesencriptado));
+
+//            ByteArrayOutputStream file = (ByteArrayOutputStream) directorioFacade.encontrarDocumentoModulo(documentoId, Modulo.COP, super.getEmpresaIdRequestContext());
+            return Response.ok(file.toByteArray(), MediaType.APPLICATION_OCTET_STREAM_TYPE).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, DirectorioREST.class);
+        }
+    }
+    
     @GET
     @Path("cop/download/{id}")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_OCTET_STREAM})
