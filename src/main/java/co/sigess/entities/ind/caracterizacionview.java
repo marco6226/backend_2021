@@ -159,6 +159,21 @@ public class caracterizacionview implements Serializable{
     @Column(name = "fecha_nacimiento_empleado")
     @Temporal(TemporalType.DATE)
     private Date fechanacimientoempleado;
+    
+    @Column(name = "id_planta")
+    private Integer idPlanta;
+    
+    @Column(name = "pais")
+    private String pais;
+    
+    @Column(name = "nombre_planta")
+    private String nombrePlanta;
+    
+    @Column(name = "id_localidad")
+    private Integer idLocalidad;
+    
+    @Column(name = "nombre_localidad")
+    private String nombreLocalidad;
 
     public Date getFechanacimientoempleado() {
         return fechanacimientoempleado;
@@ -503,4 +518,46 @@ public class caracterizacionview implements Serializable{
     public void setLugaraccidente(String lugaraccidente) {
         this.lugaraccidente = lugaraccidente;
     }  
+
+    public Integer getIdPlanta() {
+        return idPlanta;
+    }
+
+    public void setIdPlanta(Integer idPlanta) {
+        this.idPlanta = idPlanta;
+    }
+
+    public String getPais() {
+        return pais;
+    }
+
+    public void setPais(String pais) {
+        this.pais = pais;
+    }
+
+    public String getNombrePlanta() {
+        return nombrePlanta;
+    }
+
+    public void setNombrePlanta(String nombrePlanta) {
+        this.nombrePlanta = nombrePlanta;
+    }
+
+    public Integer getIdLocalidad() {
+        return idLocalidad;
+    }
+
+    public void setIdLocalidad(Integer idLocalidad) {
+        this.idLocalidad = idLocalidad;
+    }
+
+    public String getNombreLocalidad() {
+        return nombreLocalidad;
+    }
+
+    public void setNombreLocalidad(String nombreLocalidad) {
+        this.nombreLocalidad = nombreLocalidad;
+    }
+    
+    
 }
