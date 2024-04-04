@@ -5,9 +5,11 @@
 package co.sigess.entities.emp;
 
 import co.sigess.entities.ado.Directorio;
+import co.sigess.entities.ado.Documento;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,6 +17,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -43,8 +47,15 @@ public class Plantas implements Serializable{
     @Column(name = "nombre")
     private String nombre;
 
-    @Column(name = "id_division")
-    private String id_division;
+//    @Column(name = "id_division")
+//    private String id_division;
+    
+    @JoinColumn(name = "id_division", referencedColumnName = "id", nullable = true)
+    @ManyToOne
+    private Area area;
+    
+//    @JoinColumn(name = "id_division", referencedColumnName = "id")
+//    private Area area;
 
     @Column(name = "pais")
     private String pais;
@@ -195,13 +206,13 @@ public class Plantas implements Serializable{
         this.nombre = nombre;
     }
 
-    public String getId_division() {
-        return id_division;
-    }
-
-    public void setId_division(String id_division) {
-        this.id_division = id_division;
-    }
+//    public String getId_division() {
+//        return id_division;
+//    }
+//
+//    public void setId_division(String id_division) {
+//        this.id_division = id_division;
+//    }
 
     public String getPais() {
         return pais;
@@ -249,6 +260,14 @@ public class Plantas implements Serializable{
 
     public void setFechaHistoricoStart(Date fechaHistoricoStart) {
         this.fechaHistoricoStart = fechaHistoricoStart;
+    }
+
+    public Area getArea() {
+        return area;
+    }
+
+    public void setArea(Area area) {
+        this.area = area;
     }
     
     

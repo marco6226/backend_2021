@@ -59,7 +59,7 @@ public class Hht implements Serializable {
     private String empresaSelect;
     
     @JoinColumn(name = "fk_planta_id", referencedColumnName = "id")
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Plantas planta;
     
     @Column(name = "numero_personas")

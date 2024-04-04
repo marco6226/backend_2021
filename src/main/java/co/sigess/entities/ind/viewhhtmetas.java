@@ -25,33 +25,26 @@ public class viewhhtmetas implements Serializable{
 
     @Id
     private Integer id;
+    
     private String pais;
-    private double anio;
-    
-    @Column(name = "fk_empresa_id")
-    private long empresaId;
-    private String mes;
-    
-    @Column(name = "empresaselect")
-    private String empresaSelect;
-    
+    private double anio;  
 
     @Column(name = "fk_planta_id")
     private long plantaId;
     
+    @Column(name = "fk_empresa_id")
+    private long empresaId;
+    
+    
     @Column(name = "nombre_planta")
     private String nombrePlanta;
-    
-    private double hht;
-    
-    @Column(name = "numero_personas")
-    private double numeroPersonas;
     
     @Column(name = "id_division")
     private String idDivision;
     
     @Column(name = "nombre_division")
     private String nombreDivision;
+    private String modulo;
     
     @Column(name = "ili_planta")
     private double iliPlanta;
@@ -119,28 +112,12 @@ public class viewhhtmetas implements Serializable{
         return anio;
     }
 
-    public long getEmpresaId() {
-        return empresaId;
-    }
-
-    public String getMes() {
-        return mes;
-    }
-
-    public String getEmpresaSelect() {
-        return empresaSelect;
-    }
-
     public long getPlantaId() {
         return plantaId;
     }
 
-    public double getHht() {
-        return hht;
-    }
-
-    public double getNumeroPersonas() {
-        return numeroPersonas;
+    public long getEmpresaId() {
+        return empresaId;
     }
 
     public String getIdDivision() {
@@ -206,6 +183,9 @@ public class viewhhtmetas implements Serializable{
     public double getTsPlanta() {
         return tsPlanta;
     }
-    
+
+    public String getModulo() {
+        return modulo;
+    }
     
 }
