@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
+    <!-- Definición del filtro -->
+    <filter>
+        <filter-name>ContentSecurityFilter</filter-name>
+        <filter-class>co.sigess.restful.emp.ContentSecurityFilter</filter-class>
+    </filter>
+    
+    <!-- <filter>
+        <filter-name>HttpMethodFilter</filter-name>
+        <filter-class>co.sigess.restful.HttpMethodFilter</filter-class>
+    </filter> -->
+    
+    <!-- Mapeo del filtro a URL(s) -->
+    <filter-mapping>
+        <filter-name>ContentSecurityFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <!-- <filter-mapping>
+        <filter-name>HttpMethodFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping> -->
+
+    <!-- Configuración de otros servlets y componentes -->
+    <servlet>
+        <servlet-name>NewServlet</servlet-name>
+        <servlet-class>co.sigess.restful.emp.NewServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>NewServlet</servlet-name>
+        <url-pattern>/NewServlet</url-pattern>
+    </servlet-mapping>
+    <session-config>
+        <session-timeout>
+            30
+        </session-timeout>
+    </session-config>
+</web-app>
