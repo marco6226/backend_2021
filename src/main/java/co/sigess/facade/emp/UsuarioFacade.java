@@ -91,8 +91,19 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
             return null;
         }
     }
+public Usuario findByEmailAndPassword(String email, String password) {
+    Query query = em.createQuery("SELECT u from Usuario u where u.email = :email and u.password = :password");
+    query.setParameter("email", email);
+    query.setParameter("password", password);
+    try {
+        Usuario user = (Usuario) query.getSingleResult();
+        return user;
+    } catch (Exception ejbExc) {
+        return null;
+    }
+}
 
-    public Usuario authenticate(String email, String passw, String mfaCod) throws Exception {
+  public Usuario authenticate(String email, String passw, String mfaCod) throws Exception {
         Query q = this.em.createNativeQuery("SELECT id, email, estado, codigo, avatar, icon, fecha_acepta_terminos::TIMESTAMP, ip_valida, mfa, codigo_mfa, numero_movil "
                 + "FROM emp.verificar_login(?1, ?2, ?3,?4) "
                 + "AS (id INTEGER, email TEXT, estado TEXT, password TEXT, expira_password TIMESTAMP, codigo INTEGER, avatar TEXT, icon TEXT, fecha_acepta_terminos TIMESTAMP, ip_valida BOOLEAN, mfa BOOLEAN, codigo_mfa VARCHAR(10), numero_movil VARCHAR(18))");
@@ -103,12 +114,28 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
         Object[] resp = (Object[]) q.getSingleResult();
         int codigo = (Integer) resp[3];
         System.out.print(codigo);
+        
+               Usuario user = this.findByEmail(email);
+         if (user == null) {
+        throw new UserMessageException(
+                new Mensaje(
+                        "CORREO ELECTRÓNICO NO ENCONTRADO",
+                        "El correo electrónico proporcionado no está registrado en nuestra base de datos. Por favor verifique e intente nuevamente.",
+                        TipoMensaje.error,
+                        Mensaje.COD_USUARIO_NO_VALIDO
+                )
+        );
+    }
         try {
             switch (codigo) {
             case Mensaje.COD_IP_NO_PERMITIDA:
                 throw new UserMessageException(new Mensaje("ACCESO NO PERMITIDOo", "Su dirección IP no se encuentra autorizada para realizar peticiones. Por favor pongase en contacto con el administrador.", TipoMensaje.warn, Mensaje.COD_IP_NO_PERMITIDA));     
             case Mensaje.COD_USUARIO_NO_VALIDO:
-                throw new UserMessageException(new Mensaje("CREDENCIALES INCORRECTAS", "El usuario o contraseña especificada no son correctas", TipoMensaje.warn, Mensaje.COD_USUARIO_NO_VALIDO));
+                throw new UserMessageException(new Mensaje("CREDENCIALES INCORRECTAS", "La contraseña especificada no es correcta", TipoMensaje.error, Mensaje.COD_USUARIO_NO_VALIDO));
+                
+                 case Mensaje.COD_USUARIO_EMAIL_NO_VALIDO:
+                throw new UserMessageException(new Mensaje("CREDENCIALES INCORRECTAS", "El usuario especificada no son correctas ????", TipoMensaje.warn, Mensaje.COD_USUARIO_EMAIL_NO_VALIDO));
+                
             case Mensaje.COD_PIN_INCORRECTO:
                 throw new UserMessageException(new Mensaje("PIN INCORRECTO", "El pin ingresado no es válido", TipoMensaje.warn, Mensaje.COD_PIN_INCORRECTO));
             case Mensaje.COD_USUARIO_LOGIN_PREVIO:
@@ -140,7 +167,6 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
             throw new Exception(e);
         }
     }
-
     public Usuario create(Usuario usuario, Integer empresaId,boolean sendEmail) throws Exception {
         
             String host1;
@@ -293,6 +319,16 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
 
     public Usuario recuperarPasswd(String email) throws Exception {
         Usuario user = this.findByEmail(email);
+         if (user == null) {
+        throw new UserMessageException(
+                new Mensaje(
+                        "CORREO ELECTRÓNICO NO ENCONTRADO",
+                        "El correo electrónico proporcionado no está registrado en nuestra base de datos. Por favor verifique e intente nuevamente.",
+                        TipoMensaje.error,
+                        Mensaje.COD_USUARIO_NO_VALIDO
+                )
+        );
+    }
         if (user != null) {
             Query q = this.em.createNativeQuery("SELECT ?1::inet <<= ANY(ip_permitida) AS ip_valida FROM emp.usuario WHERE id = ?2");
             q.setParameter(1, httpRequest.getRemoteAddr());
@@ -332,6 +368,7 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
         }
         return user;
     }
+    
 public Usuario enviarCorreo(String email,Empleado responsable,String nombre, Integer id,  Date fechaproyectada, String host) throws Exception {
     
         String host1;

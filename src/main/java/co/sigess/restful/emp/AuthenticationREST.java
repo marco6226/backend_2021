@@ -116,7 +116,7 @@ public class AuthenticationREST {
             String loginRequest) {
         try {
             Thread.sleep(300);
-            String[] array = loginRequest.split(":");
+                        String[] array = loginRequest.split(":");
             String email = array[0].trim().toLowerCase();
             String passw = array[1];
             // Es necesario cargar como atributo el email, ya que este es un recurso que no pide token
