@@ -1,6 +1,0 @@
-test\co\sigess\facade\core\TestEmailFacade.class
-test\co\sigess\restful\security\TestUtilSecurity.class
-test\co\sigess\restful\emp\TestAuthenticationREST.class
-test\co\sigess\facade\emp\TestUsuarioFacade.class
-test\co\sigess\restful\security\TestFileEncryption.class
-test\co\sigess\util\TestUtil.class
