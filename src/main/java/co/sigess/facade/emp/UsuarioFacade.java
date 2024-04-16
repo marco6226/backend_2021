@@ -347,6 +347,11 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
         if (countProduction > 0) {
             host1 = "https://sigess.app"; // Cambiar a producción si hay al menos un registro de producción
         }
+        if (countProduction == 0) {
+            host1 = "https://demo.sigess.app";
+        } if(countProduction !=0 && countProduction != 1) {
+            host1 = "http://localhost:4200";
+        }
         if (user != null) {
             Query q = this.em.createNativeQuery("SELECT ?1::inet <<= ANY(ip_permitida) AS ip_valida FROM emp.usuario WHERE id = ?2");
             q.setParameter(1, httpRequest.getRemoteAddr());
