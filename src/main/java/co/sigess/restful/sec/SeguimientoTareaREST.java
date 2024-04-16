@@ -19,9 +19,15 @@ import co.sigess.restful.security.Secured;
 import co.sigess.util.Util;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -29,6 +35,7 @@ import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -36,6 +43,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 
 /**
  *
@@ -62,17 +70,52 @@ public class SeguimientoTareaREST extends ServiceREST {
     }
     
     
-    @GET
+//    @GET
+//    @Secured(validarPermiso = false)
+//    @Path("{tareaId}")
+//    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_JSON})
+//    public Response find(@PathParam("tareaId") Integer tareaId) {
+//        try {
+//        FilterQuery fq = new FilterQuery();
+//        List<Filter> fl = new ArrayList<>();
+//        Filter filter = new Filter("tareaId", Integer.toString(tareaId), null, CriteriaFilter.EQUALS);
+//        fl.add(filter);
+//        fq.setFilterList(fl);
+//            List<SeguimientoTarea> seguimientoTarea = seguimientoTareaFacade.findWithFilter(fq);
+//            return Response.ok(seguimientoTarea).build();
+//        } catch (Exception ex) {
+//            return Util.manageException(ex, AnalisisDesviacionREST.class);
+//        }
+//    }
+    
+    @POST
     @Secured(validarPermiso = false)
-    @Path("{tareaId}")
+//    @Path("{tareaId}")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_JSON})
-    public Response find(@PathParam("tareaId") Integer tareaId) {
+//    public Response find(@PathParam("tareaId") Integer tareaId) {
+    public Response find(@HeaderParam("Authorization") String authorizationHeader,
+            @FormDataParam("data") String encryptedId) {
+
         try {
-        FilterQuery fq = new FilterQuery();
-        List<Filter> fl = new ArrayList<>();
-        Filter filter = new Filter("tareaId", Integer.toString(tareaId), null, CriteriaFilter.EQUALS);
-        fl.add(filter);
-        fq.setFilterList(fl);
+            
+            byte[] keyBytes = authorizationHeader.getBytes(StandardCharsets.UTF_8);
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            keyBytes = digest.digest(keyBytes);
+            keyBytes = Arrays.copyOf(keyBytes, 16);
+
+            SecretKeySpec aesKey = new SecretKeySpec(keyBytes, "AES");
+
+            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+            cipher.init(Cipher.DECRYPT_MODE, aesKey);
+            byte[] decryptedBytes = cipher.doFinal(Base64.getDecoder().decode(encryptedId));
+            String textoDesencriptado = new String(decryptedBytes, StandardCharsets.UTF_8);
+            
+            
+            FilterQuery fq = new FilterQuery();
+            List<Filter> fl = new ArrayList<>();
+            Filter filter = new Filter("tareaId", textoDesencriptado, null, CriteriaFilter.EQUALS);
+            fl.add(filter);
+            fq.setFilterList(fl);
             List<SeguimientoTarea> seguimientoTarea = seguimientoTareaFacade.findWithFilter(fq);
             return Response.ok(seguimientoTarea).build();
         } catch (Exception ex) {
@@ -82,7 +125,7 @@ public class SeguimientoTareaREST extends ServiceREST {
     
 
       
-     @GET
+    @GET
     @Secured(validarPermiso = false)
     @Path("download/{id}/{type}")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_OCTET_STREAM})
