@@ -91,19 +91,20 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
             return null;
         }
     }
-public Usuario findByEmailAndPassword(String email, String password) {
-    Query query = em.createQuery("SELECT u from Usuario u where u.email = :email and u.password = :password");
-    query.setParameter("email", email);
-    query.setParameter("password", password);
-    try {
-        Usuario user = (Usuario) query.getSingleResult();
-        return user;
-    } catch (Exception ejbExc) {
-        return null;
-    }
-}
 
-  public Usuario authenticate(String email, String passw, String mfaCod) throws Exception {
+    public Usuario findByEmailAndPassword(String email, String password) {
+        Query query = em.createQuery("SELECT u from Usuario u where u.email = :email and u.password = :password");
+        query.setParameter("email", email);
+        query.setParameter("password", password);
+        try {
+            Usuario user = (Usuario) query.getSingleResult();
+            return user;
+        } catch (Exception ejbExc) {
+            return null;
+        }
+    }
+
+    public Usuario authenticate(String email, String passw, String mfaCod) throws Exception {
         Query q = this.em.createNativeQuery("SELECT id, email, estado, codigo, avatar, icon, fecha_acepta_terminos::TIMESTAMP, ip_valida, mfa, codigo_mfa, numero_movil "
                 + "FROM emp.verificar_login(?1, ?2, ?3,?4) "
                 + "AS (id INTEGER, email TEXT, estado TEXT, password TEXT, expira_password TIMESTAMP, codigo INTEGER, avatar TEXT, icon TEXT, fecha_acepta_terminos TIMESTAMP, ip_valida BOOLEAN, mfa BOOLEAN, codigo_mfa VARCHAR(10), numero_movil VARCHAR(18))");
@@ -114,71 +115,72 @@ public Usuario findByEmailAndPassword(String email, String password) {
         Object[] resp = (Object[]) q.getSingleResult();
         int codigo = (Integer) resp[3];
         System.out.print(codigo);
-        
-               Usuario user = this.findByEmail(email);
-         if (user == null) {
-        throw new UserMessageException(
-                new Mensaje(
-                        "CORREO ELECTRÓNICO NO ENCONTRADO",
-                        "El correo electrónico proporcionado no está registrado en nuestra base de datos. Por favor verifique e intente nuevamente.",
-                        TipoMensaje.error,
-                        Mensaje.COD_USUARIO_NO_VALIDO
-                )
-        );
-    }
+
+        Usuario user = this.findByEmail(email);
+        if (user == null) {
+            throw new UserMessageException(
+                    new Mensaje(
+                            "CORREO ELECTRÓNICO NO ENCONTRADO",
+                            "El correo electrónico proporcionado no está registrado en nuestra base de datos. Por favor verifique e intente nuevamente.",
+                            TipoMensaje.error,
+                            Mensaje.COD_USUARIO_NO_VALIDO
+                    )
+            );
+        }
         try {
             switch (codigo) {
-            case Mensaje.COD_IP_NO_PERMITIDA:
-                throw new UserMessageException(new Mensaje("ACCESO NO PERMITIDOo", "Su dirección IP no se encuentra autorizada para realizar peticiones. Por favor pongase en contacto con el administrador.", TipoMensaje.warn, Mensaje.COD_IP_NO_PERMITIDA));     
-            case Mensaje.COD_USUARIO_NO_VALIDO:
-                throw new UserMessageException(new Mensaje("CREDENCIALES INCORRECTAS", "La contraseña especificada no es correcta", TipoMensaje.error, Mensaje.COD_USUARIO_NO_VALIDO));
-                
-                 case Mensaje.COD_USUARIO_EMAIL_NO_VALIDO:
-                throw new UserMessageException(new Mensaje("CREDENCIALES INCORRECTAS", "El usuario especificada no son correctas ????", TipoMensaje.warn, Mensaje.COD_USUARIO_EMAIL_NO_VALIDO));
-                
-            case Mensaje.COD_PIN_INCORRECTO:
-                throw new UserMessageException(new Mensaje("PIN INCORRECTO", "El pin ingresado no es válido", TipoMensaje.warn, Mensaje.COD_PIN_INCORRECTO));
-            case Mensaje.COD_USUARIO_LOGIN_PREVIO:
-                throw new UserMessageException(new Mensaje("SESIÓN ACTIVA", "Tiene sesiones previas abiertas, por favor cierrelas de manera segura para continuar", TipoMensaje.warn, Mensaje.COD_USUARIO_LOGIN_PREVIO));
-            case Mensaje.COD_MAX_INTENTOS_LOGIN:
-                throw new UserMessageException(new Mensaje("NÚMERO MÁXIMO ALCANZADO", "Ha alcanzado el número máximo de intentos permitidos", TipoMensaje.warn, Mensaje.COD_MAX_INTENTOS_LOGIN));
-            case Mensaje.COD_USR_SIN_NUM_MOVIL:
-                throw new UserMessageException(new Mensaje("NÚMERO MÓVIL NO REGISTRADO", "Su cuenta de usuario debe tener un número móvil registrado para recibir el PIN de acceso", TipoMensaje.warn, Mensaje.COD_USR_SIN_NUM_MOVIL));
-            default:
-                Usuario usr = new Usuario(
-                        (Integer) resp[0],
-                        resp[1].toString(),
-                        resp[2].toString(),
-                        resp[4] == null ? null : resp[4].toString(),
-                        resp[5] == null ? null : resp[5].toString(),
-                        resp[6] == null ? null : Util.SIMPLE_DATE_FORMAT_ISO.parse(resp[6].toString())
-                );
-                usr.codigo = codigo;
-                if (usr.codigo == Mensaje.COD_LOGIN_OK_SIN_MFA) {
-                    String pin = resp[9].toString();
-                    Mensaje msgError = this.smsFacade.enviarSms(resp[10].toString(), "SIGESS - PIN de ingreso: " + pin);
-                    if (msgError != null) {
-                        throw new UserMessageException(msgError);
+                case Mensaje.COD_IP_NO_PERMITIDA:
+                    throw new UserMessageException(new Mensaje("ACCESO NO PERMITIDOo", "Su dirección IP no se encuentra autorizada para realizar peticiones. Por favor pongase en contacto con el administrador.", TipoMensaje.warn, Mensaje.COD_IP_NO_PERMITIDA));
+                case Mensaje.COD_USUARIO_NO_VALIDO:
+                    throw new UserMessageException(new Mensaje("CREDENCIALES INCORRECTAS", "La contraseña especificada no es correcta", TipoMensaje.error, Mensaje.COD_USUARIO_NO_VALIDO));
+
+                case Mensaje.COD_USUARIO_EMAIL_NO_VALIDO:
+                    throw new UserMessageException(new Mensaje("CREDENCIALES INCORRECTAS", "El usuario especificada no son correctas ????", TipoMensaje.warn, Mensaje.COD_USUARIO_EMAIL_NO_VALIDO));
+
+                case Mensaje.COD_PIN_INCORRECTO:
+                    throw new UserMessageException(new Mensaje("PIN INCORRECTO", "El pin ingresado no es válido", TipoMensaje.warn, Mensaje.COD_PIN_INCORRECTO));
+                case Mensaje.COD_USUARIO_LOGIN_PREVIO:
+                    throw new UserMessageException(new Mensaje("SESIÓN ACTIVA", "Tiene sesiones previas abiertas, por favor cierrelas de manera segura para continuar", TipoMensaje.warn, Mensaje.COD_USUARIO_LOGIN_PREVIO));
+                case Mensaje.COD_MAX_INTENTOS_LOGIN:
+                    throw new UserMessageException(new Mensaje("NÚMERO MÁXIMO ALCANZADO", "Ha alcanzado el número máximo de intentos permitidos", TipoMensaje.warn, Mensaje.COD_MAX_INTENTOS_LOGIN));
+                case Mensaje.COD_USR_SIN_NUM_MOVIL:
+                    throw new UserMessageException(new Mensaje("NÚMERO MÓVIL NO REGISTRADO", "Su cuenta de usuario debe tener un número móvil registrado para recibir el PIN de acceso", TipoMensaje.warn, Mensaje.COD_USR_SIN_NUM_MOVIL));
+                default:
+                    Usuario usr = new Usuario(
+                            (Integer) resp[0],
+                            resp[1].toString(),
+                            resp[2].toString(),
+                            resp[4] == null ? null : resp[4].toString(),
+                            resp[5] == null ? null : resp[5].toString(),
+                            resp[6] == null ? null : Util.SIMPLE_DATE_FORMAT_ISO.parse(resp[6].toString())
+                    );
+                    usr.codigo = codigo;
+                    if (usr.codigo == Mensaje.COD_LOGIN_OK_SIN_MFA) {
+                        String pin = resp[9].toString();
+                        Mensaje msgError = this.smsFacade.enviarSms(resp[10].toString(), "SIGESS - PIN de ingreso: " + pin);
+                        if (msgError != null) {
+                            throw new UserMessageException(msgError);
+                        }
                     }
-                }
-                return usr;
+                    return usr;
             }
         } catch (Exception e) {
             throw new Exception(e);
         }
     }
-    public Usuario create(Usuario usuario, Integer empresaId,boolean sendEmail) throws Exception {
-        
-            String host1;
-            Query q1 = em.createNativeQuery("SELECT h from com.host h where h.host ='Produccion'");
-            List hostin =q1.getResultList();
 
-            if(hostin.size()==0){
-                host1="https://demo.sigess.app";
-            }else{
-                host1="https://sigess.app";
-            }
-            
+    public Usuario create(Usuario usuario, Integer empresaId, boolean sendEmail) throws Exception {
+
+        String host1;
+        Query q1 = em.createNativeQuery("SELECT h from com.host h where h.host ='Produccion'");
+        List hostin = q1.getResultList();
+
+        if (hostin.size() == 0) {
+            host1 = "https://demo.sigess.app";
+        } else {
+            host1 = "https://sigess.app";
+        }
+
         if (usuario.getUsuarioEmpresaList() == null || usuario.getUsuarioEmpresaList().isEmpty()) {
             throw new IllegalArgumentException("Debe establecer un perfil para el usuario a crear");
         }
@@ -209,9 +211,9 @@ public Usuario findByEmailAndPassword(String email, String password) {
         parametros.put("P{passwd}", passwd);
         parametros.put("P{email}", usuario.getEmail());
         parametros.put("P{host1}", host1);
-        
+
         if (sendEmail) {
-              emailFacade.sendEmail(parametros, TipoMail.CREACION_USUARIO, "Creación de cuenta", usuario.getEmail());
+            emailFacade.sendEmail(parametros, TipoMail.CREACION_USUARIO, "Creación de cuenta", usuario.getEmail());
         }
         //System.out.println("TERMINANDO");
         //System.out.println("USUARIO:" + usuario.getAsJSON());
@@ -276,16 +278,16 @@ public Usuario findByEmailAndPassword(String email, String password) {
         List<Usuario> list = (List<Usuario>) query.getResultList();
         return list;
     }
-    
+
     public ByteArrayOutputStream consultarConsolidado(Integer empresaIdRequestContext) throws IOException {
-        Query q = this.em.createNativeQuery("SELECT distinct u.email \n" +  
-                "FROM emp.usuario u\n" +
-"JOIN emp.usuario_empresa ue \n" +
-"on  ue.pk_usuario_id=u.id\n" +
-"\n" +
-"WHERE ue.pk_empresa_id = ?1 order by u.email ASC");
+        Query q = this.em.createNativeQuery("SELECT distinct u.email \n"
+                + "FROM emp.usuario u\n"
+                + "JOIN emp.usuario_empresa ue \n"
+                + "on  ue.pk_usuario_id=u.id\n"
+                + "\n"
+                + "WHERE ue.pk_empresa_id = ?1 order by u.email ASC");
         q.setParameter(1, empresaIdRequestContext);
-        
+
         List<String> lines = q.getResultList();
         if (lines.isEmpty() || lines.size() <= 1) {
             throw new UserMessageException("Datos no encontrados", "No se hallaron usaurios ", TipoMensaje.info);
@@ -300,6 +302,7 @@ public Usuario findByEmailAndPassword(String email, String password) {
         }
         return bOutput;
     }
+
     public void filtrarUsuarioEmpresa(Usuario usuario, Integer empresaId) {
         for (Iterator<UsuarioEmpresa> iterator = usuario.getUsuarioEmpresaList().iterator(); iterator.hasNext();) {
             UsuarioEmpresa ue = iterator.next();
@@ -319,16 +322,31 @@ public Usuario findByEmailAndPassword(String email, String password) {
 
     public Usuario recuperarPasswd(String email) throws Exception {
         Usuario user = this.findByEmail(email);
-         if (user == null) {
-        throw new UserMessageException(
-                new Mensaje(
-                        "CORREO ELECTRÓNICO NO ENCONTRADO",
-                        "El correo electrónico proporcionado no está registrado en nuestra base de datos. Por favor verifique e intente nuevamente.",
-                        TipoMensaje.error,
-                        Mensaje.COD_USUARIO_NO_VALIDO
-                )
-        );
-    }
+        if (user == null) {
+            throw new UserMessageException(
+                    new Mensaje(
+                            "CORREO ELECTRÓNICO NO ENCONTRADO",
+                            "El correo electrónico proporcionado no está registrado en nuestra base de datos. Por favor verifique e intente nuevamente.",
+                            TipoMensaje.error,
+                            Mensaje.COD_USUARIO_NO_VALIDO
+                    )
+            );
+        }
+        String host1 = "https://demo.sigess.app"; // Valor por defecto para demostración
+
+        Query q1 = em.createNativeQuery("SELECT COUNT(h.id) FROM com.host h WHERE h.host ='Produccion'");
+        int countProduction = ((Number) q1.getSingleResult()).intValue();
+
+        q1 = em.createNativeQuery("SELECT h.id FROM com.host h WHERE h.host ='Localhost'");
+        int countLocalhost = -1;
+        try {
+            countLocalhost = ((Number) q1.getSingleResult()).intValue();
+        } catch (Exception e) {
+            host1 = "http://localhost:4200";
+        }
+        if (countProduction > 0) {
+            host1 = "https://sigess.app"; // Cambiar a producción si hay al menos un registro de producción
+        }
         if (user != null) {
             Query q = this.em.createNativeQuery("SELECT ?1::inet <<= ANY(ip_permitida) AS ip_valida FROM emp.usuario WHERE id = ?2");
             q.setParameter(1, httpRequest.getRemoteAddr());
@@ -364,54 +382,52 @@ public Usuario findByEmailAndPassword(String email, String password) {
 
             Map<String, String> parametros = new HashMap<>();
             parametros.put(EmailFacade.PARAM_COD_RECUP, nuevoPasswd);
+            parametros.put(EmailFacade.PARAM_ENVIROMENT, host1);
             emailFacade.sendEmail(parametros, TipoMail.RECUPERACION_PASSWD, "Recuperación cuenta", email);
+
         }
         return user;
     }
-    
-public Usuario enviarCorreo(String email,Empleado responsable,String nombre, Integer id,  Date fechaproyectada, String host) throws Exception {
-    
+
+    public Usuario enviarCorreo(String email, Empleado responsable, String nombre, Integer id, Date fechaproyectada, String host) throws Exception {
+
         String host1;
         String host2;
-        
-        if(host=="Produccion"){
-            host1="https://sigess.app/app/sec/tarea/";
-            host2="https://sigess.app";
-        }else{
-            host1="https://demo.sigess.app/app/sec/tarea/";
-            host2="https://demo.sigess.app";
+
+        if (host == "Produccion") {
+            host1 = "https://sigess.app/app/sec/tarea/";
+            host2 = "https://sigess.app";
+        } else {
+            host1 = "https://demo.sigess.app/app/sec/tarea/";
+            host2 = "https://demo.sigess.app";
         }
-    
+
         Usuario user = this.findByEmail(email);
-        if (user != null) {                 
+        if (user != null) {
             switch (user.getEstado()) {
                 case BLOQUEADO:
                 case ELIMINADO:
                 case INACTIVO:
                     throw new UserMessageException("SOLICITUD NO PERMITIDA", "El estado del usuario no permite la operación", TipoMensaje.warn);
             }
-            
-            String responsables  = responsable.getPrimerNombre() + " " + responsable.getPrimerApellido();
+
+            String responsables = responsable.getPrimerNombre() + " " + responsable.getPrimerApellido();
             String fechaproyectadas = fechaproyectada.toString();
-            
-            
-            DateTimeFormatter f = DateTimeFormatter.ofPattern( "E MMM dd HH:mm:ss z yyyy",Locale.ENGLISH);
-                                       
-            ZonedDateTime zdt = ZonedDateTime.parse( fechaproyectadas , f ); 
-            
+
+            DateTimeFormatter f = DateTimeFormatter.ofPattern("E MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
+
+            ZonedDateTime zdt = ZonedDateTime.parse(fechaproyectadas, f);
+
             LocalDate ld = zdt.toLocalDate();
-            DateTimeFormatter fLocalDate = DateTimeFormatter.ofPattern( "dd/MM/yyyy" );
-            String output = ld.format( fLocalDate) ;
-            
-            
-            
+            DateTimeFormatter fLocalDate = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            String output = ld.format(fLocalDate);
 
             Map<String, String> parametros = new HashMap<>();
-            
+
             parametros.put(EmailFacade.PARAM_ACTIVIDAD, nombre);
             parametros.put(EmailFacade.PARAM_RESPONSABLE, responsables);
-            if (id != null) { 
-            parametros.put(EmailFacade.PARAM_ID, id.toString());
+            if (id != null) {
+                parametros.put(EmailFacade.PARAM_ID, id.toString());
             }
             parametros.put(EmailFacade.PARAM_FECHA_PROY, output);
             parametros.put(EmailFacade.PARAM_HOST1, host1);
@@ -421,33 +437,33 @@ public Usuario enviarCorreo(String email,Empleado responsable,String nombre, Int
         return user;
     }
 
-public void enviarCorreoSemanal(String contTotal,String email,String pNombre,String abierto,String seguimiento,String vencida,String host){
-        
+    public void enviarCorreoSemanal(String contTotal, String email, String pNombre, String abierto, String seguimiento, String vencida, String host) {
+
         String host1;
         String host2;
-        
-        if(host=="Produccion"){
-            host1="https://sigess.app/app/sec/misTareas";
-            host2="https://sigess.app";
-        }else{
-            host1="https://demo.sigess.app/app/sec/misTareas";
-            host2="https://demo.sigess.app";
+
+        if (host == "Produccion") {
+            host1 = "https://sigess.app/app/sec/misTareas";
+            host2 = "https://sigess.app";
+        } else {
+            host1 = "https://demo.sigess.app/app/sec/misTareas";
+            host2 = "https://demo.sigess.app";
         }
-        
-        
-            Map<String, String> parametros = new HashMap<>();
-            
-            parametros.put(EmailFacade.PARAM_COUNT, contTotal);
-            parametros.put(EmailFacade.PARAM_NOMBRE, pNombre);
-            parametros.put(EmailFacade.PARAM_ABIERTO, abierto);
-            parametros.put(EmailFacade.PARAM_SEGUIMIENTO, seguimiento);
-            parametros.put(EmailFacade.PARAM_VENCIDA, vencida);
-            parametros.put(EmailFacade.PARAM_HOST1, host1);
-            parametros.put(EmailFacade.PARAM_HOST2, host2);
-            emailFacade.sendEmail(parametros, TipoMail.TAREA_SEMANAL, "Tareas", email);
-       // }
+
+        Map<String, String> parametros = new HashMap<>();
+
+        parametros.put(EmailFacade.PARAM_COUNT, contTotal);
+        parametros.put(EmailFacade.PARAM_NOMBRE, pNombre);
+        parametros.put(EmailFacade.PARAM_ABIERTO, abierto);
+        parametros.put(EmailFacade.PARAM_SEGUIMIENTO, seguimiento);
+        parametros.put(EmailFacade.PARAM_VENCIDA, vencida);
+        parametros.put(EmailFacade.PARAM_HOST1, host1);
+        parametros.put(EmailFacade.PARAM_HOST2, host2);
+        emailFacade.sendEmail(parametros, TipoMail.TAREA_SEMANAL, "Tareas", email);
+        // }
         //return user;
     }
+
     public Usuario cambiarPasswd(Integer idUsuario, String newPasswd, String newPasswdConfirm, String oldPasswd) throws Exception {
         Usuario user = super.find(idUsuario);
         if (user == null) {
