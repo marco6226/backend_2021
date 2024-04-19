@@ -17,6 +17,7 @@ import co.sigess.restful.ServiceREST;
 import co.sigess.restful.ado.DirectorioREST;
 import co.sigess.restful.security.Secured;
 import co.sigess.util.Util;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
@@ -117,7 +118,18 @@ public class SeguimientoTareaREST extends ServiceREST {
             fl.add(filter);
             fq.setFilterList(fl);
             List<SeguimientoTarea> seguimientoTarea = seguimientoTareaFacade.findWithFilter(fq);
-            return Response.ok(seguimientoTarea).build();
+            
+            ObjectMapper objectMapper = new ObjectMapper();
+            String seguimientoTareaJson = objectMapper.writeValueAsString(seguimientoTarea);
+
+            // Cifrar la respuesta en JSON
+            cipher.init(Cipher.ENCRYPT_MODE, aesKey);
+            byte[] encryptedBytes = cipher.doFinal(seguimientoTareaJson.getBytes(StandardCharsets.UTF_8));
+            String encryptedResponse = Base64.getEncoder().encodeToString(encryptedBytes);
+            
+//            return Response.ok(seguimientoTarea).build();
+            return Response.ok(encryptedResponse).build();
+
         } catch (Exception ex) {
             return Util.manageException(ex, AnalisisDesviacionREST.class);
         }
