@@ -20,6 +20,7 @@ import java.nio.file.Files;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
 import javax.crypto.spec.SecretKeySpec;
@@ -106,6 +107,10 @@ public class FileUtil {
     }
 
     public static String getFromVirtualFS2(String relativePath) throws FileNotFoundException, Exception {
+        if (containsPathTraversal(relativePath)) {
+            throw new IllegalArgumentException("El nombre del archivo contiene caracteres de ruta no permitidos.");
+        }
+
         File f = new File(ROOT_DIR + relativePath);
         FileInputStream fileInputStreamReader = new FileInputStream(f);
         byte[] bytes = new byte[(int) f.length()];
@@ -120,5 +125,9 @@ public class FileUtil {
         System.out.print(fos);
         return fos.toString();
     }
-
+    
+    private static boolean containsPathTraversal(String fileName) {
+        Pattern pathTraversalPattern = Pattern.compile("^(\\.\\./|\\.\\\\|/|\\\\).*");
+        return pathTraversalPattern.matcher(fileName).matches();
+    }
 }

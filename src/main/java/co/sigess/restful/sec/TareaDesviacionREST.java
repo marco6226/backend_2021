@@ -112,7 +112,6 @@ public class TareaDesviacionREST extends ServiceREST {
             TareaDesviacion tarea = objectMapper.readValue(textoDesencriptado, TareaDesviacion.class);
 
             
-            
             Empresa empresaUsuario = empresaFacade.find(super.getEmpresaIdRequestContext());
             if(empresaUsuario.getIdEmpresaAliada() == null){
                 tarea.setEmpresa(new Empresa(empresaUsuario.getId()));
@@ -120,7 +119,16 @@ public class TareaDesviacionREST extends ServiceREST {
                 tarea.setEmpresa(new Empresa(empresaUsuario.getIdEmpresaAliada()));
             }
             tarea = tareaDesviacionFacade.closeTask(tarea);
-            return Response.ok(tarea).build();
+            
+            
+            String tareaJson = objectMapper.writeValueAsString(tarea);
+            cipher.init(Cipher.ENCRYPT_MODE, aesKey);
+            byte[] encryptedBytes = cipher.doFinal(tareaJson.getBytes(StandardCharsets.UTF_8));
+            String encryptedResponse = Base64.getEncoder().encodeToString(encryptedBytes);
+            
+//            return Response.ok(tarea).build();
+            return Response.ok(encryptedResponse).build();
+
         } catch (Exception ex) {
             return Util.manageException(ex, TareaDesviacionREST.class);
         }
