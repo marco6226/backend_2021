@@ -107,11 +107,14 @@ public class FileUtil {
     }
 
     public static String getFromVirtualFS2(String relativePath) throws FileNotFoundException, Exception {
-        if (!containsPathTraversal(relativePath)) {
+        String pathname = ROOT_DIR + relativePath;
+        if (!containsPathTraversal(pathname)) {
             throw new IllegalArgumentException("El nombre del archivo contiene caracteres de ruta no permitidos.");
         }
 
-        File f = new File(ROOT_DIR + relativePath);
+            
+        File f = new File(pathname);
+        
         FileInputStream fileInputStreamReader = new FileInputStream(f);
         byte[] bytes = new byte[(int) f.length()];
         fileInputStreamReader.read(bytes);
