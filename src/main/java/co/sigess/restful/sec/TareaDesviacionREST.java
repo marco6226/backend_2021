@@ -14,20 +14,12 @@ import co.sigess.restful.ServiceREST;
 import co.sigess.restful.security.Secured;
 import co.sigess.restful.security.ValidadorArea;
 import co.sigess.util.Util;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.util.Arrays;
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.crypto.Cipher;
-import javax.crypto.spec.SecretKeySpec;
 import javax.ejb.EJB;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
-import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -35,7 +27,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import org.glassfish.jersey.media.multipart.FormDataParam;
 
 /**
  *
@@ -90,45 +81,30 @@ public class TareaDesviacionREST extends ServiceREST {
     @Secured(validarPermiso = false)
     @Path("close")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_JSON})
-//    public Response closeTask(TareaDesviacion tarea) {
-    public Response closeTask(@HeaderParam("Authorization") String authorizationHeader,
-            @FormDataParam("data") String encryptedId) {
-
+    public Response closeTask(TareaDesviacion tarea) {
         try {
             
-            byte[] keyBytes = authorizationHeader.getBytes(StandardCharsets.UTF_8);
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            keyBytes = digest.digest(keyBytes);
-            keyBytes = Arrays.copyOf(keyBytes, 16);
-
-            SecretKeySpec aesKey = new SecretKeySpec(keyBytes, "AES");
-
-            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
-            cipher.init(Cipher.DECRYPT_MODE, aesKey);
-            byte[] decryptedBytes = cipher.doFinal(Base64.getDecoder().decode(encryptedId));
-            String textoDesencriptado = new String(decryptedBytes, StandardCharsets.UTF_8);
-
-            ObjectMapper objectMapper = new ObjectMapper();
-            TareaDesviacion tarea = objectMapper.readValue(textoDesencriptado, TareaDesviacion.class);
-
-            
-            Empresa empresaUsuario = empresaFacade.find(super.getEmpresaIdRequestContext());
-            if(empresaUsuario.getIdEmpresaAliada() == null){
-                tarea.setEmpresa(new Empresa(empresaUsuario.getId()));
-            } else {
-                tarea.setEmpresa(new Empresa(empresaUsuario.getIdEmpresaAliada()));
+            if (tareaDesviacionFacade.isValidRuta(tarea.getEvidences())) {
+                Empresa empresaUsuario = empresaFacade.find(super.getEmpresaIdRequestContext());
+                if(empresaUsuario.getIdEmpresaAliada() == null){
+                    tarea.setEmpresa(new Empresa(empresaUsuario.getId()));
+                } else {
+                    tarea.setEmpresa(new Empresa(empresaUsuario.getIdEmpresaAliada()));
+                }
+                tarea = tareaDesviacionFacade.closeTask(tarea);
+                
+                if (!tareaDesviacionFacade.isValidRuta(tarea.getEvidences())) {
+                    
+                    return Response.noContent().build();
+                }
+                
+                return Response.ok(tarea).build();
             }
-            tarea = tareaDesviacionFacade.closeTask(tarea);
+            else{
+                return Response.noContent().build();
+            }
             
             
-            String tareaJson = objectMapper.writeValueAsString(tarea);
-            cipher.init(Cipher.ENCRYPT_MODE, aesKey);
-            byte[] encryptedBytes = cipher.doFinal(tareaJson.getBytes(StandardCharsets.UTF_8));
-            String encryptedResponse = Base64.getEncoder().encodeToString(encryptedBytes);
-            
-//            return Response.ok(tarea).build();
-            return Response.ok(encryptedResponse).build();
-
         } catch (Exception ex) {
             return Util.manageException(ex, TareaDesviacionREST.class);
         }

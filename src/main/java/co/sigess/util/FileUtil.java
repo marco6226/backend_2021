@@ -107,7 +107,7 @@ public class FileUtil {
     }
 
     public static String getFromVirtualFS2(String relativePath) throws FileNotFoundException, Exception {
-        if (containsPathTraversal(relativePath)) {
+        if (!containsPathTraversal(relativePath)) {
             throw new IllegalArgumentException("El nombre del archivo contiene caracteres de ruta no permitidos.");
         }
 
@@ -115,7 +115,13 @@ public class FileUtil {
         FileInputStream fileInputStreamReader = new FileInputStream(f);
         byte[] bytes = new byte[(int) f.length()];
         fileInputStreamReader.read(bytes);
-        return new String(Base64.getEncoder().encodeToString(bytes));
+        
+        String response = (Base64.getEncoder().encodeToString(bytes));
+        if (!containsPathTraversal(response)) {
+            throw new IllegalArgumentException("El nombre del archivo contiene caracteres de ruta no permitidos.");
+        }
+        
+        return response;
     }
 
     public static String getFromVirtualFS3(String relativePath) throws FileNotFoundException, Exception {
@@ -127,7 +133,19 @@ public class FileUtil {
     }
     
     private static boolean containsPathTraversal(String fileName) {
-        Pattern pathTraversalPattern = Pattern.compile("^(\\.\\./|\\.\\\\|/|\\\\).*");
-        return pathTraversalPattern.matcher(fileName).matches();
+        if (fileName == null) {
+            return false; 
+        }
+
+       
+        String[] forbiddenPatterns = {"..", ":", "%2e%2e", "\\", "//"};
+
+        for (String pattern : forbiddenPatterns) {
+            if (fileName.contains(pattern)) {
+                return false; 
+            }
+        }
+
+        return true;
     }
 }

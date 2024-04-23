@@ -53,36 +53,79 @@ public class SeguimientoTareaFacade extends AbstractFacade<SeguimientoTarea>{
     
     
       public  HashMap<String, List<String>>  findFileV2(Integer documentoId,String type) throws Exception{
-        HashMap<String, List<String>> files = new HashMap<String, List<String>>();
-        FilterQuery fq = new FilterQuery();
-        List<Filter> fl = new ArrayList<>();
-        Filter filter = new Filter(type, Integer.toString(documentoId), null, CriteriaFilter.EQUALS);
-        fl.add(filter);
-        fq.setFilterList(fl);
-         List<EvidencesFiles> evidences = evidencesFacade.findWithFilter(fq);
-         if (evidences == null) {
-            throw new IllegalArgumentException("parámetro id no válido");
-        }
-         
-       List<String> List = null;
-       files.put("error", List);
-       List<String> file = new ArrayList<String>();
-  
-          for (int i = 0; i < evidences.size(); i++) {
-              System.out.print(evidences.get(i).getRuta());
-              try {
-                  
-                 file.add(FileUtil.getFromVirtualFS2(evidences.get(i).getRuta()));
-             
-              } catch (Exception ex) {
-                  System.out.print("Erro");
-             }
+          
+          if (isValidRuta(type)) {
+                HashMap<String, List<String>> files = new HashMap<String, List<String>>();
+                FilterQuery fq = new FilterQuery();
+                List<Filter> fl = new ArrayList<>();
+                Filter filter = new Filter(type, Integer.toString(documentoId), null, CriteriaFilter.EQUALS);
+                fl.add(filter);
+                fq.setFilterList(fl);
+                List<EvidencesFiles> evidences = evidencesFacade.findWithFilter(fq);
+                 if (evidences == null) {
+                    throw new IllegalArgumentException("parámetro id no válido");
+                }
+                 
+                 if (isValidRuta(evidences)) {
+                     List<String> List = null;
+                    files.put("error", List);
+                    List<String> file = new ArrayList<String>();
+
+                       for (int i = 0; i < evidences.size(); i++) {
+                           System.out.print(evidences.get(i).getRuta());
+                           try {
+
+                              file.add(FileUtil.getFromVirtualFS2(evidences.get(i).getRuta()));
+
+                           } catch (Exception ex) {
+                               System.out.print("Erro");
+                          }
+                       }
+                        files.put("files", file);
+                                   return files;
+                 }else{
+                    throw new IllegalArgumentException("parámetro id no válido");
+                 }
+               
           }
-           files.put("files", file);
-                      return files;
+          else{
+            throw new IllegalArgumentException("parámetro id no válido");
+         }         
                       
       }
        
- 
+      public static boolean isValidRuta(List<EvidencesFiles> evidences) {
+        
+        String[] forbiddenPatterns = {"..", ":", "%2e%2e", "\\", "//"};    
+        
+        for (EvidencesFiles evidence : evidences) {
+            if (evidence.getRuta() != null) {
+                for (String pattern : forbiddenPatterns) {
+                    if (evidence.getRuta().contains(pattern)) {
+                        return false;
+                    }
+                }
+            }
+        }        
+        return true;
+    }
+      
+    public static boolean isValidRuta(String evidences) {
+        
+        if (evidences == null) {
+            return true;
+        }
+        
+        String[] forbiddenPatterns = {"..", ":", "%2e%2e", "\\", "//"};    
+        
+        
+        for (String pattern : forbiddenPatterns) {
+            if (evidences.contains(pattern)) {
+                return false;
+            }
+        }
+                
+        return true;
+    }
 
 }
