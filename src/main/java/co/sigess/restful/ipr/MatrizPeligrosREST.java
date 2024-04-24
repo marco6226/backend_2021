@@ -104,6 +104,9 @@ public class MatrizPeligrosREST extends ServiceREST{
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response update(MatrizPeligros matrizPeligros) {
         try {
+            MatrizPeligros matrizPeligros2=new MatrizPeligros ();
+            matrizPeligros2=((MatrizPeligrosFacade) beanInstance).find(matrizPeligros.getId());
+            matrizPeligros.setDocumentosList(matrizPeligros2.getDocumentosList());
             matrizPeligros.setEmpresa(new Empresa(super.getEmpresaIdRequestContext()));
             matrizPeligros = ((MatrizPeligrosFacade) beanInstance).edit(matrizPeligros);
             return Response.ok(matrizPeligros).build();
