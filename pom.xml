@@ -147,7 +147,7 @@
         <dependency>
             <groupId>org.bouncycastle</groupId>
             <artifactId>bcprov-jdk15on</artifactId>
-            <version>1.70</version> <!-- Verifica la versión más reciente en el repositorio de Maven -->
+            <version>1.70</version>
         </dependency>
         
         <dependency>

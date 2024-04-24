@@ -444,6 +444,7 @@ public class InspeccionFacade extends AbstractFacade<Inspeccion> {
         q.setParameter(5, hasta);
         List<String> lines = q.getResultList();
         if (lines.isEmpty()) {
+            
             throw new UserMessageException("Datos no encontrados", "No se hallaron inspecciones en el rango de fechas seleccionado", TipoMensaje.info);
         }
 

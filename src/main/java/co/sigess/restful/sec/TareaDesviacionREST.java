@@ -83,14 +83,28 @@ public class TareaDesviacionREST extends ServiceREST {
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_JSON})
     public Response closeTask(TareaDesviacion tarea) {
         try {
-            Empresa empresaUsuario = empresaFacade.find(super.getEmpresaIdRequestContext());
-            if(empresaUsuario.getIdEmpresaAliada() == null){
-                tarea.setEmpresa(new Empresa(empresaUsuario.getId()));
-            } else {
-                tarea.setEmpresa(new Empresa(empresaUsuario.getIdEmpresaAliada()));
+            
+            if (tareaDesviacionFacade.isValidRuta(tarea.getEvidences())) {
+                Empresa empresaUsuario = empresaFacade.find(super.getEmpresaIdRequestContext());
+                if(empresaUsuario.getIdEmpresaAliada() == null){
+                    tarea.setEmpresa(new Empresa(empresaUsuario.getId()));
+                } else {
+                    tarea.setEmpresa(new Empresa(empresaUsuario.getIdEmpresaAliada()));
+                }
+                tarea = tareaDesviacionFacade.closeTask(tarea);
+                
+                if (!tareaDesviacionFacade.isValidRuta(tarea.getEvidences())) {
+                    
+                    return Response.noContent().build();
+                }
+                
+                return Response.ok(tarea).build();
             }
-            tarea = tareaDesviacionFacade.closeTask(tarea);
-            return Response.ok(tarea).build();
+            else{
+                return Response.noContent().build();
+            }
+            
+            
         } catch (Exception ex) {
             return Util.manageException(ex, TareaDesviacionREST.class);
         }

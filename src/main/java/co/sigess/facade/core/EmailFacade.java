@@ -28,6 +28,7 @@ public class EmailFacade {
 
     public static final String PARAM_PLANT_PRINCIPAL = "P{contenido_plantilla}";
     public static final String PARAM_COD_RECUP = "P{codigo_recuperacion}";
+    public static final String PARAM_ENVIROMENT = "P{ambiente_actual}";
     public static final String PARAM_MENSAJE = "P{mensaje}";
     public static final String PARAM_ACTIVIDAD = "P{actividad}";
     public static final String PARAM_ID = "P{id}";

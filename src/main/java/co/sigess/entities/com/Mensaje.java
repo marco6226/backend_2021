@@ -23,6 +23,8 @@ public class Mensaje {
     public static final int COD_TOKEN_FIRMA_INVALIDA = 1_007;
     public static final int COD_USUARIO_NO_VALIDO = 1_008;
     
+    public static final int COD_USUARIO_EMAIL_NO_VALIDO = 1_009;
+    
     public static final int COD_MSG_USUARIO = 2_000;
     public static final int COD_PASSWD_EXPIRADO = 2_001;
     public static final int COD_USUARIO_LOGIN_PREVIO = 2_002;
@@ -36,7 +38,6 @@ public class Mensaje {
     public static final int COD_USR_SIN_NUM_MOVIL = 2_010;
     public static final int COD_MOVIL_NO_VALIDO = 2_011;
     public static final int COD_ERROR_ENVIO_SMS = 2_012;
-    
 
     private String mensaje;
     private String detalle;
