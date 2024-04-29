@@ -11,10 +11,13 @@ import co.sigess.entities.com.TipoMensaje;
 import co.sigess.entities.emp.Area;
 import co.sigess.entities.emp.Empresa;
 import co.sigess.entities.scm.CasosMedicos;
+import co.sigess.entities.scm.CreatePclDTO;
+import co.sigess.facade.scm.pclDiagnosticosFacade;
 import co.sigess.entities.scm.Recomendaciones;
 import co.sigess.entities.scm.ScmLogs;
 import co.sigess.entities.scm.Diagnosticos;
 import co.sigess.entities.scm.Pcl;
+import co.sigess.entities.scm.Pcl_Diagnostico;
 import co.sigess.entities.scm.Reintegro;
 import co.sigess.entities.scm.SeguimientoCaso;
 import co.sigess.entities.scm.SistemaAfectado;
@@ -33,7 +36,10 @@ import co.sigess.facade.scm.SeguimientoCasoFacade;
 import co.sigess.facade.scm.SistemaAfectadoFacade;
 import co.sigess.facade.scm.SveFacade;
 import co.sigess.facade.scm.diagnosticoFacade;
+import co.sigess.facade.scm.pclDiagFacade;
+import co.sigess.facade.scm.pclDiagnosticosFacade;
 import co.sigess.facade.scm.tratamientosFacade;
+import co.sigess.facade.sec.dtoImageDesv;
 import co.sigess.restful.Filter;
 import co.sigess.restful.FilterQuery;
 import co.sigess.restful.FilterResponse;
@@ -43,6 +49,8 @@ import co.sigess.restful.rai.ReporteREST;
 import co.sigess.restful.security.Secured;
 import co.sigess.util.Util;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -51,7 +59,9 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -84,7 +94,7 @@ public class CasoMedicoREST extends ServiceREST {
 
     @PersistenceContext(unitName = "SIGESS_PU")
     private EntityManager em;
-    
+
     public final static String EMAIL_AON = "email_aon";
     public final static String PASS_AON = "pass_aon";
     @EJB
@@ -100,10 +110,16 @@ public class CasoMedicoREST extends ServiceREST {
     private PclFacade pclFacade;
 
     @EJB
+    private pclDiagnosticosFacade PclDIag;
+
+    @EJB
     private CasosMedicosFacade casosmedicosFacade;
 
     @EJB
     private tratamientosFacade tratamientoFacade;
+    
+    @EJB
+    private pclDiagFacade pclDiagFacade ;
 
     @EJB
     private diagnosticoFacade diagnosticoFacade;
@@ -122,7 +138,6 @@ public class CasoMedicoREST extends ServiceREST {
 
     @EJB
     private ReintegroFacade reintegroFacade;
-    
 
     public CasoMedicoREST() {
         super(CasosMedicosFacade.class);
@@ -145,7 +160,7 @@ public class CasoMedicoREST extends ServiceREST {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response create(CasosMedicos casosmedicos) {
         try {
-            
+
             ObjectMapper mapper = new ObjectMapper();
             String json = mapper.writeValueAsString(casosmedicos);
 
@@ -168,7 +183,8 @@ public class CasoMedicoREST extends ServiceREST {
             String json = mapper.writeValueAsString(casosmedicos);
             casosmedicos.setEmpresa(new Empresa(super.getEmpresaIdRequestContext()));
             casosmedicos.setStatusCaso("1");
-            this.logScm("Edicion de caso medico", json, casosmedicos.getId().toString(), casosmedicos.getClass().toString());
+            this.logScm("Edicion de caso medico", json, casosmedicos.getId().toString(),
+                    casosmedicos.getClass().toString());
             casosmedicos = this.casosmedicosFacade.update(casosmedicos);
             return Response.ok(casosmedicos.getId()).build();
         } catch (Exception ex) {
@@ -185,7 +201,8 @@ public class CasoMedicoREST extends ServiceREST {
         try {
             boolean filtradoEmpresa = false;
 
-            filtradoEmpresa = filterQuery.getFilterList().stream().anyMatch(find -> find.getField().equals("empresa.id"));
+            filtradoEmpresa = filterQuery.getFilterList().stream()
+                    .anyMatch(find -> find.getField().equals("empresa.id"));
 
             for (Filter filter : filterQuery.getFilterList()) {
                 if (filter.getField().equals("empresa.id")) {
@@ -200,7 +217,7 @@ public class CasoMedicoREST extends ServiceREST {
                 empFilt.setValue1(super.getEmpresaIdRequestContext().toString());
                 filterQuery.getFilterList().add(empFilt);
             }
-            
+
             long numRows = filterQuery.isCount() ? casosmedicosFacade.countWithFilter(filterQuery) : -1;
 
             List list = casosmedicosFacade.findWithFilter(filterQuery);
@@ -235,7 +252,8 @@ public class CasoMedicoREST extends ServiceREST {
             String json = mapper.writeValueAsString(recomendaciones);
             recomendaciones.setEliminado(false);
 
-            this.logScm("Creacion de recomendacion", json, recomendaciones.getPkCase().toString(), recomendaciones.getClass().toString());
+            this.logScm("Creacion de recomendacion", json, recomendaciones.getPkCase().toString(),
+                    recomendaciones.getClass().toString());
             recomendaciones = this.recomendacionesFacade.crear(recomendaciones, super.getEmpresaIdRequestContext());
 
             return Response.ok(recomendaciones.getId()).build();
@@ -253,7 +271,8 @@ public class CasoMedicoREST extends ServiceREST {
             String json = mapper.writeValueAsString(recomendaciones);
             recomendaciones.setEliminado(false);
 
-            this.logScm("Se edito una recomendacion", json, recomendaciones.getPkCase().toString(), recomendaciones.getClass().toString());
+            this.logScm("Se edito una recomendacion", json, recomendaciones.getPkCase().toString(),
+                    recomendaciones.getClass().toString());
             recomendaciones = this.recomendacionesFacade.update(recomendaciones);
             return Response.ok(recomendaciones).build();
         } catch (Exception ex) {
@@ -279,8 +298,9 @@ public class CasoMedicoREST extends ServiceREST {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response buscarCaso(@PathParam("id") String id) {
         try {
-            if("undefined".compareToIgnoreCase(id) == 0) {
-                //return Util.manageException(new IllegalArgumentException("El valor del id es undefined"), EmpleadoREST.class);
+            if ("undefined".compareToIgnoreCase(id) == 0) {
+                // return Util.manageException(new IllegalArgumentException("El valor del id es
+                // undefined"), EmpleadoREST.class);
                 return Response.status(Response.Status.BAD_REQUEST).build();
             }
 
@@ -299,12 +319,13 @@ public class CasoMedicoREST extends ServiceREST {
         try {
 
             List<CasosMedicos> list = casosmedicosFacade.buscar(parametro);
-            for(CasosMedicos casoMedico : list){
+            for (CasosMedicos casoMedico : list) {
                 casoMedico.getPkUser().getArea().setAreaList(null);
                 casoMedico.getPkUser().setUsuario(null);
                 try {
                     casoMedico.getEmpresa().setLogo(null);
-                } catch (Exception e) { }
+                } catch (Exception e) {
+                }
             }
             return Response.ok(list).build();
 
@@ -368,9 +389,10 @@ public class CasoMedicoREST extends ServiceREST {
             ObjectMapper mapper = new ObjectMapper();
             String json = mapper.writeValueAsString(diagnosticos);
 
-            this.logScm("Se edito un diagnostico", json, diagnosticos.getPkCase().toString(), diagnosticos.getClass().toString());
+            this.logScm("Se edito un diagnostico", json, diagnosticos.getPkCase().toString(),
+                    diagnosticos.getClass().toString());
             diagnosticos = this.diagnosticoFacade.update(diagnosticos);
-            
+
             Query q1 = this.em.createNativeQuery("SELECT scm.diagnostico_cm()");
             q1.getResultList();
             return Response.ok(diagnosticos).build();
@@ -417,11 +439,12 @@ public class CasoMedicoREST extends ServiceREST {
             seguimientoCaso.setEliminado(false);
             seguimientoCaso = this.seguimientoFacade.create(seguimientoCaso);
             String json = mapper.writeValueAsString(seguimientoCaso);
-            this.logScm("Creacion de Seguimiento", json, seguimientoCaso.getPkCase(), seguimientoCaso.getClass().toString());
-            
+            this.logScm("Creacion de Seguimiento", json, seguimientoCaso.getPkCase(),
+                    seguimientoCaso.getClass().toString());
+
             Query q1 = this.em.createNativeQuery("SELECT scm.seguimiento_cm()");
             q1.getResultList();
-            
+
             return Response.ok(seguimientoCaso).build();
         } catch (Exception ex) {
             return Util.manageException(ex, ReporteREST.class);
@@ -440,8 +463,7 @@ public class CasoMedicoREST extends ServiceREST {
             return Util.manageException(ex, ReporteREST.class);
         }
     }
-    
-    
+
     @GET
     @Path("seguimiento/generico/{parametro}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -466,10 +488,10 @@ public class CasoMedicoREST extends ServiceREST {
 
             this.logScm("Se edito un seguimiento", json, seguimientoCaso.getPkCase(), seguimientoCaso.getClass().toString());
             seguimientoCaso = this.seguimientoFacade.update(seguimientoCaso);
-            
+
             Query q1 = this.em.createNativeQuery("SELECT scm.seguimiento_cm()");
             q1.getResultList();
-            
+
             return Response.ok(seguimientoCaso).build();
         } catch (Exception ex) {
             return Util.manageException(ex, ReporteREST.class);
@@ -483,7 +505,7 @@ public class CasoMedicoREST extends ServiceREST {
         try {
             String pk_case = seguimientoFacade.findById(id).get(0).getPkCase();
             this.logScm("Se Elimino un seguimiento", null, pk_case, "Seguimiento");
-            
+
             int seg = this.seguimientoFacade.eliminar(Long.parseLong(id));
             return Response.ok(seg).build();
         } catch (Exception ex) {
@@ -496,7 +518,7 @@ public class CasoMedicoREST extends ServiceREST {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response editDiag(@PathParam("id") String id) {
         try {
-            
+
             String pk_case = diagnosticoFacade.findById(id).getPkCase();
             this.logScm("Se borro un diagnostico ", null, pk_case, "diagnostico");
             int diag = this.diagnosticoFacade.eliminar(Long.parseLong(id));
@@ -598,8 +620,7 @@ public class CasoMedicoREST extends ServiceREST {
             @PathParam("token") String token,
             @PathParam("cc") String cc,
             @PathParam("fechai") String fechai,
-            @PathParam("fechafi") String fechafi
-    ) throws MalformedURLException, IOException {
+            @PathParam("fechafi") String fechafi) throws MalformedURLException, IOException {
         Properties prop = this.loaderFacade.getSmsProperties();
         try {
             HttpResponse<String> response = Unirest.get("http://localhost:3000/api/v1/aon/registers")
@@ -617,35 +638,91 @@ public class CasoMedicoREST extends ServiceREST {
 
     }
 
-    @POST
-    @Path("pcl")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response create(Pcl pcl) {
-        try {
-            pcl.setEliminado(false);
-            pcl = this.pclFacade.create(pcl);
-            String pk_case = "";
-            if(pcl.getDiag() != null){
-                pk_case = diagnosticoFacade.findById(pcl.getDiag()).getPkCase();
-            }
-            this.logScm("Creacion de pcl", null, pk_case, pcl.getClass().toString());
-            return Response.ok(pcl.getId()).build();
-        } catch (Exception ex) {
-            return Util.manageException(ex, CasoMedicoREST.class);
+@POST
+@Path("pcl")
+@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+public Response create(CreatePclDTO createvalue) {
+    try {
+        // Crear una nueva instancia de PCL y establecer eliminado en false
+        Pcl newPcl = createvalue.getPcl();
+        newPcl.setEliminado(false);
+
+        // Crear la nueva PCL en la base de datos y obtener su ID
+        Long idPcl = this.pclFacade.create(newPcl).getId();
+
+        // Asignar el ID generado a la nueva PCL
+        newPcl.setId(idPcl);
+
+        // Crear los registros de Pcl_Diagnostico
+        for (Long diagId : createvalue.getDiags()) {
+            Diagnosticos diag = new Diagnosticos();
+            diag.setId(diagId);
+
+            // Guardar el diagnóstico en la tabla diag de pcl
+            Pcl_Diagnostico pclDiag = new Pcl_Diagnostico();
+            pclDiag.setDiagnosticos(diag);
+            pclDiag.setPcl(newPcl);
+            this.PclDIag.create(pclDiag);
         }
+
+        // Log de la creación de PCL
+        String pk_case = "";
+        this.logScm("Creacion de pcl", null, pk_case, newPcl.getClass().toString());
+
+        // Construir la respuesta
+        Map<String, Object> response = new HashMap<>();
+        response.put("pcl", newPcl);
+        response.put("diags", createvalue.getDiags());
+
+        // Devolver la respuesta
+        return Response.ok(response).build();
+    } catch (Exception ex) {
+        return Util.manageException(ex, CasoMedicoREST.class);
     }
+}
+
+
 
     @GET
     @Path("pcl/{id}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response listPcl(@PathParam("id") String id) {
         try {
-            List list = this.pclFacade.findAllById(id);
+            //List list = this.pclFacade.findAllById(id);
+            List list= this.pclFacade.findAllById(id);
+            return Response.ok(list).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, CasoMedicoREST.class);
+            
+        }
+    }
+    
+    @GET
+    @Path("pclAllDiags/{id}/{pcl}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response listPclAllDiags(@PathParam("id") String id,@PathParam("pcl") Long pcl) {
+        try {
+            //List list = this.pclFacade.findAllById(id);
+            List list= this.pclDiagFacade.findPCLbyID(id, pcl);
+            return Response.ok(list).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, CasoMedicoREST.class);
+            
+        }
+    }
+    
+    @GET
+    @Path("pclDiags/{id}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response listPclAndDiags(@PathParam("id") String id) {
+        try {
+            List list = this.PclDIag.findAllByIdPCL(id);
             return Response.ok(list).build();
         } catch (Exception ex) {
             return Util.manageException(ex, CasoMedicoREST.class);
         }
     }
+
 
     @PUT
     @Path("pcl")
@@ -656,9 +733,8 @@ public class CasoMedicoREST extends ServiceREST {
 
             ObjectMapper mapper = new ObjectMapper();
             String json = mapper.writeValueAsString(pcl);
-            String pk_case = diagnosticoFacade.findById(pcl.getDiag()).getPkCase();
 
-            this.logScm("Se edito un pcl", json, pk_case, pcl.getClass().toString());
+            this.logScm("Se edito un pcl", json, "", pcl.getClass().toString());
             pcl = this.pclFacade.edit(pcl);
 
             return Response.ok(pcl).build();
@@ -673,8 +749,8 @@ public class CasoMedicoREST extends ServiceREST {
     public Response deletePcl(Pcl pcl) {
         try {
             this.pclFacade.eliminar(pcl.getId());
-            String pk_case = diagnosticoFacade.findById(pcl.getDiag()).getPkCase();
-            this.logScm("Se Elimino una pcl", null, pk_case, "Pcl");
+            //String pk_case = diagnosticoFacade.findById(pcl.getDiag()).getPkCase();
+            // this.logScm("Se Elimino una pcl", null, pk_case, "Pcl");
             return Response.ok(pcl.getId().toString()).build();
         } catch (Exception ex) {
             return Util.manageException(ex, CasoMedicoREST.class);
@@ -704,12 +780,13 @@ public class CasoMedicoREST extends ServiceREST {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response create(Reintegro reintegro) {
         try {
-//            reintegro.setEliminado(false);
+            // reintegro.setEliminado(false);
             reintegro = this.reintegroFacade.create(reintegro);
-//            this.logScm("Creacion de reintegro", null, reintegro.getId().toString(), reintegro.getClass().toString());
+            // this.logScm("Creacion de reintegro", null, reintegro.getId().toString(),
+            // reintegro.getClass().toString());
             System.out.println(reintegro);
             return Response.ok(reintegro).build();
-//            return Response.ok(reintegro.getId()).build();
+            // return Response.ok(reintegro.getId()).build();
         } catch (Exception ex) {
             return Util.manageException(ex, CasoMedicoREST.class);
         }
@@ -720,10 +797,10 @@ public class CasoMedicoREST extends ServiceREST {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response listReintegro(@PathParam("id") String id) {
         try {
-//            reintegro.setEliminado(false);
+            // reintegro.setEliminado(false);
             List<Reintegro> list = (List<Reintegro>) this.reintegroFacade.getAllByCasoID(id);
             return Response.ok(list).build();
-//            return Response.ok(reintegro.getId()).build();
+            // return Response.ok(reintegro.getId()).build();
         } catch (Exception ex) {
             return Util.manageException(ex, CasoMedicoREST.class);
         }
@@ -745,28 +822,26 @@ public class CasoMedicoREST extends ServiceREST {
             return Util.manageException(ex, ReporteREST.class);
         }
     }
-    
+
     @PUT
     @Path("cambiarEstado/{id}")
     @Secured(validarPermiso = false)
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response changeEstadoById(@PathParam("id") Integer id, String body){
+    public Response changeEstadoById(@PathParam("id") Integer id, String body) {
         try {
             CasosMedicos casosMedicos = this.casosmedicosFacade.findById(id);
-            if(casosMedicos.getStatusCaso().compareTo("0") == 0){
+            if (casosMedicos.getStatusCaso().compareTo("0") == 0) {
                 casosMedicos.setStatusCaso("1");
                 casosMedicos.setFechaFinal(null);
-                //casosMedicos.setObservaciones(null);
+                // casosMedicos.setObservaciones(null);
                 return Response.ok(casosmedicosFacade.update(casosMedicos)).build();
-            }else if(casosMedicos.getStatusCaso().compareTo("1") == 0){
+            } else if (casosMedicos.getStatusCaso().compareTo("1") == 0) {
                 casosMedicos.setStatusCaso("0");
                 return Response.ok(casosmedicosFacade.update(casosMedicos)).build();
             }
             throw new UserMessageException("Error", "No se ha podido cambiar el estado del caso.", TipoMensaje.error);
-        }catch(Exception e){
+        } catch (Exception e) {
             return Util.manageException(e, CasoMedicoREST.class);
         }
     }
 }
-
-
