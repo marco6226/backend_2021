@@ -749,8 +749,8 @@ public Response create(CreatePclDTO createvalue) {
     public Response deletePcl(Pcl pcl) {
         try {
             this.pclFacade.eliminar(pcl.getId());
-            //String pk_case = diagnosticoFacade.findById(pcl.getDiag()).getPkCase();
-            // this.logScm("Se Elimino una pcl", null, pk_case, "Pcl");
+            String pk_case = diagnosticoFacade.findById(pcl.getDiag()).getPkCase();
+             this.logScm("Se Elimino una pcl", null, pk_case, "Pcl");
             return Response.ok(pcl.getId().toString()).build();
         } catch (Exception ex) {
             return Util.manageException(ex, CasoMedicoREST.class);
