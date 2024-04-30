@@ -58,6 +58,7 @@ public class ApplicationConfig extends Application {
         resources.add(co.sigess.restful.cop.ActaREST.class);
         resources.add(co.sigess.restful.emp.AreaREST.class);
         resources.add(co.sigess.restful.emp.AuthenticationREST.class);
+        resources.add(co.sigess.restful.emp.CargoActualREST.class);
         resources.add(co.sigess.restful.emp.CargoREST.class);
         resources.add(co.sigess.restful.emp.CompetenciaREST.class);
         resources.add(co.sigess.restful.emp.ConfiguracionJornadaREST.class);
