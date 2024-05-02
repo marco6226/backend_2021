@@ -21,7 +21,6 @@ import javax.ejb.Startup;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.ws.rs.Path;
 
 /**
  *
@@ -47,8 +46,9 @@ public class LoaderFacade {
     private String PlantillaReporteATAliado;
     private String PlantillaReporteAliadoAprobado;
     private String PlantillaReporteAliadoRechazado;
-    private String PlantillaReporteAliadoModificado; 
-    private String PlantillaReporteAliadoCicloCorto; 
+    private String PlantillaReporteAliadoModificado;
+    private String PlantillaReporteAliadoCicloCorto;
+    private String PlantillaDocumentosSaludLaboral;
 
     private ApiVersion apiVersion;
     private Properties smsProp;
@@ -62,18 +62,34 @@ public class LoaderFacade {
         getPlantillaMailNotificacionNueva();
         getApiVersion();
         getSmsProperties();
-       
+
     }
-   
-   public String getPlantillaMail() {
+
+    public String getPlantillaDocumentosSaludLaborales() {
+        if (this.PlantillaDocumentosSaludLaboral == null) {
+            try {
+                String ruta = getClass().getResource(Recursos.PLANTILLA_DOCUMENTOS_SALUD_LABORAL.getRuta()).getPath();
+                int y = ruta.length();
+                String x = isWindows(ruta, y);
+
+                this.PlantillaDocumentosSaludLaboral = new String(Files.readAllBytes(Paths.get(x)));
+            } catch (IOException ex) {
+                Logger.getLogger(LoaderFacade.class.getName()).log(Level.SEVERE, null, ex);
+                throw new IllegalArgumentException("No se ha podido inicializar correctamente la plantilla PLANTILLA_DOCUMENTOS_SALUD_LABORAL");
+            }
+        }
+        return PlantillaDocumentosSaludLaboral;
+    }
+
+    public String getPlantillaMail() {
         if (this.plantillaMail == null) {
             try {
-                    
+
                 String ruta = getClass().getResource(Recursos.PLANTILLA_MAIL.getRuta()).getPath();
-                int y = ruta.length(); 
-               String x  = isWindows(ruta,y);
+                int y = ruta.length();
+                String x = isWindows(ruta, y);
                 System.out.println(x + "añsdkasñldsadasd");
-                this.plantillaMail = new String(Files.readAllBytes(Paths.get(x)));               
+                this.plantillaMail = new String(Files.readAllBytes(Paths.get(x)));
             } catch (IOException ex) {
                 Logger.getLogger(LoaderFacade.class.getName()).log(Level.SEVERE, null, ex);
                 throw new IllegalArgumentException("No se ha podido inicializar correctamente la plantilla PLANTILLA_MAIL");
@@ -86,8 +102,8 @@ public class LoaderFacade {
         if (this.plantillaMailRecPasswd == null) {
             try {
                 String ruta = getClass().getResource(Recursos.PLANTILLA_MAIL_REC_PASSW.getRuta()).getPath();
-                int y = ruta.length(); 
-                String x = isWindows(ruta,y);
+                int y = ruta.length();
+                String x = isWindows(ruta, y);
                 this.plantillaMailRecPasswd = new String(Files.readAllBytes(Paths.get(x)));
             } catch (IOException ex) {
                 Logger.getLogger(LoaderFacade.class.getName()).log(Level.SEVERE, null, ex);
@@ -96,13 +112,13 @@ public class LoaderFacade {
         }
         return plantillaMailRecPasswd;
     }
-    
-       public String getPlantillaMailCambioPasswd() {
+
+    public String getPlantillaMailCambioPasswd() {
         if (this.plantillaMailCambioPasswd == null) {
             try {
                 String ruta = getClass().getResource(Recursos.PLANTILLA_MAIL_CAMBIO_PASSW.getRuta()).getPath();
-                int y = ruta.length(); 
-                String x = isWindows(ruta,y);
+                int y = ruta.length();
+                String x = isWindows(ruta, y);
                 this.plantillaMailCambioPasswd = new String(Files.readAllBytes(Paths.get(x)));
             } catch (IOException ex) {
                 Logger.getLogger(LoaderFacade.class.getName()).log(Level.SEVERE, null, ex);
@@ -111,12 +127,13 @@ public class LoaderFacade {
         }
         return plantillaMailCambioPasswd;
     }
-       public String getPlantillaMailNotificacionNueva() {
+
+    public String getPlantillaMailNotificacionNueva() {
         if (this.PlantillaMailNotificacionNueva == null) {
             try {
                 String ruta = getClass().getResource(Recursos.PLANTILLA_MAIL_NOT_NEW.getRuta()).getPath();
-                int y = ruta.length(); 
-                String x = isWindows(ruta,y);
+                int y = ruta.length();
+                String x = isWindows(ruta, y);
                 this.PlantillaMailNotificacionNueva = new String(Files.readAllBytes(Paths.get(x)));
             } catch (IOException ex) {
                 Logger.getLogger(LoaderFacade.class.getName()).log(Level.SEVERE, null, ex);
@@ -130,8 +147,8 @@ public class LoaderFacade {
         if (this.plantillaMailCreacionUsuario == null) {
             try {
                 String ruta = getClass().getResource(Recursos.PLANTILLA_MAIL_CREACION_USUARIO.getRuta()).getPath();
-                 int y = ruta.length(); 
-                String x = isWindows(ruta,y);
+                int y = ruta.length();
+                String x = isWindows(ruta, y);
                 this.plantillaMailCreacionUsuario = new String(Files.readAllBytes(Paths.get(x)));
             } catch (IOException ex) {
                 Logger.getLogger(LoaderFacade.class.getName()).log(Level.SEVERE, null, ex);
@@ -140,15 +157,15 @@ public class LoaderFacade {
         }
         return plantillaMailCreacionUsuario;
     }
-    
+
     public String getPlantillaMailObservacionDenegada() {
         if (this.PlantillaMailObservacionDenegada == null) {
             try {
                 String ruta = getClass().getResource(Recursos.PLANTILLA_MAIL_OBSERVACION_DENEGADA.getRuta()).getPath();
-                int y = ruta.length(); 
-               String x  = isWindows(ruta,y);
+                int y = ruta.length();
+                String x = isWindows(ruta, y);
                 System.out.println(x + "observacion");
-                this.PlantillaMailObservacionDenegada = new String(Files.readAllBytes(Paths.get(x)));               
+                this.PlantillaMailObservacionDenegada = new String(Files.readAllBytes(Paths.get(x)));
             } catch (IOException ex) {
                 Logger.getLogger(LoaderFacade.class.getName()).log(Level.SEVERE, null, ex);
                 throw new IllegalArgumentException("No se ha podido inicializar correctamente la plantilla PLANTILLA_MAIL_OBSERVACION_DENEGADA");
@@ -156,15 +173,15 @@ public class LoaderFacade {
         }
         return PlantillaMailObservacionDenegada;
     }
-    
-    public String getPlantillaMailRiesgosCriticos(){
+
+    public String getPlantillaMailRiesgosCriticos() {
         if (this.PlantillaMailRiesgosCriticos == null) {
             try {
                 String ruta = getClass().getResource(Recursos.PLANTILLA_MAIL_RIESGOS_CRITICOS.getRuta()).getPath();
-                int y = ruta.length(); 
-               String x  = isWindows(ruta,y);
+                int y = ruta.length();
+                String x = isWindows(ruta, y);
                 System.out.println(x + "riesgos");
-                this.PlantillaMailRiesgosCriticos = new String(Files.readAllBytes(Paths.get(x)));               
+                this.PlantillaMailRiesgosCriticos = new String(Files.readAllBytes(Paths.get(x)));
             } catch (IOException ex) {
                 Logger.getLogger(LoaderFacade.class.getName()).log(Level.SEVERE, null, ex);
                 throw new IllegalArgumentException("No se ha podido inicializar correctamente la plantilla PLANTILLA_MAIL_RIESGOS_CRITICOS");
@@ -172,15 +189,15 @@ public class LoaderFacade {
         }
         return PlantillaMailRiesgosCriticos;
     }
-    
-    public String getPlantillaAliadoNuevo(){
+
+    public String getPlantillaAliadoNuevo() {
         if (this.PlantillaAliadoNuevo == null) {
             try {
                 String ruta = getClass().getResource(Recursos.PLANTILLA_MAIL_ALIADO_NUEVO.getRuta()).getPath();
-                int y = ruta.length(); 
-               String x  = isWindows(ruta,y);
+                int y = ruta.length();
+                String x = isWindows(ruta, y);
                 System.out.println(x + "riesgos");
-                this.PlantillaAliadoNuevo = new String(Files.readAllBytes(Paths.get(x)));               
+                this.PlantillaAliadoNuevo = new String(Files.readAllBytes(Paths.get(x)));
             } catch (IOException ex) {
                 Logger.getLogger(LoaderFacade.class.getName()).log(Level.SEVERE, null, ex);
                 throw new IllegalArgumentException("No se ha podido inicializar correctamente la plantilla PLANTILLA_MAIL_ALIADO_NUEVO");
@@ -188,15 +205,15 @@ public class LoaderFacade {
         }
         return PlantillaAliadoNuevo;
     }
-    
-    public String getPlantillaAliadoActualizado(){
+
+    public String getPlantillaAliadoActualizado() {
         if (this.PlantillaAliadoActualizado == null) {
             try {
                 String ruta = getClass().getResource(Recursos.PLANTILLA_MAIL_ALIADO_ACTUALIZADO.getRuta()).getPath();
-                int y = ruta.length(); 
-               String x  = isWindows(ruta,y);
+                int y = ruta.length();
+                String x = isWindows(ruta, y);
                 System.out.println(x + "riesgos");
-                this.PlantillaAliadoActualizado = new String(Files.readAllBytes(Paths.get(x)));               
+                this.PlantillaAliadoActualizado = new String(Files.readAllBytes(Paths.get(x)));
             } catch (IOException ex) {
                 Logger.getLogger(LoaderFacade.class.getName()).log(Level.SEVERE, null, ex);
                 throw new IllegalArgumentException("No se ha podido inicializar correctamente la plantilla PLANTILLA_MAIL_ALIADO_ACTUALIZADO");
@@ -204,14 +221,14 @@ public class LoaderFacade {
         }
         return PlantillaAliadoActualizado;
     }
-    
-    public String getPlantillaAliadoCicloCorto(){
+
+    public String getPlantillaAliadoCicloCorto() {
         if (this.PlantillaReporteAliadoCicloCorto == null) {
             try {
                 String ruta = getClass().getResource(Recursos.PLANTILLA_MAIL_ALIADO_CICLOCORTO.getRuta()).getPath();
-                int y = ruta.length(); 
-               String x  = isWindows(ruta,y);
-                this.PlantillaReporteAliadoCicloCorto = new String(Files.readAllBytes(Paths.get(x)));               
+                int y = ruta.length();
+                String x = isWindows(ruta, y);
+                this.PlantillaReporteAliadoCicloCorto = new String(Files.readAllBytes(Paths.get(x)));
             } catch (IOException ex) {
                 Logger.getLogger(LoaderFacade.class.getName()).log(Level.SEVERE, null, ex);
                 throw new IllegalArgumentException("No se ha podido inicializar correctamente la plantilla PLANTILLA_MAIL_ALIADO_CICLOCORTO");
@@ -219,15 +236,15 @@ public class LoaderFacade {
         }
         return PlantillaReporteAliadoCicloCorto;
     }
-    
-    public String getPlantillaMailTareaSemanal(){
+
+    public String getPlantillaMailTareaSemanal() {
         if (this.PlantillaMailTareaSemanal == null) {
             try {
                 String ruta = getClass().getResource(Recursos.PLANTILLA_MAIL_TAREA_SEMANAL.getRuta()).getPath();
-                int y = ruta.length(); 
-               String x  = isWindows(ruta,y);
+                int y = ruta.length();
+                String x = isWindows(ruta, y);
                 System.out.println(x + "SEMANATAREA");
-                this.PlantillaMailTareaSemanal = new String(Files.readAllBytes(Paths.get(x)));               
+                this.PlantillaMailTareaSemanal = new String(Files.readAllBytes(Paths.get(x)));
             } catch (IOException ex) {
                 Logger.getLogger(LoaderFacade.class.getName()).log(Level.SEVERE, null, ex);
                 throw new IllegalArgumentException("No se ha podido inicializar correctamente la plantilla PLANTILLA_MAIL_TAREA_SEMANAL");
@@ -235,9 +252,9 @@ public class LoaderFacade {
         }
         return PlantillaMailTareaSemanal;
     }
-    
-    public String getPlantillaReporteAliado(){
-        if(this.PlantillaReporteATAliado == null){
+
+    public String getPlantillaReporteAliado() {
+        if (this.PlantillaReporteATAliado == null) {
             try {
                 String ruta = getClass().getResource(Recursos.PLANTILLA_REPORTE_AT_ALIADO.getRuta()).getPath();
                 int y = ruta.length();
@@ -251,14 +268,14 @@ public class LoaderFacade {
         }
         return PlantillaReporteATAliado;
     }
-    
-    public String getPlantillaReporteAliadoAprobado(){
-        if(this.PlantillaReporteAliadoAprobado == null){
+
+    public String getPlantillaReporteAliadoAprobado() {
+        if (this.PlantillaReporteAliadoAprobado == null) {
             try {
                 String ruta = getClass().getResource(Recursos.PLANTILLA_REPORTE_ALIADO_APROBADO.getRuta()).getPath();
                 int y = ruta.length();
                 String x = isWindows(ruta, y);
-                System.out.println(x +"REPORTE ALIADO APROBADO");
+                System.out.println(x + "REPORTE ALIADO APROBADO");
                 this.PlantillaReporteAliadoAprobado = new String(Files.readAllBytes(Paths.get(x)));
             } catch (Exception e) {
                 Logger.getLogger(LoaderFacade.class.getName()).log(Level.SEVERE, null, e);
@@ -267,14 +284,14 @@ public class LoaderFacade {
         }
         return PlantillaReporteAliadoAprobado;
     }
-    
-    public String getPlantillaReporteAliadoRechazado(){
-        if(this.PlantillaReporteAliadoRechazado == null){
+
+    public String getPlantillaReporteAliadoRechazado() {
+        if (this.PlantillaReporteAliadoRechazado == null) {
             try {
                 String ruta = getClass().getResource(Recursos.PLANTILLA_REPORTE_ALIADO_RECHAZADO.getRuta()).getPath();
                 int y = ruta.length();
                 String x = isWindows(ruta, y);
-                System.out.println(x +"REPORTE ALIADO RECHAZADO");
+                System.out.println(x + "REPORTE ALIADO RECHAZADO");
                 this.PlantillaReporteAliadoRechazado = new String(Files.readAllBytes(Paths.get(x)));
             } catch (Exception e) {
                 Logger.getLogger(LoaderFacade.class.getName()).log(Level.SEVERE, null, e);
@@ -283,14 +300,14 @@ public class LoaderFacade {
         }
         return PlantillaReporteAliadoRechazado;
     }
-    
-    public String getPlantillaReporteAliadoModificado(){
-        if(this.PlantillaReporteAliadoModificado == null){
+
+    public String getPlantillaReporteAliadoModificado() {
+        if (this.PlantillaReporteAliadoModificado == null) {
             try {
                 String ruta = getClass().getResource(Recursos.PLANTILLA_REPORTE_ALIADO_MODIFICADO.getRuta()).getPath();
                 int y = ruta.length();
                 String x = isWindows(ruta, y);
-                System.out.println(x +"REPORTE ALIADO MODIFICADO");
+                System.out.println(x + "REPORTE ALIADO MODIFICADO");
                 this.PlantillaReporteAliadoModificado = new String(Files.readAllBytes(Paths.get(x)));
             } catch (Exception e) {
                 Logger.getLogger(LoaderFacade.class.getName()).log(Level.SEVERE, null, e);
@@ -306,7 +323,7 @@ public class LoaderFacade {
             q.setMaxResults(1);
             this.apiVersion = (ApiVersion) q.getSingleResult();
             System.out.println("########################## Desplegando api version: " + this.apiVersion.getVersionActual() + " ##########################");
-        }  
+        }
         return this.apiVersion;
     }
 
@@ -332,11 +349,11 @@ public class LoaderFacade {
         }
         return this.smsProp;
     }
-    
-    private String isWindows (String route,int y){
+
+    private String isWindows(String route, int y) {
         System.out.println(System.getProperty("os.name").toLowerCase().contains("windows"));
-        route  =   System.getProperty("os.name").toLowerCase().contains("windows") ?  route.substring(1,y) : route;
-        return route; 
+        route = System.getProperty("os.name").toLowerCase().contains("windows") ? route.substring(1, y) : route;
+        return route;
     }
 
 }

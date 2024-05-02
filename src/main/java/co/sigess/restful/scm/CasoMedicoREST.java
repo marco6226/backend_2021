@@ -10,6 +10,7 @@ import co.sigess.entities.com.Mensaje;
 import co.sigess.entities.com.TipoMensaje;
 import co.sigess.entities.emp.Area;
 import co.sigess.entities.emp.Empresa;
+import co.sigess.entities.emp.Usuario;
 import co.sigess.entities.scm.CasosMedicos;
 import co.sigess.entities.scm.CreatePclDTO;
 import co.sigess.facade.scm.pclDiagnosticosFacade;
@@ -27,10 +28,12 @@ import co.sigess.exceptions.UserMessageException;
 import co.sigess.facade.aus.ReporteAusentismoFacade;
 import co.sigess.facade.core.LoaderFacade;
 import co.sigess.facade.core.SMSFacade;
+import co.sigess.facade.emp.UsuarioFacade;
 import co.sigess.facade.scm.CasosMedicosFacade;
 import co.sigess.facade.scm.PclFacade;
 import co.sigess.facade.scm.RecomendacionesFacade;
 import co.sigess.facade.scm.ReintegroFacade;
+import co.sigess.facade.scm.SaludLaboralFacade;
 import co.sigess.facade.scm.ScmLogsFacade;
 import co.sigess.facade.scm.SeguimientoCasoFacade;
 import co.sigess.facade.scm.SistemaAfectadoFacade;
@@ -44,8 +47,10 @@ import co.sigess.restful.Filter;
 import co.sigess.restful.FilterQuery;
 import co.sigess.restful.FilterResponse;
 import co.sigess.restful.ServiceREST;
+import co.sigess.restful.emp.AuthenticationREST;
 import co.sigess.restful.emp.EmpleadoREST;
 import co.sigess.restful.rai.ReporteREST;
+import co.sigess.restful.security.Auditable;
 import co.sigess.restful.security.Secured;
 import co.sigess.util.Util;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -58,6 +63,7 @@ import java.math.BigInteger;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -77,6 +83,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import kong.unirest.HttpResponse;
@@ -88,7 +95,7 @@ import kong.unirest.UnirestException;
  *
  * @author leonardo
  */
-@Secured
+//@Secured
 @Path("casomedico")
 public class CasoMedicoREST extends ServiceREST {
 
@@ -117,6 +124,12 @@ public class CasoMedicoREST extends ServiceREST {
 
     @EJB
     private tratamientosFacade tratamientoFacade;
+    
+    @EJB
+    private SaludLaboralFacade SaludLaboralFacade;
+    
+    
+
     
     @EJB
     private pclDiagFacade pclDiagFacade ;
@@ -844,4 +857,43 @@ public Response create(CreatePclDTO createvalue) {
             return Util.manageException(e, CasoMedicoREST.class);
         }
     }
+@GET
+@Path("enviarcorreo")
+@Produces(MediaType.APPLICATION_JSON)
+public Response enviarCorreoCasosMedicos2( List<String> emails) {
+    try {
+        if (emails != null && !emails.isEmpty()) {
+            SaludLaboralFacade facade = new SaludLaboralFacade();
+            Usuario usuario = facade.enviarCorreoCasosMedicos2(emails.toArray(new String[0]));
+        }
+        return Response.ok(new Mensaje("Restauración realizada", "Se ha enviado un correo electrónico con las instrucciones para reestablecer las credenciales de usuario", TipoMensaje.success)).build();
+    } catch (Exception ex) {
+        return Util.manageException(ex, AuthenticationREST.class);
+    }
 }
+
+@GET
+@Path("sendmail/{emails}")
+@Produces(MediaType.APPLICATION_JSON)
+public Response enviarCorreoCasosMedicos(@PathParam("emails") String emails) {
+    try {
+        String[] correosArray = emails.split(",");
+        List<String> correos = Arrays.asList(correosArray);
+        
+        if (correos != null && !correos.isEmpty()) {
+            List<Usuario> usuarios = SaludLaboralFacade.enviarCorreoCasosMedicos(correos);
+        }
+        return Response.ok(new Mensaje("Envío realizado", "Se ha enviado un correo electrónico con los documentos a solicitar", TipoMensaje.success)).build();
+    } catch (Exception ex) {
+        return Util.manageException(ex, AuthenticationREST.class);
+    }
+}
+
+
+
+
+}
+
+
+
+

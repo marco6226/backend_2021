@@ -26,7 +26,7 @@ public enum Recursos {
     PLANTILLA_REPORTE_ALIADO_RECHAZADO("/mail/templates/PlantillaReporteAliadoRechazado.html"),
     PLANTILLA_REPORTE_ALIADO_MODIFICADO("/mail/templates/PlantillaReporteAliadoModificado.html"),
     PLANTILLA_MAIL_ALIADO_CICLOCORTO("/mail/templates/PlantillaAliadoCicloCorto.html"),
-
+    PLANTILLA_DOCUMENTOS_SALUD_LABORAL("/mail/templates/PlantillaDocumentacionSaludLaboral.html"),
     SMS_INTEGRACION_PROPERTIES("/sms/integracion.properties"),
     
     EXCEL_CONSOLIDADO_CORONA("/Excel/historicoexcelcorona.xlsx");
