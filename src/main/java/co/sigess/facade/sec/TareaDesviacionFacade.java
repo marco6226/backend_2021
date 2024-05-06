@@ -8,7 +8,6 @@ package co.sigess.facade.sec;
 import co.sigess.entities.com.TipoMensaje;
 import co.sigess.entities.emp.Usuario;
 import co.sigess.entities.sec.EstadoTarea;
-import co.sigess.entities.sec.EvidencesFiles;
 import co.sigess.entities.sec.TareaDesviacion;
 import co.sigess.exceptions.UserMessageException;
 import co.sigess.facade.com.AbstractFacade;
@@ -460,22 +459,6 @@ public class TareaDesviacionFacade extends AbstractFacade<TareaDesviacion> {
         query.setParameter(1, id);
         Object object = query.getSingleResult();
         return object;
-    }
-    
-    public static boolean isValidRuta(List<EvidencesFiles> evidences) {
-        
-        String[] forbiddenPatterns = {"..", ":", "%2e%2e", "\\", "//"};    
-        
-        for (EvidencesFiles evidence : evidences) {
-            if (evidence.getRuta() != null) {
-                for (String pattern : forbiddenPatterns) {
-                    if (evidence.getRuta().contains(pattern)) {
-                        return false;
-                    }
-                }
-            }
-        }        
-        return true;
     }
 
 }

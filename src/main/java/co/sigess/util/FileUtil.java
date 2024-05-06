@@ -20,7 +20,6 @@ import java.nio.file.Files;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Pattern;
 import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
 import javax.crypto.spec.SecretKeySpec;
@@ -107,24 +106,11 @@ public class FileUtil {
     }
 
     public static String getFromVirtualFS2(String relativePath) throws FileNotFoundException, Exception {
-        String pathname = ROOT_DIR + relativePath;
-        if (!containsPathTraversal(pathname)) {
-            throw new IllegalArgumentException("El nombre del archivo contiene caracteres de ruta no permitidos.");
-        }
-
-            
-        File f = new File(pathname);
-        
+        File f = new File(ROOT_DIR + relativePath);
         FileInputStream fileInputStreamReader = new FileInputStream(f);
         byte[] bytes = new byte[(int) f.length()];
         fileInputStreamReader.read(bytes);
-        
-        String response = (Base64.getEncoder().encodeToString(bytes));
-        if (!containsPathTraversal(response)) {
-            throw new IllegalArgumentException("El nombre del archivo contiene caracteres de ruta no permitidos.");
-        }
-        
-        return response;
+        return new String(Base64.getEncoder().encodeToString(bytes));
     }
 
     public static String getFromVirtualFS3(String relativePath) throws FileNotFoundException, Exception {
@@ -134,21 +120,5 @@ public class FileUtil {
         System.out.print(fos);
         return fos.toString();
     }
-    
-    private static boolean containsPathTraversal(String fileName) {
-        if (fileName == null) {
-            return false; 
-        }
 
-       
-        String[] forbiddenPatterns = {"..", ":", "%2e%2e", "\\", "//"};
-
-        for (String pattern : forbiddenPatterns) {
-            if (fileName.contains(pattern)) {
-                return false; 
-            }
-        }
-
-        return true;
-    }
 }
