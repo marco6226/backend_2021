@@ -15,7 +15,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 public enum TipoIdentificacion {
     CEDULA_CIUDADANIA("Cédula de ciudadanía"),
     CEDULA_EXTRANJERIA("Cédula de extranjería"),
-    TARJETA_IDENTIDAD("Tarjeta de identidad");
+    TARJETA_IDENTIDAD("Tarjeta de identidad"),
+    DOCUMENTO_IDENTIDAD ("Documento de identidad");
+    
 
     private final String descripcion;
 
