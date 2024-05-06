@@ -6,6 +6,7 @@
 package co.sigess.entities.scm;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -40,8 +41,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     ,
     @NamedQuery(name = "Pcl.findByPcl", query = "SELECT p FROM Pcl p WHERE p.pcl = :pcl")
     ,
-    @NamedQuery(name = "Pcl.findByDiag", query = "SELECT p FROM Pcl p WHERE p.diag = :diag ORDER BY p.emisionPclFecha DESC")
-    ,
+    //@NamedQuery(name = "Pcl.findByDiag", query = "SELECT p FROM Pcl p WHERE p.diag = :diag ORDER BY p.emisionPclFecha DESC")
+    
     @NamedQuery(name = "Pcl.findByEliminado", query = "SELECT p FROM Pcl p WHERE p.eliminado = :eliminado ORDER BY p.emisionPclFecha DESC")})
 public class Pcl implements Serializable {
 
@@ -141,7 +142,7 @@ public class Pcl implements Serializable {
     public String getDiag() {
         return diag;
     }
-
+  
     public void setDiag(String diag) {
         this.diag = diag;
     }

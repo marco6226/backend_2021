@@ -76,6 +76,11 @@ public class viewscm implements Serializable{
     private Integer planAccion;
     
     private String sve;
+    
+    @Column(name = "proximo_seguimiento")
+    @Temporal(TemporalType.DATE)
+    private Date proximoSeguimiento;
+    
 
     public Integer getRecomendaciones() {
         return recomendaciones;
@@ -212,5 +217,10 @@ public class viewscm implements Serializable{
     public void setSve(String sve) {
         this.sve = sve;
     }
+
+    public Date getProximoSeguimiento() {
+        return proximoSeguimiento;
+    }
+    
     
 }

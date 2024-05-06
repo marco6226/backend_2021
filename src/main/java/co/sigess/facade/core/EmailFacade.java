@@ -101,6 +101,9 @@ public class EmailFacade {
                 case ALIADO_ACTUALIZADO_CICLOCORTO:
                     plantilla = loaderFacade.getPlantillaAliadoCicloCorto();
                     break;
+                case SOLICITUD_DOCUMENTOS_SL:
+                    plantilla = loaderFacade.getPlantillaDocumentosSaludLaborales();
+                    break;
             }
             plantilla = replaceParameters(parametros, plantilla);
             contenido = contenido.replace(PARAM_PLANT_PRINCIPAL, plantilla);

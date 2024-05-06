@@ -5,7 +5,10 @@
  */
 package co.sigess.facade.scm;
 
+import co.sigess.entities.scm.CreatePclDTO;
 import co.sigess.entities.scm.Pcl;
+import co.sigess.entities.scm.Pcl_Diagnostico;
+import co.sigess.entities.scm.pclDIagEntity;
 import co.sigess.facade.com.AbstractFacade;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -36,8 +39,8 @@ public class PclFacade extends AbstractFacade<Pcl> {
 
         return super.create(pcl);
     }
-    
-     public int eliminar(Long id) {
+
+    public int eliminar(Long id) {
 
         //3117537464
         Query q = this.em.createNativeQuery("UPDATE scm.pcl  SET eliminado = true WHERE id = ?1");
@@ -46,17 +49,41 @@ public class PclFacade extends AbstractFacade<Pcl> {
         return deleted;
     }
 
-    public List<Pcl> findAllById(String caseId) {
-        Query query = this.em.createNativeQuery("select *  from scm.pcl as pcl\n" +
-"	right join scm.diagnosticos as diag\n" +
-"	on CAST (pcl.diag AS BIGINT)=diag.id	\n" +
-"	where pk_case=?1 and pcl.eliminado=false order by pcl.emision_pcl_fecha desc", Pcl.class);
+       public List<Object> findAllById(String caseId) {
+       Query query = this.em.createNativeQuery(" SELECT pcl.id,\n" +
+"    pcl.porcentaje_pcl,\n" +
+"    pcl.emision_pcl_fecha,\n" +
+"    pcl.entidad_emite_pcl,\n" +
+"    pcl.pcl,\n" +
+"    diag.id AS diag,\n" +
+"    pcl.eliminado,\n" +
+"    pcl.entidad_emitida,\n" +
+"    pcl.status_de_calificacion,\n" +
+"    pcl.fecha_calificacion,\n" +
+"    pcl.entidad_emite_calificacion,\n" +
+"    pcl.entidad_emitida_calificacion,\n" +
+"    pcl.observaciones,\n" +
+"    pcl.origen,\n" +
+"    diag.id AS id_diagnostico,\n" +
+"    diag.diagnostico AS nombre_diagnostico\n" +
+"   FROM scm.pcl pcl\n" +
+"     JOIN scm.pcl_diagnostico pcl_diag ON pcl.id = pcl_diag.id_pcl\n" +
+"     JOIN scm.diagnosticos diag ON pcl_diag.id_diagnostico = diag.id\n" +
+"  WHERE diag.pk_case= ?1 AND pcl.eliminado = false\n" +
+"  ORDER BY pcl.emision_pcl_fecha;", Pcl.class);
+
+        
+
         query.setParameter(1, caseId);
-        List<Pcl> list = (List<Pcl>) query.getResultList();
-        return list; 
+        List<Object> list = query.getResultList();
+        System.out.println(query);
+        System.out.println(list + "lsta");
+        return list;
     }
-    
-    public Pcl findById(Long id){
+       
+      
+
+    public Pcl findById(Long id) {
         Query query = this.em.createQuery("SELECT DISTINCT pc FROM Pcl pc WHERE PC.id = :id ORDER BY PC.id DESC");
         query.setParameter("id", id);
         List<Pcl> list = (List<Pcl>) query.getResultList();
