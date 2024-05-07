@@ -388,6 +388,7 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
             Map<String, String> parametros = new HashMap<>();
             parametros.put(EmailFacade.PARAM_COD_RECUP, nuevoPasswd);
             parametros.put(EmailFacade.PARAM_ENVIROMENT, host1);
+            
             emailFacade.sendEmail(parametros, TipoMail.RECUPERACION_PASSWD, "Recuperación cuenta", email);
 
         }
