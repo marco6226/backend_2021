@@ -369,26 +369,26 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
                         )
                 );
             }
-//            switch (user.getEstado()) {
-//                case BLOQUEADO:
-//                case ELIMINADO:
-//                case INACTIVO:
-//                    throw new UserMessageException("SOLICITUD NO PERMITIDA", "El estado del usuario no permite la operación", TipoMensaje.warn);
-//            }
-//            String nuevoPasswd = UtilSecurity.generatePassword();
-//            String shaPassw = UtilSecurity.createEmailPasswordHash(email, UtilSecurity.toSHA256(nuevoPasswd));
-//            Calendar expPassed = Calendar.getInstance();
-//            expPassed.add(Calendar.SECOND, UtilSecurity.CAMBIO_PASSWD_TIMEOUT);
-//
-//            user.setEstado(EstadoUsuario.CAMBIO_PASSWD);
-//            user.setPassword(shaPassw);
-//            user.setExpiraPassword(expPassed.getTime());
-//            this.edit(user);
+            switch (user.getEstado()) {
+                case BLOQUEADO:
+                case ELIMINADO:
+                case INACTIVO:
+                    throw new UserMessageException("SOLICITUD NO PERMITIDA", "El estado del usuario no permite la operación", TipoMensaje.warn);
+            }
+            String nuevoPasswd = UtilSecurity.generatePassword();
+            String shaPassw = UtilSecurity.createEmailPasswordHash(email, UtilSecurity.toSHA256(nuevoPasswd));
+            Calendar expPassed = Calendar.getInstance();
+            expPassed.add(Calendar.SECOND, UtilSecurity.CAMBIO_PASSWD_TIMEOUT);
+
+            user.setEstado(EstadoUsuario.CAMBIO_PASSWD);
+            user.setPassword(shaPassw);
+            user.setExpiraPassword(expPassed.getTime());
+            this.edit(user);
 
             Map<String, String> parametros = new HashMap<>();
-            //parametros.put(EmailFacade.PARAM_COD_RECUP, nuevoPasswd);
-            //parametros.put(EmailFacade.PARAM_ENVIROMENT, host1);
-            emailFacade.sendEmail(parametros, TipoMail.SOLICITUD_DOCUMENTOS_SL, "Recuperación cuenta", email);
+            parametros.put(EmailFacade.PARAM_COD_RECUP, nuevoPasswd);
+            parametros.put(EmailFacade.PARAM_ENVIROMENT, host1);
+            emailFacade.sendEmail(parametros, TipoMail.RECUPERACION_PASSWD, "Recuperación cuenta", email);
 
         }
         return user;
