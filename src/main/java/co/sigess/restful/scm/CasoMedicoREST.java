@@ -13,6 +13,7 @@ import co.sigess.entities.emp.Empresa;
 import co.sigess.entities.emp.Usuario;
 import co.sigess.entities.scm.CasosMedicos;
 import co.sigess.entities.scm.CreatePclDTO;
+import co.sigess.entities.scm.DatosTrabajadorEntity;
 import co.sigess.facade.scm.pclDiagnosticosFacade;
 import co.sigess.entities.scm.Recomendaciones;
 import co.sigess.entities.scm.ScmLogs;
@@ -30,6 +31,7 @@ import co.sigess.facade.core.LoaderFacade;
 import co.sigess.facade.core.SMSFacade;
 import co.sigess.facade.emp.UsuarioFacade;
 import co.sigess.facade.scm.CasosMedicosFacade;
+import co.sigess.facade.scm.DatosTrabajadorFacade;
 import co.sigess.facade.scm.PclFacade;
 import co.sigess.facade.scm.RecomendacionesFacade;
 import co.sigess.facade.scm.ReintegroFacade;
@@ -95,7 +97,7 @@ import kong.unirest.UnirestException;
  *
  * @author leonardo
  */
-//@Secured
+@Secured
 @Path("casomedico")
 public class CasoMedicoREST extends ServiceREST {
 
@@ -121,12 +123,16 @@ public class CasoMedicoREST extends ServiceREST {
 
     @EJB
     private CasosMedicosFacade casosmedicosFacade;
+    
+    @EJB
+    private DatosTrabajadorFacade DatosTrabajadorFacade ;
 
     @EJB
     private tratamientosFacade tratamientoFacade;
     
     @EJB
     private SaludLaboralFacade SaludLaboralFacade;
+    
     
     
 
@@ -187,6 +193,10 @@ public class CasoMedicoREST extends ServiceREST {
             return Util.manageException(ex, ReporteREST.class);
         }
     }
+    
+ 
+
+
 
     @PUT
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -379,6 +389,7 @@ public class CasoMedicoREST extends ServiceREST {
     public Response createDiag(Diagnosticos diagnosticos) {
         try {
             diagnosticos.setCreadoPor(super.getUsuarioRequestContext().getEmail());
+            
 
             ObjectMapper mapper = new ObjectMapper();
             String json = mapper.writeValueAsString(diagnosticos);
@@ -857,20 +868,6 @@ public Response create(CreatePclDTO createvalue) {
             return Util.manageException(e, CasoMedicoREST.class);
         }
     }
-@GET
-@Path("enviarcorreo")
-@Produces(MediaType.APPLICATION_JSON)
-public Response enviarCorreoCasosMedicos2( List<String> emails) {
-    try {
-        if (emails != null && !emails.isEmpty()) {
-            SaludLaboralFacade facade = new SaludLaboralFacade();
-            Usuario usuario = facade.enviarCorreoCasosMedicos2(emails.toArray(new String[0]));
-        }
-        return Response.ok(new Mensaje("Restauración realizada", "Se ha enviado un correo electrónico con las instrucciones para reestablecer las credenciales de usuario", TipoMensaje.success)).build();
-    } catch (Exception ex) {
-        return Util.manageException(ex, AuthenticationREST.class);
-    }
-}
 
 @GET
 @Path("sendmail/{emails}")
@@ -888,6 +885,24 @@ public Response enviarCorreoCasosMedicos(@PathParam("emails") String emails) {
         return Util.manageException(ex, AuthenticationREST.class);
     }
 }
+    @POST
+    @Path("createDT")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response createDT(DatosTrabajadorEntity datosTrabajador) {
+        try {
+
+            ObjectMapper mapper = new ObjectMapper();
+            String json = mapper.writeValueAsString(datosTrabajador);
+
+  
+            datosTrabajador = this.DatosTrabajadorFacade.createDT(datosTrabajador);
+            this.logScm("Creacion de datos del empledado", json, datosTrabajador.getId().toString(), datosTrabajador.getClass().toString());
+
+            return Response.ok(datosTrabajador.getId()).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, ReporteREST.class);
+        }
+    }
 
 
 
