@@ -95,7 +95,7 @@ import kong.unirest.UnirestException;
  *
  * @author leonardo
  */
-//@Secured
+@Secured
 @Path("casomedico")
 public class CasoMedicoREST extends ServiceREST {
 
