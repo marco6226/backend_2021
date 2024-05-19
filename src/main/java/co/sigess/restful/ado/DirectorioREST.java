@@ -582,11 +582,11 @@ public class DirectorioREST extends ServiceREST {
      * @return
      * @throws Exception
      */
-    @DELETE
-    @Path("documento/{documentoId}")
+    @POST
+    @Path("documento/")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response removeDocumento(@HeaderParam("Authorization") String authorizationHeader
-            , @PathParam("documentoId") String documentoId) throws Exception {
+            , @FormDataParam("data") String encryptedId) throws Exception {
         try {
             
             
@@ -599,7 +599,7 @@ public class DirectorioREST extends ServiceREST {
 
             Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
             cipher.init(Cipher.DECRYPT_MODE, aesKey);
-            byte[] decryptedBytes = cipher.doFinal(Base64.getDecoder().decode(documentoId));
+            byte[] decryptedBytes = cipher.doFinal(Base64.getDecoder().decode(encryptedId));
             String textoDesencriptado = new String(decryptedBytes, StandardCharsets.UTF_8);
 
             System.out.println("Texto Desencriptado: " + textoDesencriptado);
