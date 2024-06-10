@@ -64,6 +64,20 @@ public class SeguimientoTareaFacade extends AbstractFacade<SeguimientoTarea>{
             throw new IllegalArgumentException("parámetro id no válido");
         }
          
+         for (EvidencesFiles evidence : evidences) {
+            String ruta = evidence.getRuta();
+            try {
+                // Valida que la ruta no contenga secuencias peligrosas
+                if(ruta.contains("..") || ruta.contains("::")|| ruta.contains(":/")){
+                    throw new IllegalArgumentException("Ruta contiene secuencias peligrosas");
+
+                }               
+
+            } catch (Exception ex) {
+                System.out.println("Error procesando el archivo");
+            }
+        }
+         
        List<String> List = null;
        files.put("error", List);
        List<String> file = new ArrayList<String>();

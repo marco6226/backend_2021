@@ -106,11 +106,17 @@ public class FileUtil {
     }
 
     public static String getFromVirtualFS2(String relativePath) throws FileNotFoundException, Exception {
-        File f = new File(ROOT_DIR + relativePath);
-        FileInputStream fileInputStreamReader = new FileInputStream(f);
-        byte[] bytes = new byte[(int) f.length()];
-        fileInputStreamReader.read(bytes);
-        return new String(Base64.getEncoder().encodeToString(bytes));
+        
+        if (relativePath.contains("..") || relativePath.contains("::") || relativePath.contains("./") || relativePath.contains(":/")) {
+            throw new IllegalArgumentException("Ruta contiene secuencias peligrosas");
+        }
+        else{
+            File f = new File(ROOT_DIR + relativePath);
+            FileInputStream fileInputStreamReader = new FileInputStream(f);
+            byte[] bytes = new byte[(int) f.length()];
+            fileInputStreamReader.read(bytes);
+            return new String(Base64.getEncoder().encodeToString(bytes));    
+        }        
     }
 
     public static String getFromVirtualFS3(String relativePath) throws FileNotFoundException, Exception {
