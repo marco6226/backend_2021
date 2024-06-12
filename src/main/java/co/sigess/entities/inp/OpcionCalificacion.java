@@ -69,6 +69,9 @@ public class OpcionCalificacion implements Serializable {
     @Column(name = "requerir_doc")
     private Boolean requerirDoc;
     
+     @Column(name = "defecto")
+    private Boolean defecto;
+    
     @JsonIgnore
     @JoinColumns({
         @JoinColumn(name = "fk_lista_inspeccion_id", referencedColumnName = "id")
@@ -191,6 +194,20 @@ public class OpcionCalificacion implements Serializable {
     @Override
     public String toString() {
         return "co.sigess.entities.inp.OpcionCalificacion[ id=" + id + " ]";
+    }
+
+    /**
+     * @return the defecto
+     */
+    public Boolean getDefecto() {
+        return defecto;
+    }
+
+    /**
+     * @param defecto the defecto to set
+     */
+    public void setDefecto(Boolean defecto) {
+        this.defecto = defecto;
     }
     
 }
