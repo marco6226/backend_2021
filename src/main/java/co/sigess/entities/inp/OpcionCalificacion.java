@@ -82,6 +82,8 @@ public class OpcionCalificacion implements Serializable {
     
     @Column(name = "requerir_desc")
     private Boolean requerirDesc;
+    
+    private Boolean defecto;
 
     public OpcionCalificacion() {
     }
@@ -192,5 +194,15 @@ public class OpcionCalificacion implements Serializable {
     public String toString() {
         return "co.sigess.entities.inp.OpcionCalificacion[ id=" + id + " ]";
     }
+
+    public Boolean getDefecto() {
+        return defecto;
+    }
+
+    public void setDefecto(Boolean defecto) {
+        this.defecto = defecto;
+    }
+    
+    
     
 }
