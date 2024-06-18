@@ -23,9 +23,11 @@ import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 /**
  *
  * @author Usuario
@@ -42,7 +44,7 @@ public class caracterizacionviewREST extends ServiceREST{
     
     @GET
     @Path("all")
-    public Response findByAll(@HeaderParam("Authorization") String authorizationHeader){
+    public Response findByAll(@Context HttpHeaders headers){
         try{
             List<caracterizacionview> list = this.caracterizacionviewFACADE.findByalll();
             
@@ -50,6 +52,8 @@ public class caracterizacionviewREST extends ServiceREST{
             String json = gson.toJson(list);
 
             // Generar clave usando el token de autorización
+            String authorizationHeader = headers.getHeaderString("Authorization");
+            
             byte[] keyBytes = authorizationHeader.getBytes(StandardCharsets.UTF_8);
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
             keyBytes = digest.digest(keyBytes);
