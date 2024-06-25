@@ -9,6 +9,7 @@ import co.sigess.entities.ind.caracterizacionview;
 import co.sigess.facade.ind.caracterizacionviewFACADE;
 import co.sigess.restful.ServiceREST;
 import co.sigess.restful.security.Secured;
+import co.sigess.restful.security.TokenInterceptor;
 import co.sigess.util.Util;
 import com.google.gson.Gson;
 import java.nio.charset.StandardCharsets;
@@ -44,15 +45,14 @@ public class caracterizacionviewREST extends ServiceREST{
     
     @GET
     @Path("all")
-    public Response findByAll(@Context HttpHeaders headers){
+    public Response findByAll(){
         try{
             List<caracterizacionview> list = this.caracterizacionviewFACADE.findByalll();
-            
             Gson gson = new Gson();
             String json = gson.toJson(list);
 
-            // Generar clave usando el token de autorización
-            String authorizationHeader = headers.getHeaderString("Authorization");
+            // Generar clave usando el token de autorización interceptada al login
+            String authorizationHeader = TokenInterceptor.getToken(); 
             
             byte[] keyBytes = authorizationHeader.getBytes(StandardCharsets.UTF_8);
             MessageDigest digest = MessageDigest.getInstance("SHA-256");

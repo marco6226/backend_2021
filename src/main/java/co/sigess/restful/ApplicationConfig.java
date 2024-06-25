@@ -139,6 +139,7 @@ public class ApplicationConfig extends Application {
         resources.add(co.sigess.restful.security.RequestAuditableFilter.class);
         resources.add(co.sigess.restful.security.ResponseAuditableFilter.class);
         resources.add(co.sigess.restful.security.ResponseFilter.class);
+        resources.add(co.sigess.restful.security.TokenInterceptor.class);
         resources.add(co.sigess.restful.security.WriterResponseInterceptor.class);
         resources.add(co.sigess.restful.sge.ElementoREST.class);
         resources.add(co.sigess.restful.sge.EvaluacionREST.class);

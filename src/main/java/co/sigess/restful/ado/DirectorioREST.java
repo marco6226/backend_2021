@@ -19,6 +19,7 @@ import co.sigess.restful.FilterQuery;
 import co.sigess.restful.FilterResponse;
 import co.sigess.restful.ServiceREST;
 import co.sigess.restful.security.Secured;
+import co.sigess.restful.security.TokenInterceptor;
 import co.sigess.util.FileUtil;
 import co.sigess.util.Util;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -429,12 +430,11 @@ public class DirectorioREST extends ServiceREST {
     @Consumes({MediaType.MULTIPART_FORM_DATA})
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response downloadFilePost(
-            @HeaderParam("Authorization") String authorizationHeader,
             @FormDataParam("data") String encryptedId) throws Exception {
         
         try {
             
-
+            String authorizationHeader = TokenInterceptor.getToken();            
             byte[] keyBytes = authorizationHeader.getBytes(StandardCharsets.UTF_8);
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
             keyBytes = digest.digest(keyBytes);
