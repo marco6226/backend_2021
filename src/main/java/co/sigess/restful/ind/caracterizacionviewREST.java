@@ -72,6 +72,17 @@ public class caracterizacionviewREST extends ServiceREST{
         }
     }
     
+    @GET
+    @Path("all2")
+    public Response findByAll2(){
+        try{
+            List<caracterizacionview> list = this.caracterizacionviewFACADE.findByalll();
+            return Response.ok(list).build();
+        } catch(Exception ex){
+            return Util.manageException(ex, caracterizacionviewREST.class);
+        }
+    }
+    
     
     
 }
