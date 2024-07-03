@@ -51,6 +51,13 @@ public class AreaFacade extends AbstractFacade<Area> {
         List<Area> areaList = (List<Area>) q.getResultList();
         return areaList;
     }
+    
+     public List<Area> findByIdSL() {
+        Query q = this.em.createQuery("SELECT a FROM Area a");
+        //q.setParameter("id", id);
+        List<Area> areaList = (List<Area>) q.getResultList();
+        return areaList;
+    }
 
     @Override
     public Area create(Area area) throws Exception {

@@ -342,6 +342,18 @@ public class EmpresaREST extends ServiceREST {
     }
     
     @GET
+    @Secured(validarPermiso = false)
+    @Path("findSLoc")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getLocalidadById() {
+        List<Localidades> localidad = LocalidadesFacade.findByAllLocalidades();
+        if (localidad.isEmpty()) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        return Response.ok(localidad).build();
+    }
+    
+    @GET
     @Path("filterLocalidades")
     @Secured(requiereEmpresaId = false)
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})

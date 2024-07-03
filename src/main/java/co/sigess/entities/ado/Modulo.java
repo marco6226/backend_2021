@@ -22,7 +22,9 @@ public enum Modulo {
     SGE("Sistema de gestión"),
     COP("COPASST"),
     LISTA("Lista Inspeccion"),
+    SSL("Salud Laboral"),
     EMPRESA("Empresa");
+    
     
     private String nombre;
 

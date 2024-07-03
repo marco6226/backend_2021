@@ -49,6 +49,9 @@ public class LoaderFacade {
     private String PlantillaReporteAliadoModificado;
     private String PlantillaReporteAliadoCicloCorto;
     private String PlantillaDocumentosSaludLaboral;
+    private String PlantillaRechazoDocumentosUsuario;
+    private String PlantillaRechazoDocumentosUsuarioSOlicitado;
+    private String PlantillaDocumentacionEnviada;
 
     private ApiVersion apiVersion;
     private Properties smsProp;
@@ -80,6 +83,52 @@ public class LoaderFacade {
         }
         return PlantillaDocumentosSaludLaboral;
     }
+     public String getPlantillaDocumentosRechazoSolicitante() {
+        if (this.PlantillaRechazoDocumentosUsuarioSOlicitado == null) {
+            try {
+                String ruta = getClass().getResource(Recursos.PLANTILLA_RECHAZO_DOCUMENTOS_SOLICITADO.getRuta()).getPath();
+                int y = ruta.length();
+                String x = isWindows(ruta, y);
+
+                this.PlantillaRechazoDocumentosUsuarioSOlicitado = new String(Files.readAllBytes(Paths.get(x)));
+            } catch (IOException ex) {
+                Logger.getLogger(LoaderFacade.class.getName()).log(Level.SEVERE, null, ex);
+                throw new IllegalArgumentException("No se ha podido inicializar correctamente la plantilla PLANTILLA_DOCUMENTOS_SALUD_LABORAL");
+            }
+        }
+        return PlantillaRechazoDocumentosUsuarioSOlicitado;
+    }
+     
+     public String getPlantillaDocumentosUsuario(){
+          if (this.PlantillaRechazoDocumentosUsuario == null) {
+            try {
+                String ruta = getClass().getResource(Recursos.PLANTILLA_RECHAZO_DOCUMENTOS_USUARIO.getRuta()).getPath();
+                int y = ruta.length();
+                String x = isWindows(ruta, y);
+
+                this.PlantillaRechazoDocumentosUsuario = new String(Files.readAllBytes(Paths.get(x)));
+            } catch (IOException ex) {
+                Logger.getLogger(LoaderFacade.class.getName()).log(Level.SEVERE, null, ex);
+                throw new IllegalArgumentException("No se ha podido inicializar correctamente la plantilla PLANTILLA_DOCUMENTOS_SALUD_LABORAL");
+            }
+        }
+        return PlantillaRechazoDocumentosUsuario;
+     }
+     public String getPlantillaDocumentacionEnviada(){
+          if (this.PlantillaDocumentacionEnviada == null) {
+            try {
+                String ruta = getClass().getResource(Recursos.PLANTILLA_DOCUMENTACION_ENVIADA.getRuta()).getPath();
+                int y = ruta.length();
+                String x = isWindows(ruta, y);
+
+                this.PlantillaDocumentacionEnviada = new String(Files.readAllBytes(Paths.get(x)));
+            } catch (IOException ex) {
+                Logger.getLogger(LoaderFacade.class.getName()).log(Level.SEVERE, null, ex);
+                throw new IllegalArgumentException("No se ha podido inicializar correctamente la plantilla PLANTILLA_DOCUMENTOS_SALUD_LABORAL");
+            }
+        }
+        return PlantillaDocumentacionEnviada;
+     }
 
     public String getPlantillaMail() {
         if (this.plantillaMail == null) {
