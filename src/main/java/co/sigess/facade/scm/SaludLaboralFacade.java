@@ -56,20 +56,54 @@ public class SaludLaboralFacade extends AbstractFacade<Usuario>{
     }
     
 
-public List<Usuario> enviarCorreoCasosMedicos(List<String> emails) throws Exception {
+public List<Usuario> enviarCorreoCasosMedicos(List<String> emails, Map<String, String> parametros) throws Exception {
     List<Usuario> users = new ArrayList<>();
     for (String email : emails) {
         Usuario user = this.findByEmail(email);
         if (user != null) {
-            Map<String, String> parametros = new HashMap<>();
-            //parametros.put(EmailFacade.PARAM_COD_RECUP, nuevoPasswd);
-            //parametros.put(EmailFacade.PARAM_ENVIROMENT, host1);
             emailFacade.sendEmail(parametros, TipoMail.SOLICITUD_DOCUMENTOS_SL, "Solicitud de documentos ", email);
             users.add(user);
         }
     }
     return users;
 }
+
+public List<Usuario> enviarCorreoRechazo(List<String> emails, Map<String, String> parametros) throws Exception {
+    List<Usuario> users = new ArrayList<>();
+    for (String email : emails) {
+        Usuario user = this.findByEmail(email);
+        if (user != null) {
+            emailFacade.sendEmail(parametros, TipoMail.RECHAZO_DOCUMENTOS_SOLICITADO, "Solicitud de documentos ", email);
+            users.add(user);
+        }
+    }
+    return users;
+}
+public List<Usuario> enviarCorreoRechazoSolicitante(List<String> emails, Map<String, String> parametros) throws Exception {
+    List<Usuario> users = new ArrayList<>();
+    for (String email : emails) {
+        Usuario user = this.findByEmail(email);
+        if (user != null) {
+            emailFacade.sendEmail(parametros, TipoMail.RECHAZO_DOCUMENTOS_USUARIO, "Solicitud de documentos ", email);
+            users.add(user);
+        }
+    }
+    return users;
+}
+
+public List<Usuario> enviarCorreoDocumentosEnviadosFacade(List<String> emails, Map<String, String> parametros) throws Exception {
+    List<Usuario> users = new ArrayList<>();
+    for (String email : emails) {
+        Usuario user = this.findByEmail(email);
+        if (user != null) {
+            emailFacade.sendEmail(parametros, TipoMail.DOCUMENTACION_ENVIADA, "Solicitud de documentos ", email);
+            users.add(user);
+        }
+    }
+    return users;
+}
+
+
 
 
 

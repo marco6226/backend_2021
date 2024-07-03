@@ -4,6 +4,7 @@
  */
 package co.sigess.entities.scm;
 
+import co.sigess.entities.emp.CargoActual;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.util.Date;
@@ -12,6 +13,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -20,7 +25,9 @@ import javax.persistence.Table;
  * @author Luis
  */
 @Entity
-@Table(name = "datos_trabajador", schema = "scm")
+@Table(name = "salud_laboral", schema = "scm")
+@NamedQueries({
+    @NamedQuery(name = "DatosTrabajadorEntity.findAll", query = "SELECT c FROM DatosTrabajadorEntity c")})
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DatosTrabajadorEntity implements Serializable{
     private static final long serialVersionUID = 1L;
@@ -28,14 +35,19 @@ public class DatosTrabajadorEntity implements Serializable{
     @Id
     @SequenceGenerator(name = "datos_trabajador_id_seq", schema = "scm", sequenceName = "datos_trabajador_id_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "datos_trabajador_id_seq")
-    @Column(name = "iddt")
-    private Long iddt;
+    @Column(name = "id_sl")
+    private Long idSl;
+    
+    
+    @Column(name = "pk_empleado_caso")
+    private Integer pkUser;
     
      @Column(name = "usuario_creador")
-    private Integer usuarioCreador;
+    private String usuarioCreador;
+     
 
     @Column(name = "usuario_asignado")
-    private Integer usuarioAsignado;
+    private String usuarioAsignado;
 
     @Column(name = "fecha_creacion")
     private Date fechaCreacion;
@@ -72,28 +84,56 @@ public class DatosTrabajadorEntity implements Serializable{
 
     @Column(name = "proceso_actual")
     private String procesoActual;
+    
+    @Column(name = "nombre_completo_usuario")
+    private String nombreCompletoSL;
 
-    public Long getId() {
-        return iddt;
+    public String getNombreCompletoSL() {
+        return nombreCompletoSL;
     }
 
-    public void setId(Long iddt) {
-        this.iddt = iddt;
+    public void setNombreCompletoSL(String nombreCompletoSL) {
+        this.nombreCompletoSL = nombreCompletoSL;
+    }
+    
+    
+
+    public Integer getPkUser() {
+        return pkUser;
     }
 
-    public Integer getUsuarioCreador() {
+    public void setPkUser(Integer pkUser) {
+        this.pkUser = pkUser;
+    }
+
+    public Long getIdSl() {
+        return idSl;
+    }
+
+    public void setIdSl(Long idSl) {
+        this.idSl = idSl;
+    }
+    
+
+ 
+
+    
+    
+
+
+    public String getUsuarioCreador() {
         return usuarioCreador;
     }
 
-    public void setUsuarioCreador(Integer usuarioCreador) {
+        public void setUsuarioCreador(String usuarioCreador) {
         this.usuarioCreador = usuarioCreador;
     }
 
-    public Integer getUsuarioAsignado() {
+    public String getUsuarioAsignado() {
         return usuarioAsignado;
     }
 
-    public void setUsuarioAsignado(Integer usuarioAsignado) {
+    public void setUsuarioAsignado(String usuarioAsignado) {
         this.usuarioAsignado = usuarioAsignado;
     }
 

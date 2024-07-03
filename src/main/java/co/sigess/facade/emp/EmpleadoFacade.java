@@ -84,6 +84,13 @@ public class EmpleadoFacade extends AbstractFacade<Empleado> {
 //        empleado = this.find(empleado.getId());
         return empleado;
     }
+         public Empleado findByIdEmpleado(Integer id) {
+        Query q = this.em.createNativeQuery("SELECT * FROM emp.empleado WHERE id = ?1", Empleado.class);
+
+        q.setParameter(1, id);
+        Empleado saludLaboral = (Empleado) q.getSingleResult();
+        return saludLaboral;
+    }
 
     public void remove(Integer empleadoId) throws Exception {
         Empleado empleadoDB = this.find(empleadoId);
@@ -238,6 +245,31 @@ public class EmpleadoFacade extends AbstractFacade<Empleado> {
         } else {
             throw new UserMessageException("Operación no permitida", "No puede editar datos de empleado diferente al suyo", TipoMensaje.error);
         }
+    }
+        public Empleado updateEmpleadoSL(Empleado dt) throws Exception {
+         Empleado empDb = this.find(dt.getId());
+
+        empDb.setFechaNacimiento(dt.getFechaNacimiento());
+        empDb.setGenero(dt.getGenero());
+        empDb.setFechaIngreso(dt.getFechaIngreso());
+        empDb.setTelefono1(dt.getTelefono1());
+        empDb.setTelefono2(dt.getTelefono2());
+        empDb.setCorporativePhone(dt.getCorporativePhone());
+        empDb.setCiudad(dt.getCiudad());
+        empDb.setDireccion(dt.getDireccion());
+        empDb.setZonaResidencia(dt.getZonaResidencia());
+        empDb.setCorreoPersonal(dt.getCorreoPersonal());
+        empDb.setEps(dt.getEps());
+        empDb.setAfp(dt.getAfp());
+        empDb.setEmergencyContact(dt.getEmergencyContact());
+        empDb.setPhoneEmergencyContact(dt.getPhoneEmergencyContact());
+        empDb.setEmailEmergencyContact(dt.getEmailEmergencyContact());
+        empDb.setJefeInmediato(dt.getJefeInmediato());
+        empDb.setEmpresa(dt.getEmpresa());
+        empDb.setNit(dt.getNit());
+                
+        
+        return dt;
     }
     
     public void guardarImagen(Integer id_documento, Integer id_empleado) {

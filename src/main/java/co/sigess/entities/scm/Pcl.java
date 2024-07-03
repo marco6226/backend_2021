@@ -91,6 +91,41 @@ public class Pcl implements Serializable {
     @Size(max = 2147483647)
     @Column(name = "observaciones")
     private String observaciones;
+    
+    @Column(name = "origen_pcl")
+    private String origenPcl;
+    
+    @Column(name = "observaciones_pcl")
+    private String observacionesPcl;
+    
+    @Column(name = "saludlaboral")
+    private boolean saludLaboral;
+
+    public boolean isSaludLaboral() {
+        return saludLaboral;
+    }
+
+    public void setSaludLaboral(boolean saludLaboral) {
+        this.saludLaboral = saludLaboral;
+    }
+
+    public String getOrigenPcl() {
+        return origenPcl;
+    }
+
+    public void setOrigenPcl(String origenPcl) {
+        this.origenPcl = origenPcl;
+    }
+
+    public String getObservacionesPcl() {
+        return observacionesPcl;
+    }
+
+    public void setObservacionesPcl(String observacionesPcl) {
+        this.observacionesPcl = observacionesPcl;
+    }
+    
+    
 
     public Pcl() {
     }
