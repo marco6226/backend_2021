@@ -43,34 +43,37 @@ public class caracterizacionviewREST extends ServiceREST{
         super(caracterizacionviewFACADE.class);
     }
     
-    @GET
-    @Path("all")
-    public Response findByAll(){
-        try{
-            List<caracterizacionview> list = this.caracterizacionviewFACADE.findByalll();
-            Gson gson = new Gson();
-            String json = gson.toJson(list);
+        @GET
+        @Path("all")
+        public Response findByAll(){
+            try{
+                List<caracterizacionview> list = this.caracterizacionviewFACADE.findByalll();
+                Gson gson = new Gson();
+                String json = gson.toJson(list);
 
-            // Generar clave usando el token de autorización interceptada al login
-            String authorizationHeader = TokenInterceptor.getToken(); 
-            
-            byte[] keyBytes = authorizationHeader.getBytes(StandardCharsets.UTF_8);
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            keyBytes = digest.digest(keyBytes);
-            keyBytes = Arrays.copyOf(keyBytes, 16);
-            
-            SecretKeySpec aesKey = new SecretKeySpec(keyBytes, "AES");
+                // Generar clave usando el token de autorización interceptada al login
+    //            String authorizationHeader = TokenInterceptor.getToken(); 
 
-            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
-            cipher.init(Cipher.ENCRYPT_MODE, aesKey);
-            byte[] encryptedBytes = cipher.doFinal(json.getBytes(StandardCharsets.UTF_8));
-            String encryptedJson = Base64.getEncoder().encodeToString(encryptedBytes);
-                        
-            return Response.ok(encryptedJson).build();
-        } catch(Exception ex){
-            return Util.manageException(ex, caracterizacionviewREST.class);
+                String authorizationHeader = "dlMvbmWwxVXO3LVwhQTmnPBsaL7lSyjq";
+
+
+                byte[] keyBytes = authorizationHeader.getBytes(StandardCharsets.UTF_8);
+                MessageDigest digest = MessageDigest.getInstance("SHA-256");
+                keyBytes = digest.digest(keyBytes);
+                keyBytes = Arrays.copyOf(keyBytes, 16);
+
+                SecretKeySpec aesKey = new SecretKeySpec(keyBytes, "AES");
+
+                Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+                cipher.init(Cipher.ENCRYPT_MODE, aesKey);
+                byte[] encryptedBytes = cipher.doFinal(json.getBytes(StandardCharsets.UTF_8));
+                    String encryptedJson = Base64.getEncoder().encodeToString(encryptedBytes);
+
+                return Response.ok(encryptedJson.toString()).build();
+            } catch(Exception ex){
+                return Util.manageException(ex, caracterizacionviewREST.class);
+            }
         }
-    }
     
     @GET
     @Path("all2")
