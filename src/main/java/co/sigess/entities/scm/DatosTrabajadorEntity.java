@@ -87,6 +87,89 @@ public class DatosTrabajadorEntity implements Serializable{
     
     @Column(name = "nombre_completo_usuario")
     private String nombreCompletoSL;
+    
+    @Column(name = "fecha_recep_solidocs")
+    private Date fechaRecepcionDocs;
+    
+    @Column(name = "entidad_emite_calif")
+    private String entidadEmiteCalificacion;
+    
+    @Column(name ="otro_detalle")
+    private String otroDetalle;
+    
+    @Column(name = "detalle_calificacion")
+    private String detalleCalificacion;
+    
+    @Column(name = "fecha_max_envdocs")
+    private Date fechaMaximaEnvDocs;
+    
+    @Column(name = "documentos")
+    private String documentos;
+    
+    @Column(name = "fecha_cierre_caso")
+    private Date fechaCierreCaso;
+
+    public Date getFechaCierreCaso() {
+        return fechaCierreCaso;
+    }
+
+    public void setFechaCierreCaso(Date fechaCierreCaso) {
+        this.fechaCierreCaso = fechaCierreCaso;
+    }
+    
+    
+
+    public String getDocumentos() {
+        return documentos;
+    }
+
+    public void setDocumentos(String documentos) {
+        this.documentos = documentos;
+    }
+    
+    
+
+    public Date getFechaRecepcionDocs() {
+        return fechaRecepcionDocs;
+    }
+
+    public void setFechaRecepcionDocs(Date fechaRecepcionDocs) {
+        this.fechaRecepcionDocs = fechaRecepcionDocs;
+    }
+
+    public String getEntidadEmiteCalificacion() {
+        return entidadEmiteCalificacion;
+    }
+
+    public void setEntidadEmiteCalificacion(String entidadEmiteCalificacion) {
+        this.entidadEmiteCalificacion = entidadEmiteCalificacion;
+    }
+
+    public String getOtroDetalle() {
+        return otroDetalle;
+    }
+
+    public void setOtroDetalle(String otroDetalle) {
+        this.otroDetalle = otroDetalle;
+    }
+
+    public String getDetalleCalificacion() {
+        return detalleCalificacion;
+    }
+
+    public void setDetalleCalificacion(String detalleCalificacion) {
+        this.detalleCalificacion = detalleCalificacion;
+    }
+
+    public Date getFechaMaximaEnvDocs() {
+        return fechaMaximaEnvDocs;
+    }
+
+    public void setFechaMaximaEnvDocs(Date fechaMaximaEnvDocs) {
+        this.fechaMaximaEnvDocs = fechaMaximaEnvDocs;
+    }
+    
+    
 
     public String getNombreCompletoSL() {
         return nombreCompletoSL;

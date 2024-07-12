@@ -1117,6 +1117,12 @@ public class CasoMedicoREST extends ServiceREST {
             dt.setAreaOrigen(updatedData.getAreaOrigen());
             dt.setProcesoActual(updatedData.getProcesoActual());
             dt.setProcesoOrigen(updatedData.getProcesoOrigen());
+            dt.setFechaRecepcionDocs(updatedData.getFechaRecepcionDocs());
+            dt.setEntidadEmiteCalificacion(updatedData.getEntidadEmiteCalificacion());
+            dt.setOtroDetalle(updatedData.getOtroDetalle());
+            dt.setDetalleCalificacion(updatedData.getDetalleCalificacion());
+            dt.setFechaMaximaEnvDocs(updatedData.getFechaMaximaEnvDocs());
+            dt.setFechaCierreCaso(updatedData.getFechaCierreCaso());
             // ... actualiza otros campos necesarios ...
 
             return Response.ok(DatosTrabajadorFacade.update(dt)).build();
@@ -1269,6 +1275,18 @@ public class CasoMedicoREST extends ServiceREST {
     public Response deleteDocumentFromMail(@PathParam("id") Integer id, @PathParam("docID") String docID) {
         try {
             mailSaludLaboralFacade.deleteDocumentFromMail(id, docID);
+            return Response.ok(new Mensaje("Documento eliminado correctamente")).build();
+        } catch (Exception e) {
+            return Util.manageException(e, CasoMedicoREST.class);
+        }
+    }
+        @DELETE
+    @Path("deleteDocumentDT/{id}/{docID}")
+    @Secured(validarPermiso = false)
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response deleteDocumentCaseDT(@PathParam("id") Integer id, @PathParam("docID") String docID) {
+        try {
+            DatosTrabajadorFacade.deleteDocumentFromMail(id, docID);
             return Response.ok(new Mensaje("Documento eliminado correctamente")).build();
         } catch (Exception e) {
             return Util.manageException(e, CasoMedicoREST.class);
@@ -1551,6 +1569,30 @@ public class CasoMedicoREST extends ServiceREST {
             dt.setDocumentos(updatedData.getDocumentos());
             //dt.setDocumentos(documentosString);
             return Response.ok(mailSaludLaboralFacade.update(dt)).build();
+        } catch (Exception e) {
+            return Util.manageException(e, CasoMedicoREST.class);
+        }
+    }
+    
+        @PUT
+    @Path("documentsDT/{id}")
+    @Secured(validarPermiso = false)
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response actualizarDocumentosCaso(@PathParam("id") int id, DatosTrabajadorEntity updatedData) {
+        try {
+            DatosTrabajadorEntity dt = DatosTrabajadorFacade.findById(id);
+//            String docs = dt.getDocumentos();
+//            ArrayList<String> doc = new ArrayList<>();
+//            doc.add(docs);
+//            doc.add(updatedData.getDocumentos());
+//            String documentosString = arrayListToString(doc);
+
+            if (dt == null) {
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }
+            dt.setDocumentos(updatedData.getDocumentos());
+            //dt.setDocumentos(documentosString);
+            return Response.ok(DatosTrabajadorFacade.update(dt)).build();
         } catch (Exception e) {
             return Util.manageException(e, CasoMedicoREST.class);
         }
