@@ -42,6 +42,7 @@ public class ViewMatrizPeligros implements Serializable{
     @Column(name = "fk_planta_id")    
     private Long idplantas;
     
+    private String pais;
     private String division;
     private String planta;
     private String area;
@@ -165,6 +166,10 @@ public class ViewMatrizPeligros implements Serializable{
 
     public Long getIdplantas() {
         return idplantas;
+    }
+
+    public String getPais() {
+        return pais;
     }
 
     public String getDivision() {

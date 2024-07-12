@@ -90,6 +90,15 @@ public class viewhhtmetas implements Serializable{
     
     @Column(name = "ts_anual")
     private double tsAnual;
+    
+    @Column(name = "icr_planta")
+    private double icrPlanta;
+    
+    @Column(name = "icr_division")
+    private double icrDivision;
+    
+    @Column(name = "icr_anual")
+    private double icrAnual;
 
     public String getNombrePlanta() {
         return nombrePlanta;
@@ -187,5 +196,17 @@ public class viewhhtmetas implements Serializable{
     public String getModulo() {
         return modulo;
     }
+
+    public double getIcrPlanta() {
+        return icrPlanta;
+    }
+
+    public double getIcrDivision() {
+        return icrDivision;
+    }
+
+    public double getIcrAnual() {
+        return icrAnual;
+    }    
     
 }
