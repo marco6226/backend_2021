@@ -80,6 +80,19 @@ public class Diagnosticos implements Serializable {
     @Size(max = 2147483647)
     @Column(name = "origen")
     private String origen;
+    
+    @Column(name = "saludlaboral")
+    private boolean saludLaboral;
+
+    public boolean isSaludLaboral() {
+        return saludLaboral;
+    }
+
+    public void setSaludLaboral(boolean saludLaboral) {
+        this.saludLaboral = saludLaboral;
+    }
+    
+    
 
     public Diagnosticos() {
     }

@@ -104,6 +104,15 @@ public class EmailFacade {
                 case SOLICITUD_DOCUMENTOS_SL:
                     plantilla = loaderFacade.getPlantillaDocumentosSaludLaborales();
                     break;
+                case RECHAZO_DOCUMENTOS_SOLICITADO:
+                    plantilla = loaderFacade.getPlantillaDocumentosRechazoSolicitante();
+                    break;
+                case RECHAZO_DOCUMENTOS_USUARIO:
+                    plantilla = loaderFacade.getPlantillaDocumentosUsuario();
+                    break;
+                case DOCUMENTACION_ENVIADA:
+                    plantilla = loaderFacade.getPlantillaDocumentacionEnviada();
+                    break;
             }
             plantilla = replaceParameters(parametros, plantilla);
             contenido = contenido.replace(PARAM_PLANT_PRINCIPAL, plantilla);

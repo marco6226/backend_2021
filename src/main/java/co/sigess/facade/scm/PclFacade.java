@@ -49,37 +49,70 @@ public class PclFacade extends AbstractFacade<Pcl> {
         return deleted;
     }
 
-       public List<Object> findAllById(String caseId) {
-       Query query = this.em.createNativeQuery(" SELECT pcl.id,\n" +
-"    pcl.porcentaje_pcl,\n" +
-"    pcl.emision_pcl_fecha,\n" +
-"    pcl.entidad_emite_pcl,\n" +
-"    pcl.pcl,\n" +
-"    diag.id AS diag,\n" +
-"    pcl.eliminado,\n" +
-"    pcl.entidad_emitida,\n" +
-"    pcl.status_de_calificacion,\n" +
-"    pcl.fecha_calificacion,\n" +
-"    pcl.entidad_emite_calificacion,\n" +
-"    pcl.entidad_emitida_calificacion,\n" +
-"    pcl.observaciones,\n" +
-"    pcl.origen,\n" +
-"    diag.id AS id_diagnostico,\n" +
-"    diag.diagnostico AS nombre_diagnostico\n" +
-"   FROM scm.pcl pcl\n" +
-"     JOIN scm.pcl_diagnostico pcl_diag ON pcl.id = pcl_diag.id_pcl\n" +
-"     JOIN scm.diagnosticos diag ON pcl_diag.id_diagnostico = diag.id\n" +
-"  WHERE diag.pk_case= ?1 AND pcl.eliminado = false\n" +
-"  ORDER BY pcl.emision_pcl_fecha;", Pcl.class);
+public List<Object> findAllById(String caseId) {
+    Query query = this.em.createNativeQuery("SELECT pcl.id,\n" +
+        "    pcl.porcentaje_pcl,\n" +
+        "    pcl.emision_pcl_fecha,\n" +
+        "    pcl.entidad_emite_pcl,\n" +
+        "    pcl.pcl,\n" +
+        "    diag.id AS diag,\n" +
+        "    pcl.eliminado,\n" +
+        "    pcl.entidad_emitida,\n" +
+        "    pcl.status_de_calificacion,\n" +
+        "    pcl.fecha_calificacion,\n" +
+        "    pcl.entidad_emite_calificacion,\n" +
+        "    pcl.entidad_emitida_calificacion,\n" +
+        "    pcl.observaciones,\n" +
+        "    pcl.origen,\n" +
+        "    diag.id AS id_diagnostico,\n" +
+        "    diag.diagnostico AS nombre_diagnostico,\n" +
+        "    pcl.origen_pcl,\n" +
+        "    pcl.observaciones_pcl\n" +
+        "   FROM scm.pcl pcl\n" +
+        "     JOIN scm.pcl_diagnostico pcl_diag ON pcl.id = pcl_diag.id_pcl\n" +
+        "     JOIN scm.diagnosticos diag ON pcl_diag.id_diagnostico = diag.id\n" +
+        "  WHERE diag.pk_case= ?1 AND pcl.eliminado = false\n" +
+        "  ORDER BY pcl.emision_pcl_fecha;", Pcl.class);
 
-        
+    query.setParameter(1, caseId);
+    List<Object> list = query.getResultList();
+    System.out.println(query);
+    System.out.println(list + "lsta");
+    return list;
+}
 
-        query.setParameter(1, caseId);
-        List<Object> list = query.getResultList();
-        System.out.println(query);
-        System.out.println(list + "lsta");
-        return list;
-    }
+public List<Object> findAllByIdSaludLaboral(String caseId) {
+    Query query = this.em.createNativeQuery("SELECT pcl.id,\n" +
+        "    pcl.porcentaje_pcl,\n" +
+        "    pcl.emision_pcl_fecha,\n" +
+        "    pcl.entidad_emite_pcl,\n" +
+        "    pcl.pcl,\n" +
+        "    diag.id AS diag,\n" +
+        "    pcl.eliminado,\n" +
+        "    pcl.entidad_emitida,\n" +
+        "    pcl.status_de_calificacion,\n" +
+        "    pcl.fecha_calificacion,\n" +
+        "    pcl.entidad_emite_calificacion,\n" +
+        "    pcl.entidad_emitida_calificacion,\n" +
+        "    pcl.observaciones,\n" +
+        "    pcl.origen,\n" +
+        "    pcl.saludlaboral,\n" +    
+        "    diag.id AS id_diagnostico,\n" +
+        "    diag.diagnostico AS nombre_diagnostico,\n" +
+        "    pcl.origen_pcl,\n" +
+        "    pcl.observaciones_pcl\n" +
+        "   FROM scm.pcl pcl\n" +
+        "     JOIN scm.pcl_diagnostico pcl_diag ON pcl.id = pcl_diag.id_pcl\n" +
+        "     JOIN scm.diagnosticos diag ON pcl_diag.id_diagnostico = diag.id\n" +
+        "  WHERE diag.pk_case= ?1 AND pcl.eliminado = false AND pcl.saludlaboral = true\n" +
+        "  ORDER BY pcl.emision_pcl_fecha;", Pcl.class);
+
+    query.setParameter(1, caseId);
+    List<Object> list = query.getResultList();
+    System.out.println(query);
+    System.out.println(list + "lsta");
+    return list;
+}
        
       
 

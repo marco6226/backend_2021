@@ -103,6 +103,18 @@ public class AreaREST extends ServiceREST{
     }
     
     @GET
+    @Secured(validarPermiso = false)
+    @Path("findSL")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAreaById() {
+        List<Area> areas = areaFacade.findByIdSL();
+        if (areas.isEmpty()) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        return Response.ok(areas).build();
+    }
+    
+    @GET
     @Path("filterArea")
     @Secured(requiereEmpresaId = false)
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
