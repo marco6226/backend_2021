@@ -585,12 +585,12 @@ public class DirectorioREST extends ServiceREST {
     @POST
     @Path("documento/")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response removeDocumento(@HeaderParam("Authorization") String authorizationHeader
-            , @FormDataParam("data") String encryptedId) throws Exception {
+    public Response removeDocumento(@FormDataParam("data") String encryptedId) throws Exception {
         try {
             
-            
-            byte[] keyBytes = authorizationHeader.getBytes(StandardCharsets.UTF_8);
+            String secureKey = "dlMvbmWwxVXO3LVwhQTmnPBsaL7lSyjq";
+
+            byte[] keyBytes = secureKey.getBytes(StandardCharsets.UTF_8);
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
             keyBytes = digest.digest(keyBytes);
             keyBytes = Arrays.copyOf(keyBytes, 16);
@@ -603,7 +603,6 @@ public class DirectorioREST extends ServiceREST {
             String textoDesencriptado = new String(decryptedBytes, StandardCharsets.UTF_8);
 
             System.out.println("Texto Desencriptado: " + textoDesencriptado);
-            
             
             Documento doc = documentoFacade.find(Long.parseLong(textoDesencriptado));
             documentoFacade.remove(doc);
