@@ -7,6 +7,8 @@ package co.sigess.facade.scm;
 import co.sigess.entities.emp.Empleado;
 import co.sigess.entities.scm.DatosTrabajadorEntity;
 import co.sigess.facade.com.AbstractFacade;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -115,5 +117,33 @@ public class DatosTrabajadorFacade extends AbstractFacade<DatosTrabajadorEntity>
         List<DatosTrabajadorEntity> list = (List<DatosTrabajadorEntity>) q.getResultList();
         return list;
     }
+    
+    public void deleteDocumentFromMail(Integer id, String docID) throws Exception {
+    try {
+        // Suponiendo que el campo documentos es una cadena que contiene los IDs de los documentos separados por comas.
+        DatosTrabajadorEntity mailEntity = this.findById(id);
+        if (mailEntity != null) {
+            String documentos = mailEntity.getDocumentos();
+            if (documentos != null && !documentos.isEmpty()) {
+                List<String> documentosList = new ArrayList<>(Arrays.asList(documentos.split(",")));
+                if (documentosList.contains(docID)) {
+                    documentosList.remove(docID);
+                    mailEntity.setDocumentos(String.join(",", documentosList));
+                    this.update(mailEntity);
+                } else {
+                    throw new Exception("Documento no encontrado en la lista.");
+                }
+            } else {
+                throw new Exception("No hay documentos para eliminar.");
+            }
+        } else {
+            throw new Exception("MailSaludLaboralEntity no encontrado.");
+        }
+    } catch (Exception e) {
+        // Manejar la excepción y re-lanzarla para que se registre adecuadamente
+        e.printStackTrace();
+        throw e;
+    }
+}
 
 }

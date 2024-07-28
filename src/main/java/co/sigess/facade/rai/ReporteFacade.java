@@ -327,7 +327,8 @@ public class ReporteFacade extends AbstractFacade<Reporte> {
     }
     
     public List<Reporte> buscar(String parametro, Integer empresaId) {
-        Query q = this.em.createQuery("SELECT r FROM Reporte AS r WHERE CAST(r.id AS text) like ?1 AND (r.empresa.id = ?2 OR (r.temporal IS NOT null AND r.istemporal = true))");
+        //Query q = this.em.createQuery("SELECT r FROM Reporte AS r WHERE CAST(r.id AS text) like ?1 AND (r.empresa.id = ?2 OR (r.temporal IS NOT null AND r.istemporal = true))");
+        Query q = this.em.createQuery("SELECT r FROM Reporte AS r WHERE CAST(r.id AS text) like ?1 AND (r.empresa.id = ?2 OR r.empresa.idEmpresaAliada = ?2)");
         q.setParameter(1, parametro+"%");
         q.setParameter(2, empresaId);
         List<Reporte> list = (List<Reporte>) q.getResultList();
