@@ -58,6 +58,19 @@ public class AreaFacade extends AbstractFacade<Area> {
         List<Area> areaList = (List<Area>) q.getResultList();
         return areaList;
     }
+     
+    public List<Area> findByAreaId() {
+        // Crear la consulta JPQL
+        String jpql = "SELECT a FROM Area a WHERE a.padreNombre IS NOT NULL AND a.nivel = 0 AND a.tipoArea.id = :tipoAreaId";
+        Query query = this.em.createQuery(jpql);
+        
+        // Establecer el valor del parámetro en la consulta como Integer
+        query.setParameter("tipoAreaId", 59);  // El valor 59 es un Integer
+        
+        // Ejecutar la consulta y devolver el resultado
+        List<Area> areaList = query.getResultList();
+        return areaList;        
+    }
 
     @Override
     public Area create(Area area) throws Exception {

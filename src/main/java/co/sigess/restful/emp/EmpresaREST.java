@@ -13,6 +13,7 @@ import co.sigess.entities.emp.Empresa;
 import co.sigess.entities.emp.Sst;
 import co.sigess.entities.emp.AliadoInformacion;
 import co.sigess.entities.emp.AliadosDivisiones;
+import co.sigess.entities.emp.Area;
 import co.sigess.entities.emp.Subcontratista;
 import co.sigess.exceptions.UserMessageException;
 import co.sigess.facade.emp.ActividadesContratadasFacade;
@@ -20,6 +21,7 @@ import co.sigess.facade.emp.EmpresaFacade;
 import co.sigess.facade.emp.SstFacade;
 import co.sigess.facade.emp.AliadoInformacionFacade;
 import co.sigess.facade.emp.LocalidadesFacade;
+import co.sigess.facade.emp.AreaFacade;
 import co.sigess.facade.emp.SubcontratistaFacade;
 import co.sigess.facade.emp.UsuarioFacade;
 import co.sigess.restful.CriteriaFilter;
@@ -74,6 +76,9 @@ public class EmpresaREST extends ServiceREST {
     
     @EJB
     private UsuarioFacade usuarioFacade;
+    
+    @EJB
+    private AreaFacade areaFacade;
     
     public EmpresaREST() {
 
@@ -339,6 +344,21 @@ public class EmpresaREST extends ServiceREST {
     public Response findByLocalidadId(@PathParam("EmpresaId") Integer empresaId) {
         List<Localidades> act = LocalidadesFacade.findByAllLocalidades();
         return Response.ok(act).build();
+    }
+    
+    @GET
+    
+    @Secured(validarPermiso = false)
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Path("getAreas")
+    public Response findByDivisionId() {
+        try{
+              List<Area> act = areaFacade.findByAreaId();
+              return Response.ok(act).build();
+        }catch (Exception e) {
+            return Util.manageException(e, EmpresaREST.class);
+        }
+        
     }
     
     @GET
