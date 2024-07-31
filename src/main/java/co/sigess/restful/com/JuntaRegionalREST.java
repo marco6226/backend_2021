@@ -7,6 +7,7 @@ package co.sigess.restful.com;
 
 import co.sigess.entities.com.JuntaRegional;
 import co.sigess.facade.com.JuntaRegionalFacade;
+import co.sigess.restful.security.Secured;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ws.rs.GET;
@@ -26,6 +27,7 @@ public class JuntaRegionalREST {
     private JuntaRegionalFacade juntaRegionalFacade;
 
     @GET
+    @Secured(validarPermiso = false)
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response findAll() {
         List<JuntaRegional> list = juntaRegionalFacade.findAll();

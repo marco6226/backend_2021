@@ -956,6 +956,27 @@ public class CasoMedicoREST extends ServiceREST {
             return Util.manageException(e, CasoMedicoREST.class);
         }
     }
+    
+    @PUT
+    @Path("cambiarEstadoSL/{id}")
+    @Secured(validarPermiso = false)
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response actualizarEstadoSL(@PathParam("id") int id, DatosTrabajadorEntity updatedData) {
+        try {
+            DatosTrabajadorEntity dt = DatosTrabajadorFacade.findById(id);
+            if (dt == null) {
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }
+
+            // Actualiza los campos del objeto existente con los valores del objeto actualizado
+            dt.setStatusCaso(true);
+            // ... actualiza otros campos necesarios ...
+
+            return Response.ok(DatosTrabajadorFacade.update(dt)).build();
+        } catch (Exception e) {
+            return Util.manageException(e, CasoMedicoREST.class);
+        }
+    }
 
     @GET
     @Path("sendmail/{emails}")
@@ -1123,6 +1144,17 @@ public class CasoMedicoREST extends ServiceREST {
             dt.setDetalleCalificacion(updatedData.getDetalleCalificacion());
             dt.setFechaMaximaEnvDocs(updatedData.getFechaMaximaEnvDocs());
             dt.setFechaCierreCaso(updatedData.getFechaCierreCaso());
+            dt.setFechaNotificacionEmp(updatedData.getFechaNotificacionEmp());
+            dt.setFechaNotificacionMin(updatedData.getFechaNotificacionMin());
+            dt.setEpsDictamen(updatedData.getEpsDictamen());
+            dt.setFechaDictamenArl(updatedData.getFechaDictamenArl());
+            dt.setArlDictamen(updatedData.getArlDictamen());
+            //dt.setDocumentosArl(updatedData.getDocumentosArl());
+            dt.setFechaDictamenJr(updatedData.getFechaDictamenJr());
+            dt.setJrDictamen(updatedData.getJrDictamen());
+            dt.setFechaDictamenJn(updatedData.getFechaDictamenJn());
+            //dt.setDocumentosJn(updatedData.getDocumentosJn());
+            //dt.setDocumentosJr(updatedData.getJrDictamen());
             // ... actualiza otros campos necesarios ...
 
             return Response.ok(DatosTrabajadorFacade.update(dt)).build();
@@ -1287,6 +1319,66 @@ public class CasoMedicoREST extends ServiceREST {
     public Response deleteDocumentCaseDT(@PathParam("id") Integer id, @PathParam("docID") String docID) {
         try {
             DatosTrabajadorFacade.deleteDocumentFromMail(id, docID);
+            return Response.ok(new Mensaje("Documento eliminado correctamente")).build();
+        } catch (Exception e) {
+            return Util.manageException(e, CasoMedicoREST.class);
+        }
+    }
+    @DELETE
+    @Path("deleteDocumentEmp/{id}/{docID}")
+    @Secured(validarPermiso = false)
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response deleteDocumentEmp(@PathParam("id") Integer id, @PathParam("docID") String docID) {
+        try {
+            DatosTrabajadorFacade.deleteDocumentEmp(id, docID);
+            return Response.ok(new Mensaje("Documento eliminado correctamente")).build();
+        } catch (Exception e) {
+            return Util.manageException(e, CasoMedicoREST.class);
+        }
+    }
+        @DELETE
+    @Path("deleteDocumentArl/{id}/{docID}")
+    @Secured(validarPermiso = false)
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response deleteDocumentArl(@PathParam("id") Integer id, @PathParam("docID") String docID) {
+        try {
+            DatosTrabajadorFacade.deleteDocumentArl(id, docID);
+            return Response.ok(new Mensaje("Documento eliminado correctamente")).build();
+        } catch (Exception e) {
+            return Util.manageException(e, CasoMedicoREST.class);
+        }
+    }
+          @DELETE
+    @Path("deleteDocumentJr/{id}/{docID}")
+    @Secured(validarPermiso = false)
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response deleteDocumentJr(@PathParam("id") Integer id, @PathParam("docID") String docID) {
+        try {
+            DatosTrabajadorFacade.deleteDocumentJr(id, docID);
+            return Response.ok(new Mensaje("Documento eliminado correctamente")).build();
+        } catch (Exception e) {
+            return Util.manageException(e, CasoMedicoREST.class);
+        }
+    }
+             @DELETE
+    @Path("deleteDocumentJn/{id}/{docID}")
+    @Secured(validarPermiso = false)
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response deleteDocumentJn(@PathParam("id") Integer id, @PathParam("docID") String docID) {
+        try {
+            DatosTrabajadorFacade.deleteDocumentJn(id, docID);
+            return Response.ok(new Mensaje("Documento eliminado correctamente")).build();
+        } catch (Exception e) {
+            return Util.manageException(e, CasoMedicoREST.class);
+        }
+    }
+        @DELETE
+    @Path("deleteDocumentMin/{id}/{docID}")
+    @Secured(validarPermiso = false)
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response deleteDocumentMin(@PathParam("id") Integer id, @PathParam("docID") String docID) {
+        try {
+            DatosTrabajadorFacade.deleteDocumentMin(id, docID);
             return Response.ok(new Mensaje("Documento eliminado correctamente")).build();
         } catch (Exception e) {
             return Util.manageException(e, CasoMedicoREST.class);
@@ -1581,16 +1673,95 @@ public class CasoMedicoREST extends ServiceREST {
     public Response actualizarDocumentosCaso(@PathParam("id") int id, DatosTrabajadorEntity updatedData) {
         try {
             DatosTrabajadorEntity dt = DatosTrabajadorFacade.findById(id);
-//            String docs = dt.getDocumentos();
-//            ArrayList<String> doc = new ArrayList<>();
-//            doc.add(docs);
-//            doc.add(updatedData.getDocumentos());
-//            String documentosString = arrayListToString(doc);
-
             if (dt == null) {
                 return Response.status(Response.Status.NOT_FOUND).build();
             }
             dt.setDocumentos(updatedData.getDocumentos());
+            //dt.setDocumentos(documentosString);
+            return Response.ok(DatosTrabajadorFacade.update(dt)).build();
+        } catch (Exception e) {
+            return Util.manageException(e, CasoMedicoREST.class);
+        }
+    }
+    @PUT
+    @Path("documentsEmp/{id}")
+    @Secured(validarPermiso = false)
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response actualizarDocumentosEmpresa(@PathParam("id") int id, DatosTrabajadorEntity updatedData) {
+        try {
+            DatosTrabajadorEntity dt = DatosTrabajadorFacade.findById(id);
+            if (dt == null) {
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }
+            dt.setDocumentosEmpresa(updatedData.getDocumentosEmpresa());
+            //dt.setDocumentos(documentosString);
+            return Response.ok(DatosTrabajadorFacade.update(dt)).build();
+        } catch (Exception e) {
+            return Util.manageException(e, CasoMedicoREST.class);
+        }
+    }
+        @PUT
+    @Path("documentsArl/{id}")
+    @Secured(validarPermiso = false)
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response actualizarDocumentosArl(@PathParam("id") int id, DatosTrabajadorEntity updatedData) {
+        try {
+            DatosTrabajadorEntity dt = DatosTrabajadorFacade.findById(id);
+            if (dt == null) {
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }
+            dt.setDocumentosArl(updatedData.getDocumentosArl());
+            //dt.setDocumentos(documentosString);
+            return Response.ok(DatosTrabajadorFacade.update(dt)).build();
+        } catch (Exception e) {
+            return Util.manageException(e, CasoMedicoREST.class);
+        }
+    }
+            @PUT
+    @Path("documentsJr/{id}")
+    @Secured(validarPermiso = false)
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response actualizarDocumentosJr(@PathParam("id") int id, DatosTrabajadorEntity updatedData) {
+        try {
+            DatosTrabajadorEntity dt = DatosTrabajadorFacade.findById(id);
+            if (dt == null) {
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }
+            dt.setDocumentosJr(updatedData.getDocumentosJr());
+            //dt.setDocumentos(documentosString);
+            return Response.ok(DatosTrabajadorFacade.update(dt)).build();
+        } catch (Exception e) {
+            return Util.manageException(e, CasoMedicoREST.class);
+        }
+    }
+                @PUT
+    @Path("documentsJn/{id}")
+    @Secured(validarPermiso = false)
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response actualizarDocumentosJn(@PathParam("id") int id, DatosTrabajadorEntity updatedData) {
+        try {
+            DatosTrabajadorEntity dt = DatosTrabajadorFacade.findById(id);
+            if (dt == null) {
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }
+            dt.setDocumentosJn(updatedData.getDocumentosJn());
+            //dt.setDocumentos(documentosString);
+            return Response.ok(DatosTrabajadorFacade.update(dt)).build();
+        } catch (Exception e) {
+            return Util.manageException(e, CasoMedicoREST.class);
+        }
+    }
+    @PUT
+    @Path("documentsMin/{id}")
+    @Secured(validarPermiso = false)
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response actualizarDocumentosMinisterio(@PathParam("id") int id, DatosTrabajadorEntity updatedData) {
+        try {
+            DatosTrabajadorEntity dt = DatosTrabajadorFacade.findById(id);
+            if (dt == null) {
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }
+            dt.setDocumentosMinisterio(updatedData.getDocumentosMinisterio());
             //dt.setDocumentos(documentosString);
             return Response.ok(DatosTrabajadorFacade.update(dt)).build();
         } catch (Exception e) {
