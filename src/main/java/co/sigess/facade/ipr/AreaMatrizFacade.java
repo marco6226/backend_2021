@@ -40,6 +40,14 @@ public class AreaMatrizFacade extends AbstractFacade<AreaMatriz>{
         return list;
     }
     
+    public List<AreaMatriz> findForEmpA() {
+        String jpql = "SELECT am FROM AreaMatriz am WHERE am.empresa.id = :empresaId AND am.eliminado = FALSE";
+        Query query = this.em.createQuery(jpql);
+        query.setParameter("empresaId", 22);
+        return query.getResultList();
+    }
+
+    
     public void editAreaEstado(Integer areaId){
         int q = this.em.createQuery("UPDATE AreaMatriz am SET am.estado = 'No evaluada' WHERE am.id = :areaId")
         .setParameter("areaId", areaId)
