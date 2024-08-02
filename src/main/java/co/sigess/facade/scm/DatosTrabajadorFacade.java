@@ -97,14 +97,12 @@ public class DatosTrabajadorFacade extends AbstractFacade<DatosTrabajadorEntity>
         DatosTrabajadorEntity saludLaboral = (DatosTrabajadorEntity) q.getSingleResult();
         return saludLaboral;
     }
-    
 
     public DatosTrabajadorEntity update(DatosTrabajadorEntity dt) throws Exception {
 
         dt = super.edit(dt);
         return dt;
     }
-    
 
     public List<DatosTrabajadorEntity> buscar(String parametro) {
         System.out.println(parametro);
@@ -117,33 +115,173 @@ public class DatosTrabajadorFacade extends AbstractFacade<DatosTrabajadorEntity>
         List<DatosTrabajadorEntity> list = (List<DatosTrabajadorEntity>) q.getResultList();
         return list;
     }
-    
+
     public void deleteDocumentFromMail(Integer id, String docID) throws Exception {
-    try {
-        // Suponiendo que el campo documentos es una cadena que contiene los IDs de los documentos separados por comas.
-        DatosTrabajadorEntity mailEntity = this.findById(id);
-        if (mailEntity != null) {
-            String documentos = mailEntity.getDocumentos();
-            if (documentos != null && !documentos.isEmpty()) {
-                List<String> documentosList = new ArrayList<>(Arrays.asList(documentos.split(",")));
-                if (documentosList.contains(docID)) {
-                    documentosList.remove(docID);
-                    mailEntity.setDocumentos(String.join(",", documentosList));
-                    this.update(mailEntity);
+        try {
+            // Suponiendo que el campo documentos es una cadena que contiene los IDs de los documentos separados por comas.
+            DatosTrabajadorEntity mailEntity = this.findById(id);
+            if (mailEntity != null) {
+                String documentos = mailEntity.getDocumentos();
+                if (documentos != null && !documentos.isEmpty()) {
+                    List<String> documentosList = new ArrayList<>(Arrays.asList(documentos.split(",")));
+                    if (documentosList.contains(docID)) {
+                        documentosList.remove(docID);
+                        mailEntity.setDocumentos(String.join(",", documentosList));
+                        this.update(mailEntity);
+                    } else {
+                        throw new Exception("Documento no encontrado en la lista.");
+                    }
                 } else {
-                    throw new Exception("Documento no encontrado en la lista.");
+                    throw new Exception("No hay documentos para eliminar.");
                 }
             } else {
-                throw new Exception("No hay documentos para eliminar.");
+                throw new Exception("MailSaludLaboralEntity no encontrado.");
             }
-        } else {
-            throw new Exception("MailSaludLaboralEntity no encontrado.");
+        } catch (Exception e) {
+            // Manejar la excepción y re-lanzarla para que se registre adecuadamente
+            e.printStackTrace();
+            throw e;
         }
-    } catch (Exception e) {
-        // Manejar la excepción y re-lanzarla para que se registre adecuadamente
-        e.printStackTrace();
-        throw e;
     }
-}
+
+    public void deleteDocumentEmp(Integer id, String docID) throws Exception {
+        try {
+            // Suponiendo que el campo documentos es una cadena que contiene los IDs de los documentos separados por comas.
+            DatosTrabajadorEntity mailEntity = this.findById(id);
+            if (mailEntity != null) {
+                String documentos = mailEntity.getDocumentosEmpresa();
+                if (documentos != null && !documentos.isEmpty()) {
+                    List<String> documentosList = new ArrayList<>(Arrays.asList(documentos.split(",")));
+                    if (documentosList.contains(docID)) {
+                        documentosList.remove(docID);
+                        mailEntity.setDocumentosEmpresa(String.join(",", documentosList));
+                        this.update(mailEntity);
+                    } else {
+                        throw new Exception("Documento no encontrado en la lista.");
+                    }
+                } else {
+                    throw new Exception("No hay documentos para eliminar.");
+                }
+            } else {
+                throw new Exception("MailSaludLaboralEntity no encontrado.");
+            }
+        } catch (Exception e) {
+            // Manejar la excepción y re-lanzarla para que se registre adecuadamente
+            e.printStackTrace();
+            throw e;
+        }
+
+    }
+        public void deleteDocumentArl(Integer id, String docID) throws Exception {
+        try {
+            // Suponiendo que el campo documentos es una cadena que contiene los IDs de los documentos separados por comas.
+            DatosTrabajadorEntity mailEntity = this.findById(id);
+            if (mailEntity != null) {
+                String documentos = mailEntity.getDocumentosArl();
+                if (documentos != null && !documentos.isEmpty()) {
+                    List<String> documentosList = new ArrayList<>(Arrays.asList(documentos.split(",")));
+                    if (documentosList.contains(docID)) {
+                        documentosList.remove(docID);
+                        mailEntity.setDocumentosArl(String.join(",", documentosList));
+                        this.update(mailEntity);
+                    } else {
+                        throw new Exception("Documento no encontrado en la lista.");
+                    }
+                } else {
+                    throw new Exception("No hay documentos para eliminar.");
+                }
+            } else {
+                throw new Exception("MailSaludLaboralEntity no encontrado.");
+            }
+        } catch (Exception e) {
+            // Manejar la excepción y re-lanzarla para que se registre adecuadamente
+            e.printStackTrace();
+            throw e;
+        }
+
+    }
+        public void deleteDocumentJr(Integer id, String docID) throws Exception {
+        try {
+            // Suponiendo que el campo documentos es una cadena que contiene los IDs de los documentos separados por comas.
+            DatosTrabajadorEntity mailEntity = this.findById(id);
+            if (mailEntity != null) {
+                String documentos = mailEntity.getDocumentosJr();
+                if (documentos != null && !documentos.isEmpty()) {
+                    List<String> documentosList = new ArrayList<>(Arrays.asList(documentos.split(",")));
+                    if (documentosList.contains(docID)) {
+                        documentosList.remove(docID);
+                        mailEntity.setDocumentosJr(String.join(",", documentosList));
+                        this.update(mailEntity);
+                    } else {
+                        throw new Exception("Documento no encontrado en la lista.");
+                    }
+                } else {
+                    throw new Exception("No hay documentos para eliminar.");
+                }
+            } else {
+                throw new Exception("MailSaludLaboralEntity no encontrado.");
+            }
+        } catch (Exception e) {
+            // Manejar la excepción y re-lanzarla para que se registre adecuadamente
+            e.printStackTrace();
+            throw e;
+        }
+
+    }
+
+    public void deleteDocumentMin(Integer id, String docID) throws Exception {
+        try {
+            // Suponiendo que el campo documentos es una cadena que contiene los IDs de los documentos separados por comas.
+            DatosTrabajadorEntity mailEntity = this.findById(id);
+            if (mailEntity != null) {
+                String documentos = mailEntity.getDocumentosMinisterio();
+                if (documentos != null && !documentos.isEmpty()) {
+                    List<String> documentosList = new ArrayList<>(Arrays.asList(documentos.split(",")));
+                    if (documentosList.contains(docID)) {
+                        documentosList.remove(docID);
+                        mailEntity.setDocumentosMinisterio(String.join(",", documentosList));
+                        this.update(mailEntity);
+                    } else {
+                        throw new Exception("Documento no encontrado en la lista.");
+                    }
+                } else {
+                    throw new Exception("No hay documentos para eliminar.");
+                }
+            } else {
+                throw new Exception("MailSaludLaboralEntity no encontrado.");
+            }
+        } catch (Exception e) {
+            // Manejar la excepción y re-lanzarla para que se registre adecuadamente
+            e.printStackTrace();
+            throw e;
+        }
+    }
+     public void deleteDocumentJn(Integer id, String docID) throws Exception {
+        try {
+            // Suponiendo que el campo documentos es una cadena que contiene los IDs de los documentos separados por comas.
+            DatosTrabajadorEntity mailEntity = this.findById(id);
+            if (mailEntity != null) {
+                String documentos = mailEntity.getDocumentosJn();
+                if (documentos != null && !documentos.isEmpty()) {
+                    List<String> documentosList = new ArrayList<>(Arrays.asList(documentos.split(",")));
+                    if (documentosList.contains(docID)) {
+                        documentosList.remove(docID);
+                        mailEntity.setDocumentosJn(String.join(",", documentosList));
+                        this.update(mailEntity);
+                    } else {
+                        throw new Exception("Documento no encontrado en la lista.");
+                    }
+                } else {
+                    throw new Exception("No hay documentos para eliminar.");
+                }
+            } else {
+                throw new Exception("MailSaludLaboralEntity no encontrado.");
+            }
+        } catch (Exception e) {
+            // Manejar la excepción y re-lanzarla para que se registre adecuadamente
+            e.printStackTrace();
+            throw e;
+        }
+    }
 
 }

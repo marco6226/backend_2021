@@ -60,6 +60,20 @@ public class AreaMatrizREST extends ServiceREST{
         }
     }
     
+    @GET
+    @Path("getAreaM")
+    @Secured(validarPermiso = false)
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response findAreaM() {
+        try {
+            List<AreaMatriz> list = areaMatrizFacade.findForEmpA();
+            return Response.ok(list).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, AreaMatrizREST.class);
+        }
+    }
+
+    
     @POST
     @Secured(validarPermiso = false)
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})

@@ -106,8 +106,174 @@ public class DatosTrabajadorEntity implements Serializable{
     @Column(name = "documentos")
     private String documentos;
     
+    @Column (name= "documentos_emp")
+    private String documentosEmpresa;
+    
+    @Column (name ="documentos_ministerio")
+    private String documentosMinisterio;
+    
+    @Column(name = "fecha_empresa")
+    private Date fechaNotificacionEmp;
+    
+    @Column(name = "fecha_ministerio")
+    private Date fechaNotificacionMin;
+    
     @Column(name = "fecha_cierre_caso")
     private Date fechaCierreCaso;
+    
+    @Column(name = "status_caso")
+    private Boolean statusCaso;
+    
+    @Column(name = "eps_dictamen")
+    private String epsDictamen;
+    
+    @Column(name= "fecha_dictamen_arl")
+    private Date fechaDictamenArl;
+    
+    @Column(name = "arl_dictamen")
+    private String arlDictamen;
+    
+    @Column(name = "documentos_arl")
+    private String documentosArl;
+    
+    @Column(name = "fecha_dictamenjr")
+    private Date fechaDictamenJr;
+    
+    @Column(name = "jr_dictamen")
+    private String jrDictamen;
+//    
+    @Column(name = "documentos_jr")
+    private String documentosJr;
+    
+    @Column(name = "fecha_dictamenjn")
+    private Date fechaDictamenJn;
+    
+    @Column(name = "documentos_jn")
+    private String documentosJn;
+
+    public Date getFechaDictamenJn() {
+        return fechaDictamenJn;
+    }
+
+    public void setFechaDictamenJn(Date fechaDictamenJn) {
+        this.fechaDictamenJn = fechaDictamenJn;
+    }
+
+    public String getDocumentosJn() {
+        return documentosJn;
+    }
+
+    public void setDocumentosJn(String documentosJn) {
+        this.documentosJn = documentosJn;
+    }
+    
+    
+
+    public Date getFechaDictamenJr() {
+        return fechaDictamenJr;
+    }
+
+    public void setFechaDictamenJr(Date fechaDictamenJr) {
+        this.fechaDictamenJr = fechaDictamenJr;
+    }
+
+    public String getJrDictamen() {
+        return jrDictamen;
+    }
+
+    public void setJrDictamen(String jrDictamen) {
+        this.jrDictamen = jrDictamen;
+    }
+//
+    public String getDocumentosJr() {
+        return documentosJr;
+    }
+
+    public void setDocumentosJr(String documentosJr) {
+        this.documentosJr = documentosJr;
+    }
+    
+    
+
+    public Date getFechaDictamenArl() {
+        return fechaDictamenArl;
+    }
+
+    public void setFechaDictamenArl(Date fechaDictamenArl) {
+        this.fechaDictamenArl = fechaDictamenArl;
+    }
+
+    public String getArlDictamen() {
+        return arlDictamen;
+    }
+
+    public void setArlDictamen(String arlDictamen) {
+        this.arlDictamen = arlDictamen;
+    }
+
+    public String getDocumentosArl() {
+        return documentosArl;
+    }
+
+    public void setDocumentosArl(String documentosArl) {
+        this.documentosArl = documentosArl;
+    }
+    
+    
+
+    public String getEpsDictamen() {
+        return epsDictamen;
+    }
+
+    public void setEpsDictamen(String epsDictamen) {
+        this.epsDictamen = epsDictamen;
+    }
+    
+    
+
+    public Boolean getStatusCaso() {
+        return statusCaso;
+    }
+
+    public void setStatusCaso(Boolean statusCaso) {
+        this.statusCaso = statusCaso;
+    }
+    
+    
+    public Date getFechaNotificacionEmp() {
+        return fechaNotificacionEmp;
+    }
+
+    public void setFechaNotificacionEmp(Date fechaNotificacionEmp) {
+        this.fechaNotificacionEmp = fechaNotificacionEmp;
+    }
+
+    public Date getFechaNotificacionMin() {
+        return fechaNotificacionMin;
+    }
+
+    public void setFechaNotificacionMin(Date fechaNotificacionMin) {
+        this.fechaNotificacionMin = fechaNotificacionMin;
+    }
+    
+
+    public String getDocumentosEmpresa() {
+        return documentosEmpresa;
+    }
+
+    public void setDocumentosEmpresa(String documentosEmpresa) {
+        this.documentosEmpresa = documentosEmpresa;
+    }
+
+    public String getDocumentosMinisterio() {
+        return documentosMinisterio;
+    }
+
+    public void setDocumentosMinisterio(String documentosMinisterio) {
+        this.documentosMinisterio = documentosMinisterio;
+    }
+    
+    
 
     public Date getFechaCierreCaso() {
         return fechaCierreCaso;
