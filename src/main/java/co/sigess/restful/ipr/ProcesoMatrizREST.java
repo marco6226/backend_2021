@@ -60,6 +60,20 @@ public class ProcesoMatrizREST extends ServiceREST{
         }
     }
     
+    @GET
+    @Path("getProcesos/{AreaId}")
+    @Secured(validarPermiso = false)
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response findProceso(@PathParam("AreaId") Integer areaId) {
+        try {
+            System.out.println("Área ID recibida: " + areaId); 
+            List<ProcesoMatriz> list = procesoMatrizFacade.findForArea2(areaId);
+            return Response.ok(list).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, ProcesoMatrizREST.class);
+        }
+    }
+    
     @POST
     @Secured(validarPermiso = false)
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})

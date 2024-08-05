@@ -47,6 +47,15 @@ public class ProcesoMatrizFacade extends AbstractFacade<ProcesoMatriz> {
         List<ProcesoMatriz> list = (List<ProcesoMatriz>) q.getResultList();
         return list;
     }
+    
+    public List<ProcesoMatriz> findForArea2(Integer areaId){
+        System.out.println("Consulta para área ID: " + areaId); // Agrega una línea para depuración
+        Query q = this.em.createQuery("SELECT pm FROM ProcesoMatriz pm WHERE pm.areaMatriz.id = :areaId AND pm.eliminado = FALSE");
+        q.setParameter("areaId", areaId);
+        List<ProcesoMatriz> list = (List<ProcesoMatriz>) q.getResultList();
+        System.out.println("Procesos encontrados: " + list.size()); // Agrega una línea para depuración
+        return list;
+    }
      
     public void editProcesoEstado(Integer procesoId){
         int q = this.em.createQuery("UPDATE ProcesoMatriz pm SET pm.estado = 'No evaluada' WHERE pm.id = :procesoId")

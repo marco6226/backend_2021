@@ -61,12 +61,12 @@ public class AreaMatrizREST extends ServiceREST{
     }
     
     @GET
-    @Path("getAreaM")
+    @Path("getAreaM/{LocalidadId}")
     @Secured(validarPermiso = false)
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response findAreaM() {
+    public Response findAreaM(@PathParam("LocalidadId") Integer localidadId) {
         try {
-            List<AreaMatriz> list = areaMatrizFacade.findForEmpA();
+            List<AreaMatriz> list = areaMatrizFacade.findForEmpA(localidadId);
             return Response.ok(list).build();
         } catch (Exception ex) {
             return Util.manageException(ex, AreaMatrizREST.class);

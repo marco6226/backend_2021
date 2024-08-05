@@ -64,6 +64,14 @@ public class LocalidadesFacade extends AbstractFacade<Localidades>{
         return localidades;        
     }
     
+    public List<Localidades> findByDivision(Integer divisionId) {
+
+        Query query = this.em.createQuery("SELECT al FROM Localidades al WHERE al.plantas.area.id = :divisionId");
+        query.setParameter("divisionId", divisionId);
+        List<Localidades> localidades = (List<Localidades>) query.getResultList();
+        return localidades;        
+    }
+    
     public void deleteLocalidad(Localidades localidades)throws Exception {
         super.remove(localidades);      
     }

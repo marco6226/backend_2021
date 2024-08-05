@@ -336,7 +336,7 @@ public class EmpresaREST extends ServiceREST {
         List<ActividadesContratadas> act = ActividadesContratadasFacade.findByActividadContratadaId(empresaId);
         return Response.ok(act).build();
     }
-
+    
     @GET
     @Secured(requiereEmpresaId = false)
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -347,7 +347,6 @@ public class EmpresaREST extends ServiceREST {
     }
     
     @GET
-    
     @Secured(validarPermiso = false)
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("getAreas")
@@ -360,6 +359,16 @@ public class EmpresaREST extends ServiceREST {
         }
         
     }
+    
+    @GET
+    @Secured(requiereEmpresaId = false)
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Path("getLocalidades/{DivisionId}")
+    public Response findLocByDivisonId(@PathParam("DivisionId") Integer divisionId) {
+        List<Localidades> loc = LocalidadesFacade.findByDivision(divisionId);
+        return Response.ok(loc).build();
+    }
+
     
     @GET
     @Secured(validarPermiso = false)
