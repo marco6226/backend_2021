@@ -38,7 +38,6 @@ import javax.persistence.criteria.Selection;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 
-
 /**
  *
  * @author fmoreno
@@ -54,14 +53,14 @@ public abstract class AbstractFacade<T> {
     protected abstract EntityManager getEntityManager();
 
     public T create(T entity) throws Exception {
-         try {
-      getEntityManager().persist(entity);
-    } catch (ConstraintViolationException e) {
-        // Aqui tira los errores de constraint
-        for (ConstraintViolation actual : e.getConstraintViolations()) {
-            System.out.println(actual.toString());
+        try {
+            getEntityManager().persist(entity);
+        } catch (ConstraintViolationException e) {
+            // Aqui tira los errores de constraint
+            for (ConstraintViolation actual : e.getConstraintViolations()) {
+                System.out.println(actual.toString());
+            }
         }
-    }
         return entity;
     }
 
@@ -70,12 +69,11 @@ public abstract class AbstractFacade<T> {
         return entity;
     }
 
-    
     public T editV(T entity) throws Exception {
         getEntityManager().persist(entity);
         return entity;
     }
-    
+
     public void remove(T entity) throws Exception {
         getEntityManager().remove(getEntityManager().merge(entity));
     }
@@ -94,11 +92,14 @@ public abstract class AbstractFacade<T> {
         CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
         CriteriaQuery cq = cb.createQuery();
         Root<T> root = cq.from(entityClass);
-       
-        cq.select(cb.count(root));
+        if (root.getJavaType().equals(Empresa.class)) {
+            cq.select(cb.countDistinct(root));
+        } else {
+            cq.select(cb.count(root));
+        }
         cq.where(this.generarPredicados(filterQuery, cb, root));
         Query query = getEntityManager().createQuery(cq);
-        
+
         return (Long) query.getSingleResult();
     }
 
@@ -114,11 +115,12 @@ public abstract class AbstractFacade<T> {
         } else {
             cq.select(root);
         }
-        
-       
+
         cq.where(this.generarPredicados(filterQuery, cb, root));
         if (filterQuery.getSortField() != null && !filterQuery.getSortField().isEmpty()) {
-            Order order = (filterQuery.getSortOrder() != null && filterQuery.getSortOrder() < 0) ? cb.asc(this.recursiveSearchField(filterQuery.getSortField(), root)) : cb.desc(this.recursiveSearchField(filterQuery.getSortField(), root));
+            Order order = (filterQuery.getSortOrder() != null && filterQuery.getSortOrder() < 0)
+                    ? cb.asc(this.recursiveSearchField(filterQuery.getSortField(), root))
+                    : cb.desc(this.recursiveSearchField(filterQuery.getSortField(), root));
             cq.orderBy(order);
         }
         Query query = getEntityManager().createQuery(cq);
@@ -130,14 +132,15 @@ public abstract class AbstractFacade<T> {
         }
 
         if (queryByField) {
-            List mapList = new ArrayList<>();           
+            List mapList = new ArrayList<>();
             query.getResultList().forEach(
                     resultado -> {
                         try {
                             Map<String, Object> rowMap = new HashMap(filterQuery.getFieldList().length);
                             int i = 0;
                             for (String field : filterQuery.getFieldList()) {
-                                rowMap.put(field, resultado instanceof Object[] ? ((Object[]) resultado)[i++] : resultado);
+                                rowMap.put(field,
+                                        resultado instanceof Object[] ? ((Object[]) resultado)[i++] : resultado);
                             }
                             mapList.add(rowMap);
                         } catch (IOException ex) {
@@ -162,7 +165,10 @@ public abstract class AbstractFacade<T> {
                 if (field.contains("_")) {
                     String[] subFieldArray = field.split("_");
                     for (String subField : subFieldArray) {
-                        pathField = pathField instanceof Root ? ((Root<T>) pathField).join(subField, subField.endsWith("PK") ? JoinType.INNER : JoinType.LEFT) : pathField.get(subField);
+                        pathField = pathField instanceof Root
+                                ? ((Root<T>) pathField).join(subField,
+                                        subField.endsWith("PK") ? JoinType.INNER : JoinType.LEFT)
+                                : pathField.get(subField);
                     }
                 } else {
                     pathField = pathField.get(field);
@@ -175,7 +181,8 @@ public abstract class AbstractFacade<T> {
         return selectList.toArray(new Selection[0]);
     }
 
-    private Predicate[] generarPredicados(FilterQuery filterQuery, CriteriaBuilder cb, Root<T> root) throws ParseException, NoSuchFieldException, IOException {
+    private Predicate[] generarPredicados(FilterQuery filterQuery, CriteriaBuilder cb, Root<T> root)
+            throws ParseException, NoSuchFieldException, IOException {
 
         List<Filter> list = filterQuery.getFilterList();
         List<Predicate> predicateList = new ArrayList<>();
@@ -183,7 +190,8 @@ public abstract class AbstractFacade<T> {
 
         for (int i = 0; i < list.size(); i++) {
             Filter filter = list.get(i);
-            if (filter.getValue1() == null && !(filter.getCriteriaEnum().equals(CriteriaFilter.IS_NOT_NULL) || filter.getCriteriaEnum().equals(CriteriaFilter.IS_NULL))) {
+            if (filter.getValue1() == null && !(filter.getCriteriaEnum().equals(CriteriaFilter.IS_NOT_NULL)
+                    || filter.getCriteriaEnum().equals(CriteriaFilter.IS_NULL))) {
                 continue;
             }
 
@@ -248,10 +256,13 @@ public abstract class AbstractFacade<T> {
                 case BETWEEN:
                     if (type == Date.class) {
                         Date value1 = Util.SIMPLE_DATE_FORMAT.parse(filter.getValue1());
-                        Date value2 = filter.getValue2() == null ? null : new Date(Util.SIMPLE_DATE_FORMAT.parse(filter.getValue2()).getTime());// + (1000 * 60 * 60 * 24
+                        Date value2 = filter.getValue2() == null ? null
+                                : new Date(Util.SIMPLE_DATE_FORMAT.parse(filter.getValue2()).getTime());// + (1000 * 60
+                                                                                                        // * 60 * 24
                         predicate = cb.between(expression, value1, value2);
                     } else if (type == Integer.class) {
-                        predicate = cb.between(expression, Integer.parseInt(filter.getValue1()), Integer.parseInt(filter.getValue2()));
+                        predicate = cb.between(expression, Integer.parseInt(filter.getValue1()),
+                                Integer.parseInt(filter.getValue2()));
                     } else {
                         predicate = cb.between(expression, filter.getValue1(), filter.getValue2());
                     }
@@ -270,18 +281,18 @@ public abstract class AbstractFacade<T> {
         }
 
         /*
-        Predicate predicate;
-        Predicate[] arrayPred = predicateList.toArray(new Predicate[0]);
-        switch (filterQuery.getLogicOperation()) {
-            case OR:
-                predicate = cb.or(arrayPred);
-                break;
-            case AND:
-            default:
-                predicate = cb.and(arrayPred);
-                break;
-        }
-        Predicate[] arrayPredicates = {predicate};
+         * Predicate predicate;
+         * Predicate[] arrayPred = predicateList.toArray(new Predicate[0]);
+         * switch (filterQuery.getLogicOperation()) {
+         * case OR:
+         * predicate = cb.or(arrayPred);
+         * break;
+         * case AND:
+         * default:
+         * predicate = cb.and(arrayPred);
+         * break;
+         * }
+         * Predicate[] arrayPredicates = {predicate};
          */
         Predicate[] arrayPredicates = predicateList.toArray(new Predicate[0]);
         return arrayPredicates;
@@ -294,7 +305,7 @@ public abstract class AbstractFacade<T> {
         cq.select(root).where(cb.equal(root.get("empresa"), new Empresa(empresaId))).orderBy(cb.asc(root.get("id")));
         return getEntityManager().createQuery(cq).getResultList();
     }
-    
+
     public List<T> findAllByCustom(Integer id, String custom) {
         CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
         CriteriaQuery cq = cb.createQuery();
@@ -369,8 +380,6 @@ public abstract class AbstractFacade<T> {
         }
     }
 
-    
-    
     public Class<T> getEntityClass() {
         return entityClass;
     }

@@ -93,6 +93,43 @@ public class Programacion implements Serializable {
         , @JoinColumn(name = "fk_lista_inspeccion_version", referencedColumnName = "version")})
     @ManyToOne(optional = false)
     private ListaInspeccion listaInspeccion;
+    
+    @Column(name = "localidad_sv")
+    private Integer localidadSv;
+    
+    @Column(name = "area_sv")
+    private Integer areaSv;
+    
+    @Column(name = "proceso_sv")
+    private Integer procesoSv;
+
+    public Integer getAreaSv() {
+        return areaSv;
+    }
+
+    public void setAreaSv(Integer areaSv) {
+        this.areaSv = areaSv;
+    }
+
+    public Integer getProcesoSv() {
+        return procesoSv;
+    }
+
+    public void setProcesoSv(Integer procesoSv) {
+        this.procesoSv = procesoSv;
+    }
+    
+    
+
+    public Integer getLocalidadSv() {
+        return localidadSv;
+    }
+
+    public void setLocalidadSv(Integer localidadSv) {
+        this.localidadSv = localidadSv;
+    }
+    
+    
 
     public Programacion() {
     }

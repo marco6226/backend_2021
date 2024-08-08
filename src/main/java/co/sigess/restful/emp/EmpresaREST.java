@@ -58,25 +58,25 @@ public class EmpresaREST extends ServiceREST {
 
     @EJB
     private EmpresaFacade empresaFacade;
-    
+
     @EJB
     private SstFacade SstFacade;
-    
+
     @EJB
     private AliadoInformacionFacade AliadoInformacionFacade;
 
     @EJB
     private ActividadesContratadasFacade ActividadesContratadasFacade;
-    
+
     @EJB
     private LocalidadesFacade LocalidadesFacade;
-    
+
     @EJB
     private SubcontratistaFacade subcontratistaFacade;
-    
+
     @EJB
     private UsuarioFacade usuarioFacade;
-    
+
     @EJB
     private AreaFacade areaFacade;
     
@@ -85,7 +85,7 @@ public class EmpresaREST extends ServiceREST {
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     @Override
     public Response findWithFilter(@BeanParam FilterQuery filterQuery) {
         try {
@@ -95,14 +95,14 @@ public class EmpresaREST extends ServiceREST {
             for (Filter filter : filterQuery.getFilterList()) {
                 if (filter.getField().equals("usuarioEmpresaList.usuario.id")) {
                     filtradoEmpresa = true;
-                }else if(filter.getField().compareToIgnoreCase("idempresaaliada") == 0){
+                } else if (filter.getField().compareToIgnoreCase("idempresaaliada") == 0) {
                     isFindAliado = true;
-                }else if(filter.getField().compareToIgnoreCase("id") == 0){
+                } else if (filter.getField().compareToIgnoreCase("id") == 0) {
                     isFindEmpresa = true;
                 }
             }
 
-            if(isFindAliado){
+            if (isFindAliado) {
                 // System.out.println("isfindaliado");
                 long numRows = filterQuery.isCount() ? empresaFacade.countWithFilter(filterQuery) : -1;
                 List list = empresaFacade.findWithFilter(filterQuery);
@@ -113,7 +113,7 @@ public class EmpresaREST extends ServiceREST {
                 // System.out.println("return >>>");
                 return Response.ok(filterResponse).build();
             }
-            
+
             if (!filtradoEmpresa && !isFindEmpresa) {
                 // System.out.println("add filtradoempresa >>>");
                 Filter empFilt = new Filter();
@@ -137,7 +137,7 @@ public class EmpresaREST extends ServiceREST {
     }
 
     @POST
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public Response create(Empresa empresa) {
         try {
             empresa = empresaFacade.adicionar(empresa, super.getUsuarioRequestContext().getId());
@@ -148,7 +148,7 @@ public class EmpresaREST extends ServiceREST {
     }
 
     @PUT
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public Response edit(Empresa empresa) {
         try {
             empresa = empresaFacade.edit(empresa);
@@ -158,34 +158,34 @@ public class EmpresaREST extends ServiceREST {
             return Util.manageException(ex, EmpresaREST.class);
         }
     }
-    
-    
-    
+
     @POST
     @Secured(validarPermiso = false)
     @Path("createEmpresaAliada")
-    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public Response createEmpresaAliada(Empresa empresa){
-        try{
-            if(usuarioFacade.findByEmail(empresa.getEmail()) != null){
-                throw new UserMessageException("Error", "El correo del contratista se encuentra asociado a un usuario del sistema.", TipoMensaje.error);
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public Response createEmpresaAliada(Empresa empresa) {
+        try {
+            if (usuarioFacade.findByEmail(empresa.getEmail()) != null) {
+                throw new UserMessageException("Error",
+                        "El correo del contratista se encuentra asociado a un usuario del sistema.", TipoMensaje.error);
             }
-            
+
             List<Empresa> empresas = empresaFacade.findEmpresaByNit(empresa.getNit());
-            if(empresas != null && empresas.size() > 0) {
-                throw new UserMessageException("Error", "El NIT digitado se encuentra asociado a un contratista en el sistema.", TipoMensaje.error);
+            if (empresas != null && empresas.size() > 0) {
+                throw new UserMessageException("Error",
+                        "El NIT digitado se encuentra asociado a un contratista en el sistema.", TipoMensaje.error);
             }
-            
+
             empresa = empresaFacade.adicionar(empresa, super.getUsuarioRequestContext().getId());
             return Response.ok(empresa).build();
-        }catch(Exception ex){
+        } catch (Exception ex) {
             return Util.manageException(ex, EmpresaREST.class);
         }
     }
 
     @GET
     @Path("contratistas/{empresaId}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public Response obtenerContratistas(@PathParam("empresaId") Integer empresaId) {
         try {
             List<Empresa> empresasList = empresaFacade.find(empresaId).getEmpresasContratistasList();
@@ -197,7 +197,7 @@ public class EmpresaREST extends ServiceREST {
 
     @PUT
     @Path("contratistas")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public Response vincularContratista(Empresa contratista) {
         try {
             boolean vinculado = empresaFacade.vincularContratista(super.getEmpresaIdRequestContext(), contratista);
@@ -209,7 +209,7 @@ public class EmpresaREST extends ServiceREST {
 
     @Secured(requiereEmpresaId = false)
     @GET
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     @Path("usuario/{usuarioId}")
     public Response findByUsuario(@PathParam("usuarioId") Integer usuarioId) {
         List<Empresa> empresa = empresaFacade.findByUsuario(usuarioId);
@@ -218,17 +218,17 @@ public class EmpresaREST extends ServiceREST {
 
     @GET
     @Secured(validarPermiso = false)
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     @Path("selected")
     public Response findBySelected() {
-         
-      Empresa  empresa = empresaFacade.find(super.getEmpresaIdRequestContext());
+
+        Empresa empresa = empresaFacade.find(super.getEmpresaIdRequestContext());
         return Response.ok(empresa).build();
     }
 
     @POST
     @Secured(validarPermiso = false)
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     @Path("createEquipoSST")
     public Response createEquipoSST(Sst sst) {
         try {
@@ -238,10 +238,10 @@ public class EmpresaREST extends ServiceREST {
             return Util.manageException(ex, EmpresaREST.class);
         }
     }
-    
+
     @PUT
     @Secured(validarPermiso = false)
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     @Path("updateEquipoSST")
     public Response updateEquipoSST(Sst sst) {
         try {
@@ -251,11 +251,10 @@ public class EmpresaREST extends ServiceREST {
             return Util.manageException(ex, EmpresaREST.class);
         }
     }
-  
-    
+
     @GET
     @Secured(requiereEmpresaId = false)
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     @Path("getEquipoSST/{aliadoId}")
     public Response findByAliadoId(@PathParam("aliadoId") Integer aliadoId) {
         List<Sst> sst = SstFacade.findByAliadoId(aliadoId);
@@ -264,7 +263,7 @@ public class EmpresaREST extends ServiceREST {
 
     @DELETE
     @Secured(validarPermiso = false)
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     @Path("deleteEquipoSST")
     public Response deleteEquipoSST(Sst sst) {
         try {
@@ -274,33 +273,32 @@ public class EmpresaREST extends ServiceREST {
             return Util.manageException(ex, EmpresaREST.class);
         }
     }
-    
+
     @DELETE
     @Secured(validarPermiso = false)
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     @Path("deleteMiembroSst/{miembroId}")
-    public Response deleteMiembroSst(@PathParam("miembroId") Integer miembroId){
-        try{
+    public Response deleteMiembroSst(@PathParam("miembroId") Integer miembroId) {
+        try {
             return Response.ok(SstFacade.deleteById(miembroId)).build();
-        }catch(Exception ex){
+        } catch (Exception ex) {
             return Util.manageException(ex, EmpresaREST.class);
         }
     }
-    
+
     @PUT
     @Secured(validarPermiso = false)
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     @Path("saveAliadoInformacion")
     public Response saveAliadoInformacion(AliadoInformacion aliadoInformacion) {
         try {
-            
+
             List<AliadoInformacion> data = AliadoInformacionFacade.findByAliadoId(aliadoInformacion.getId_empresa());
 
-            if(data.size()>0){
+            if (data.size() > 0) {
                 aliadoInformacion = AliadoInformacionFacade.updateAliadoInformacion(aliadoInformacion);
                 return Response.ok(aliadoInformacion).build();
-            }
-            else{
+            } else {
                 aliadoInformacion = AliadoInformacionFacade.adicionarAliadoInformacion(aliadoInformacion);
                 return Response.ok(aliadoInformacion).build();
             }
@@ -309,28 +307,28 @@ public class EmpresaREST extends ServiceREST {
             return Util.manageException(ex, EmpresaREST.class);
         }
     }
-    
+
     @GET
     @Secured(requiereEmpresaId = false)
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     @Path("getAliadoInformacion/{aliadoId}")
     public Response findByInformacionAliadoId(@PathParam("aliadoId") Integer aliadoId) {
         List<AliadoInformacion> aliadoInformacion = AliadoInformacionFacade.findByAliadoId(aliadoId);
         return Response.ok(aliadoInformacion).build();
     }
-    
+
     @GET
     @Secured(requiereEmpresaId = false)
     @Path("getAliadoDivision/{empresaId}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response getAliadosDivision(@PathParam("empresaId") Integer empresaId){
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public Response getAliadosDivision(@PathParam("empresaId") Integer empresaId) {
         List<AliadosDivisiones> aliadosDivisionesList = AliadoInformacionFacade.getAliadosDivision(empresaId);
         return Response.ok(aliadosDivisionesList).build();
     }
-    
+
     @GET
     @Secured(requiereEmpresaId = false)
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     @Path("getActividadesContratadas/{EmpresaId}")
     public Response findByActividadesContratadasId(@PathParam("EmpresaId") Integer empresaId) {
         List<ActividadesContratadas> act = ActividadesContratadasFacade.findByActividadContratadaId(empresaId);
@@ -339,13 +337,13 @@ public class EmpresaREST extends ServiceREST {
     
     @GET
     @Secured(requiereEmpresaId = false)
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     @Path("getActividadesContratadas")
     public Response findByLocalidadId(@PathParam("EmpresaId") Integer empresaId) {
         List<Localidades> act = LocalidadesFacade.findByAllLocalidades();
         return Response.ok(act).build();
     }
-    
+
     @GET
     @Secured(validarPermiso = false)
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -381,19 +379,19 @@ public class EmpresaREST extends ServiceREST {
         }
         return Response.ok(localidad).build();
     }
-    
+
     @GET
     @Path("filterLocalidades")
     @Secured(requiereEmpresaId = false)
-    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public Response localidadesFirmWithFilter(@BeanParam FilterQuery filterQuery){
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public Response localidadesFirmWithFilter(@BeanParam FilterQuery filterQuery) {
         try {
-            if(filterQuery == null){
+            if (filterQuery == null) {
                 filterQuery = new FilterQuery();
             }
             long numRows = filterQuery.isCount() ? LocalidadesFacade.countWithFilter(filterQuery) : -1;
             List list = LocalidadesFacade.findWithFilter(filterQuery);
-            
+
             FilterResponse filterResponse = new FilterResponse();
             filterResponse.setData(list);
             filterResponse.setCount(numRows);
@@ -402,32 +400,32 @@ public class EmpresaREST extends ServiceREST {
             return Util.manageException(e, EmpresaREST.class);
         }
     }
-    
+
     @PUT
     @Path("updateLocalidades")
     @Secured(validarPermiso = false)
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public Response updateLocalidad(Localidades localidad) {
         try {
             Localidades localidadbd = LocalidadesFacade.find(localidad.getId());
-            if(!localidad.getIdDocConsolidado().equals("null")){
+            if (!localidad.getIdDocConsolidado().equals("null")) {
                 localidadbd.setIdDocConsolidado(localidad.getIdDocConsolidado());
                 localidadbd.setUsuarioConsolidado(localidad.getUsuarioConsolidado());
                 localidadbd.setDescargaConsolidado(localidad.getDescargaConsolidado());
                 localidadbd.setFechaConsolidadoStart(localidad.getFechaConsolidadoStart());
                 localidadbd.setFechaConsolidado(localidad.getFechaConsolidado());
             }
-            //plantabd.setIdDocConsolidado(plantas.getIdDocConsolidado());
-            if(!localidad.getIdDocHistorico().equals("null")){
+            // plantabd.setIdDocConsolidado(plantas.getIdDocConsolidado());
+            if (!localidad.getIdDocHistorico().equals("null")) {
                 localidadbd.setIdDocHistorico(localidad.getIdDocHistorico());
                 localidadbd.setUsuarioHistorico(localidad.getUsuarioHistorico());
                 localidadbd.setDescargaHistorico(localidad.getDescargaHistorico());
                 localidadbd.setFechaHistoricoStart(localidad.getFechaHistoricoStart());
                 localidadbd.setFechaHistorico(localidad.getFechaHistorico());
             }
-            //plantabd.setIdDocHistorico(plantas.getIdDocHistorico());
-            //if(!plantas.getIdDocHistorico().isEmpty()){plantabd.setIdDocHistorico(plantas.getIdDocHistorico());}
-            
+            // plantabd.setIdDocHistorico(plantas.getIdDocHistorico());
+            // if(!plantas.getIdDocHistorico().isEmpty()){plantabd.setIdDocHistorico(plantas.getIdDocHistorico());}
+
             localidadbd = LocalidadesFacade.edit(localidadbd);
 
             return Response.ok(localidadbd).build();
@@ -435,12 +433,12 @@ public class EmpresaREST extends ServiceREST {
             return Util.manageException(ex, PlantasREST.class);
         }
     }
-    
+
     @POST
     @Secured(requiereEmpresaId = false)
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     @Path("saveSubcontratista")
-    public Response postSubcontratista(Subcontratista subcontratista){
+    public Response postSubcontratista(Subcontratista subcontratista) {
         try {
             subcontratista = subcontratistaFacade.crearSubcontratista(subcontratista);
             return Response.ok(subcontratista).build();
@@ -448,12 +446,12 @@ public class EmpresaREST extends ServiceREST {
             return Util.manageException(ex, EmpresaREST.class);
         }
     }
-    
+
     @PUT
     @Secured(requiereEmpresaId = false)
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     @Path("updateSubcontratista")
-    public Response updateSubcontratista(Subcontratista subcontratista){
+    public Response updateSubcontratista(Subcontratista subcontratista) {
         try {
             subcontratista = subcontratistaFacade.actualizarSubcontratista(subcontratista);
             return Response.ok(subcontratista).build();
@@ -461,11 +459,10 @@ public class EmpresaREST extends ServiceREST {
             return Util.manageException(ex, EmpresaREST.class);
         }
     }
-    
-    
+
     @GET
     @Secured(requiereEmpresaId = false)
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     @Path("getSubcontratistas/{aliadoId}")
     public Response getSubcontratistas(@PathParam("aliadoId") Integer aliadoId) {
         List<Subcontratista> listaSubcontratista = subcontratistaFacade.findByAliadoCreador(aliadoId);
@@ -474,32 +471,32 @@ public class EmpresaREST extends ServiceREST {
 
     @GET
     @Secured(requiereEmpresaId = false)
-    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Path("temporales/{empresaId}")
-    public Response getTemporales(@PathParam("empresaId") Integer empresaId){
-        try{
+    public Response getTemporales(@PathParam("empresaId") Integer empresaId) {
+        try {
             List<AliadoInformacion> listaTemporales = AliadoInformacionFacade.findTemporalesByEmpresaId(empresaId);
             // System.out.println(listaTemporales.size());
             // Response re = Response.ok(listaTemporales).build();
             // System.out.println(re.toString() + re.getMetadata().toString());
             return Response.ok(listaTemporales).build();
-        } catch(Exception e){
+        } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
     }
-    
+
     @GET
     @Secured(validarPermiso = false)
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     @Path("empresaId/{id}")
     public Response findBySelected(@PathParam("id") Integer empresaId) {
-        try{
-            Empresa  empresa = empresaFacade.findEmpresaById(empresaId);
+        try {
+            Empresa empresa = empresaFacade.findEmpresaById(empresaId);
             return Response.ok(empresa).build();
-        } catch(Exception e){
-         return Response.status(Response.Status.NOT_FOUND).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.NOT_FOUND).build();
         }
-        
+
     }
-    
+
 }
