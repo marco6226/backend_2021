@@ -61,7 +61,7 @@ public class AreaFacade extends AbstractFacade<Area> {
      
     public List<Area> findByAreaId() {
         // Crear la consulta JPQL
-        String jpql = "SELECT a FROM Area a WHERE a.padreNombre IS NOT NULL AND a.nivel = 0 AND a.tipoArea.id = :tipoAreaId";
+        String jpql = "SELECT a FROM Area a WHERE a.padreNombre IS NOT NULL AND a.nivel = 0 AND a.tipoArea.id = :tipoAreaId ORDER BY a.id asc";
         Query query = this.em.createQuery(jpql);
         
         // Establecer el valor del parámetro en la consulta como Integer
