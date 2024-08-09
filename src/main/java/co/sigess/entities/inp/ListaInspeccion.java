@@ -109,6 +109,18 @@ public class ListaInspeccion implements Serializable {
     
     @Column(name = "usar_tipo_hallazgo")
     private Boolean usarTipoHallazgo;
+    
+    @Column(name = "division_sv")
+    private Integer divisionSv;
+    
+    @Column(name = "localidad_sv")
+    private Integer localidadSv;
+    
+    @Column(name = "area_sv")
+    private Integer areaSv;
+    
+    @Column(name = "proceso_sv")
+    private Integer procesoSv;
 
     public ListaInspeccion() {
     }
@@ -136,7 +148,38 @@ public class ListaInspeccion implements Serializable {
     public void setListaInspeccionPK(ListaInspeccionPK listaInspeccionPK) {
         this.listaInspeccionPK = listaInspeccionPK;
     }
+    
+    public Integer getAreaSv() {
+        return areaSv;
+    }
 
+    public void setAreaSv(Integer areaSv) {
+        this.areaSv = areaSv;
+    }
+
+    public Integer getProcesoSv() {
+        return procesoSv;
+    }
+
+    public void setProcesoSv(Integer procesoSv) {
+        this.procesoSv = procesoSv;
+    }
+    
+    public Integer getLocalidadSv() {
+        return localidadSv;
+    }
+
+    public void setLocalidadSv(Integer localidadSv) {
+        this.localidadSv = localidadSv;
+    }
+
+    public Integer getDivisionSv() {
+        return divisionSv;
+    }
+
+    public void setDivisionSv(Integer divisionSv) {
+        this.divisionSv = divisionSv;
+    }
     public String getNombre() {
         return nombre;
     }
