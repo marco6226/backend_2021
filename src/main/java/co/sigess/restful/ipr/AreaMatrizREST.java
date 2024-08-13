@@ -59,6 +59,18 @@ public class AreaMatrizREST extends ServiceREST{
             return Util.manageException(ex, AreaMatrizREST.class);
         }
     }
+       @GET
+    @Path("empresaCor")
+    @Secured(validarPermiso = false)
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response findEmpresaCorona() {
+        try {
+            List<AreaMatriz> list = areaMatrizFacade.findForCorona();
+            return Response.ok(list).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, AreaMatrizREST.class);
+        }
+    }
     
     @GET
     @Path("getAreaM/{LocalidadId}")

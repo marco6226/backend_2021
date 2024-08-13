@@ -134,5 +134,17 @@ public class ProcesoMatrizREST extends ServiceREST{
             return Util.manageException(ex, ProcesoMatrizREST.class);
         }
     }
+    @GET
+    @Path("empresaCorPros")
+    @Secured(validarPermiso = false)
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response findEmpresaCorona() {
+        try {
+            List<ProcesoMatriz> list = procesoMatrizFacade.findForCoronaPros();
+            return Response.ok(list).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, ProcesoMatrizREST.class);
+        }
+    }
     
 }

@@ -330,10 +330,22 @@ public class ListaInspeccionFacade extends AbstractFacade<ListaInspeccion> {
         query.executeUpdate();
     }
      
-    public ListaInspeccion findByIdAndVersion(Integer id, Integer version){
+    public Object findByIdAndVersion(Integer id, Integer version){
         Query q = this.em.createQuery("SELECT l FROM ListaInspeccion l WHERE l.listaInspeccionPK.id =?1 AND l.listaInspeccionPK.version =?2");
         q.setParameter(1, id);
         q.setParameter(2, version);
-        return (ListaInspeccion) q.getSingleResult();
+        return (Object) q.getSingleResult();
+    }
+    
+      public List<ListaInspeccion> buscarByProceso(Integer parametro) {
+        System.out.println(parametro);
+
+        Query q = this.em.createNativeQuery("SELECT * FROM inp.lista_inspeccion  WHERE proceso_sv = ?1  ", ListaInspeccion.class);
+//esta query hace relacion a busqueda por empleados.
+
+        q.setParameter(1, (parametro));
+        System.out.println(q);
+        List<ListaInspeccion> list = (List<ListaInspeccion>) q.getResultList();
+        return list;
     }
 }

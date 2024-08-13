@@ -171,7 +171,7 @@ public class ListaInspeccionREST extends ServiceREST {
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response delete(@QueryParam("id") Integer id, @QueryParam("version") Integer version){
         try {
-            ListaInspeccion listaInspeccionDB = listaInspeccionFacade.findByIdAndVersion(id, version);
+            ListaInspeccion listaInspeccionDB = (ListaInspeccion) listaInspeccionFacade.findByIdAndVersion(id, version);
             listaInspeccionDB.setFkPerfilId(null);
             listaInspeccionFacade.edit(listaInspeccionDB);
             return Response.ok(true).build();
@@ -291,4 +291,34 @@ public class ListaInspeccionREST extends ServiceREST {
             return Util.manageException(e, ListaInspeccionREST.class);
         }
     }
+@GET
+@Secured(validarPermiso = false)
+@Path("InspeccionSv/{proceso}")
+@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+public Response buscarCasoProceso(@PathParam("proceso") Integer proceso) {
+    try {
+        // Verificar si el proceso es null, vacío o "undefined"
+        if (proceso == null || proceso== 0 || "undefined".equals(proceso)) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity("El parámetro 'proceso' es inválido o está undefined").build();
+        }
+
+        // Llamar al método facade para buscar la ListaInspeccion por proceso
+        List<ListaInspeccion> list = (List<ListaInspeccion>) listaInspeccionFacade.buscarByProceso(proceso);
+
+        // Verificar si el resultado es null
+        if (list == null) {     
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity("No se encontró ninguna inspección para el proceso proporcionado").build();
+        }
+
+        // Devolver la respuesta con el objeto encontrado
+        return Response.ok(list).build();
+
+    } catch (Exception ex) {
+        // Manejar excepciones y devolver un error interno
+        return Util.manageException(ex, ListaInspeccionREST.class);
+    }
+}
+
 }

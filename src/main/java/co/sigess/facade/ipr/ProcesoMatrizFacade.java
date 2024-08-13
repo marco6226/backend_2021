@@ -76,5 +76,10 @@ public class ProcesoMatrizFacade extends AbstractFacade<ProcesoMatriz> {
         List<ProcesoMatriz> list = (List<ProcesoMatriz>) q.getResultList();
         return list;        
     }
-    
+       public List<ProcesoMatriz> findForCoronaPros(){
+            
+        Query q = this.em.createNativeQuery("SELECT * FROM ipr.proceso_matriz  WHERE fk_empresa_id = 22 ", ProcesoMatriz.class);
+        List<ProcesoMatriz> list = (List<ProcesoMatriz>) q.getResultList();
+        return list;
+    }
 }

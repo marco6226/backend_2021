@@ -39,6 +39,13 @@ public class AreaMatrizFacade extends AbstractFacade<AreaMatriz>{
         List<AreaMatriz> list = (List<AreaMatriz>) q.getResultList();
         return list;
     }
+       public List<AreaMatriz> findForCorona(){
+            
+        Query q = this.em.createNativeQuery("SELECT * FROM ipr.area_matriz  WHERE fk_empresa_id = 22 ", AreaMatriz.class);
+        List<AreaMatriz> list = (List<AreaMatriz>) q.getResultList();
+        return list;
+    }
+       
     
     public List<AreaMatriz> findForEmpA(Integer localidadId) {
         Query query= this.em.createQuery("SELECT am FROM AreaMatriz am WHERE am.localidad.id = :localidadId  AND am.eliminado = FALSE");
