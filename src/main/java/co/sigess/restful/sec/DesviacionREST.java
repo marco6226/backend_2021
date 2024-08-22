@@ -43,6 +43,26 @@ public class DesviacionREST extends ServiceREST {
     public DesviacionREST() {
         super(DesviacionFacade.class, "empresaId");
     }
+    @GET
+    @Path("findDesviacion")
+     @Secured(validarPermiso = false)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response findWithoutAreaValidation(@BeanParam FilterQuery filterQuery) {
+        try {
+            // Realiza la búsqueda utilizando la fachada de desviaciones
+            List<Desviacion> desviacionList = ((DesviacionFacade) super.beanInstance).findWithFilter(filterQuery);
+
+            // Envuelve el resultado en un FilterResponse, si lo necesitas
+            FilterResponse filterResponse = new FilterResponse();
+            filterResponse.setData(desviacionList);
+            filterResponse.setCount(desviacionList.size());
+
+            // Retorna la respuesta con los datos
+            return Response.ok(filterResponse).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, DesviacionREST.class);
+        }
+    }
 
     @Override
     @ValidadorArea("area.id")
