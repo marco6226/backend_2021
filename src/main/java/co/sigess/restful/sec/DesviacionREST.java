@@ -51,14 +51,8 @@ public class DesviacionREST extends ServiceREST {
         try {
             // Realiza la búsqueda utilizando la fachada de desviaciones
             List<Desviacion> desviacionList = ((DesviacionFacade) super.beanInstance).findWithFilter(filterQuery);
-
-            // Envuelve el resultado en un FilterResponse, si lo necesitas
-            FilterResponse filterResponse = new FilterResponse();
-            filterResponse.setData(desviacionList);
-            filterResponse.setCount(desviacionList.size());
-
-            // Retorna la respuesta con los datos
-            return Response.ok(filterResponse).build();
+ 
+            return Response.ok(desviacionList).build();
         } catch (Exception ex) {
             return Util.manageException(ex, DesviacionREST.class);
         }
