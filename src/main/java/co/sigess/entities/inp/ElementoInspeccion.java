@@ -77,6 +77,11 @@ public class ElementoInspeccion implements Serializable {
     
     @Column(name = "etiqueta")
     private String etiqueta;
+
+
+    
+    @Column(name = "tipo_peligro")
+    private Integer tipoPeligro;
     
     @OrderBy("id")
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "elementoInspeccionPadre")
@@ -212,6 +217,14 @@ public class ElementoInspeccion implements Serializable {
 
     public void setEtiqueta(String etiqueta) {
         this.etiqueta = etiqueta;
+    }
+    
+    public Integer getTipoPeligro() {
+        return tipoPeligro;
+    }
+
+    public void setTipoPeligro(Integer tipoPeligro) {
+        this.tipoPeligro = tipoPeligro;
     }
 
     @Override

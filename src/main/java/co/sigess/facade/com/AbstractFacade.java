@@ -7,6 +7,7 @@ package co.sigess.facade.com;
 
 import co.sigess.entities.ado.Modulo;
 import co.sigess.entities.emp.Empresa;
+import co.sigess.entities.emp.Usuario;
 import co.sigess.entities.sec.EvidencesFiles;
 import co.sigess.restful.CriteriaFilter;
 import co.sigess.restful.Filter;
@@ -92,7 +93,7 @@ public abstract class AbstractFacade<T> {
         CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
         CriteriaQuery cq = cb.createQuery();
         Root<T> root = cq.from(entityClass);
-        if (root.getJavaType().equals(Empresa.class)) {
+        if (root.getJavaType().equals(Empresa.class) || root.getJavaType().equals(Usuario.class)) {
             cq.select(cb.countDistinct(root));
         } else {
             cq.select(cb.count(root));

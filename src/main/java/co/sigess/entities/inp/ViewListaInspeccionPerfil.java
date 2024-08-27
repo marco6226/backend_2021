@@ -71,16 +71,25 @@ public class ViewListaInspeccionPerfil implements Serializable {
     
     @Column(name = "pk_usuario_id")
     private Integer pkUsuarioId;
-
+    
+    @Column(name = "division_sv")
+    private Integer divisionSv;
+       
+    @Column(name = "localidad_sv")
+    private Integer localidadSv;
+       
+  
     public ViewListaInspeccionPerfil() {
     }
 
-    public ViewListaInspeccionPerfil(ListaInspeccionPK listaInspeccionPK, String nombre, String codigo, String descripcion, Integer numeroPreguntas) {
+    public ViewListaInspeccionPerfil(ListaInspeccionPK listaInspeccionPK, String nombre, String codigo, String descripcion, Integer numeroPreguntas, Integer divisionSv, Integer localidadSv) {
         this.listaInspeccionPK = listaInspeccionPK;
         this.nombre = nombre;
         this.codigo = codigo;
         this.descripcion = descripcion;
         this.numeroPreguntas = numeroPreguntas;
+        this.divisionSv = divisionSv;
+        this.localidadSv = localidadSv;
     }
 
     public ViewListaInspeccionPerfil(ListaInspeccionPK listaInspeccionPK) {
@@ -194,6 +203,23 @@ public class ViewListaInspeccionPerfil implements Serializable {
     public void setPkUsuarioId(Integer pkUsuarioId) {
         this.pkUsuarioId = pkUsuarioId;
     } 
+    
+      public Integer getDivisionSv() {
+        return divisionSv;
+    }
+
+    public void setDivisionSv(Integer divisionSv) {
+        this.divisionSv = divisionSv;
+    }
+
+    public Integer getLocalidadSv() {
+        return localidadSv;
+    }
+
+    public void setLocalidadSv(Integer localidadSv) {
+        this.localidadSv = localidadSv;
+    }
+
     
         @Override
     public int hashCode() {

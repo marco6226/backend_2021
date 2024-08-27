@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -83,7 +84,33 @@ public class Calificacion implements Serializable {
     
     @Column(name = "calcular_cumplimiento")
     private boolean calcularCumplimiento;
-
+    
+    @Column(name = "accion")
+    private Integer accion;
+    
+    @Size(max = 1024)
+    @Column(name = "descripcion_accion")
+    private String descripcionAccion;
+     @Size(max = 1024)
+    @Column(name = "descripcion_miti")
+    private String descripcionMiti;
+    
+    @Column(name = "plan_accion")
+    private Integer planAccion;
+     
+    @Column(name = "responsable")
+    private String responsable;
+    
+    @Size(max = 1024)
+    @Column (name="descripcion_acc_tarjeta")
+    private String descripcionAccTarjeta;
+    
+    @Column (name="fecha_proyectada")
+    private Date fechaProyectada;
+    
+    
+            
+            
     public Calificacion() {
     }
 
@@ -165,6 +192,63 @@ public class Calificacion implements Serializable {
         this.calcularCumplimiento = calcularCumplimiento;
     }
     
+     public Integer getAccion() {
+        return accion;
+    }
+
+    public void setAccion(Integer accion) {
+        this.accion = accion;
+    }
+    
+    public String getDescripcionAccion() {
+        return descripcionAccion;
+    }
+
+    public void setDescripcionAccion(String descripcionAccion) {
+        this.descripcionAccion = descripcionAccion;
+    }
+    
+    public String getDescripcionMiti() {
+        return descripcionMiti;
+    }
+
+    public void setDescripcionMiti(String descripcionMiti) {
+        this.descripcionMiti = descripcionMiti;
+    }
+    
+     public Integer getPlanAccion() {
+        return planAccion;
+    }
+
+    public void setPlanAccion(Integer planAccion) {
+        this.planAccion = planAccion;
+    }
+    
+    public String getResponsable() {
+        return responsable;
+    }
+
+    public void setResponsable(String responsable) {
+        this.responsable = responsable;
+    }
+    
+    public String getDescripcionAccTarjeta() {
+        return descripcionAccTarjeta;
+    }
+
+    public void setDescripcionAccTarjeta(String descripcionAccTarjeta) {
+        this.descripcionAccTarjeta = descripcionAccTarjeta;
+    }
+    
+    public Date getFechaProyectada() {
+        return fechaProyectada;
+    }
+
+    public void setFechaProyectada(Date fechaProyectada) {
+        this.fechaProyectada = fechaProyectada;
+    }
+    
+
     @Override
     public int hashCode() {
         int hash = 0;
