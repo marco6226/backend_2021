@@ -58,7 +58,7 @@ public class mailSaludLaboralFacade  extends AbstractFacade<MailSaludLaboralEnti
      
      public List<MailSaludLaboralEntity> findAllByIdMailUser(Integer caseId, Integer pkUser) {
         //String pkUser = "12845";
-        Query query = this.em.createNativeQuery("SELECT * FROM scm.mail_saludlaboral WHERE pk_case = ?1 and pk_user = ?2", MailSaludLaboralEntity.class);
+        Query query = this.em.createNativeQuery("SELECT * FROM scm.mail_saludlaboral WHERE pk_case = ?1", MailSaludLaboralEntity.class);
         
         
         query.setParameter(1, caseId);

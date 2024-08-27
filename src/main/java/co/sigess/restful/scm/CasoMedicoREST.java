@@ -1093,6 +1093,25 @@ public class CasoMedicoREST extends ServiceREST {
             return Util.manageException(ex, EmpleadoREST.class);
         }
     }
+        @GET
+    @Path("saludMail")
+    @Secured(validarPermiso = false)
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response findWithFilterMails(@BeanParam FilterQuery filterQuery) {
+
+        try {
+
+            long numRows = filterQuery.isCount() ? mailSaludLaboralFacade.countWithFilter(filterQuery) : -1;
+
+            List list = mailSaludLaboralFacade.findWithFilter(filterQuery);
+            FilterResponse filterResponse = new FilterResponse();
+            filterResponse.setData(list);
+            filterResponse.setCount(numRows);
+            return Response.ok(filterResponse).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, EmpleadoREST.class);
+        }
+    }
 
     @GET
     @Secured(validarPermiso = false)
