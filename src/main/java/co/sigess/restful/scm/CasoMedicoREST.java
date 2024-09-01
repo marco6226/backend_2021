@@ -1678,6 +1678,8 @@ public class CasoMedicoREST extends ServiceREST {
                 return Response.status(Response.Status.NOT_FOUND).build();
             }
             dt.setDocumentos(updatedData.getDocumentos());
+            dt.setEstadoCorreo(3);
+            dt.setFechaEnvio(new Date());
             //dt.setDocumentos(documentosString);
             return Response.ok(mailSaludLaboralFacade.update(dt)).build();
         } catch (Exception e) {

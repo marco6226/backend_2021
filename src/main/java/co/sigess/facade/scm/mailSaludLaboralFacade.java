@@ -92,8 +92,10 @@ public class mailSaludLaboralFacade  extends AbstractFacade<MailSaludLaboralEnti
          
 public void deleteDocumentFromMail(Integer id, String docID) throws Exception {
     try {
+        
         // Suponiendo que el campo documentos es una cadena que contiene los IDs de los documentos separados por comas.
         MailSaludLaboralEntity mailEntity = this.findById(id);
+        mailEntity.setEstadoCorreo(5);
         if (mailEntity != null) {
             String documentos = mailEntity.getDocumentos();
             if (documentos != null && !documentos.isEmpty()) {
