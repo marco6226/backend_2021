@@ -77,12 +77,19 @@ public class ViewListaInspeccionPerfil implements Serializable {
        
     @Column(name = "localidad_sv")
     private Integer localidadSv;
+
+    
+    @Column(name = "area_sv")
+    private Integer areaSv;
+       
+    @Column(name = "proceso_sv")
+    private Integer procesoSv;
        
   
     public ViewListaInspeccionPerfil() {
     }
 
-    public ViewListaInspeccionPerfil(ListaInspeccionPK listaInspeccionPK, String nombre, String codigo, String descripcion, Integer numeroPreguntas, Integer divisionSv, Integer localidadSv) {
+    public ViewListaInspeccionPerfil(ListaInspeccionPK listaInspeccionPK, String nombre, String codigo, String descripcion, Integer numeroPreguntas, Integer divisionSv, Integer localidadSv, Integer areaSv, Integer procesoSv) {
         this.listaInspeccionPK = listaInspeccionPK;
         this.nombre = nombre;
         this.codigo = codigo;
@@ -90,6 +97,8 @@ public class ViewListaInspeccionPerfil implements Serializable {
         this.numeroPreguntas = numeroPreguntas;
         this.divisionSv = divisionSv;
         this.localidadSv = localidadSv;
+        this.areaSv = areaSv;
+        this.procesoSv = procesoSv;
     }
 
     public ViewListaInspeccionPerfil(ListaInspeccionPK listaInspeccionPK) {
@@ -220,6 +229,22 @@ public class ViewListaInspeccionPerfil implements Serializable {
         this.localidadSv = localidadSv;
     }
 
+    public Integer getAreaSv() {
+        return areaSv;
+    }
+
+    public void setAreaSv(Integer areaSv) {
+        this.areaSv = areaSv;
+    }
+
+    public Integer getProcesoSv() {
+        return procesoSv;
+    }
+
+    public void setProcesoSv(Integer procesoSv) {
+        this.procesoSv = procesoSv;
+    }
+    
     
         @Override
     public int hashCode() {
