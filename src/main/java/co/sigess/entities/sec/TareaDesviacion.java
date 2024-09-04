@@ -174,6 +174,18 @@ public class TareaDesviacion implements Serializable {
     
     @Column(name = "responsable_aliado")
     private String responsableAliado;
+    
+    @Column(name = "localidad_sv")
+    private String localidadSv;
+
+    @Column(name = "area_sv")
+    private String areaSv;
+    
+    @Column(name = "proceso_sv")
+    private String procesoSv;
+
+   
+   
 
     public TareaDesviacion() {
     }
@@ -338,7 +350,32 @@ public class TareaDesviacion implements Serializable {
     public void setAreaResponsable(Area areaResponsable) {
         this.areaResponsable = areaResponsable;
     }
+    
+    public String getLocalidadSv() {
+        return localidadSv;
+    }
 
+    public void setLocalidadSv(String localidadSv) {
+        this.localidadSv = localidadSv;
+    }
+    
+     public String getAreaSv() {
+        return areaSv;
+    }
+
+    public void setAreaSv(String areaSv) {
+        this.areaSv = areaSv;
+    }
+
+    public String getProcesoSv() {
+        return procesoSv;
+    }
+
+    public void setProcesoSv(String procesoSv) {
+        this.procesoSv = procesoSv;
+    }
+    
+   
     @XmlTransient
     @JsonIgnore
     public List<AnalisisDesviacion> getAnalisisDesviacionList() {
