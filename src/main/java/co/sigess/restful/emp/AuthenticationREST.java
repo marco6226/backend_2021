@@ -356,7 +356,9 @@ public class AuthenticationREST {
             System.out.println("correo"+correo);
             if(correo==null){
                correo=false;}
-            if(correo == true){
+            if(!correo){
+                tarea.setEnvioCorreo(true);
+                tareaDesviacionFacade.edit(tarea);
                 if (email != null) {
                     String nombre = tarea.getNombre();
                     Integer id = tarea.getId();
