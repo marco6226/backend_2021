@@ -150,6 +150,32 @@ public class DatosTrabajadorEntity implements Serializable{
     
     @Column(name = "documentos_jn")
     private String documentosJn;
+    
+    @Column(name = "fk_empresa_id")
+    private Integer empresaId;
+    
+    @Column(name = "eliminado")
+    private Boolean eliminado;
+
+    public Boolean getEliminado() {
+        return eliminado;
+    }
+
+    public void setEliminado(Boolean eliminado) {
+        this.eliminado = eliminado;
+    }
+    
+    
+
+    public Integer getEmpresaId() {
+        return empresaId;
+    }
+
+    public void setEmpresaId(Integer empresaId) {
+        this.empresaId = empresaId;
+    }
+    
+    
 
     public Date getFechaDictamenJn() {
         return fechaDictamenJn;

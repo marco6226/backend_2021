@@ -31,79 +31,309 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Desviacion implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     @Column(name = "hash_id")
     @Id
     private String hashId;
-    
+
     @Column(name = "modulo")
     private String modulo;
-    
+
     @Column(name = "concepto")
     private String concepto;
-    
+
     @Column(name = "fecha_reporte")
     @Temporal(TemporalType.DATE)
     private Date fechaReporte;
-    
+
     @Column(name = "aspecto_causante")
     private String aspectoCausante;
-    
+
     @Column(name = "nivel_riesgo")
     private String nivelRiesgo;
-        
+
     @JoinColumn(name = "fk_area_id", referencedColumnName = "id")
     @ManyToOne
     private Area area;
-        
+
     @Column(name = "fk_empresa_id")
     private Integer empresaId;
-    
+
     @Column(name = "analisis_id")
     private Integer analisisId;
-    
+
     @Column(name = "criticidad")
     private String criticidad;
-    
+
     @Column(name = "nombre")
     private String nombre;
-    
-     @Column(name = "hora")
+
+    @Column(name = "hora")
     private String hora;
-     
-     @Column(name = "empresa")
+
+    @Column(name = "empresa")
     private String empresa;
-     
-     @Column(name = "nit")
+
+    @Column(name = "nit")
     private String nit;
-     
-     @Column(name = "severidad")
+
+    @Column(name = "severidad")
     private String severidad;
-     
-       @Column(name = "furat")
+
+    @Column(name = "furat")
     private String furat;
-       
+
     @Column(name = "emptemporal")
     private String emptemporal;
-     
+
     @Column(name = "causo_muerte")
     private boolean causoMuerte;
-    
+
     @Column(name = "email")
     private String email;
-    
+
     @Column(name = "localidad")
     private String localidad;
-    
+
     @Column(name = "division")
     private String division;
-    
+
     @Column(name = "aliado")
     private String aliado;
-    
+
     @JoinColumn(name = "railocalidad", referencedColumnName = "id")
     @ManyToOne
     private Localidades railocalidad;
+
+    @Column(name = "division_origen")
+    private String divisionOrigen;
+
+    @Column(name = "localidad_origen")
+    private String localidadOrigen;
+
+    @Column(name = "area_origen")
+    private String areaOrigen;
+
+    @Column(name = "proceso_origen")
+    private String procesoOrigen;
+    
+        @Column(name = "division_actual")
+    private String divisionActual;
+
+    @Column(name = "localidad_actual")
+    private String localidadActual;
+
+    @Column(name = "area_actual")
+    private String areaActual;
+
+    @Column(name = "proceso_actual")
+    private String procesoActual;
+    
+    @Column(name = "cargo_original")
+    private String cargoOrigen;
+    
+    @Column(name = "cargo_actual")
+    private String cargoActual;
+    
+    @Column(name = "eps_dictamen")
+    private String epsDictamen;
+    
+    @Column(name = "arl_dictamen")
+    private String arlDictamen;
+    
+    @Column(name = "jr_dictamen")
+    private String jrDictamen;
+    
+    @Column(name = "cedula")
+    private String cedulaUsuario;
+    
+    @Column(name = "nombres_sl")
+    private String nombresSl;
+    
+    @Column(name = "edad")
+    @Temporal(TemporalType.DATE)
+    private Date edad;
+    
+    @Column(name = "antiguedad")
+    @Temporal(TemporalType.DATE)
+    private Date antiguedad;
+
+    @Column(name = "sexo")
+    private String genero;
+    
+    @Column(name = "pk_case_sl")
+    private Integer idSl;
+
+    public Integer getIdSl() {
+        return idSl;
+    }
+
+    public void setIdSl(Integer idSl) {
+        this.idSl = idSl;
+    }
+    
+    
+
+    public String getGenero() {
+        return genero;
+    }
+
+    public void setGenero(String genero) {
+        this.genero = genero;
+    }
+    
+    
+    public Date getAntiguedad() {
+        return antiguedad;
+    }
+
+    public void setAntiguedad(Date antiguedad) {
+        this.antiguedad = antiguedad;
+    }
+    
+    
+
+    public Date getEdad() {
+        return edad;
+    }
+
+    public void setEdad(Date edad) {
+        this.edad = edad;
+    }
+    
+    
+
+    public String getNombresSl() {
+        return nombresSl;
+    }
+
+    public void setNombresSl(String nombresSl) {
+        this.nombresSl = nombresSl;
+    }
+    
+    
+
+    public String getCedulaUsuario() {
+        return cedulaUsuario;
+    }
+
+    public void setCedulaUsuario(String cedulaUsuario) {
+        this.cedulaUsuario = cedulaUsuario;
+    }
+    
+    
+
+    public String getEpsDictamen() {
+        return epsDictamen;
+    }
+
+    public void setEpsDictamen(String epsDictamen) {
+        this.epsDictamen = epsDictamen;
+    }
+
+    public String getArlDictamen() {
+        return arlDictamen;
+    }
+
+    public void setArlDictamen(String arlDictamen) {
+        this.arlDictamen = arlDictamen;
+    }
+
+    public String getJrDictamen() {
+        return jrDictamen;
+    }
+
+    public void setJrDictamen(String jrDictamen) {
+        this.jrDictamen = jrDictamen;
+    }
+    
+    
+
+    public String getCargoOrigen() {
+        return cargoOrigen;
+    }
+
+    public void setCargoOrigen(String cargoOrigen) {
+        this.cargoOrigen = cargoOrigen;
+    }
+
+    public String getCargoActual() {
+        return cargoActual;
+    }
+
+    public void setCargoActual(String cargoActual) {
+        this.cargoActual = cargoActual;
+    }
+    
+    
+
+    public String getDivisionActual() {
+        return divisionActual;
+    }
+
+    public void setDivisionActual(String divisionActual) {
+        this.divisionActual = divisionActual;
+    }
+
+    public String getLocalidadActual() {
+        return localidadActual;
+    }
+
+    public void setLocalidadActual(String localidadActual) {
+        this.localidadActual = localidadActual;
+    }
+
+    public String getAreaActual() {
+        return areaActual;
+    }
+
+    public void setAreaActual(String areaActual) {
+        this.areaActual = areaActual;
+    }
+
+    public String getProcesoActual() {
+        return procesoActual;
+    }
+
+    public void setProcesoActual(String procesoActual) {
+        this.procesoActual = procesoActual;
+    }
+    
+    
+
+    public String getAreaOrigen() {
+        return areaOrigen;
+    }
+
+    public void setAreaOrigen(String areaOrigen) {
+        this.areaOrigen = areaOrigen;
+    }
+
+    public String getProcesoOrigen() {
+        return procesoOrigen;
+    }
+
+    public void setProcesoOrigen(String procesoOrigen) {
+        this.procesoOrigen = procesoOrigen;
+    }
+    
+    
+
+    public String getLocalidadOrigen() {
+        return localidadOrigen;
+    }
+
+    public void setLocalidadOrigen(String localidadOrigen) {
+        this.localidadOrigen = localidadOrigen;
+    }
+
+    public String getDivisionOrigen() {
+        return divisionOrigen;
+    }
+
+    public void setDivisionOrigen(String divisionOrigen) {
+        this.divisionOrigen = divisionOrigen;
+    }
 
     public String getEmail() {
         return email;
@@ -112,7 +342,6 @@ public class Desviacion implements Serializable {
     public void setEmail(String email) {
         this.email = email;
     }
-        
 
     public String getCriticidad() {
         return criticidad;
@@ -286,7 +515,7 @@ public class Desviacion implements Serializable {
     public void setFurat(String furat) {
         this.furat = furat;
     }
-    
+
     public String getEmptemporal() {
         return emptemporal;
     }

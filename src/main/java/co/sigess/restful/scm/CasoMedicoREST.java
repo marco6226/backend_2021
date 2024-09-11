@@ -612,6 +612,18 @@ public class CasoMedicoREST extends ServiceREST {
             return Util.manageException(ex, ReporteREST.class);
         }
     }
+    @PUT
+    @Secured(validarPermiso = false)
+    @Path("deleteCasoSL/{id}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response deleteCasoSL(@PathParam("id") String id) {
+        try {
+            int seg = this.DatosTrabajadorFacade.eliminar(Long.parseLong(id));
+            return Response.ok(seg).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, ReporteREST.class);
+        }
+    }
 
     @PUT
     @Path("diagnosticos/{id}")
@@ -1628,8 +1640,8 @@ public class CasoMedicoREST extends ServiceREST {
             Map<String, String> parametros = new HashMap<>();
             parametros.put("{motivoRechazoSoli}", dt.getRazonRechazoSolicitante());
             parametros.put("{docSolicitadoSoli}", dt.getDocSolicitado());
-            parametros.put("{nameSolicitadoSoli}", dt.getSoliictanteNombres());
-            parametros.put("{cedulaSolicitadoSoli}", dt.getSolicitanteCedula());
+            parametros.put("{nameSolicitadoSoli}", dt.getSolicitadoNombres());
+            parametros.put("{cedulaSolicitadoSoli}", dt.getSolicitadoCedula());
             parametros.put("{nuevaFechaLimiteSoli}", fechaFormateada);
             parametros.put("{pkCase}", dt.getPkCase().toString());
             parametros.put(EmailFacade.PARAM_ENVIROMENT, host1);

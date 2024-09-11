@@ -89,6 +89,19 @@ public class MailSaludLaboralEntity implements Serializable {
     
     @Column(name = "correo_enviado")
     private Boolean correoEnviado;
+    
+    @Column(name = "fk_empresa_id")
+    private Integer empresaId;
+
+    public Integer getEmpresaId() {
+        return empresaId;
+    }
+
+    public void setEmpresaId(Integer empresaId) {
+        this.empresaId = empresaId;
+    }
+    
+    
 
     public Boolean getCorreoEnviado() {
         return correoEnviado;

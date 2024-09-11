@@ -283,5 +283,14 @@ public class DatosTrabajadorFacade extends AbstractFacade<DatosTrabajadorEntity>
             throw e;
         }
     }
+     
+       public int eliminar(Long id) {
+
+        //3117537464
+        Query q = this.em.createNativeQuery("UPDATE scm.salud_laboral  SET eliminado = true WHERE id_sl = ?1");
+        q.setParameter(1, id);
+        int deleted = q.executeUpdate();
+        return deleted;
+    }
 
 }
