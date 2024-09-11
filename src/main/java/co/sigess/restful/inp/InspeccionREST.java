@@ -106,6 +106,19 @@ public class InspeccionREST extends ServiceREST {
             return Util.manageException(ex, InspeccionREST.class);
         }
     }
+    
+    @GET
+    @Secured(validarPermiso = false)
+    @Path("find/{id}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response findI(@PathParam("id") Long id) {
+        try {
+            Inspeccion insp = inspeccionFacade.find(id);
+            return Response.ok(insp).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, InspeccionREST.class);
+        }
+    }
 
     @GET
     @Path("consolidado")

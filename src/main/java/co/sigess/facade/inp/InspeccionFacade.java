@@ -295,6 +295,13 @@ public class InspeccionFacade extends AbstractFacade<Inspeccion> {
                 if (calfMod.getId().equals(calificacion.getId())) {
                     calificacion.setNivelRiesgo(calfMod.getNivelRiesgo());
                     calificacion.setOpcionCalificacion(calfMod.getOpcionCalificacion());
+                    calificacion.setAccion(calfMod.getAccion());
+                    calificacion.setDescripcionAccion(calfMod.getDescripcionAccion());
+                    calificacion.setDescripcionMiti(calfMod.getDescripcionMiti());
+                    calificacion.setPlanAccion(calfMod.getPlanAccion());
+                    calificacion.setResponsable(calfMod.getResponsable());
+                    calificacion.setDescripcionAccTarjeta(calfMod.getDescripcionAccTarjeta());
+                    calificacion.setFechaProyectada(calfMod.getFechaProyectada());
                     calificacion.setRecomendacion(calfMod.getRecomendacion());
                     calificacion.setTipoHallazgo(calfMod.getTipoHallazgo() == null ? null : (calfMod.getTipoHallazgo().getId() == null ? null : calfMod.getTipoHallazgo()));
                     calificacion.setCalcularCumplimiento(calfMod.isCalcularCumplimiento());
