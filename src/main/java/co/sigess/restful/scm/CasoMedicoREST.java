@@ -1074,6 +1074,7 @@ public class CasoMedicoREST extends ServiceREST {
             Date fechaActual = new Date();
             datosTrabajador.setFechaCreacion(fechaActual);
             datosTrabajador.setUsuarioCreador(super.getUsuarioRequestContext().getEmail());
+            datosTrabajador.setEliminado(false);
             //datosTrabajador.setPkUser(super.getUsuarioRequestContext().getId());
             //datosTrabajador.setId(null);
 
