@@ -156,6 +156,19 @@ public class DatosTrabajadorEntity implements Serializable{
     
     @Column(name = "eliminado")
     private Boolean eliminado;
+    
+    @Column(name = "pk_user_emp")
+    private Integer pkUserEmp;
+
+    public Integer getPkUserEmp() {
+        return pkUserEmp;
+    }
+
+    public void setPkUserEmp(Integer pkUserEmp) {
+        this.pkUserEmp = pkUserEmp;
+    }
+    
+    
 
     public Boolean getEliminado() {
         return eliminado;
