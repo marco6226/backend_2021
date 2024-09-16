@@ -21,7 +21,7 @@ public class ApplicationConfig extends Application {
         Set<Class<?>> resources = new java.util.HashSet<>();
         resources.add(org.glassfish.jersey.jackson.JacksonFeature.class);
         resources.add(MultiPartFeature.class);
-        
+
         addRestResourceClasses(resources);
         return resources;
     }
@@ -125,6 +125,7 @@ public class ApplicationConfig extends Application {
         resources.add(co.sigess.restful.scm.AnexosREST.class);
         resources.add(co.sigess.restful.scm.CasoMedicoREST.class);
         resources.add(co.sigess.restful.scm.viewscmREST.class);
+        resources.add(co.sigess.restful.scm.GenerateSignaturelinkControllerRest.class);
         resources.add(co.sigess.restful.sec.AnalisisDesviacionREST.class);
         resources.add(co.sigess.restful.sec.CorreoEstadosREST.class);
         resources.add(co.sigess.restful.sec.DesviacionAliadosREST.class);
@@ -146,6 +147,7 @@ public class ApplicationConfig extends Application {
         resources.add(co.sigess.restful.sge.ReportesSGEREST.class);
         resources.add(co.sigess.restful.sge.RespuestaREST.class);
         resources.add(co.sigess.restful.sge.SistemaGestionREST.class);
+        
     }
-    
+
 }

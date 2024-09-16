@@ -107,6 +107,7 @@ public abstract class AbstractFacade<T> {
     public List<T> findWithFilter(FilterQuery filterQuery) throws IOException, ParseException, NoSuchFieldException {
         CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
         CriteriaQuery cq = cb.createQuery();
+        System.out.println("Tabla a consultar: " + entityClass);
         Root<T> root = cq.from(entityClass);
 
         boolean queryByField = filterQuery.getFieldList() != null;

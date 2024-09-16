@@ -41,7 +41,7 @@ import javax.ws.rs.core.Response;
  */
 @Secured
 @Path("area")
-public class AreaREST extends ServiceREST{
+public class AreaREST extends ServiceREST {
 
     @EJB
     private AreaFacade areaFacade;
@@ -49,20 +49,20 @@ public class AreaREST extends ServiceREST{
     public AreaREST() {
         super(AreaFacade.class);
     }
-    
+
     @PersistenceContext(unitName = "SIGESS_PU")
     private EntityManager em;
-//    @GET
-//    @Path("empresa/{empresaId}")
-//    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-//    public Response findByEmpresa(@PathParam("empresaId") Integer empresaId) {
-//        try {
-//            List<Area> areaList = areaFacade.findByEmpresa(empresaId);
-//            return Response.ok(areaList).build();
-//        } catch (Exception iae) {
-//            return Util.manageException(iae, AreaREST.class);
-//        }
-//    }
+    // @GET
+    // @Path("empresa/{empresaId}")
+    // @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    // public Response findByEmpresa(@PathParam("empresaId") Integer empresaId) {
+    // try {
+    // List<Area> areaList = areaFacade.findByEmpresa(empresaId);
+    // return Response.ok(areaList).build();
+    // } catch (Exception iae) {
+    // return Util.manageException(iae, AreaREST.class);
+    // }
+    // }
 
     @Override
     public Response findWithFilter(FilterQuery filterQuery) {
@@ -70,29 +70,29 @@ public class AreaREST extends ServiceREST{
             Query q1 = em.createNativeQuery("SELECT e.id_empresa_aliada from emp.empresa e where e.id = ?1");
             q1.setParameter(1, getEmpresaIdRequestContext());
             List list1 = q1.getResultList();
-        
+
             boolean filtradoEmpresa = false;
             for (Filter filter : filterQuery.getFilterList()) {
                 if (filter.getField().equals("tipoArea.empresa.id")) {
                     filtradoEmpresa = true;
                 }
             }
-            
+
             if (!filtradoEmpresa) {
                 Filter empFilt = new Filter();
                 empFilt.setCriteriaEnum(CriteriaFilter.EQUALS);
                 empFilt.setField("tipoArea.empresa.id");
-                if(list1.get(0) != null){
+                if (list1.get(0) != null) {
                     empFilt.setValue1(list1.get(0).toString());
-                }else{
+                } else {
                     empFilt.setValue1(getEmpresaIdRequestContext().toString());
                 }
                 filterQuery.getFilterList().add(empFilt);
             }
-            
+
             long numRows = filterQuery.isCount() ? beanInstance.countWithFilter(filterQuery) : -1;
             List list = beanInstance.findWithFilter(filterQuery);
-            
+
             FilterResponse filterResponse = new FilterResponse();
             filterResponse.setData(list);
             filterResponse.setCount(numRows);
@@ -101,7 +101,7 @@ public class AreaREST extends ServiceREST{
             return Util.manageException(ex, ReporteREST.class);
         }
     }
-    
+
     @GET
     @Secured(validarPermiso = false)
     @Path("findSL")
@@ -113,19 +113,19 @@ public class AreaREST extends ServiceREST{
         }
         return Response.ok(areas).build();
     }
-    
+
     @GET
     @Path("filterArea")
     @Secured(requiereEmpresaId = false)
-    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public Response localidadesFirmWithFilter(@BeanParam FilterQuery filterQuery){
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public Response localidadesFirmWithFilter(@BeanParam FilterQuery filterQuery) {
         try {
-            if(filterQuery == null){
+            if (filterQuery == null) {
                 filterQuery = new FilterQuery();
             }
             long numRows = filterQuery.isCount() ? areaFacade.countWithFilter(filterQuery) : -1;
             List list = areaFacade.findWithFilter(filterQuery);
-            
+
             FilterResponse filterResponse = new FilterResponse();
             filterResponse.setData(list);
             filterResponse.setCount(numRows);
@@ -134,23 +134,22 @@ public class AreaREST extends ServiceREST{
             return Util.manageException(e, AreaREST.class);
         }
     }
-    
-    
 
-//    @GET
-//    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-//    public Response findAll() {
-//        try {
-//            List<Area> areaList = areaFacade.findByEmpresa(super.getEmpresaIdRequestContext());
-//            return Response.ok(areaList).build();
-//        } catch (Exception iae) {
-//            return Util.manageException(iae, AreaREST.class);
-//        }
-//    }
+    // @GET
+    // @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    // public Response findAll() {
+    // try {
+    // List<Area> areaList =
+    // areaFacade.findByEmpresa(super.getEmpresaIdRequestContext());
+    // return Response.ok(areaList).build();
+    // } catch (Exception iae) {
+    // return Util.manageException(iae, AreaREST.class);
+    // }
+    // }
 
     @GET
     @Path("areaPadre/{areaPadreId}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public Response findByAreaPadre(@PathParam("areaPadreId") Long areaPadreId) {
         try {
             List<Area> areaList = areaFacade.findByAreaPadre(areaPadreId);
@@ -161,7 +160,7 @@ public class AreaREST extends ServiceREST{
     }
 
     @POST
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public Response create(Area area) {
         try {
             area = areaFacade.create(area);
@@ -172,7 +171,7 @@ public class AreaREST extends ServiceREST{
     }
 
     @PUT
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public Response edit(Area area) {
         try {
             area = areaFacade.edit(area);
@@ -185,12 +184,24 @@ public class AreaREST extends ServiceREST{
 
     @DELETE
     @Path("{areaId}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public Response delete(@PathParam("areaId") Long areaId) {
         try {
             Area area = areaFacade.eliminar(areaId);
             return Response.ok(area).build();
         } catch (Exception iae) {
+            // // Variable para almacenar el detalle del error
+            // String detailMessage = iae.getMessage();
+
+            // // Recorrer las causas de la excepción para encontrar el mensaje más específico
+            // Throwable cause = iae.getCause();
+            // while (cause != null) {
+            //     detailMessage = cause.getMessage();
+            //     cause = cause.getCause();
+            // }
+
+            // // Imprimir solo el detalle relevante
+            // System.out.println("Detalle del error: " + detailMessage);
             return Util.manageException(iae, AreaREST.class);
         }
 

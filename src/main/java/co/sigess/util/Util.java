@@ -74,6 +74,7 @@ public class Util {
     }
 
     public static Response manageException(Exception ex, Class restClass) {
+        
         Throwable exception = getUserException(ex);
         Mensaje msg = new Mensaje();
         msg.setDetalle("ERROR ID: " + getFechaId());
