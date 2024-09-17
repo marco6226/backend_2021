@@ -163,6 +163,19 @@ public class Desviacion implements Serializable {
     
     @Column(name = "pk_case_sl")
     private Integer idSl;
+    
+    @Column(name = "pk_user_sl")
+    private Integer pkUserSl;
+
+    public Integer getPkUserSl() {
+        return pkUserSl;
+    }
+
+    public void setPkUserSl(Integer pkUserSl) {
+        this.pkUserSl = pkUserSl;
+    }
+    
+    
 
     public Integer getIdSl() {
         return idSl;

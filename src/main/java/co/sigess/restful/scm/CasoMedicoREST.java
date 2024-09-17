@@ -435,6 +435,20 @@ public class CasoMedicoREST extends ServiceREST {
             return Util.manageException(ex, ReporteREST.class);
         }
     }
+    
+        @GET
+    @Path("diagnosticosSlCM/{param}/{pkcase}")
+    @Secured(validarPermiso = false)
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response getDiagnosticosSlCM(@PathParam("param") String param, @PathParam("pkcase") String pkcase) {
+        try {
+
+            List<Diagnosticos> list = this.diagnosticoFacade.findAllByIdSlCM(param, pkcase);
+            return Response.ok(list).build();
+        } catch (Exception ex) {
+            return Util.manageException(ex, ReporteREST.class);
+        }
+    }
 
     @POST
     @Path("diagnosticos")

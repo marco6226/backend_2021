@@ -53,7 +53,14 @@ public class diagnosticoFacade extends AbstractFacade<Diagnosticos> {
         List<Diagnosticos> list = (List<Diagnosticos>) query.getResultList();
         return list;
     }
-    
+          public List<Diagnosticos> findAllByIdSlCM(String caseId, String pkcase) {
+        Query query = this.em.createNativeQuery("SELECT * FROM scm.diagnosticos WHERE pk_user = ?1 and eliminado != true and pk_case != ?2 order by fecha_diagnostico desc", Diagnosticos.class);
+        
+        query.setParameter(1, caseId);
+        query.setParameter(2, pkcase);
+        List<Diagnosticos> list = (List<Diagnosticos>) query.getResultList();
+        return list;
+    }
     public Diagnosticos findById(String id){
         Query query = this.em.createQuery("SELECT DISTINCT DIAG FROM Diagnosticos diag where DIAG.id = :id");
         Integer id_aux = new Integer(id);
