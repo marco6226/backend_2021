@@ -92,6 +92,19 @@ public class MailSaludLaboralEntity implements Serializable {
     
     @Column(name = "fk_empresa_id")
     private Integer empresaId;
+    
+    @Column(name = "eliminado")
+    private Boolean eliminado;
+
+    public Boolean getEliminado() {
+        return eliminado;
+    }
+
+    public void setEliminado(Boolean eliminado) {
+        this.eliminado = eliminado;
+    }
+    
+    
 
     public Integer getEmpresaId() {
         return empresaId;

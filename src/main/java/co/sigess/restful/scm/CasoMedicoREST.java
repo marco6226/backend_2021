@@ -435,8 +435,8 @@ public class CasoMedicoREST extends ServiceREST {
             return Util.manageException(ex, ReporteREST.class);
         }
     }
-    
-        @GET
+
+    @GET
     @Path("diagnosticosSlCM/{param}/{pkcase}")
     @Secured(validarPermiso = false)
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -626,6 +626,7 @@ public class CasoMedicoREST extends ServiceREST {
             return Util.manageException(ex, ReporteREST.class);
         }
     }
+
     @PUT
     @Secured(validarPermiso = false)
     @Path("deleteCasoSL/{id}")
@@ -633,7 +634,12 @@ public class CasoMedicoREST extends ServiceREST {
     public Response deleteCasoSL(@PathParam("id") String id) {
         try {
             int seg = this.DatosTrabajadorFacade.eliminar(Long.parseLong(id));
-            return Response.ok(seg).build();
+            int del = this.mailSaludLaboralFacade.eliminar(Long.parseLong(id));
+
+            Map<String, Integer> responseMap = new HashMap<>();
+            responseMap.put("seg", seg);
+            responseMap.put("del", del);
+            return Response.ok(responseMap).build();
         } catch (Exception ex) {
             return Util.manageException(ex, ReporteREST.class);
         }
@@ -982,7 +988,7 @@ public class CasoMedicoREST extends ServiceREST {
             return Util.manageException(e, CasoMedicoREST.class);
         }
     }
-    
+
     @PUT
     @Path("cambiarEstadoSL/{id}")
     @Secured(validarPermiso = false)
@@ -1120,7 +1126,8 @@ public class CasoMedicoREST extends ServiceREST {
             return Util.manageException(ex, EmpleadoREST.class);
         }
     }
-        @GET
+
+    @GET
     @Path("saludMail")
     @Secured(validarPermiso = false)
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -1358,7 +1365,8 @@ public class CasoMedicoREST extends ServiceREST {
             return Util.manageException(e, CasoMedicoREST.class);
         }
     }
-        @DELETE
+
+    @DELETE
     @Path("deleteDocumentDT/{id}/{docID}")
     @Secured(validarPermiso = false)
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -1370,6 +1378,7 @@ public class CasoMedicoREST extends ServiceREST {
             return Util.manageException(e, CasoMedicoREST.class);
         }
     }
+
     @DELETE
     @Path("deleteDocumentEmp/{id}/{docID}")
     @Secured(validarPermiso = false)
@@ -1382,7 +1391,8 @@ public class CasoMedicoREST extends ServiceREST {
             return Util.manageException(e, CasoMedicoREST.class);
         }
     }
-        @DELETE
+
+    @DELETE
     @Path("deleteDocumentArl/{id}/{docID}")
     @Secured(validarPermiso = false)
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -1394,7 +1404,8 @@ public class CasoMedicoREST extends ServiceREST {
             return Util.manageException(e, CasoMedicoREST.class);
         }
     }
-          @DELETE
+
+    @DELETE
     @Path("deleteDocumentJr/{id}/{docID}")
     @Secured(validarPermiso = false)
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -1406,7 +1417,8 @@ public class CasoMedicoREST extends ServiceREST {
             return Util.manageException(e, CasoMedicoREST.class);
         }
     }
-             @DELETE
+
+    @DELETE
     @Path("deleteDocumentJn/{id}/{docID}")
     @Secured(validarPermiso = false)
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -1418,7 +1430,8 @@ public class CasoMedicoREST extends ServiceREST {
             return Util.manageException(e, CasoMedicoREST.class);
         }
     }
-        @DELETE
+
+    @DELETE
     @Path("deleteDocumentMin/{id}/{docID}")
     @Secured(validarPermiso = false)
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -1458,7 +1471,7 @@ public class CasoMedicoREST extends ServiceREST {
     @Path("createMail")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response createMailCaseSL(MailSaludLaboralEntity datosTrabajador) {
-         String host1 = "https://demo.sigess.app"; // Valor por defecto para demostración
+        String host1 = "https://demo.sigess.app"; // Valor por defecto para demostración
 
         Query q1 = em.createNativeQuery("SELECT COUNT(h.id) FROM com.host h WHERE h.host ='Produccion'");
         int countProduction = ((Number) q1.getSingleResult()).intValue();
@@ -1475,12 +1488,13 @@ public class CasoMedicoREST extends ServiceREST {
         }
         if (countProduction == 0) {
             host1 = "https://demo.sigess.app";
-        } if(countProduction !=0 && countProduction != 1) {
+        }
+        if (countProduction != 0 && countProduction != 1) {
             host1 = "http://localhost:4200";
         }
         try {
             ObjectMapper mapper = new ObjectMapper();
-            datosTrabajador.setDocumentos(null);            
+            datosTrabajador.setDocumentos(null);
             String json = mapper.writeValueAsString(datosTrabajador);
             Date fechaActual = new Date();
             SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
@@ -1489,9 +1503,11 @@ public class CasoMedicoREST extends ServiceREST {
             datosTrabajador.setFechaSolicitud(fechaActual);
             datosTrabajador.setEstadoCorreo(1);
             datosTrabajador.setCorreoEnviado(Boolean.FALSE);
+            datosTrabajador.setEliminado(Boolean.FALSE);
+          
             Date nuevaFechaLimite = datosTrabajador.getFechaLimite();
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-            
+
             datosTrabajador.setFechaLimite(nuevaFechaLimite);
             String fechaFormateadaLimit = formatoFecha.format(nuevaFechaLimite);
             datosTrabajador = this.mailSaludLaboralFacade.createMailCaseSL(datosTrabajador);
@@ -1613,7 +1629,7 @@ public class CasoMedicoREST extends ServiceREST {
     @Secured(validarPermiso = false)
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response actualizarMailRechazoSoliictante(@PathParam("id") int id, MailSaludLaboralEntity updatedData) {
-             String host1 = "https://demo.sigess.app"; // Valor por defecto para demostración
+        String host1 = "https://demo.sigess.app"; // Valor por defecto para demostración
 
         Query q1 = em.createNativeQuery("SELECT COUNT(h.id) FROM com.host h WHERE h.host ='Produccion'");
         int countProduction = ((Number) q1.getSingleResult()).intValue();
@@ -1630,7 +1646,8 @@ public class CasoMedicoREST extends ServiceREST {
         }
         if (countProduction == 0) {
             host1 = "https://demo.sigess.app";
-        } if(countProduction !=0 && countProduction != 1) {
+        }
+        if (countProduction != 0 && countProduction != 1) {
             host1 = "http://localhost:4200";
         }
         try {
@@ -1713,8 +1730,8 @@ public class CasoMedicoREST extends ServiceREST {
             return Util.manageException(e, CasoMedicoREST.class);
         }
     }
-    
-        @PUT
+
+    @PUT
     @Path("documentsDT/{id}")
     @Secured(validarPermiso = false)
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -1731,6 +1748,7 @@ public class CasoMedicoREST extends ServiceREST {
             return Util.manageException(e, CasoMedicoREST.class);
         }
     }
+
     @PUT
     @Path("documentsEmp/{id}")
     @Secured(validarPermiso = false)
@@ -1748,7 +1766,8 @@ public class CasoMedicoREST extends ServiceREST {
             return Util.manageException(e, CasoMedicoREST.class);
         }
     }
-        @PUT
+
+    @PUT
     @Path("documentsArl/{id}")
     @Secured(validarPermiso = false)
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -1765,7 +1784,8 @@ public class CasoMedicoREST extends ServiceREST {
             return Util.manageException(e, CasoMedicoREST.class);
         }
     }
-            @PUT
+
+    @PUT
     @Path("documentsJr/{id}")
     @Secured(validarPermiso = false)
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -1782,7 +1802,8 @@ public class CasoMedicoREST extends ServiceREST {
             return Util.manageException(e, CasoMedicoREST.class);
         }
     }
-                @PUT
+
+    @PUT
     @Path("documentsJn/{id}")
     @Secured(validarPermiso = false)
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -1799,6 +1820,7 @@ public class CasoMedicoREST extends ServiceREST {
             return Util.manageException(e, CasoMedicoREST.class);
         }
     }
+
     @PUT
     @Path("documentsMin/{id}")
     @Secured(validarPermiso = false)

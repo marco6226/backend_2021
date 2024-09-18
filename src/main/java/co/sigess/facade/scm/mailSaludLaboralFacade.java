@@ -120,4 +120,13 @@ public void deleteDocumentFromMail(Integer id, String docID) throws Exception {
     }
 }
 
+public int eliminar(Long id) {
+
+        //3117537464
+        Query q = this.em.createNativeQuery("UPDATE scm.mail_saludlaboral  SET eliminado = true WHERE pk_case = ?1");
+        q.setParameter(1, id);
+        int deleted = q.executeUpdate();
+        return deleted;
+    }
+
 }
