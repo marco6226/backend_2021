@@ -7,6 +7,7 @@ package co.sigess.entities.scm;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -50,6 +51,20 @@ public class viewscm implements Serializable{
     
     @Column(name = "estado_del_caso")
     private String estadoCaso;
+    
+    @Column(name = "fecha_final")
+    private String fechaFinal;
+
+    public String getFechaFinal() {
+        return fechaFinal;
+    }
+
+    public void setFechaFinal(String fechaFinal) {
+        this.fechaFinal = fechaFinal;
+    }
+
+
+
     
     @Column(name = "diagnostico")
     private String diagnostico;
