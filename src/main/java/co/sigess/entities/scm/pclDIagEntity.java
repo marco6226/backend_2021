@@ -85,6 +85,19 @@ public class pclDIagEntity implements Serializable{
     
     @Column(name = "nombre_entidad_calificada")
     private String nombreEntidadCalificada;
+    
+     @Column(name = "observaciones_pcl")
+    private String observacionesPcl;
+
+    public String getObservacionesPcl() {
+        return observacionesPcl;
+    }
+
+    public void setObservacionesPcl(String observacionesPcl) {
+        this.observacionesPcl = observacionesPcl;
+    }
+     
+     
 
     public String getNombreEntidad() {
         return nombreEntidad;

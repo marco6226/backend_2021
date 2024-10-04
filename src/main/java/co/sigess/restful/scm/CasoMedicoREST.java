@@ -231,6 +231,28 @@ public class CasoMedicoREST extends ServiceREST {
             return Util.manageException(ex, ReporteREST.class);
         }
     }
+    @PUT
+    @Path("casosmedicosEd/{idSl}")
+    @Secured(validarPermiso = false)
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response actualizarCasosMedicos(@PathParam("idSl") int idSl, CasosMedicos updatedData) {
+        try {
+            CasosMedicos dt = casosmedicosFacade.findById(idSl);
+            if (dt == null) {
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }
+
+            // Actualiza los campos del objeto existente con los valores del objeto actualizado
+                dt.setDiagnostico(updatedData.getDiagnostico());
+            //dt.setDocumentosJn(updatedData.getDocumentosJn());
+            //dt.setDocumentosJr(updatedData.getJrDictamen());
+            // ... actualiza otros campos necesarios ...
+
+            return Response.ok(casosmedicosFacade.update(dt)).build();
+        } catch (Exception e) {
+            return Util.manageException(e, CasoMedicoREST.class);
+        }
+    }
 
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -1168,53 +1190,101 @@ public class CasoMedicoREST extends ServiceREST {
         }
     }
 
-    @PUT
-    @Path("caseESL/{idSl}")
-    @Secured(validarPermiso = false)
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response actualizarCasoSL(@PathParam("idSl") int idSl, DatosTrabajadorEntity updatedData) {
-        try {
-            DatosTrabajadorEntity dt = DatosTrabajadorFacade.findById(idSl);
-            if (dt == null) {
-                return Response.status(Response.Status.NOT_FOUND).build();
-            }
-
-            // Actualiza los campos del objeto existente con los valores del objeto actualizado
-            dt.setFechaEdicion(new Date());
-            dt.setCargoActual(updatedData.getCargoActual());
-            dt.setCargoOriginal(updatedData.getCargoOriginal());
-            dt.setDivisionActual(updatedData.getDivisionActual());
-            dt.setDivisionOrigen(updatedData.getDivisionOrigen());
-            dt.setLocalidadActual(updatedData.getLocalidadActual());
-            dt.setLocalidadOrigen(updatedData.getLocalidadOrigen());
-            dt.setAreaActual(updatedData.getAreaActual());
-            dt.setAreaOrigen(updatedData.getAreaOrigen());
-            dt.setProcesoActual(updatedData.getProcesoActual());
-            dt.setProcesoOrigen(updatedData.getProcesoOrigen());
-            dt.setFechaRecepcionDocs(updatedData.getFechaRecepcionDocs());
-            dt.setEntidadEmiteCalificacion(updatedData.getEntidadEmiteCalificacion());
-            dt.setOtroDetalle(updatedData.getOtroDetalle());
-            dt.setDetalleCalificacion(updatedData.getDetalleCalificacion());
-            dt.setFechaMaximaEnvDocs(updatedData.getFechaMaximaEnvDocs());
-            dt.setFechaCierreCaso(updatedData.getFechaCierreCaso());
-            dt.setFechaNotificacionEmp(updatedData.getFechaNotificacionEmp());
-            dt.setFechaNotificacionMin(updatedData.getFechaNotificacionMin());
-            dt.setEpsDictamen(updatedData.getEpsDictamen());
-            dt.setFechaDictamenArl(updatedData.getFechaDictamenArl());
-            dt.setArlDictamen(updatedData.getArlDictamen());
-            //dt.setDocumentosArl(updatedData.getDocumentosArl());
-            dt.setFechaDictamenJr(updatedData.getFechaDictamenJr());
-            dt.setJrDictamen(updatedData.getJrDictamen());
-            dt.setFechaDictamenJn(updatedData.getFechaDictamenJn());
-            //dt.setDocumentosJn(updatedData.getDocumentosJn());
-            //dt.setDocumentosJr(updatedData.getJrDictamen());
-            // ... actualiza otros campos necesarios ...
-
-            return Response.ok(DatosTrabajadorFacade.update(dt)).build();
-        } catch (Exception e) {
-            return Util.manageException(e, CasoMedicoREST.class);
+@PUT
+@Path("caseESL/{idSl}")
+@Secured(validarPermiso = false)
+@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+public Response actualizarCasoSL(@PathParam("idSl") int idSl, DatosTrabajadorEntity updatedData) {
+    try {
+        DatosTrabajadorEntity dt = DatosTrabajadorFacade.findById(idSl);
+        if (dt == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
         }
+
+        // Actualiza los campos del objeto existente solo si los valores no son null
+        dt.setFechaEdicion(new Date());
+        
+        if (updatedData.getCargoActual() != null) {
+            dt.setCargoActual(updatedData.getCargoActual());
+        }
+        if (updatedData.getCargoOriginal() != null) {
+            dt.setCargoOriginal(updatedData.getCargoOriginal());
+        }
+        if (updatedData.getDivisionActual() != null) {
+            dt.setDivisionActual(updatedData.getDivisionActual());
+        }
+        if (updatedData.getDivisionOrigen() != null) {
+            dt.setDivisionOrigen(updatedData.getDivisionOrigen());
+        }
+        if (updatedData.getLocalidadActual() != null) {
+            dt.setLocalidadActual(updatedData.getLocalidadActual());
+        }
+        if (updatedData.getLocalidadOrigen() != null) {
+            dt.setLocalidadOrigen(updatedData.getLocalidadOrigen());
+        }
+        if (updatedData.getAreaActual() != null) {
+            dt.setAreaActual(updatedData.getAreaActual());
+        }
+        if (updatedData.getAreaOrigen() != null) {
+            dt.setAreaOrigen(updatedData.getAreaOrigen());
+        }
+        if (updatedData.getProcesoActual() != null) {
+            dt.setProcesoActual(updatedData.getProcesoActual());
+        }
+        if (updatedData.getProcesoOrigen() != null) {
+            dt.setProcesoOrigen(updatedData.getProcesoOrigen());
+        }
+        if (updatedData.getFechaRecepcionDocs() != null) {
+            dt.setFechaRecepcionDocs(updatedData.getFechaRecepcionDocs());
+        }
+        if (updatedData.getEntidadEmiteCalificacion() != null) {
+            dt.setEntidadEmiteCalificacion(updatedData.getEntidadEmiteCalificacion());
+        }
+        if (updatedData.getOtroDetalle() != null) {
+            dt.setOtroDetalle(updatedData.getOtroDetalle());
+        }
+        if (updatedData.getDetalleCalificacion() != null) {
+            dt.setDetalleCalificacion(updatedData.getDetalleCalificacion());
+        }
+        if (updatedData.getFechaMaximaEnvDocs() != null) {
+            dt.setFechaMaximaEnvDocs(updatedData.getFechaMaximaEnvDocs());
+        }
+        if (updatedData.getFechaCierreCaso() != null) {
+            dt.setFechaCierreCaso(updatedData.getFechaCierreCaso());
+        }
+        if (updatedData.getFechaNotificacionEmp() != null) {
+            dt.setFechaNotificacionEmp(updatedData.getFechaNotificacionEmp());
+        }
+        if (updatedData.getFechaNotificacionMin() != null) {
+            dt.setFechaNotificacionMin(updatedData.getFechaNotificacionMin());
+        }
+        if (updatedData.getEpsDictamen() != null) {
+            dt.setEpsDictamen(updatedData.getEpsDictamen());
+        }
+        if (updatedData.getFechaDictamenArl() != null) {
+            dt.setFechaDictamenArl(updatedData.getFechaDictamenArl());
+        }
+        if (updatedData.getArlDictamen() != null) {
+            dt.setArlDictamen(updatedData.getArlDictamen());
+        }
+        if (updatedData.getFechaDictamenJr() != null) {
+            dt.setFechaDictamenJr(updatedData.getFechaDictamenJr());
+        }
+        if (updatedData.getJrDictamen() != null) {
+            dt.setJrDictamen(updatedData.getJrDictamen());
+        }
+        if (updatedData.getFechaDictamenJn() != null) {
+            dt.setFechaDictamenJn(updatedData.getFechaDictamenJn());
+        }
+
+        // ... actualiza otros campos necesarios si no son null ...
+
+        return Response.ok(DatosTrabajadorFacade.update(dt)).build();
+    } catch (Exception e) {
+        return Util.manageException(e, CasoMedicoREST.class);
     }
+}
+
 
     @PUT
     @Path("userUpdate/{pkUser}")
