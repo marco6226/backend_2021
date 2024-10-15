@@ -50,6 +50,7 @@ import co.sigess.facade.scm.SeguimientoCasoFacade;
 import co.sigess.facade.scm.SistemaAfectadoFacade;
 import co.sigess.facade.scm.SveFacade;
 import co.sigess.facade.scm.diagnosticoFacade;
+import co.sigess.facade.scm.mailSLFacade.EmailService;
 import co.sigess.facade.scm.mailSaludLaboralFacade;
 import co.sigess.facade.scm.pclDiagFacade;
 import co.sigess.facade.scm.pclDiagnosticosFacade;
@@ -84,6 +85,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.stream.Collectors;
+import javax.ejb.Asynchronous;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -92,6 +95,7 @@ import javax.persistence.Query;
 import javax.transaction.Transactional;
 import javax.ws.rs.BeanParam;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.PATCH;
 import javax.ws.rs.POST;
@@ -179,6 +183,9 @@ public class CasoMedicoREST extends ServiceREST {
     @EJB
     private ReintegroFacade reintegroFacade;
 
+    @EJB
+    private EmailFacade emailFacade;
+
     public CasoMedicoREST() {
         super(CasosMedicosFacade.class);
 
@@ -231,6 +238,7 @@ public class CasoMedicoREST extends ServiceREST {
             return Util.manageException(ex, ReporteREST.class);
         }
     }
+
     @PUT
     @Path("casosmedicosEd/{idSl}")
     @Secured(validarPermiso = false)
@@ -243,7 +251,7 @@ public class CasoMedicoREST extends ServiceREST {
             }
 
             // Actualiza los campos del objeto existente con los valores del objeto actualizado
-                dt.setDiagnostico(updatedData.getDiagnostico());
+            dt.setDiagnostico(updatedData.getDiagnostico());
             //dt.setDocumentosJn(updatedData.getDocumentosJn());
             //dt.setDocumentosJr(updatedData.getJrDictamen());
             // ... actualiza otros campos necesarios ...
@@ -1032,24 +1040,26 @@ public class CasoMedicoREST extends ServiceREST {
         }
     }
 
-    @GET
-    @Path("sendmail/{emails}")
-    @Secured(validarPermiso = false)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response enviarCorreoCasosMedicos(@PathParam("emails") String emails, Map<String, String> parametros) {
-        try {
-            String[] correosArray = emails.split(",");
-            List<String> correos = Arrays.asList(correosArray);
-
-            if (correos != null && !correos.isEmpty()) {
-                List<Usuario> usuarios = SaludLaboralFacade.enviarCorreoCasosMedicos(correos, parametros);
-            }
-            return Response.ok(new Mensaje("Envío realizado", "Se ha enviado un correo electrónico con los documentos a solicitar", TipoMensaje.success)).build();
-        } catch (Exception ex) {
-            return Util.manageException(ex, AuthenticationREST.class);
-        }
-    }
-
+//    @POST
+//    @Path("sendmail")
+//    @Secured(validarPermiso = false)
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public Response enviarCorreoCasosMedicos(@FormParam("emails") String emails, Map<String, String> parametros) {
+//        try {
+//            String[] correosArray = emails.split(",");
+//            List<String> correos = Arrays.asList(correosArray);
+//
+//            if (correos != null && !correos.isEmpty()) {
+//                // Llamada asincrónica para enviar el correo
+//                SaludLaboralFacade.enviarCorreoCasosMedicos(correos, parametros);
+//            }
+//
+//            // Responder de inmediato sin esperar a que los correos se envíen
+//            return Response.ok(new Mensaje("Envío realizado", "Se ha enviado un correo electrónico con los documentos a solicitar", TipoMensaje.success)).build();
+//        } catch (Exception ex) {
+//            return Util.manageException(ex, CasoMedicoREST.class);
+//        }
+//    }
     @GET
     @Path("sendmailReject/{emails}")
     @Secured(validarPermiso = false)
@@ -1190,101 +1200,99 @@ public class CasoMedicoREST extends ServiceREST {
         }
     }
 
-@PUT
-@Path("caseESL/{idSl}")
-@Secured(validarPermiso = false)
-@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-public Response actualizarCasoSL(@PathParam("idSl") int idSl, DatosTrabajadorEntity updatedData) {
-    try {
-        DatosTrabajadorEntity dt = DatosTrabajadorFacade.findById(idSl);
-        if (dt == null) {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
+    @PUT
+    @Path("caseESL/{idSl}")
+    @Secured(validarPermiso = false)
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response actualizarCasoSL(@PathParam("idSl") int idSl, DatosTrabajadorEntity updatedData) {
+        try {
+            DatosTrabajadorEntity dt = DatosTrabajadorFacade.findById(idSl);
+            if (dt == null) {
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }
 
-        // Actualiza los campos del objeto existente solo si los valores no son null
-        dt.setFechaEdicion(new Date());
-        
-        if (updatedData.getCargoActual() != null) {
-            dt.setCargoActual(updatedData.getCargoActual());
-        }
-        if (updatedData.getCargoOriginal() != null) {
-            dt.setCargoOriginal(updatedData.getCargoOriginal());
-        }
-        if (updatedData.getDivisionActual() != null) {
-            dt.setDivisionActual(updatedData.getDivisionActual());
-        }
-        if (updatedData.getDivisionOrigen() != null) {
-            dt.setDivisionOrigen(updatedData.getDivisionOrigen());
-        }
-        if (updatedData.getLocalidadActual() != null) {
-            dt.setLocalidadActual(updatedData.getLocalidadActual());
-        }
-        if (updatedData.getLocalidadOrigen() != null) {
-            dt.setLocalidadOrigen(updatedData.getLocalidadOrigen());
-        }
-        if (updatedData.getAreaActual() != null) {
-            dt.setAreaActual(updatedData.getAreaActual());
-        }
-        if (updatedData.getAreaOrigen() != null) {
-            dt.setAreaOrigen(updatedData.getAreaOrigen());
-        }
-        if (updatedData.getProcesoActual() != null) {
-            dt.setProcesoActual(updatedData.getProcesoActual());
-        }
-        if (updatedData.getProcesoOrigen() != null) {
-            dt.setProcesoOrigen(updatedData.getProcesoOrigen());
-        }
-        if (updatedData.getFechaRecepcionDocs() != null) {
-            dt.setFechaRecepcionDocs(updatedData.getFechaRecepcionDocs());
-        }
-        if (updatedData.getEntidadEmiteCalificacion() != null) {
-            dt.setEntidadEmiteCalificacion(updatedData.getEntidadEmiteCalificacion());
-        }
-        if (updatedData.getOtroDetalle() != null) {
-            dt.setOtroDetalle(updatedData.getOtroDetalle());
-        }
-        if (updatedData.getDetalleCalificacion() != null) {
-            dt.setDetalleCalificacion(updatedData.getDetalleCalificacion());
-        }
-        if (updatedData.getFechaMaximaEnvDocs() != null) {
-            dt.setFechaMaximaEnvDocs(updatedData.getFechaMaximaEnvDocs());
-        }
-        if (updatedData.getFechaCierreCaso() != null) {
-            dt.setFechaCierreCaso(updatedData.getFechaCierreCaso());
-        }
-        if (updatedData.getFechaNotificacionEmp() != null) {
-            dt.setFechaNotificacionEmp(updatedData.getFechaNotificacionEmp());
-        }
-        if (updatedData.getFechaNotificacionMin() != null) {
-            dt.setFechaNotificacionMin(updatedData.getFechaNotificacionMin());
-        }
-        if (updatedData.getEpsDictamen() != null) {
-            dt.setEpsDictamen(updatedData.getEpsDictamen());
-        }
-        if (updatedData.getFechaDictamenArl() != null) {
-            dt.setFechaDictamenArl(updatedData.getFechaDictamenArl());
-        }
-        if (updatedData.getArlDictamen() != null) {
-            dt.setArlDictamen(updatedData.getArlDictamen());
-        }
-        if (updatedData.getFechaDictamenJr() != null) {
-            dt.setFechaDictamenJr(updatedData.getFechaDictamenJr());
-        }
-        if (updatedData.getJrDictamen() != null) {
-            dt.setJrDictamen(updatedData.getJrDictamen());
-        }
-        if (updatedData.getFechaDictamenJn() != null) {
-            dt.setFechaDictamenJn(updatedData.getFechaDictamenJn());
-        }
+            // Actualiza los campos del objeto existente solo si los valores no son null
+            dt.setFechaEdicion(new Date());
 
-        // ... actualiza otros campos necesarios si no son null ...
+            if (updatedData.getCargoActual() != null) {
+                dt.setCargoActual(updatedData.getCargoActual());
+            }
+            if (updatedData.getCargoOriginal() != null) {
+                dt.setCargoOriginal(updatedData.getCargoOriginal());
+            }
+            if (updatedData.getDivisionActual() != null) {
+                dt.setDivisionActual(updatedData.getDivisionActual());
+            }
+            if (updatedData.getDivisionOrigen() != null) {
+                dt.setDivisionOrigen(updatedData.getDivisionOrigen());
+            }
+            if (updatedData.getLocalidadActual() != null) {
+                dt.setLocalidadActual(updatedData.getLocalidadActual());
+            }
+            if (updatedData.getLocalidadOrigen() != null) {
+                dt.setLocalidadOrigen(updatedData.getLocalidadOrigen());
+            }
+            if (updatedData.getAreaActual() != null) {
+                dt.setAreaActual(updatedData.getAreaActual());
+            }
+            if (updatedData.getAreaOrigen() != null) {
+                dt.setAreaOrigen(updatedData.getAreaOrigen());
+            }
+            if (updatedData.getProcesoActual() != null) {
+                dt.setProcesoActual(updatedData.getProcesoActual());
+            }
+            if (updatedData.getProcesoOrigen() != null) {
+                dt.setProcesoOrigen(updatedData.getProcesoOrigen());
+            }
+            if (updatedData.getFechaRecepcionDocs() != null) {
+                dt.setFechaRecepcionDocs(updatedData.getFechaRecepcionDocs());
+            }
+            if (updatedData.getEntidadEmiteCalificacion() != null) {
+                dt.setEntidadEmiteCalificacion(updatedData.getEntidadEmiteCalificacion());
+            }
+            if (updatedData.getOtroDetalle() != null) {
+                dt.setOtroDetalle(updatedData.getOtroDetalle());
+            }
+            if (updatedData.getDetalleCalificacion() != null) {
+                dt.setDetalleCalificacion(updatedData.getDetalleCalificacion());
+            }
+            if (updatedData.getFechaMaximaEnvDocs() != null) {
+                dt.setFechaMaximaEnvDocs(updatedData.getFechaMaximaEnvDocs());
+            }
+            if (updatedData.getFechaCierreCaso() != null) {
+                dt.setFechaCierreCaso(updatedData.getFechaCierreCaso());
+            }
+            if (updatedData.getFechaNotificacionEmp() != null) {
+                dt.setFechaNotificacionEmp(updatedData.getFechaNotificacionEmp());
+            }
+            if (updatedData.getFechaNotificacionMin() != null) {
+                dt.setFechaNotificacionMin(updatedData.getFechaNotificacionMin());
+            }
+            if (updatedData.getEpsDictamen() != null) {
+                dt.setEpsDictamen(updatedData.getEpsDictamen());
+            }
+            if (updatedData.getFechaDictamenArl() != null) {
+                dt.setFechaDictamenArl(updatedData.getFechaDictamenArl());
+            }
+            if (updatedData.getArlDictamen() != null) {
+                dt.setArlDictamen(updatedData.getArlDictamen());
+            }
+            if (updatedData.getFechaDictamenJr() != null) {
+                dt.setFechaDictamenJr(updatedData.getFechaDictamenJr());
+            }
+            if (updatedData.getJrDictamen() != null) {
+                dt.setJrDictamen(updatedData.getJrDictamen());
+            }
+            if (updatedData.getFechaDictamenJn() != null) {
+                dt.setFechaDictamenJn(updatedData.getFechaDictamenJn());
+            }
 
-        return Response.ok(DatosTrabajadorFacade.update(dt)).build();
-    } catch (Exception e) {
-        return Util.manageException(e, CasoMedicoREST.class);
+            // ... actualiza otros campos necesarios si no son null ...
+            return Response.ok(DatosTrabajadorFacade.update(dt)).build();
+        } catch (Exception e) {
+            return Util.manageException(e, CasoMedicoREST.class);
+        }
     }
-}
-
 
     @PUT
     @Path("userUpdate/{pkUser}")
@@ -1536,36 +1544,31 @@ public Response actualizarCasoSL(@PathParam("idSl") int idSl, DatosTrabajadorEnt
 //            return Util.manageException(ex, ReporteREST.class);
 //        }
 //    }
+    private String obtenerHost() {
+        String host = "https://demo.sigess.app"; // Valor por defecto
+        Query q1 = em.createNativeQuery("SELECT COUNT(h.id) FROM com.host h WHERE h.host ='Produccion'");
+        int countProduction = ((Number) q1.getSingleResult()).intValue();
+
+        if (countProduction > 0) {
+            return "https://sigess.app";
+        } else if (countProduction == 0) {
+            return "https://demo.sigess.app";
+        } else {
+            return "http://localhost:4200"; // Este caso puede requerir revisión
+        }
+    }
+
     @POST
     @Secured(validarPermiso = false)
     @Path("createMail")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response createMailCaseSL(MailSaludLaboralEntity datosTrabajador) {
-        String host1 = "https://demo.sigess.app"; // Valor por defecto para demostración
-
-        Query q1 = em.createNativeQuery("SELECT COUNT(h.id) FROM com.host h WHERE h.host ='Produccion'");
-        int countProduction = ((Number) q1.getSingleResult()).intValue();
-
-        q1 = em.createNativeQuery("SELECT h.id FROM com.host h WHERE h.host ='Localhost'");
-        int countLocalhost = -1;
+        String host1 = obtenerHost();
+        // Lógica para detectar si estamos en producción, localhost, o demo
         try {
-            countLocalhost = ((Number) q1.getSingleResult()).intValue();
-        } catch (Exception e) {
-            host1 = "http://localhost:4200";
-        }
-        if (countProduction > 0) {
-            host1 = "https://sigess.app"; // Cambiar a producción si hay al menos un registro de producción
-        }
-        if (countProduction == 0) {
-            host1 = "https://demo.sigess.app";
-        }
-        if (countProduction != 0 && countProduction != 1) {
-            host1 = "http://localhost:4200";
-        }
-        try {
-            ObjectMapper mapper = new ObjectMapper();
+
+            // Guardar los datos en la tabla 'mail_saludlaboral'
             datosTrabajador.setDocumentos(null);
-            String json = mapper.writeValueAsString(datosTrabajador);
             Date fechaActual = new Date();
             SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
             String fechaFormateada = formatoFecha.format(fechaActual);
@@ -1574,17 +1577,24 @@ public Response actualizarCasoSL(@PathParam("idSl") int idSl, DatosTrabajadorEnt
             datosTrabajador.setEstadoCorreo(1);
             datosTrabajador.setCorreoEnviado(Boolean.FALSE);
             datosTrabajador.setEliminado(Boolean.FALSE);
-          
-            Date nuevaFechaLimite = datosTrabajador.getFechaLimite();
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
+            // Formatear la fecha límite
+            Date nuevaFechaLimite = datosTrabajador.getFechaLimite();
             datosTrabajador.setFechaLimite(nuevaFechaLimite);
             String fechaFormateadaLimit = formatoFecha.format(nuevaFechaLimite);
-            datosTrabajador = this.mailSaludLaboralFacade.createMailCaseSL(datosTrabajador);
-            this.logScm("Creacion de datos del mail para empledado", json, datosTrabajador.getId().toString(), datosTrabajador.getClass().toString());
 
-            // Enviar correo electrónico
-            String emails = datosTrabajador.getUsuarioSolicitado(); // Cambiar aquí para usar el correo del usuario solicitado
+            // Guardar los datos del trabajador en la base de datos
+            if (datosTrabajador == null || datosTrabajador.getUsuarioSolicitado() == null) {
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity(new Mensaje("Error", "Los datos del trabajador son inválidos", TipoMensaje.error))
+                        .build();
+            } else {
+                datosTrabajador = this.mailSaludLaboralFacade.createMailCaseSL(datosTrabajador);
+
+            }
+
+            // Preparar los parámetros del correo
+            String emails = datosTrabajador.getUsuarioSolicitado();
             Map<String, String> parametros = new HashMap<>();
             parametros.put("{name}", datosTrabajador.getUsuarioSolicitado());
             parametros.put("{document}", datosTrabajador.getUsuarioSolicitado());
@@ -1599,14 +1609,15 @@ public Response actualizarCasoSL(@PathParam("idSl") int idSl, DatosTrabajadorEnt
             parametros.put("{solicitadoNombresMail}", datosTrabajador.getSolicitadoNombresMail());
             parametros.put(EmailFacade.PARAM_ENVIROMENT, host1);
 
-            Response correoResponse = enviarCorreoCasosMedicos(emails, parametros);
-            if (correoResponse.getStatus() != Response.Status.OK.getStatusCode()) {
-                return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                        .entity(new Mensaje("Error al enviar el correo electrónico", "No se pudo enviar el correo electrónico con los documentos a solicitar", TipoMensaje.error))
-                        .build();
-            }
+            EmailService emailService = new EmailService(emailFacade);
 
-            return Response.ok(datosTrabajador.getId()).build();
+            // Enviar el correo de manera asincrónica
+            List<String> listaCorreos = Arrays.asList(emails.split(","));
+            for (String email : listaCorreos) {
+                emailService.enviarCorreo(email, parametros); // Encolamos los correos
+            }
+            // Responder de inmediato sin esperar a que los correos se envíen
+            return Response.ok(new Mensaje("Creación exitosa", "Los datos se han guardado y el correo se ha enviado", TipoMensaje.success)).build();
         } catch (Exception ex) {
             return Util.manageException(ex, ReporteREST.class);
         }

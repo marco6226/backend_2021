@@ -71,8 +71,7 @@ public List<Object> findAllById(String caseId) {
         "   FROM scm.pcl pcl\n" +
         "     JOIN scm.pcl_diagnostico pcl_diag ON pcl.id = pcl_diag.id_pcl\n" +
         "     JOIN scm.diagnosticos diag ON pcl_diag.id_diagnostico = diag.id\n" +
-        "  WHERE diag.pk_case= ?1 AND pcl.eliminado = false\n" +
-        "  ORDER BY pcl.emision_pcl_fecha;", Pcl.class);
+        "  WHERE diag.pk_case= ?1 AND pcl.eliminado = false\n", Pcl.class);
 
     query.setParameter(1, caseId);
     List<Object> list = query.getResultList();

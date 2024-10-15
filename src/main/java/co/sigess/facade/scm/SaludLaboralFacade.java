@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.ejb.Asynchronous;
 import javax.ejb.EJB;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -54,19 +55,29 @@ public class SaludLaboralFacade extends AbstractFacade<Usuario>{
             return null;
         }
     }
-    
-
 public List<Usuario> enviarCorreoCasosMedicos(List<String> emails, Map<String, String> parametros) throws Exception {
     List<Usuario> users = new ArrayList<>();
     for (String email : emails) {
         Usuario user = this.findByEmail(email);
         if (user != null) {
-            emailFacade.sendEmail(parametros, TipoMail.SOLICITUD_DOCUMENTOS_SL, "Solicitud de documentos ", email);
             users.add(user);
+            enviarCorreoAsync(parametros, user);
         }
     }
     return users;
 }
+    @Asynchronous
+    public void enviarCorreoAsync(Map<String, String> parametros, Usuario user) {
+        try {
+            String email = user.getEmail();
+            // Lógica para enviar el correo
+            emailFacade.sendEmail(parametros, TipoMail.SOLICITUD_DOCUMENTOS_SL, "Solicitud de documentos", email);
+            System.out.println("Correo enviado exitosamente a: " + email);
+        } catch (Exception e) {
+            System.err.println("Error al enviar correo a: " + user.getEmail());
+            e.printStackTrace();
+        }
+    }
 
 public List<Usuario> enviarCorreoRechazo(List<String> emails, Map<String, String> parametros) throws Exception {
     List<Usuario> users = new ArrayList<>();
