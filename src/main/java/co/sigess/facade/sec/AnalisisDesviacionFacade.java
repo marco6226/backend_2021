@@ -70,7 +70,9 @@ public class AnalisisDesviacionFacade extends AbstractFacade<AnalisisDesviacion>
 
         if (analisisDesviacion.getTareaDesviacionList() != null) {
             for (TareaDesviacion tarea : analisisDesviacion.getTareaDesviacionList()) {
-                tarea.setAnalisisDesviacionList(new ArrayList<>());
+                if (tarea.getAnalisisDesviacionList() == null) {
+                    tarea.setAnalisisDesviacionList(new ArrayList<>());
+                }
                 tarea.getAnalisisDesviacionList().add(analisisDesviacion);
                 tarea.setEmpresa(analisisDesviacion.getEmpresa());
                 tareaDesvFacade.create(tarea);
