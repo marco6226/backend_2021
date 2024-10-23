@@ -21,7 +21,8 @@ public enum CriteriaFilter {
     BETWEEN("bt"),
     IS_NOT_NULL("isnn"),
     LIKE("lk"),
-    IS_NULL("isn");
+    IS_NULL("isn"),
+    IN("in");
 
     private String code;
 

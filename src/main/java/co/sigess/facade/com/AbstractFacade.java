@@ -254,6 +254,13 @@ public abstract class AbstractFacade<T> {
                         predicate = cb.ge(expression, NumberFormat.getInstance().parse(filter.getValue1()));
                     }
                     break;
+                case IN:
+                    if (filter.getValueArray() != null && filter.getValueArray().length > 0) {
+                        predicate = expression.in((Object[]) filter.getValueArray());
+                    } else {
+                        throw new IllegalArgumentException("El valor para el criterio IN no puede ser nulo o vacío");
+                    }
+                    break;
                 case BETWEEN:
                     if (type == Date.class) {
                         Date value1 = Util.SIMPLE_DATE_FORMAT.parse(filter.getValue1());
@@ -269,6 +276,7 @@ public abstract class AbstractFacade<T> {
                     }
                     betweenPredicateList.add(predicate);
                     continue;
+                
                 default:
                     throw new IllegalArgumentException("Criterio de filtrado no válido: " + filter.getCriteriaEnum());
             }
