@@ -159,6 +159,19 @@ public class DatosTrabajadorEntity implements Serializable{
     
     @Column(name = "pk_user_emp")
     private Integer pkUserEmp;
+    
+    @Column (name= "estado_investigacion")
+    private Integer estadoInv;
+
+    public Integer getEstadoInv() {
+        return estadoInv;
+    }
+
+    public void setEstadoInv(Integer estadoInv) {
+        this.estadoInv = estadoInv;
+    }
+    
+    
 
     public Integer getPkUserEmp() {
         return pkUserEmp;

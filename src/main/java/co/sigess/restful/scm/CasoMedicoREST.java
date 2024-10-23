@@ -487,21 +487,44 @@ public class CasoMedicoREST extends ServiceREST {
         try {
             diagnosticos.setCreadoPor(super.getUsuarioRequestContext().getEmail());
 
+            // Convertir diagnosticos a JSON
             ObjectMapper mapper = new ObjectMapper();
             String json = mapper.writeValueAsString(diagnosticos);
 
-            this.logScm("Creacion de Diagnostico", json, diagnosticos.getPkCase(), diagnosticos.getClass().toString());
+            // Parsear el JSON para buscar el campo saludLaboral
+            Map<String, Object> jsonData = mapper.readValue(json, Map.class);
+
+            // Verificar si el campo "saludLaboral" existe en el JSON
+            if (jsonData.containsKey("saludLaboral")) {
+                Object saludLaboralValue = jsonData.get("saludLaboral");
+
+                // Verificar si el valor de saludLaboral es true
+                if (saludLaboralValue instanceof Boolean && (Boolean) saludLaboralValue) {
+                    System.out.println("saludLaboral es true, no se creará el log.");
+                } else {
+                    // Si es false o no existe, se crea el log
+                    this.logScm("Creacion de Diagnostico", json, diagnosticos.getPkCase(), diagnosticos.getClass().toString());
+                }
+            } else {
+                // Si no existe el campo, se procede con la creación del log
+                this.logScm("Creacion de Diagnostico", json, diagnosticos.getPkCase(), diagnosticos.getClass().toString());
+            }
+
+            // Crear el diagnóstico en la base de datos
             diagnosticos = this.diagnosticoFacade.create(diagnosticos);
+
+            // Obtener el ID generado
             Query q1 = this.em.createNativeQuery("SELECT currval('scm.diagnosticos_id_seq')");
             Long idGenerado = ((Number) q1.getSingleResult()).longValue();
 
             diagnosticos.setId(idGenerado);
             q1.getResultList();
+
+            // Devolver la respuesta
             return Response.ok(diagnosticos).build();
         } catch (Exception ex) {
             return Util.manageException(ex, ReporteREST.class);
         }
-
     }
 
     @POST
@@ -530,15 +553,37 @@ public class CasoMedicoREST extends ServiceREST {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response editDiag(Diagnosticos diagnosticos) {
         try {
+            // Convertir diagnosticos a JSON
             ObjectMapper mapper = new ObjectMapper();
             String json = mapper.writeValueAsString(diagnosticos);
 
-            this.logScm("Se edito un diagnostico", json, diagnosticos.getPkCase().toString(),
-                    diagnosticos.getClass().toString());
+            // Parsear el JSON para buscar el campo saludLaboral
+            Map<String, Object> jsonData = mapper.readValue(json, Map.class);
+
+            // Verificar si el campo "saludLaboral" existe en el JSON
+            if (jsonData.containsKey("saludLaboral")) {
+                Object saludLaboralValue = jsonData.get("saludLaboral");
+
+                // Verificar si el valor de saludLaboral es true
+                if (saludLaboralValue instanceof Boolean && (Boolean) saludLaboralValue) {
+                    System.out.println("saludLaboral es true, no se creará el log.");
+                } else {
+                    // Si es false o no existe, se crea el log
+                    this.logScm("Se edito un diagnostico", json, diagnosticos.getPkCase().toString(), diagnosticos.getClass().toString());
+                }
+            } else {
+                // Si no existe el campo, se procede con la creación del log
+                this.logScm("Se edito un diagnostico", json, diagnosticos.getPkCase().toString(), diagnosticos.getClass().toString());
+            }
+
+            // Actualizar el diagnóstico en la base de datos
             diagnosticos = this.diagnosticoFacade.update(diagnosticos);
 
+            // Llamar a la función SQL
             Query q1 = this.em.createNativeQuery("SELECT scm.diagnostico_cm()");
             q1.getResultList();
+
+            // Devolver la respuesta
             return Response.ok(diagnosticos).build();
         } catch (Exception ex) {
             return Util.manageException(ex, ReporteREST.class);
@@ -680,10 +725,46 @@ public class CasoMedicoREST extends ServiceREST {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response editDiag(@PathParam("id") String id) {
         try {
+            // Buscar el diagnóstico por su ID
+            Diagnosticos diagnostico = diagnosticoFacade.findById(id);
+            if (diagnostico == null) {
+                return Response.status(Response.Status.NOT_FOUND).entity("Diagnostico no encontrado").build();
+            }
 
-            String pk_case = diagnosticoFacade.findById(id).getPkCase();
-            this.logScm("Se borro un diagnostico ", null, pk_case, "diagnostico");
+            // Crear un mapa con los datos del diagnóstico
+            Map<String, Object> diagMap = new HashMap<>();
+            diagMap.put("id", diagnostico.getId());
+            diagMap.put("diagnostico", diagnostico.getDiagnostico());
+            diagMap.put("detalle", diagnostico.getDetalle());
+            diagMap.put("pkCase", diagnostico.getPkCase());
+            diagMap.put("fechaDiagnostico", diagnostico.getFechaDiagnostico());
+            diagMap.put("eliminado", diagnostico.isEliminado());
+            diagMap.put("creadoPor", diagnostico.getCreadoPor());
+            diagMap.put("sistemaAfectado", diagnostico.getSistemaAfectado());
+            diagMap.put("pkUser", diagnostico.getPkUser());
+            diagMap.put("codigoCie10", diagnostico.getCodigoCie10());
+            diagMap.put("origen", diagnostico.getOrigen());
+            diagMap.put("saludLaboral", diagnostico.isSaludLaboral());
+
+            // Convertir el mapa a JSON
+            ObjectMapper mapper = new ObjectMapper();
+            String json = mapper.writeValueAsString(diagMap);
+
+            // Verificar el valor de "saludLaboral"
+            Boolean saludLaboral = diagnostico.isSaludLaboral();
+            if (saludLaboral != null && saludLaboral) {
+                System.out.println("saludLaboral es true, no se creará el log.");
+            } else {
+                // Obtener el pk_case y crear el log solo si "saludLaboral" es false o null
+                String pk_case = diagnostico.getPkCase();
+                this.logScm("Se borro un diagnostico ", json, pk_case, "diagnostico asociado al caso " + pk_case +" "+ diagnostico.getDiagnostico()+" "+"codigo CIE10 " + diagnostico.getCodigoCie10());
+                System.out.println(json);
+            }
+
+            // Eliminar el diagnóstico
             int diag = this.diagnosticoFacade.eliminar(Long.parseLong(id));
+
+            // Retornar la respuesta
             return Response.ok(diag).build();
         } catch (Exception ex) {
             return Util.manageException(ex, ReporteREST.class);
@@ -805,14 +886,15 @@ public class CasoMedicoREST extends ServiceREST {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response create(CreatePclDTO createvalue) {
         try {
+            ObjectMapper mapper = new ObjectMapper();
+            String json = mapper.writeValueAsString(createvalue);
+
             // Crear una nueva instancia de PCL y establecer eliminado en false
             Pcl newPcl = createvalue.getPcl();
             newPcl.setEliminado(false);
 
             // Crear la nueva PCL en la base de datos y obtener su ID
             Long idPcl = this.pclFacade.create(newPcl).getId();
-
-            // Asignar el ID generado a la nueva PCL
             newPcl.setId(idPcl);
 
             // Crear los registros de Pcl_Diagnostico
@@ -827,9 +909,16 @@ public class CasoMedicoREST extends ServiceREST {
                 this.PclDIag.create(pclDiag);
             }
 
-            // Log de la creación de PCL
-            String pk_case = "";
-            this.logScm("Creacion de pcl", null, pk_case, newPcl.getClass().toString());
+            // Consultar el pkCase del primer diagnóstico asociado
+            String pkCase = obtenerPkCaseDeDiagnosticos(createvalue.getDiags());
+
+            // Log de la creación de PCL con el pkCase
+            if (createvalue.getPcl().isSaludLaboral()) {
+                System.out.println("nada");
+            } else {
+                this.logScm("Creacion de PCL", json, pkCase, newPcl.getClass().toString());
+
+            }
 
             // Construir la respuesta
             Map<String, Object> response = new HashMap<>();
@@ -841,6 +930,21 @@ public class CasoMedicoREST extends ServiceREST {
         } catch (Exception ex) {
             return Util.manageException(ex, CasoMedicoREST.class);
         }
+    }
+
+// Método para obtener el pkCase de la tabla Diagnosticos basado en los ids de diagnosticos
+    private String obtenerPkCaseDeDiagnosticos(List<Long> diagIds) {
+        if (diagIds == null || diagIds.isEmpty()) {
+            return null; // No hay diagnosticos asociados
+        }
+
+        // Obtener el pkCase del primer diagnóstico (o de todos si es necesario)
+        Diagnosticos diag = (Diagnosticos) this.em.createQuery("SELECT d FROM Diagnosticos d WHERE d.id IN :diagIds")
+                .setParameter("diagIds", diagIds)
+                .setMaxResults(1) // Si solo necesitas un pkCase, tomas el primero
+                .getSingleResult();
+
+        return diag != null ? diag.getPkCase() : null;
     }
 
     @GET
@@ -905,10 +1009,20 @@ public class CasoMedicoREST extends ServiceREST {
         try {
             pcl.setEliminado(false);
 
+            // Obtener el pkCase desde los diagnósticos asociados al PCL
+            String pkCase = obtenerPkCaseDeDiagnosticos(pcl.getId());
+
             ObjectMapper mapper = new ObjectMapper();
             String json = mapper.writeValueAsString(pcl);
 
-            this.logScm("Se edito un pcl", json, "", pcl.getClass().toString());
+            // Log con el pkCase
+            if (pcl.isSaludLaboral()) {
+                System.out.println("nada");
+            } else {
+                this.logScm("Se edito una PCL", json, pkCase, pcl.getClass().toString());
+
+            }
+
             pcl = this.pclFacade.edit(pcl);
 
             return Response.ok(pcl).build();
@@ -917,14 +1031,37 @@ public class CasoMedicoREST extends ServiceREST {
         }
     }
 
+    private String obtenerPkCaseDeDiagnosticos(Long pclId) {
+        // Consultar los diagnósticos relacionados con este PCL
+        List<Diagnosticos> diagnosticos = this.em.createQuery("SELECT d FROM Diagnosticos d JOIN Pcl_Diagnostico pd ON pd.diagnosticos.id = d.id WHERE pd.pcl.id = :pclId", Diagnosticos.class)
+                .setParameter("pclId", pclId)
+                .setMaxResults(1) // Obtener solo el primer diagnóstico si hay más de uno
+                .getResultList();
+
+        // Si se encontró algún diagnóstico, devolver el pkCase
+        if (!diagnosticos.isEmpty()) {
+            return diagnosticos.get(0).getPkCase();
+        }
+
+        return null; // Si no hay diagnósticos relacionados, devolver null
+    }
+
     @PUT
     @Path("pcl/delete")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response deletePcl(Pcl pcl) {
         try {
+            Pcl existingPcl = this.pclFacade.findById(pcl.getId());
+            ObjectMapper mapper = new ObjectMapper();
+            String json = mapper.writeValueAsString(pcl);
             this.pclFacade.eliminar(pcl.getId());
             String pk_case = diagnosticoFacade.findById(pcl.getDiag()).getPkCase();
-            this.logScm("Se Elimino una pcl", null, pk_case, "Pcl");
+            if (existingPcl.isSaludLaboral()) {
+                System.out.println("nada");
+            } else {
+                this.logScm("Se elimino una PCL", json, pk_case, pcl.getClass().toString());
+
+            }
             return Response.ok(pcl.getId().toString()).build();
         } catch (Exception ex) {
             return Util.manageException(ex, CasoMedicoREST.class);
@@ -941,10 +1078,11 @@ public class CasoMedicoREST extends ServiceREST {
             log.setFecha_creacion(fechaActual.getTime());
             log.setEntity(entity);
             log.setJson(json);
+
             scmLogsFacade.create(log);
 
-        } catch (Exception e) {
-
+        } catch (Exception ex) {
+            Util.manageException(ex, CasoMedicoREST.class);
         }
 
     }
@@ -1032,6 +1170,27 @@ public class CasoMedicoREST extends ServiceREST {
 
             // Actualiza los campos del objeto existente con los valores del objeto actualizado
             dt.setStatusCaso(true);
+            // ... actualiza otros campos necesarios ...
+
+            return Response.ok(DatosTrabajadorFacade.update(dt)).build();
+        } catch (Exception e) {
+            return Util.manageException(e, CasoMedicoREST.class);
+        }
+    }
+
+    @PUT
+    @Path("cambiarEstadoSLInv/{id}/{value}")
+    @Secured(validarPermiso = false)
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response actualizarEstadoSLInv(@PathParam("id") int id, @PathParam("value") int value, DatosTrabajadorEntity updatedData) {
+        try {
+            DatosTrabajadorEntity dt = DatosTrabajadorFacade.findById(id);
+            if (dt == null) {
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }
+
+            // Actualiza los campos del objeto existente con los valores del objeto actualizado
+            dt.setEstadoInv(value);
             // ... actualiza otros campos necesarios ...
 
             return Response.ok(DatosTrabajadorFacade.update(dt)).build();
@@ -1131,7 +1290,6 @@ public class CasoMedicoREST extends ServiceREST {
             //datosTrabajador.setId(null);
 
             datosTrabajador = this.DatosTrabajadorFacade.createDT(datosTrabajador);
-            this.logScm("Creacion de datos del empledado", json, datosTrabajador.getIdSl().toString(), datosTrabajador.getClass().toString());
 
             return Response.ok(datosTrabajador.getIdSl()).build();
         } catch (Exception ex) {
@@ -1522,28 +1680,6 @@ public class CasoMedicoREST extends ServiceREST {
         }
     }
 
-//    @POST
-//    @Secured(validarPermiso = false)
-//    @Path("createMail")
-//    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-//    public Response createMailCaseSL(MailSaludLaboralEntity datosTrabajador) {
-//        try {
-//
-//            ObjectMapper mapper = new ObjectMapper();
-//            String json = mapper.writeValueAsString(datosTrabajador);
-//            //datosTrabajador.setFechaCreacion(fechaActual);
-//            datosTrabajador.setUsuarioSolicitante(super.getUsuarioRequestContext().getEmail());
-//            
-//
-//
-//            datosTrabajador = this.mailSaludLaboralFacade.createMailCaseSL(datosTrabajador);
-//            this.logScm("Creacion de datos del mail para empledado", json, datosTrabajador.getId().toString(), datosTrabajador.getClass().toString());
-//
-//            return Response.ok(datosTrabajador.getId()).build();
-//        } catch (Exception ex) {
-//            return Util.manageException(ex, ReporteREST.class);
-//        }
-//    }
     private String obtenerHost() {
         String host = "https://demo.sigess.app"; // Valor por defecto
         Query q1 = em.createNativeQuery("SELECT COUNT(h.id) FROM com.host h WHERE h.host ='Produccion'");
@@ -1644,6 +1780,7 @@ public class CasoMedicoREST extends ServiceREST {
             parametros.put("{docSolicitado}", dt.getDocSolicitado());
             parametros.put("{nameSolicitado}", dt.getSolicitadoNombres());
             parametros.put("{cedulaSolicitado}", dt.getSolicitadoCedula());
+            parametros.put("{pkCase}", dt.getPkCase().toString());
 
             Response correoResponse = enviarCorreoRechazo(emails, parametros);
 
@@ -1687,6 +1824,7 @@ public class CasoMedicoREST extends ServiceREST {
             parametros.put("{docSolicitado}", dt.getDocSolicitado());
             parametros.put("{nameSolicitado}", dt.getSolicitadoNombres());
             parametros.put("{cedulaSolicitado}", dt.getSolicitadoCedula());
+            parametros.put("{pkCase}", dt.getPkCase().toString());
 
             Response correoResponse = enviarCorreoDocumentosEnviados(emails, parametros);
 

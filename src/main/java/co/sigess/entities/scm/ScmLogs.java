@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author leonardo
  */
 @Entity
-@Table(name = "scm_logs",schema="scm")
+@Table(name = "scm_logs", schema = "scm")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "ScmLogs.findAll", query = "SELECT s FROM ScmLogs s")})
@@ -41,7 +41,9 @@ public class ScmLogs implements Serializable {
     @Size(max = 2147483647)
     @Column(name = "pk_user")
     private String pkUser;
-     @Size(max = 2147483647)
+    @Column(name = "salud_laboral")
+    private boolean saludLaboral;
+    @Size(max = 2147483647)
     @Column(name = "pk_case")
     private String pkCase;
     @Column(name = "fecha_creacion")
@@ -53,12 +55,25 @@ public class ScmLogs implements Serializable {
     @Size(max = 2147483647)
     @Column(name = "entity")
     private String entity;
-     @Id
+    
+    @Id
     @SequenceGenerator(name = "scm_logs_id_seq", schema = "scm", sequenceName = "scm_logs_id_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "scm_logs_id_seq")
     @Basic(optional = false)
     @Column(name = "id")
+    
+
     private long id;
+
+    public boolean isSaludLaboral() {
+        return saludLaboral;
+    }
+
+    public void setSaludLaboral(boolean saludLaboral) {
+        this.saludLaboral = saludLaboral;
+    }
+    
+
     public ScmLogs() {
     }
 
@@ -120,8 +135,6 @@ public class ScmLogs implements Serializable {
         this.id = id;
     }
 
-  
-
     @Override
     public String toString() {
         return "co.sigess.entities.scm.ScmLogs[ id=" + id + " ]";
@@ -140,5 +153,5 @@ public class ScmLogs implements Serializable {
     public void setPkUser(String pkUser) {
         this.pkUser = pkUser;
     }
-    
+
 }
